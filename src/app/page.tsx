@@ -1,3 +1,4 @@
+
 'use client';
 
 import { useState, useEffect } from 'react';
@@ -6,7 +7,7 @@ import TestRunning from '@/components/test/test-running';
 import TestSummary from '@/components/test/test-summary';
 import type { TestConfiguration, K6Summary, HistoryItem, LighthouseSummary, SeoAnalysis } from '@/types';
 import { useLocalStorage } from '@/hooks/use-local-storage';
-import AboutPage from '@/components/pages/about-page';
+import AboutPage from '@/app/about/page';
 import HistoryPage from './history/page';
 import Joyride, { STATUS } from 'react-joyride';
 import { TOUR_STEPS } from '@/lib/constants';
@@ -33,6 +34,11 @@ export default function Home() {
   const [formKey, setFormKey] = useState(Date.now());
   const [isTourRunning, setIsTourRunning] = useState(false);
   const { toast } = useToast();
+  const [isMounted, setIsMounted] = useState(false);
+
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
 
   const handleRunTest = (testId: string, config: TestConfiguration) => {
     setActiveTestId(testId);
@@ -58,7 +64,7 @@ export default function Home() {
       const newHistory = [newHistoryItem, ...history.filter(h => h.id !== activeTestId)];
       setHistory(newHistory);
       toast({ title: 'Saved to History', description: 'Test run has been saved.'})
-      setView('history');
+      // setView('history'); This was causing a jump to the history page which might not be desired.
     }
   };
 
@@ -70,14 +76,18 @@ export default function Home() {
   };
 
   const handleRerun = (config: TestConfiguration) => {
+    // Setting initial values for the form when "Run Again" is clicked
+    sessionStorage.setItem('rerun-config', JSON.stringify(config));
     setRerunInitialValues(config);
-    setFormKey(Date.now());
+    setFormKey(Date.now()); // Change key to force re-mount
     setView('form');
   };
   
   const handleCreateNewTest = () => {
-    setRerunInitialValues(null);
-    setFormKey(Date.now());
+    sessionStorage.removeItem('rerun-config');
+    sessionStorage.removeItem('load-history-item');
+    setRerunInitialValues(null); // Clear initial values
+    setFormKey(Date.now()); // Change key to force re-mount
     setActiveTestConfig(null);
     setActiveTestResults(null);
     setActiveTestId(null);
@@ -91,6 +101,31 @@ export default function Home() {
       // A small delay to ensure the form view is rendered
       setTimeout(() => setIsTourRunning(true), 100);
     };
+
+    // Check for history item to load from session storage
+    const itemToLoad = sessionStorage.getItem('load-history-item');
+    if (itemToLoad) {
+        try {
+            handleLoadFromHistory(JSON.parse(itemToLoad));
+        } catch (e) {
+            console.error("Failed to parse history item from session storage", e);
+        } finally {
+            sessionStorage.removeItem('load-history-item');
+        }
+    }
+
+    // Check for rerun config from session storage
+    const configToRerun = sessionStorage.getItem('rerun-config');
+    if (configToRerun) {
+        try {
+            handleRerun(JSON.parse(configToRerun));
+        } catch (e) {
+            console.error("Failed to parse rerun config from session storage", e);
+        } finally {
+            sessionStorage.removeItem('rerun-config');
+        }
+    }
+
     return () => {
       delete (window as any).startTour;
     }
@@ -142,23 +177,25 @@ export default function Home() {
 
   return (
     <>
-      <Joyride
-        steps={TOUR_STEPS}
-        run={isTourRunning}
-        continuous
-        showProgress
-        showSkipButton
-        callback={handleJoyrideCallback}
-        styles={{
-          options: {
-            arrowColor: 'hsl(var(--card))',
-            backgroundColor: 'hsl(var(--card))',
-            primaryColor: 'hsl(var(--primary))',
-            textColor: 'hsl(var(--card-foreground))',
-            zIndex: 1000,
-          },
-        }}
-      />
+      {isMounted && (
+        <Joyride
+          steps={TOUR_STEPS}
+          run={isTourRunning}
+          continuous
+          showProgress
+          showSkipButton
+          callback={handleJoyrideCallback}
+          styles={{
+            options: {
+              arrowColor: 'hsl(var(--card))',
+              backgroundColor: 'hsl(var(--card))',
+              primaryColor: 'hsl(var(--primary))',
+              textColor: 'hsl(var(--card-foreground))',
+              zIndex: 1000,
+            },
+          }}
+        />
+      )}
       <ConsentModal />
       {renderView()}
     </>
