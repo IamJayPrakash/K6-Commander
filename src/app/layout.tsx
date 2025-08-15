@@ -57,7 +57,9 @@ export default function RootLayout({
       if (!i18n.hasResourceBundle(detectedLng, 'translation')) {
         i18n.addResourceBundle(detectedLng, 'translation', translations);
       }
-      i18n.changeLanguage(detectedLng);
+      if (i18n.language !== detectedLng) {
+        await i18n.changeLanguage(detectedLng);
+      }
       setIsI18nInitialized(true);
     };
 
@@ -79,11 +81,6 @@ export default function RootLayout({
     };
 
   }, [isI18nInitialized]);
-
-  if (!isI18nInitialized) {
-    // You can render a loading state here if needed
-    return <body className={cn('min-h-screen bg-background font-sans antialiased', inter.variable)}></body>;
-  }
   
   return (
     <html lang={i18n.language} className="dark" suppressHydrationWarning>
@@ -93,21 +90,25 @@ export default function RootLayout({
           inter.variable
         )}
       >
-        <I18nextProvider i18n={i18n}>
-            <Providers>
-                <div className="relative flex flex-col min-h-screen bg-gradient-to-br from-black to-[#1a1a1a]">
-                    <Suspense>
-                      <ProgressBar />
-                    </Suspense>
-                    <AppHeader />
-                    <main className="flex-1 container max-w-screen-2xl mx-auto p-4 md:p-6 lg:p-8">
-                      {children}
-                    </main>
-                    <AppFooter />
-                </div>
-            </Providers>
-            <Toaster />
-        </I18nextProvider>
+        {!isI18nInitialized ? (
+          <div className="flex items-center justify-center min-h-screen"></div>
+        ) : (
+          <I18nextProvider i18n={i18n}>
+              <Providers>
+                  <div className="relative flex flex-col min-h-screen bg-gradient-to-br from-black to-[#1a1a1a]">
+                      <Suspense>
+                        <ProgressBar />
+                      </Suspense>
+                      <AppHeader />
+                      <main className="flex-1 container max-w-screen-2xl mx-auto p-4 md:p-6 lg:p-8">
+                        {children}
+                      </main>
+                      <AppFooter />
+                  </div>
+              </Providers>
+              <Toaster />
+          </I18nextProvider>
+        )}
       </body>
     </html>
   );
