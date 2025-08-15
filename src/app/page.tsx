@@ -11,7 +11,7 @@ import Joyride, { STATUS } from 'react-joyride';
 import { TOUR_STEPS } from '@/lib/constants';
 import ConsentModal from '@/components/layout/consent-modal';
 import { useToast } from '@/hooks/use-toast';
-import { Sidebar, SidebarProvider, SidebarInset, SidebarTrigger } from '@/components/ui/sidebar';
+import { Sidebar, SidebarInset, SidebarRail } from '@/components/ui/sidebar';
 import { HistoryPanel } from '@/components/layout/history-panel';
 
 type View = 'form' | 'running' | 'summary';
@@ -42,6 +42,7 @@ export default function Home() {
 
   // Check for history item to load from session storage on mount
   useEffect(() => {
+      if (!isMounted) return;
       const itemToLoad = sessionStorage.getItem('load-history-item');
       if(itemToLoad) {
         try {
@@ -64,7 +65,7 @@ export default function Home() {
           sessionStorage.removeItem('rerun-config');
       }
 
-  }, []);
+  }, [isMounted]);
 
   const handleRunTest = (testId: string, config: TestConfiguration) => {
     setActiveTestId(testId);
@@ -74,8 +75,19 @@ export default function Home() {
   };
 
   const handleTestComplete = (results: TestResults) => {
-    setActiveTestResults(results);
-    setView('summary');
+    if (activeTestConfig && activeTestId) {
+      setActiveTestResults(results);
+      // Auto-save to history on completion
+      const newHistoryItem: HistoryItem = {
+        id: activeTestId,
+        timestamp: new Date().toISOString(),
+        config: activeTestConfig,
+        results: results,
+      };
+      setHistory(prev => [newHistoryItem, ...prev.filter(h => h.id !== activeTestId)]);
+      toast({ title: 'Test Complete & Saved', description: 'Your test results are ready and saved to history.'});
+      setView('summary');
+    }
   };
 
   const handleSaveToHistory = () => {
@@ -169,41 +181,41 @@ export default function Home() {
   };
 
   return (
-    <SidebarProvider>
-        <Sidebar>
-            <HistoryPanel 
-                history={history}
-                setHistory={setHistory}
-                onLoad={handleLoadFromHistory}
-                onRerun={handleRerun}
-            />
-        </Sidebar>
-        <SidebarInset>
-            <div className="p-4 md:p-6 lg:p-8">
-                <SidebarTrigger className='md:hidden mb-4'/>
-                {isMounted && (
-                    <Joyride
-                    steps={TOUR_STEPS}
-                    run={isTourRunning}
-                    continuous
-                    showProgress
-                    showSkipButton
-                    callback={handleJoyrideCallback}
-                    styles={{
-                        options: {
-                        arrowColor: 'hsl(var(--card))',
-                        backgroundColor: 'hsl(var(--card))',
-                        primaryColor: 'hsl(var(--primary))',
-                        textColor: 'hsl(var(--card-foreground))',
-                        zIndex: 1000,
-                        },
-                    }}
-                    />
-                )}
-                <ConsentModal />
-                {renderView()}
-            </div>
-        </SidebarInset>
-    </SidebarProvider>
+    <>
+      <Sidebar>
+          <HistoryPanel 
+              history={history}
+              setHistory={setHistory}
+              onLoad={handleLoadFromHistory}
+              onRerun={handleRerun}
+          />
+          <SidebarRail />
+      </Sidebar>
+      <SidebarInset>
+          <div className="p-0 md:p-6 lg:p-8">
+              {isMounted && (
+                  <Joyride
+                  steps={TOUR_STEPS}
+                  run={isTourRunning}
+                  continuous
+                  showProgress
+                  showSkipButton
+                  callback={handleJoyrideCallback}
+                  styles={{
+                      options: {
+                      arrowColor: 'hsl(var(--card))',
+                      backgroundColor: 'hsl(var(--card))',
+                      primaryColor: 'hsl(var(--primary))',
+                      textColor: 'hsl(var(--card-foreground))',
+                      zIndex: 1000,
+                      },
+                  }}
+                  />
+              )}
+              <ConsentModal />
+              {renderView()}
+          </div>
+      </SidebarInset>
+    </>
   );
 }

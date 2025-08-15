@@ -1,7 +1,7 @@
 
 'use client';
 
-import { Rocket, History, Info, Github, PlayCircle, MessageSquarePlus, Bug } from 'lucide-react';
+import { Rocket, History, Info, Github, PlayCircle, MessageSquarePlus, Bug, PanelLeft } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useTheme } from 'next-themes';
 import { Sun, Moon } from 'lucide-react';
@@ -12,9 +12,11 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import Link from 'next/link';
+import { useSidebar } from '../ui/sidebar';
 
 export function AppHeader() {
   const { setTheme } = useTheme();
+  const { toggleSidebar } = useSidebar();
 
   const startTour = () => {
     if (typeof window !== 'undefined' && (window as any).startTour) {
@@ -26,9 +28,13 @@ export function AppHeader() {
     <header className="sticky top-0 z-50 w-full border-b border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
       <div className="container flex h-16 max-w-screen-2xl items-center">
         <div className="mr-4 flex items-center">
+           <Button variant="ghost" size="icon" className="md:hidden" onClick={toggleSidebar}>
+              <PanelLeft className="h-6 w-6" />
+              <span className="sr-only">Toggle Sidebar</span>
+          </Button>
           <Link href="/" className="mr-6 flex items-center space-x-2 cursor-pointer">
             <Rocket className="h-6 w-6 text-primary" />
-            <span className="font-bold">K6 Commander</span>
+            <span className="font-bold hidden sm:inline-block">K6 Commander</span>
           </Link>
           <nav className="hidden md:flex items-center gap-6 text-sm">
             <Link href="/history" className="transition-colors hover:text-foreground/80 text-foreground/60 cursor-pointer">
