@@ -25,7 +25,7 @@ import {
 } from '@/components/ui/select';
 import { Textarea } from '@/components/ui/textarea';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Rocket, Trash2, Plus, Server, Settings, FileJson, ChevronsRightLeft, Search, Gauge, ShieldCheck, TestTubeDiagonal, ChevronsUpDown, Check, X, History } from 'lucide-react';
+import { Rocket, Trash2, Plus, Server, Settings, FileJson, ChevronsRightLeft, Search, Gauge, ShieldCheck, TestTubeDiagonal, ChevronsUpDown, Check, X, History, BrainCircuit } from 'lucide-react';
 import { TEST_PRESETS } from '@/lib/constants';
 import type { TestConfiguration, TestPreset } from '@/types';
 import { useToast } from '@/hooks/use-toast';
@@ -244,6 +244,7 @@ export default function TestForm({ initialValues, onRunTest, setHistory }: TestF
                                                         value={url}
                                                         onSelect={(currentValue) => {
                                                             form.setValue("url", currentValue);
+                                                            addUrlToRecents(currentValue);
                                                             setPopoverOpen(false);
                                                         }}
                                                         className="group"
@@ -322,8 +323,8 @@ export default function TestForm({ initialValues, onRunTest, setHistory }: TestF
                                 render={({ field }) => (
                                     <FormItem className="flex flex-row items-center justify-between rounded-lg border p-4 shadow-sm bg-background/50">
                                         <div className="space-y-0.5">
-                                            <FormLabel className="text-base flex items-center gap-2"><Search/> Basic SEO Check</FormLabel>
-                                            <FormDescription>Analyze title, meta description, and other on-page factors.</FormDescription>
+                                            <FormLabel className="text-base flex items-center gap-2"><BrainCircuit/> AI-Powered SEO Analysis</FormLabel>
+                                            <FormDescription>Deep-dive analysis of on-page factors with AI suggestions.</FormDescription>
                                         </div>
                                         <FormControl>
                                             <Switch
@@ -544,10 +545,10 @@ export default function TestForm({ initialValues, onRunTest, setHistory }: TestF
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
-          <AlertDialogCancel onClick={() => proceedWithTest(false)}>Don't Clear</AlertDialogCancel>
+          <AlertDialogCancel onClick={() => { setClearStorageDialogOpen(false); proceedWithTest(false); }}>Don't Clear</AlertDialogCancel>
           <AlertDialogAction 
             className='bg-destructive hover:bg-destructive/90' 
-            onClick={() => proceedWithTest(true)}>
+            onClick={() => { setClearStorageDialogOpen(false); proceedWithTest(true); }}>
             <Trash2 className="mr-2 h-4 w-4" /> Clear History & Run
           </AlertDialogAction>
         </AlertDialogFooter>
@@ -556,3 +557,5 @@ export default function TestForm({ initialValues, onRunTest, setHistory }: TestF
     </>
   );
 }
+
+    

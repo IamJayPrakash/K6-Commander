@@ -1,6 +1,6 @@
 
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Info, Rocket, Database, Shield, Code, Github, BarChart2, Search, Zap, Layers, Share2 } from "lucide-react";
+import { Info, Rocket, Database, Shield, Code, Github, BarChart2, Search, Zap, Layers, Share2, BrainCircuit } from "lucide-react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 
@@ -9,6 +9,7 @@ export default function AboutPage() {
         { name: 'Frontend', value: 'Next.js & React', description: 'For a fast, server-rendered user interface.' },
         { name: 'Styling', value: 'Tailwind CSS', description: 'A utility-first CSS framework for rapid UI development.' },
         { name: 'UI Components', value: 'shadcn/ui', description: 'Beautifully designed, accessible, and reusable components.' },
+        { name: 'AI Integration', value: 'Genkit', description: 'Powers the AI-driven SEO analysis and recommendations.' },
         { name: 'Load Testing', value: 'k6', description: 'A powerful, open-source load testing tool from Grafana Labs.' },
         { name: 'Auditing', value: 'Lighthouse', description: 'Google\'s automated tool for improving web page quality.' },
         { name: 'Metrics DB', value: 'InfluxDB', description: 'A time-series database for storing k6 test metrics.' },
@@ -80,13 +81,13 @@ export default function AboutPage() {
                 </Card>
                 <Card className="bg-card/50 backdrop-blur-sm">
                     <CardHeader>
-                         <Search size={32} className="text-accent mb-2" />
-                        <CardTitle>Basic SEO Checks</CardTitle>
-                        <CardDescription>Verify on-page SEO fundamentals instantly.</CardDescription>
+                         <BrainCircuit size={32} className="text-accent mb-2" />
+                        <CardTitle>AI-Powered SEO Analysis</CardTitle>
+                        <CardDescription>Deep-dive analysis with AI recommendations.</CardDescription>
                     </CardHeader>
                     <CardContent className="text-sm text-muted-foreground space-y-2">
-                        <p>Get a quick, automated check of the most critical on-page SEO elements to ensure your pages are optimized for search engines.</p>
-                        <p>This includes checks for the presence and length of title tags, meta descriptions, H1 headings, and the proper implementation of canonical tags.</p>
+                        <p>Get a deep, AI-powered analysis of the most critical on-page SEO elements to ensure your pages are optimized for search engines.</p>
+                        <p>This includes checks for title tags, meta descriptions, H1s, canonicals, and Open Graph tags, complete with AI-generated suggestions for improvement.</p>
                     </CardContent>
                 </Card>
             </div>
@@ -102,7 +103,7 @@ export default function AboutPage() {
                     </CardDescription>
                 </CardHeader>
                 <CardContent className="space-y-4">
-                    <ul className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+                    <ul className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 text-sm">
                         {techStack.map((tech) => (
                            <li key={tech.name} className="flex items-start gap-3 p-3 bg-background/50 rounded-lg">
                                <div>
@@ -135,3 +136,5 @@ export default function AboutPage() {
         </div>
     );
 }
+
+    
