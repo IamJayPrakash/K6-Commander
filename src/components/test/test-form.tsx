@@ -1,6 +1,7 @@
+
 'use client';
 
-import { useForm, useFieldArray, Controller } from 'react-hook-form';
+import { useForm, useFieldArray } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
 import { Button } from '@/components/ui/button';
@@ -58,7 +59,7 @@ const formSchema = z.object({
 type TestFormValues = z.infer<typeof formSchema>;
 
 interface TestFormProps {
-  defaultValues: TestFormValues;
+  defaultValues: Partial<TestFormValues>;
   onRunTest: (testId: string, config: TestConfiguration) => void;
 }
 
@@ -99,9 +100,9 @@ export default function TestForm({ defaultValues, onRunTest }: TestFormProps) {
         return acc;
       }, {} as Record<string, string>),
       // Ensure VUs and duration are correctly set for non-custom presets
-      vus: data.testPreset === 'custom' ? data.vus! : (data.runLoadTest ? TEST_PRESETS[data.testPreset].vus! : 0),
-      duration: data.testPreset === 'custom' ? data.duration! : (data.runLoadTest ? TEST_PRESETS[data.testPreset].duration! : ''),
-      stages: data.testPreset === 'custom' ? data.stages! : (data.runLoadTest ? TEST_PRESETS[data.testPreset].stages! : []),
+      vus: data.testPreset === 'custom' ? data.vus! : (data.runLoadTest ? TEST_PRESETS[data.testPreset as TestPreset].vus! : 0),
+      duration: data.testPreset === 'custom' ? data.duration! : (data.runLoadTest ? TEST_PRESETS[data.testPreset as TestPreset].duration! : ''),
+      stages: data.testPreset === 'custom' ? data.stages! : (data.runLoadTest ? TEST_PRESETS[data.testPreset as TestPreset].stages! : []),
       body: data.body || '',
     };
     

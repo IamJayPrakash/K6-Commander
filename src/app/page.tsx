@@ -74,19 +74,20 @@ export default function Home() {
   };
   
   const formDefaultValues = useMemo(() => {
-    if (rerunConfig) {
+    const config = rerunConfig;
+    if (config) {
         return {
-            url: rerunConfig.url || '',
-            method: rerunConfig.method || 'GET',
-            headers: rerunConfig.headers ? Object.entries(rerunConfig.headers).map(([key, value]) => ({ key, value })) : [],
-            body: rerunConfig.body || '',
-            testPreset: rerunConfig.testPreset || 'custom',
-            vus: rerunConfig.vus,
-            duration: rerunConfig.duration,
-            stages: rerunConfig.stages,
-            runLoadTest: rerunConfig.runLoadTest,
-            runLighthouse: rerunConfig.runLighthouse,
-            runSeo: rerunConfig.runSeo,
+            url: config.url || '',
+            method: config.method || 'GET',
+            headers: config.headers ? Object.entries(config.headers).map(([key, value]) => ({ key, value })) : [],
+            body: config.body || '',
+            testPreset: config.testPreset || 'custom',
+            vus: config.vus,
+            duration: config.duration,
+            stages: config.stages,
+            runLoadTest: config.runLoadTest,
+            runLighthouse: config.runLighthouse,
+            runSeo: config.runSeo,
         }
     }
     // Default for a new form
@@ -141,7 +142,7 @@ export default function Home() {
       default:
         return (
           <TestForm
-            key={rerunConfig ? `rerun-${rerunConfig.url}` : 'new-form'}
+            key={rerunConfig ? `rerun-${JSON.stringify(rerunConfig)}` : 'new-form'}
             defaultValues={formDefaultValues}
             onRunTest={handleRunTest}
           />
@@ -159,4 +160,3 @@ export default function Home() {
     </div>
   );
 }
-
