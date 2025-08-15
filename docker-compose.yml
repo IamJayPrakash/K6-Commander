@@ -1,0 +1,64 @@
+version: '3.8'
+
+networks:
+  k6-network:
+    driver: bridge
+
+services:
+  influxdb:
+    image: influxdb:1.8
+    container_name: influxdb
+    networks:
+      - k6-network
+    ports:
+      - "8086:8086"
+    environment:
+      - INFLUXDB_DB=k6
+    volumes:
+      - influxdb_data:/var/lib/influxdb
+
+  grafana:
+    image: grafana/grafana:latest
+    container_name: grafana
+    networks:
+      - k6-network
+    ports:
+      - "3003:3000"
+    environment:
+      - GF_SECURITY_ADMIN_USER=admin
+      - GF_SECURITY_ADMIN_PASSWORD=admin
+      - GF_AUTH_ANONYMOUS_ENABLED=true
+      - GF_AUTH_ANONYMOUS_ORG_ROLE=Viewer
+    volumes:
+      - ./grafana/provisioning/datasources:/etc/grafana/provisioning/datasources
+      - ./grafana/provisioning/dashboards:/etc/grafana/provisioning/dashboards
+      - grafana_data:/var/lib/grafana
+    depends_on:
+      - influxdb
+
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: k6-commander-app
+    networks:
+      - k6-network
+    ports:
+      - "3000:3000"
+    # We mount the results directory to persist k6 summary outputs.
+    # We mount the k6 directory to provide the script to the k6 container.
+    # We mount the Docker socket to allow the app container to run other Docker containers (k6).
+    volumes:
+      - ./results:/app/results
+      - ./k6:/app/k6
+      - /var/run/docker.sock:/var/run/docker.sock
+    depends_on:
+      - influxdb
+      - grafana
+    # Keep the container running
+    tty: true
+    stdin_open: true
+
+volumes:
+  influxdb_data:
+  grafana_data:
