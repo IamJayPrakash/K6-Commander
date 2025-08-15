@@ -1,6 +1,6 @@
 
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Info, Rocket, Database, BarChart2, Github, Shield, Code } from "lucide-react";
+import { Info, Rocket, Database, Shield, Code, Github } from "lucide-react";
 import Link from "next/link";
 
 export default function AboutPage() {

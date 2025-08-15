@@ -189,18 +189,18 @@ export default function TestForm({ initialValues, onRunTest }: TestFormProps) {
                           <FormLabel className="text-lg">Target Endpoint</FormLabel>
                           <FormDescription>The full URL of the API endpoint or page to test.</FormDescription>
                            <Popover open={popoverOpen} onOpenChange={setPopoverOpen}>
-                                <div className="relative">
-                                    <Server className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
-                                    <FormControl>
-                                        <Input
-                                            placeholder="https://your-api.com/v1/users"
-                                            className="pl-10 h-11 text-base"
-                                            {...field}
-                                            onFocus={() => setPopoverOpen(true)}
-                                            onBlurCapture={() => addUrlToRecents(field.value)}
-                                        />
-                                    </FormControl>
-                                    <PopoverTrigger asChild>
+                                <PopoverTrigger asChild>
+                                    <div className="relative">
+                                        <Server className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
+                                        <FormControl>
+                                            <Input
+                                                placeholder="https://your-api.com/v1/users"
+                                                className="pl-10 h-11 text-base"
+                                                {...field}
+                                                onFocus={() => setPopoverOpen(true)}
+                                                onBlurCapture={() => addUrlToRecents(field.value)}
+                                            />
+                                        </FormControl>
                                         <Button
                                             variant="ghost"
                                             role="combobox"
@@ -209,8 +209,8 @@ export default function TestForm({ initialValues, onRunTest }: TestFormProps) {
                                         >
                                             <ChevronsUpDown className="h-4 w-4 shrink-0 opacity-50" />
                                         </Button>
-                                    </PopoverTrigger>
-                                </div>
+                                    </div>
+                                </PopoverTrigger>
                                 <PopoverContent className="w-[--radix-popover-trigger-width] p-0">
                                     <Command>
                                         <CommandInput placeholder="Search or type a new URL..."/>
