@@ -95,8 +95,8 @@ export default function TestForm({ initialValues, onRunTest }: TestFormProps) {
         form.reset({
             ...initialValues,
             headers: headersArray,
-            vus: initialValues.vus || 0,
-            duration: initialValues.duration || '',
+            vus: initialValues.vus || undefined,
+            duration: initialValues.duration || undefined,
             stages: initialValues.stages || [],
         });
     } else {
