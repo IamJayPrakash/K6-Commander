@@ -1,7 +1,7 @@
 
 'use client';
 
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 import TestForm from '@/components/test/test-form';
 import TestRunning from '@/components/test/test-running';
 import TestSummary from '@/components/test/test-summary';
@@ -16,6 +16,17 @@ import HistoryPage from '@/components/pages/history-page';
 
 type View = 'form' | 'running' | 'summary' | 'about' | 'history' | 'help' | 'contact';
 
+const newTestDefaultValues: Partial<TestConfiguration> = {
+    url: '',
+    method: 'GET' as const,
+    headers: {},
+    body: '',
+    testPreset: 'baseline' as const,
+    runLoadTest: true,
+    runLighthouse: false,
+    runSeo: false,
+};
+
 export default function Home() {
   const [view, setView] = useState<View>('form');
   const [activeTestId, setActiveTestId] = useState<string | null>(null);
@@ -25,11 +36,7 @@ export default function Home() {
     useState<K6Summary | null>(null);
   const [history, setHistory] = useLocalStorage<HistoryItem[]>('k6-history', []);
   
-  // A key to force re-mounting of the TestForm component.
-  // This is the most reliable way to reset the form state.
-  const [formKey, setFormKey] = useState(Date.now());
   const [rerunInitialValues, setRerunInitialValues] = useState<Partial<TestConfiguration> | null>(null);
-
 
   const handleRunTest = (testId: string, config: TestConfiguration) => {
     setActiveTestId(testId);
@@ -65,7 +72,6 @@ export default function Home() {
 
   const handleRerun = (config: TestConfiguration) => {
     setRerunInitialValues(config);
-    setFormKey(Date.now()); // Change key to force re-mount
     setView('form');
   };
   
@@ -74,9 +80,15 @@ export default function Home() {
     setActiveTestConfig(null);
     setActiveTestSummary(null);
     setActiveTestId(null);
-    setFormKey(Date.now()); // Change key to force re-mount
     setView('form');
   };
+
+  const initialValues = useMemo(() => {
+    if (!rerunInitialValues) {
+        return newTestDefaultValues;
+    }
+    return { ...newTestDefaultValues, ...rerunInitialValues };
+  }, [rerunInitialValues]);
 
   const renderView = () => {
     switch (view) {
@@ -114,8 +126,8 @@ export default function Home() {
       default:
         return (
           <TestForm
-            key={formKey}
-            initialValues={rerunInitialValues}
+            key={JSON.stringify(initialValues)} // Force re-mount with new initial values
+            initialValues={initialValues}
             onRunTest={handleRunTest}
           />
         );

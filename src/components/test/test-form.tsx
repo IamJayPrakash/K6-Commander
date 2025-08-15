@@ -63,42 +63,8 @@ const formSchema = z.object({
 
 type TestFormValues = z.infer<typeof formSchema>;
 
-const newTestDefaultValues: Partial<TestFormValues> = {
-    url: '',
-    method: 'GET' as const,
-    headers: [],
-    body: '',
-    testPreset: 'baseline' as const,
-    vus: TEST_PRESETS.baseline.vus,
-    duration: TEST_PRESETS.baseline.duration,
-    stages: TEST_PRESETS.baseline.stages,
-    runLoadTest: true,
-    runLighthouse: false,
-    runSeo: false,
-};
-
-// This function is defined outside the component to ensure it's stable
-const getInitialValues = (initialValues: Partial<TestConfiguration> | null): Partial<TestFormValues> => {
-    if (!initialValues || Object.keys(initialValues).length === 0) {
-      return newTestDefaultValues;
-    }
-    // If we are re-running, the headers are an object. Convert to array for the form.
-    const headersArray = initialValues.headers
-      ? Object.entries(initialValues.headers)
-          .map(([key, value]) => ({ key, value: String(value) }))
-          .sort((a, b) => a.key.localeCompare(b.key)) // Sort for stability
-      : [];
-
-    return {
-        ...newTestDefaultValues, // Start with base defaults
-        ...initialValues, // Override with any rerun values
-        headers: headersArray, // Set the converted and sorted headers
-    };
-};
-
-
 interface TestFormProps {
-  initialValues: Partial<TestConfiguration> | null;
+  initialValues: Partial<TestConfiguration>;
   onRunTest: (testId: string, config: TestConfiguration) => void;
 }
 
@@ -107,8 +73,12 @@ export default function TestForm({ initialValues, onRunTest }: TestFormProps) {
 
   const form = useForm<TestFormValues>({
     resolver: zodResolver(formSchema),
-    // Call the stable function to get default values
-    defaultValues: getInitialValues(initialValues),
+    defaultValues: {
+      ...initialValues,
+      headers: initialValues.headers
+      ? Object.entries(initialValues.headers).map(([key, value]) => ({ key, value: String(value) }))
+      : [],
+    }
   });
 
   const { fields: headerFields, append: appendHeader, remove: removeHeader } = useFieldArray({
