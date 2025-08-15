@@ -24,19 +24,13 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { Textarea } from '@/components/ui/textarea';
-import {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
-} from '@/components/ui/accordion';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Rocket, Trash2, Plus, Server, Settings, FileJson, ChevronsRightLeft, Search, Gauge, ShieldCheck, TestTubeDiagonal } from 'lucide-react';
 import { TEST_PRESETS } from '@/lib/constants';
 import type { TestConfiguration, TestPreset } from '@/types';
 import { useToast } from '@/hooks/use-toast';
 import { Switch } from '../ui/switch';
+import { RadioGroup, RadioGroupItem } from '../ui/radio-group';
 
 const stageSchema = z.object({
   duration: z.string().min(1, 'Duration is required'),
@@ -81,18 +75,16 @@ interface TestFormProps {
   onRunTest: (testId: string, config: TestConfiguration) => void;
 }
 
-const getInitialValues = (values: Partial<TestConfiguration> | null) => {
-  if (!values) {
-    return newTestDefaultValues;
-  }
-  return {
+const getInitialValues = (values: Partial<TestConfiguration> | null): TestFormValues => {
+  const defaults = {
     ...newTestDefaultValues,
     ...values,
-    headers: values.headers ? Object.entries(values.headers).map(([key, value]) => ({ key, value: String(value) })) : [],
-    vus: values.vus || undefined,
-    duration: values.duration || undefined,
-    stages: values.stages || [],
+    headers: values?.headers ? Object.entries(values.headers).map(([key, value]) => ({ key, value: String(value) })) : [],
+    vus: values?.vus ?? newTestDefaultValues.vus,
+    duration: values?.duration ?? newTestDefaultValues.duration,
+    stages: values?.stages ?? newTestDefaultValues.stages,
   };
+  return defaults as TestFormValues;
 };
 
 
@@ -164,104 +156,182 @@ export default function TestForm({ initialValues, onRunTest }: TestFormProps) {
         });
     }
   };
+  
+  const isLoadTestEnabled = form.watch('runLoadTest');
 
   return (
-    <Card>
+    <Card className="border-none shadow-none">
       <CardHeader>
-        <CardTitle className="flex items-center gap-2">
+        <CardTitle className="flex items-center gap-2 text-2xl font-bold">
           <TestTubeDiagonal />
-          Configure New Test
+          New Test Run
         </CardTitle>
+        <CardDescription>Configure and launch k6 performance tests.</CardDescription>
       </CardHeader>
       <CardContent>
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-            <FormField
-              control={form.control}
-              name="url"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel className="text-lg">Target URL</FormLabel>
-                   <FormDescription>Enter the full URL of the page you want to test.</FormDescription>
-                  <FormControl>
-                    <div className="relative">
-                      <Server className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
-                      <Input placeholder="https://your-website.com/page" {...field} className="pl-10 h-12 text-lg" />
-                    </div>
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
-            <FormItem>
-                <FormLabel className="text-lg">Test Suites</FormLabel>
-                <FormDescription>Select which test suites to run for the URL.</FormDescription>
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-4 pt-2">
+            
+            <div className="grid grid-cols-1 lg:grid-cols-2 lg:gap-8">
+                {/* Left Column */}
+                <div className="space-y-8">
                     <FormField
+                      control={form.control}
+                      name="url"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel className="text-lg">Target Endpoint</FormLabel>
+                          <FormDescription>The full URL of the API endpoint or page to test.</FormDescription>
+                          <FormControl>
+                            <div className="relative">
+                              <Server className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
+                              <Input placeholder="https://your-api.com/v1/users" {...field} className="pl-10 h-11 text-base" />
+                            </div>
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                     <FormField
                       control={form.control}
                       name="runLoadTest"
                       render={({ field }) => (
-                         <FormItem className="flex flex-row items-start space-x-3 space-y-0 rounded-md border p-4">
-                            <FormControl><Switch checked={field.value} onCheckedChange={field.onChange} /></FormControl>
-                            <div className="space-y-1 leading-none">
-                                <FormLabel className="flex items-center gap-2"><Gauge/> Load Test</FormLabel>
-                                <FormDescription>Run a k6 load test to measure performance under pressure.</FormDescription>
+                         <FormItem className="flex flex-row items-center justify-between rounded-lg border p-4 shadow-sm">
+                            <div className="space-y-0.5">
+                                <FormLabel className="text-base flex items-center gap-2"><Gauge/> k6 Load Test</FormLabel>
+                                <FormDescription>Simulate traffic to measure performance under pressure.</FormDescription>
                             </div>
-                        </FormItem>
-                      )}
-                    />
-                     <FormField
-                      control={form.control}
-                      name="runLighthouse"
-                      render={({ field }) => (
-                         <FormItem className="flex flex-row items-start space-x-3 space-y-0 rounded-md border p-4">
                             <FormControl><Switch checked={field.value} onCheckedChange={field.onChange} /></FormControl>
-                            <div className="space-y-1 leading-none">
-                                <FormLabel className="flex items-center gap-2"><ShieldCheck/> Lighthouse Audit</FormLabel>
-                                <FormDescription>Analyze Performance, SEO, and Accessibility scores.</FormDescription>
-                            </div>
-                        </FormItem>
-                      )}
-                    />
-                     <FormField
-                      control={form.control}
-                      name="runSeo"
-                      render={({ field }) => (
-                         <FormItem className="flex flex-row items-start space-x-3 space-y-0 rounded-md border p-4">
-                            <FormControl><Switch checked={field.value} onCheckedChange={field.onChange} /></FormControl>
-                            <div className="space-y-1 leading-none">
-                                <FormLabel className="flex items-center gap-2"><Search/> SEO Analysis</FormLabel>
-                                <FormDescription>Check meta tags, sitemap, and other SEO factors.</FormDescription>
-                            </div>
                         </FormItem>
                       )}
                     />
                 </div>
-            </FormItem>
 
+                {/* Right Column */}
+                <div className="space-y-8 mt-8 lg:mt-0">
+                   <Card className={isLoadTestEnabled ? '' : 'bg-muted/50'}>
+                       <CardHeader>
+                           <CardTitle className="flex items-center gap-2"><Settings /> Request Configuration</CardTitle>
+                           <CardDescription>Define the HTTP request details for the load test.</CardDescription>
+                       </CardHeader>
+                       <CardContent className="space-y-6">
+                            <FormField
+                            control={form.control}
+                            name="method"
+                            render={({ field }) => (
+                                <FormItem>
+                                <FormLabel>HTTP Method</FormLabel>
+                                <Select onValueChange={field.onChange} defaultValue={field.value} disabled={!isLoadTestEnabled}>
+                                    <FormControl>
+                                    <SelectTrigger>
+                                        <SelectValue placeholder="Select HTTP method" />
+                                    </SelectTrigger>
+                                    </FormControl>
+                                    <SelectContent>
+                                    <SelectItem value="GET">GET</SelectItem>
+                                    <SelectItem value="POST">POST</SelectItem>
+                                    <SelectItem value="PUT">PUT</SelectItem>
+                                    <SelectItem value="DELETE">DELETE</SelectItem>
+                                    <SelectItem value="PATCH">PATCH</SelectItem>
+                                    </SelectContent>
+                                </Select>
+                                <FormMessage />
+                                </FormItem>
+                            )}
+                            />
+                            <div>
+                                <FormLabel>Headers</FormLabel>
+                                {headerFields.map((field, index) => (
+                                    <div key={field.id} className="flex items-center gap-2 mt-2">
+                                    <FormField
+                                        control={form.control}
+                                        name={`headers.${index}.key`}
+                                        render={({ field }) => <FormItem className="flex-1"><FormControl><Input placeholder="Header Name" {...field} disabled={!isLoadTestEnabled}/></FormControl></FormItem>}
+                                    />
+                                        <FormField
+                                        control={form.control}
+                                        name={`headers.${index}.value`}
+                                        render={({ field }) => <FormItem className="flex-1"><FormControl><Input placeholder="Header Value" {...field} disabled={!isLoadTestEnabled}/></FormControl></FormItem>}
+                                    />
+                                    <Button type="button" variant="destructive" size="icon" onClick={() => removeHeader(index)} disabled={!isLoadTestEnabled}><Trash2 className="h-4 w-4" /></Button>
+                                    </div>
+                                ))}
+                                <Button type="button" variant="outline" size="sm" className="mt-2" onClick={() => appendHeader({ key: '', value: '' })} disabled={!isLoadTestEnabled}>
+                                    <Plus className="mr-2 h-4 w-4" /> Add Header
+                                </Button>
+                            </div>
+                            <FormField
+                                control={form.control}
+                                name="body"
+                                render={({ field }) => (
+                                    <FormItem>
+                                    <FormLabel className="flex items-center gap-2"><FileJson /><span>Request Body</span></FormLabel>
+                                    <FormControl>
+                                        <Textarea placeholder='{ "key": "value" }' className="font-mono" rows={5} {...field} disabled={!isLoadTestEnabled}/>
+                                    </FormControl>
+                                    <FormMessage />
+                                    </FormItem>
+                                )}
+                            />
+                       </CardContent>
+                   </Card>
+                </div>
+            </div>
 
-            {form.watch('runLoadTest') && (
-                <Accordion type="single" collapsible className="w-full" defaultValue="load-test-config">
-                  <AccordionItem value="load-test-config">
-                    <AccordionTrigger>
-                        <div className="flex items-center gap-2"><Gauge /><span>Load Test Configuration</span></div>
-                    </AccordionTrigger>
-                    <AccordionContent className="space-y-6 pt-4">
-                        <Tabs defaultValue={form.getValues('testPreset')} onValueChange={handlePresetChange} className="w-full">
-                          <FormLabel>Test Type</FormLabel>
-                          <TabsList className="grid w-full grid-cols-2 md:grid-cols-5 mt-2">
-                            <TabsTrigger value="baseline">Baseline</TabsTrigger>
-                            <TabsTrigger value="spike">Spike</TabsTrigger>
-                            <TabsTrigger value="stress">Stress</TabsTrigger>
-                            <TabsTrigger value="soak">Soak</TabsTrigger>
-                            <TabsTrigger value="custom">Custom</TabsTrigger>
-                          </TabsList>
-                        </Tabs>
+            {isLoadTestEnabled && (
+                <Card>
+                    <CardHeader>
+                        <CardTitle className="flex items-center gap-2"><Gauge/> Load Test Profile</CardTitle>
+                        <CardDescription>Choose a preset or define a custom load profile.</CardDescription>
+                    </CardHeader>
+                    <CardContent>
+                         <FormField
+                            control={form.control}
+                            name="testPreset"
+                            render={({ field }) => (
+                                <FormItem className="space-y-3">
+                                    <FormControl>
+                                        <RadioGroup
+                                            onValueChange={handlePresetChange}
+                                            defaultValue={field.value}
+                                            className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-4"
+                                        >
+                                            {Object.entries(TEST_PRESETS).map(([key]) => (
+                                                 <FormItem key={key} className="flex items-center space-x-3 space-y-0">
+                                                    <FormControl>
+                                                        <Card className={`p-4 cursor-pointer hover:border-primary w-full ${field.value === key ? 'border-primary shadow-md' : ''}`}>
+                                                          <RadioGroupItem value={key} id={key} className="sr-only"/>
+                                                            <FormLabel htmlFor={key} className="font-semibold capitalize text-base cursor-pointer">
+                                                                {key}
+                                                            </FormLabel>
+                                                        </Card>
+                                                    </FormControl>
+                                                </FormItem>
+                                            ))}
+                                            <FormItem className="flex items-center space-x-3 space-y-0">
+                                                <FormControl>
+                                                    <Card className={`p-4 cursor-pointer hover:border-primary w-full ${field.value === 'custom' ? 'border-primary shadow-md' : ''}`}>
+                                                        <RadioGroupItem value="custom" id="custom" className="sr-only"/>
+                                                        <FormLabel htmlFor="custom" className="font-semibold capitalize text-base cursor-pointer">
+                                                            Custom
+                                                        </FormLabel>
+                                                    </Card>
+                                                </FormControl>
+                                            </FormItem>
+                                        </RadioGroup>
+                                    </FormControl>
+                                    <FormMessage />
+                                </FormItem>
+                            )}
+                            />
 
                         {form.watch('testPreset') === 'custom' && (
-                          <Card className="bg-muted/30">
-                            <CardContent className="pt-6">
+                          <Card className="bg-muted/30 mt-6">
+                            <CardHeader>
+                                <CardTitle>Custom Load Profile</CardTitle>
+                                <CardDescription>Manually set Virtual Users (VUs) and duration, or define ramping stages.</CardDescription>
+                            </CardHeader>
+                            <CardContent>
                               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                                 <FormField
                                   control={form.control}
@@ -291,8 +361,8 @@ export default function TestForm({ initialValues, onRunTest }: TestFormProps) {
                                 />
                               </div>
                               <div className="mt-6">
-                                 <FormLabel>Stages</FormLabel>
-                                  <FormDescription>Define ramping stages for VUs. This overrides VUs and Duration.</FormDescription>
+                                 <FormLabel>Ramping Stages</FormLabel>
+                                  <FormDescription>Define ramping stages for VUs. This overrides fixed VUs and Duration.</FormDescription>
                                  {stageFields.map((field, index) => (
                                     <div key={field.id} className="flex items-end gap-2 mt-2">
                                       <FormField
@@ -316,81 +386,16 @@ export default function TestForm({ initialValues, onRunTest }: TestFormProps) {
                             </CardContent>
                           </Card>
                         )}
-                        <Accordion type="multiple" className="w-full">
-                          <AccordionItem value="request-details">
-                            <AccordionTrigger>
-                                <div className="flex items-center gap-2"><Settings /><span>Request Details</span></div>
-                            </AccordionTrigger>
-                            <AccordionContent className="space-y-6 pt-4">
-                              <FormField
-                                control={form.control}
-                                name="method"
-                                render={({ field }) => (
-                                  <FormItem>
-                                    <FormLabel>HTTP Method</FormLabel>
-                                    <Select onValueChange={field.onChange} defaultValue={field.value}>
-                                      <FormControl>
-                                        <SelectTrigger>
-                                          <SelectValue placeholder="Select HTTP method" />
-                                        </SelectTrigger>
-                                      </FormControl>
-                                      <SelectContent>
-                                        <SelectItem value="GET">GET</SelectItem>
-                                        <SelectItem value="POST">POST</SelectItem>
-                                        <SelectItem value="PUT">PUT</SelectItem>
-                                        <SelectItem value="DELETE">DELETE</SelectItem>
-                                        <SelectItem value="PATCH">PATCH</SelectItem>
-                                      </SelectContent>
-                                    </Select>
-                                    <FormMessage />
-                                  </FormItem>
-                                )}
-                              />
-                              <div>
-                                <FormLabel>Headers</FormLabel>
-                                {headerFields.map((field, index) => (
-                                  <div key={field.id} className="flex items-center gap-2 mt-2">
-                                    <FormField
-                                        control={form.control}
-                                        name={`headers.${index}.key`}
-                                        render={({ field }) => <FormItem className="flex-1"><FormControl><Input placeholder="Header Name" {...field} /></FormControl></FormItem>}
-                                    />
-                                     <FormField
-                                        control={form.control}
-                                        name={`headers.${index}.value`}
-                                        render={({ field }) => <FormItem className="flex-1"><FormControl><Input placeholder="Header Value" {...field} /></FormControl></FormItem>}
-                                    />
-                                    <Button type="button" variant="destructive" size="icon" onClick={() => removeHeader(index)}><Trash2 className="h-4 w-4" /></Button>
-                                  </div>
-                                ))}
-                                <Button type="button" variant="outline" size="sm" className="mt-2" onClick={() => appendHeader({ key: '', value: '' })}>
-                                    <Plus className="mr-2 h-4 w-4" /> Add Header
-                                </Button>
-                              </div>
-                               <FormField
-                                control={form.control}
-                                name="body"
-                                render={({ field }) => (
-                                  <FormItem>
-                                    <FormLabel className="flex items-center gap-2"><FileJson /><span>Request Body</span></FormLabel>
-                                    <FormControl>
-                                      <Textarea placeholder='{ "key": "value" }' className="font-mono" rows={5} {...field} />
-                                    </FormControl>
-                                    <FormMessage />
-                                  </FormItem>
-                                )}
-                              />
-                            </AccordionContent>
-                          </AccordionItem>
-                        </Accordion>
-                    </AccordionContent>
-                  </AccordionItem>
-                </Accordion>
+                    </CardContent>
+                </Card>
             )}
             
-            <Button type="submit" size="lg" className="w-full" disabled={form.formState.isSubmitting}>
-              <Rocket className="mr-2 h-5 w-5" /> Run Test(s)
-            </Button>
+            <div className="flex justify-end pt-8">
+                <Button type="submit" size="lg" className="w-full md:w-auto" disabled={form.formState.isSubmitting}>
+                <Rocket className="mr-2 h-5 w-5" />
+                {form.formState.isSubmitting ? 'Starting Test...' : 'Run Test'}
+                </Button>
+            </div>
           </form>
         </Form>
       </CardContent>
