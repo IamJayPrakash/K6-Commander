@@ -140,6 +140,14 @@ export function HistoryPanel({
   const handleCancelDelete = React.useCallback(() => {
     setItemToDelete(null);
   }, []);
+  
+  const handleLoadItem = React.useCallback((item: HistoryItem) => {
+    onLoad(item);
+  }, [onLoad]);
+
+  const handleRerunItem = React.useCallback((config: TestConfiguration) => {
+    onRerun(config);
+  }, [onRerun]);
 
   return (
     <>
@@ -163,7 +171,7 @@ export function HistoryPanel({
                 <SidebarMenuItem key={item.id} className="group/menu-item">
                   <SidebarMenuButton
                     className="h-auto flex-col items-start p-2"
-                    onClick={() => onLoad(item)}
+                    onClick={() => handleLoadItem(item)}
                     tooltip={{
                       children: 'View Summary',
                       side: 'right',
@@ -185,7 +193,7 @@ export function HistoryPanel({
                       variant="ghost"
                       size="icon"
                       className="h-7 w-7"
-                      onClick={() => onRerun(item.config)}
+                      onClick={() => handleRerunItem(item.config)}
                     >
                       <Play className="h-4 w-4" />
                     </Button>
