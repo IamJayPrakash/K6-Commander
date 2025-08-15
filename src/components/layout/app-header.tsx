@@ -1,7 +1,7 @@
 
 'use client';
 
-import { Rocket, History, Info, HelpCircle, Mail, PlayCircle } from 'lucide-react';
+import { Rocket, History, Info, Github, PlayCircle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useTheme } from 'next-themes';
 import { Sun, Moon } from 'lucide-react';
@@ -50,6 +50,12 @@ export function AppHeader({ setView }: AppHeaderProps) {
                 <PlayCircle className='h-4 w-4 mr-2'/>
                 Start Tour
             </Button>
+             <a href="https://github.com/IamJayPrakash/K6-Commander" target="_blank" rel="noopener noreferrer">
+                <Button variant="ghost" size="icon">
+                    <Github className="h-5 w-5" />
+                    <span className="sr-only">GitHub</span>
+                </Button>
+            </a>
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <Button variant="ghost" size="icon">
