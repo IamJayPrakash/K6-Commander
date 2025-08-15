@@ -142,7 +142,7 @@ export default function Home() {
       default:
         return (
           <TestForm
-            key={rerunConfig ? `rerun-${JSON.stringify(rerunConfig)}` : 'new-form'}
+            key={rerunConfig ? `rerun-${activeTestId}` : 'new-form'}
             defaultValues={formDefaultValues}
             onRunTest={handleRunTest}
           />
