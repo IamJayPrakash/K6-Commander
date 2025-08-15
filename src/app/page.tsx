@@ -29,7 +29,7 @@ export default function Home() {
   const handleRunTest = (testId: string, config: TestConfiguration) => {
     setActiveTestId(testId);
     setActiveTestConfig(config);
-    setRerunConfig(null);
+    setRerunConfig(null); // Clear any rerun config
     setView('running');
   };
 
@@ -73,19 +73,20 @@ export default function Home() {
   };
   
   const formDefaultValues = useMemo(() => {
-    if (rerunConfig) {
+    const configToUse = rerunConfig;
+    if (configToUse) {
         return {
-            url: rerunConfig.url || '',
-            method: rerunConfig.method || 'GET',
-            headers: rerunConfig.headers ? Object.entries(rerunConfig.headers).map(([key, value]) => ({ key, value })) : [],
-            body: rerunConfig.body || '',
-            testPreset: rerunConfig.testPreset || 'baseline',
-            vus: rerunConfig.vus,
-            duration: rerunConfig.duration,
-            stages: rerunConfig.stages,
-            runLoadTest: rerun-config.runLoadTest,
-            runLighthouse: rerunConfig.runLighthouse,
-            runSeo: rerunConfig.runSeo,
+            url: configToUse.url || '',
+            method: configToUse.method || 'GET',
+            headers: configToUse.headers ? Object.entries(configToUse.headers).map(([key, value]) => ({ key, value })) : [],
+            body: configToUse.body || '',
+            testPreset: configToUse.testPreset || 'custom',
+            vus: configToUse.vus,
+            duration: configToUse.duration,
+            stages: configToUse.stages,
+            runLoadTest: configToUse.runLoadTest,
+            runLighthouse: configToUse.runLighthouse,
+            runSeo: configToUse.runSeo,
         }
     }
     // Default for a new form
@@ -140,7 +141,7 @@ export default function Home() {
       default:
         return (
           <TestForm
-            key={rerunConfig ? 'rerun-form' : 'new-form'}
+            key={rerunConfig ? `rerun-${rerunConfig.url}` : 'new-form'}
             defaultValues={formDefaultValues}
             onRunTest={handleRunTest}
           />
@@ -149,7 +150,7 @@ export default function Home() {
   };
 
   return (
-    <div className="flex flex-col min-h-screen bg-gradient-to-br from-[#000000] to-[#1a1a1a]">
+    <div className="flex flex-col min-h-screen bg-gradient-to-br from-black to-[#1a1a1a]">
         <AppHeader setView={setView} />
         <main className="flex-1 container mx-auto px-4 md:px-6 lg:px-8 py-8">
             {renderView()}
