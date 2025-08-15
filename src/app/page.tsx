@@ -24,13 +24,12 @@ export default function Home() {
   const [activeTestSummary, setActiveTestSummary] =
     useState<K6Summary | null>(null);
   const [history, setHistory] = useLocalStorage<HistoryItem[]>('k6-history', []);
-  const [formSeed, setFormSeed] = useState(Date.now());
   const [rerunConfig, setRerunConfig] = useState<TestConfiguration | null>(null);
 
   const handleRunTest = (testId: string, config: TestConfiguration) => {
     setActiveTestId(testId);
     setActiveTestConfig(config);
-    setRerunConfig(null); // Clear rerun config
+    setRerunConfig(null);
     setView('running');
   };
 
@@ -62,34 +61,31 @@ export default function Home() {
 
   const handleRerun = (config: TestConfiguration) => {
     setRerunConfig(config);
-    setFormSeed(Date.now()); // Re-seed form with this config
     setView('form');
   };
-
+  
   const handleCreateNewTest = () => {
     setRerunConfig(null);
     setActiveTestConfig(null);
     setActiveTestSummary(null);
     setActiveTestId(null);
-    setFormSeed(Date.now());
     setView('form');
   };
-
+  
   const formDefaultValues = useMemo(() => {
-    const config = rerunConfig; // Prioritize rerun config
-    if (config) {
+    if (rerunConfig) {
         return {
-            url: config.url || '',
-            method: config.method || 'GET',
-            headers: config.headers ? Object.entries(config.headers).map(([key, value]) => ({ key, value })) : [],
-            body: config.body || '',
-            testPreset: config.testPreset || 'baseline',
-            vus: config.vus,
-            duration: config.duration,
-            stages: config.stages,
-            runLoadTest: config.runLoadTest,
-            runLighthouse: config.runLighthouse,
-            runSeo: config.runSeo,
+            url: rerunConfig.url || '',
+            method: rerunConfig.method || 'GET',
+            headers: rerunConfig.headers ? Object.entries(rerunConfig.headers).map(([key, value]) => ({ key, value })) : [],
+            body: rerunConfig.body || '',
+            testPreset: rerunConfig.testPreset || 'baseline',
+            vus: rerunConfig.vus,
+            duration: rerunConfig.duration,
+            stages: rerunConfig.stages,
+            runLoadTest: rerun-config.runLoadTest,
+            runLighthouse: rerunConfig.runLighthouse,
+            runSeo: rerunConfig.runSeo,
         }
     }
     // Default for a new form
@@ -107,7 +103,7 @@ export default function Home() {
         runSeo: false,
     }
   }, [rerunConfig]);
-  
+
   const renderView = () => {
     switch (view) {
       case 'running':
@@ -144,7 +140,7 @@ export default function Home() {
       default:
         return (
           <TestForm
-            key={formSeed}
+            key={rerunConfig ? 'rerun-form' : 'new-form'}
             defaultValues={formDefaultValues}
             onRunTest={handleRunTest}
           />
