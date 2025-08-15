@@ -1,7 +1,6 @@
 
 'use client';
 
-import type { Metadata, Viewport } from 'next';
 import './globals.css';
 import { Toaster } from '@/components/ui/toaster';
 import { Inter } from 'next/font/google';
@@ -9,7 +8,7 @@ import { cn } from '@/lib/utils';
 import { Providers } from './providers';
 import { AppHeader } from '@/components/layout/app-header';
 import { AppFooter } from '@/components/layout/app-footer';
-import { useState } from 'react';
+import { useCallback } from 'react';
 
 const inter = Inter({
   subsets: ['latin'],
@@ -72,9 +71,11 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  // The `setView` state is no longer used here as navigation is handled by Next.js router
-  // We can pass a dummy function or adapt the header if it needs to trigger layout changes.
-  const [view, setView] = useState('form');
+  // Using useCallback to ensure the function reference is stable
+  const setView = useCallback(() => {
+    // This function is now just a placeholder for the prop,
+    // as navigation is handled by Next.js router.
+  }, []);
 
   return (
     <html lang="en" className="dark" suppressHydrationWarning>
@@ -86,7 +87,7 @@ export default function RootLayout({
       >
         <Providers>
            <div className="flex flex-col min-h-screen bg-gradient-to-br from-black to-[#1a1a1a]">
-              <AppHeader setView={() => {}} />
+              <AppHeader setView={setView} />
               <main className="flex-1 container mx-auto px-4 md:px-6 lg:px-8 py-8">
                 {children}
               </main>
