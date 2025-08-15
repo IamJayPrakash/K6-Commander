@@ -1,4 +1,3 @@
-
 'use client';
 
 import { useState, useEffect } from 'react';
@@ -8,7 +7,7 @@ import TestSummary from '@/components/test/test-summary';
 import type { TestConfiguration, K6Summary, HistoryItem, LighthouseSummary, SeoAnalysis } from '@/types';
 import { useLocalStorage } from '@/hooks/use-local-storage';
 import AboutPage from '@/components/pages/about-page';
-import HistoryPage from '@/components/pages/history-page';
+import HistoryPage from './history/page';
 import Joyride, { STATUS } from 'react-joyride';
 import { TOUR_STEPS } from '@/lib/constants';
 import ConsentModal from '@/components/layout/consent-modal';
@@ -128,12 +127,7 @@ export default function Home() {
       case 'about':
         return <AboutPage />;
       case 'history':
-        return <HistoryPage 
-                  history={history} 
-                  setHistory={setHistory}
-                  onLoad={handleLoadFromHistory}
-                  onRerun={handleRerun}
-                />;
+        return <HistoryPage />;
       case 'form':
       default:
         return (
