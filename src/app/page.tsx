@@ -181,7 +181,7 @@ export default function Home() {
   };
 
   return (
-    <div className="flex flex-1">
+    <div className="flex flex-1 min-h-0">
       <Sidebar>
           <HistoryPanel 
               history={history}
@@ -190,7 +190,7 @@ export default function Home() {
               onRerun={handleRerun}
           />
       </Sidebar>
-       <main className="flex-1 p-4 md:p-6 lg:p-8">
+       <main className="flex-1 p-4 md:p-6 lg:p-8 overflow-auto">
         {isMounted && (
             <Joyride
             steps={TOUR_STEPS}

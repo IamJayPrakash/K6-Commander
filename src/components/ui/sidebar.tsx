@@ -192,16 +192,16 @@ const Sidebar = React.forwardRef<
       <aside
         ref={ref}
         className={cn(
-            "hidden md:flex flex-col h-full bg-card/80 border-r transition-all duration-300 ease-in-out",
+            "relative hidden md:flex flex-col h-full bg-card/80 border-r transition-all duration-300 ease-in-out",
             state === 'expanded' ? 'w-[var(--sidebar-width)]' : 'w-[var(--sidebar-width-icon)]',
             className
         )}
         data-state={state}
         {...props}
       >
-        <div className="flex-1 overflow-y-auto">{children}</div>
-         <div className="absolute top-1/2 -right-3 transform -translate-y-1/2 z-10">
-            <Button variant="outline" size="icon" className="rounded-full h-6 w-6 p-0" onClick={toggleSidebar}>
+        <div className="flex-1 flex flex-col min-h-0">{children}</div>
+         <div className="absolute top-1/2 -right-[13px] transform -translate-y-1/2 z-10">
+            <Button variant="outline" size="icon" className="rounded-full h-7 w-7 p-0" onClick={toggleSidebar}>
                 {open ? <PanelLeft className="h-4 w-4"/> : <PanelRight className="h-4 w-4"/>}
             </Button>
         </div>
@@ -311,7 +311,7 @@ const SidebarContent = React.forwardRef<
       ref={ref}
       data-sidebar="content"
       className={cn(
-        "flex min-h-0 flex-1 flex-col gap-2 overflow-auto",
+        "flex min-h-0 flex-1 flex-col gap-2",
         state === 'collapsed' && 'overflow-hidden',
         className
       )}

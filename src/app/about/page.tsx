@@ -1,47 +1,85 @@
 
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Info, Rocket, Database, BarChart2 } from "lucide-react";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Info, Rocket, Database, BarChart2, Github, Shield, Code } from "lucide-react";
+import Link from "next/link";
 
 export default function AboutPage() {
     return (
-        <Card className="bg-card/50 backdrop-blur-sm">
-            <CardHeader>
-                <CardTitle className="flex items-center gap-2 text-2xl">
-                    <Info className="text-primary" />
-                    About K6 Commander
-                </CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-6 text-lg text-foreground/80">
-                <p>
-                    K6 Commander is a powerful, local-first testing platform designed for developers who need to ensure their applications are performant, accessible, and SEO-friendly. We believe that comprehensive testing should be easy to set up and run, without the complexity of cloud services for most use cases.
-                </p>
-                <div className="grid md:grid-cols-3 gap-6">
-                    <div className="flex flex-col items-center text-center p-4 rounded-lg bg-background/50">
-                        <Rocket size={40} className="text-accent mb-2" />
-                        <h3 className="text-xl font-semibold mb-2">Load Testing</h3>
-                        <p className="text-sm">
-                            Run sophisticated load tests using k6, with real-time dashboards powered by InfluxDB and Grafana.
-                        </p>
+        <div className="space-y-8">
+            <Card className="bg-card/50 backdrop-blur-sm text-center">
+                <CardHeader>
+                    <div className="mx-auto bg-primary/10 rounded-full p-4 w-fit border-2 border-dashed border-primary/20">
+                        <Rocket className="h-12 w-12 text-primary" />
                     </div>
-                    <div className="flex flex-col items-center text-center p-4 rounded-lg bg-background/50">
-                        <BarChart2 size={40} className="text-accent mb-2" />
-                        <h3 className="text-xl font-semibold mb-2">Lighthouse Audits</h3>
-                        <p className="text-sm">
-                            Get detailed Google Lighthouse reports to analyze performance, accessibility, and SEO scores.
-                        </p>
-                    </div>
-                    <div className="flex flex-col items-center text-center p-4 rounded-lg bg-background/50">
-                        <Database size={40} className="text-accent mb-2" />
-                        <h3 className="text-xl font-semibold mb-2">Local First</h3>
-                        <p className="text-sm">
-                            All your test configurations and history are stored securely in your browser's local storage.
-                        </p>
-                    </div>
-                </div>
-                <p>
-                    This tool is built for developers, by developers. Our goal is to provide a seamless and powerful testing experience right on your local machine.
-                </p>
-            </CardContent>
-        </Card>
+                    <CardTitle className="text-3xl font-bold pt-4">About K6 Commander</CardTitle>
+                    <CardDescription className="text-lg text-muted-foreground max-w-3xl mx-auto">
+                        K6 Commander is a powerful, local-first testing platform designed for developers who need to ensure their applications are performant, accessible, and SEO-friendly without the complexity of cloud services.
+                    </CardDescription>
+                </CardHeader>
+            </Card>
+
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <Card className="bg-card/50 backdrop-blur-sm">
+                    <CardHeader className="flex-row items-center gap-4">
+                        <Database size={32} className="text-accent flex-shrink-0" />
+                        <div>
+                            <CardTitle>Local First Philosophy</CardTitle>
+                            <CardDescription>Your data stays with you.</CardDescription>
+                        </div>
+                    </CardHeader>
+                    <CardContent>
+                        All your test configurations and history are stored securely in your browser's local storage. No cloud account needed, no data transmission, full privacy.
+                    </CardContent>
+                </Card>
+                <Card className="bg-card/50 backdrop-blur-sm">
+                    <CardHeader className="flex-row items-center gap-4">
+                        <Shield size={32} className="text-accent flex-shrink-0" />
+                        <div>
+                            <CardTitle>All-in-One Auditing</CardTitle>
+                            <CardDescription>One tool for multiple tests.</CardDescription>
+                        </div>
+                    </CardHeader>
+                    <CardContent>
+                        Run sophisticated k6 load tests, get detailed Google Lighthouse reports, and perform basic SEO checks from a single, unified interface.
+                    </CardContent>
+                </Card>
+                <Card className="bg-card/50 backdrop-blur-sm">
+                    <CardHeader className="flex-row items-center gap-4">
+                         <Github size={32} className="text-accent flex-shrink-0" />
+                        <div>
+                            <CardTitle>Open & Extensible</CardTitle>
+                            <CardDescription>Built for the community.</CardDescription>
+                        </div>
+                    </CardHeader>
+                    <CardContent>
+                        K6 Commander is open-source. Fork it, extend it, and contribute back. Check out the <Link href="https://github.com/your-username/k6-commander" target="_blank" className="text-primary underline">GitHub repository</Link>.
+                    </CardContent>
+                </Card>
+            </div>
+            
+            <Card className="bg-card/50 backdrop-blur-sm">
+                <CardHeader>
+                    <CardTitle className="flex items-center gap-2 text-2xl">
+                        <Code className="text-primary" />
+                        Tech Stack
+                    </CardTitle>
+                    <CardDescription>
+                        Built with modern, powerful, and developer-friendly technologies.
+                    </CardDescription>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                    <ul className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
+                        <li className="flex items-center gap-2 p-2 bg-background/50 rounded-lg"><strong className="font-semibold">Frontend:</strong>Next.js & React</li>
+                        <li className="flex items-center gap-2 p-2 bg-background/50 rounded-lg"><strong className="font-semibold">Styling:</strong>Tailwind CSS</li>
+                        <li className="flex items-center gap-2 p-2 bg-background/50 rounded-lg"><strong className="font-semibold">UI:</strong>shadcn/ui</li>
+                        <li className="flex items-center gap-2 p-2 bg-background/50 rounded-lg"><strong className="font-semibold">Load Testing:</strong>k6</li>
+                        <li className="flex items-center gap-2 p-2 bg-background/50 rounded-lg"><strong className="font-semibold">Auditing:</strong>Lighthouse</li>
+                        <li className="flex items-center gap-2 p-2 bg-background/50 rounded-lg"><strong className="font-semibold">Metrics:</strong>InfluxDB</li>
+                        <li className="flex items-center gap-2 p-2 bg-background/50 rounded-lg"><strong className="font-semibold">Dashboards:</strong>Grafana</li>
+                        <li className="flex items-center gap-2 p-2 bg-background/50 rounded-lg"><strong className="font-semibold">Orchestration:</strong>Docker</li>
+                    </ul>
+                </CardContent>
+            </Card>
+        </div>
     );
 }
