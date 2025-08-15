@@ -63,19 +63,54 @@ const formSchema = z.object({
 
 type TestFormValues = z.infer<typeof formSchema>;
 
+const newTestDefaultValues: Partial<TestFormValues> = {
+    url: '',
+    method: 'GET' as const,
+    headers: [],
+    body: '',
+    testPreset: 'baseline' as const,
+    vus: TEST_PRESETS.baseline.vus,
+    duration: TEST_PRESETS.baseline.duration,
+    stages: TEST_PRESETS.baseline.stages,
+    runLoadTest: true,
+    runLighthouse: false,
+    runSeo: false,
+};
+
+
 interface TestFormProps {
-  defaultValues: Partial<TestFormValues>;
+  rerunConfig: TestConfiguration | null;
   onRunTest: (testId: string, config: TestConfiguration) => void;
 }
 
-export default function TestForm({ defaultValues, onRunTest }: TestFormProps) {
+export default function TestForm({ rerunConfig, onRunTest }: TestFormProps) {
   const { toast } = useToast();
+
+  const getInitialValues = () => {
+    if (!rerunConfig) {
+      return newTestDefaultValues;
+    }
+    // Sort headers to ensure a stable order and prevent re-render loops
+    const sortedHeaders = rerunConfig.headers ? Object.entries(rerunConfig.headers).sort((a, b) => a[0].localeCompare(b[0])).map(([key, value]) => ({ key, value: String(value) })) : [];
+
+    return {
+        url: rerunConfig.url || '',
+        method: rerunConfig.method || 'GET',
+        headers: sortedHeaders,
+        body: rerunConfig.body || '',
+        testPreset: rerunConfig.testPreset || 'custom',
+        vus: rerunConfig.vus,
+        duration: rerunConfig.duration,
+        stages: rerunConfig.stages,
+        runLoadTest: rerunConfig.runLoadTest,
+        runLighthouse: rerunConfig.runLighthouse,
+        runSeo: rerunConfig.runSeo,
+    };
+  };
+
   const form = useForm<TestFormValues>({
     resolver: zodResolver(formSchema),
-    defaultValues: {
-      ...defaultValues,
-      headers: defaultValues.headers || [],
-    }
+    defaultValues: getInitialValues(),
   });
 
   const { fields: headerFields, append: appendHeader, remove: removeHeader } = useFieldArray({

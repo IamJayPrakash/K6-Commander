@@ -13,24 +13,8 @@ import AboutPage from '@/components/pages/about-page';
 import HelpPage from '@/components/pages/help-page';
 import ContactPage from '@/components/pages/contact-page';
 import HistoryPage from '@/components/pages/history-page';
-import { TEST_PRESETS } from '@/lib/constants';
 
 type View = 'form' | 'running' | 'summary' | 'about' | 'history' | 'help' | 'contact';
-
-// Define default values outside the component to ensure it's a stable reference
-const newTestDefaultValues = {
-    url: '',
-    method: 'GET' as const,
-    headers: [],
-    body: '',
-    testPreset: 'baseline' as const,
-    vus: TEST_PRESETS.baseline.vus,
-    duration: TEST_PRESETS.baseline.duration,
-    stages: TEST_PRESETS.baseline.stages,
-    runLoadTest: true,
-    runLighthouse: false,
-    runSeo: false,
-};
 
 export default function Home() {
   const [view, setView] = useState<View>('form');
@@ -44,7 +28,8 @@ export default function Home() {
   // By using a key that changes, we can force React to re-mount the TestForm component,
   // ensuring a clean state for the form instead of trying to update the existing one.
   const [formKey, setFormKey] = useState(Date.now());
-  const [formInitialValues, setFormInitialValues] = useState(newTestDefaultValues);
+  const [rerunConfig, setRerunConfig] = useState<TestConfiguration | null>(null);
+
 
   const handleRunTest = (testId: string, config: TestConfiguration) => {
     setActiveTestId(testId);
@@ -79,35 +64,16 @@ export default function Home() {
   };
 
   const handleRerun = (config: TestConfiguration) => {
-    // Set the initial values for the form based on the historical run
-    // Sort headers to ensure a stable order and prevent re-render loops
-    const sortedHeaders = config.headers ? Object.entries(config.headers).sort((a, b) => a[0].localeCompare(b[0])).map(([key, value]) => ({ key, value: String(value) })) : [];
-    
-    setFormInitialValues({
-        url: config.url || '',
-        method: config.method || 'GET',
-        headers: sortedHeaders,
-        body: config.body || '',
-        testPreset: config.testPreset || 'custom',
-        vus: config.vus,
-        duration: config.duration,
-        stages: config.stages,
-        runLoadTest: config.runLoadTest,
-        runLighthouse: config.runLighthouse,
-        runSeo: config.runSeo,
-    });
-    // Change the key to force re-mount and navigate to the form
+    setRerunConfig(config);
     setFormKey(Date.now());
     setView('form');
   };
   
   const handleCreateNewTest = () => {
-    // Reset to default values
-    setFormInitialValues(newTestDefaultValues);
+    setRerunConfig(null);
     setActiveTestConfig(null);
     setActiveTestSummary(null);
     setActiveTestId(null);
-    // Change the key to force re-mount
     setFormKey(Date.now());
     setView('form');
   };
@@ -149,7 +115,7 @@ export default function Home() {
         return (
           <TestForm
             key={formKey}
-            defaultValues={formInitialValues}
+            rerunConfig={rerunConfig}
             onRunTest={handleRunTest}
           />
         );
