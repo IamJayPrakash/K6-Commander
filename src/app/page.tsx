@@ -15,6 +15,7 @@ import type { TestResults } from '@/types/index';
 import { Card, CardDescription } from '@/components/ui/card';
 import { Clock } from 'lucide-react';
 import { formatDistanceToNow } from 'date-fns';
+import Link from 'next/link';
 
 type View = 'form' | 'running' | 'summary';
 
@@ -207,10 +208,12 @@ export default function Home() {
       )}
       <ConsentModal />
        {view === 'form' && lastSaved && (
-        <Card className="mb-6 bg-blue-900/10 border-blue-500/20">
-            <CardDescription className="text-center p-2 text-xs text-blue-300 flex items-center justify-center gap-2">
-                <Clock className="h-3 w-3"/> Local history last saved: {formatDistanceToNow(new Date(lastSaved), { addSuffix: true })}
-            </CardDescription>
+        <Card className="mb-6 bg-blue-900/10 border-blue-500/20 hover:border-blue-500/50 transition-colors">
+            <Link href="/history">
+                <CardDescription className="text-center p-2 text-xs text-blue-300 flex items-center justify-center gap-2 cursor-pointer">
+                    <Clock className="h-3 w-3"/> Local history last saved: {formatDistanceToNow(new Date(lastSaved), { addSuffix: true })}
+                </CardDescription>
+            </Link>
         </Card>
       )}
       {renderView()}
