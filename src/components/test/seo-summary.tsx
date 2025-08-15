@@ -40,9 +40,9 @@ const AnalysisItem = ({ item }: { item: SeoAnalysis['analysis'][0] }) => {
         <div className="flex flex-col gap-2 rounded-lg border p-4">
             <div className="flex items-center gap-3">
                 <Icon className={`h-6 w-6 flex-shrink-0 ${colorClass}`} />
-                <div className='flex-1'>
+                <div className='flex-1 min-w-0'>
                     <h4 className="font-semibold text-base">{item.name}</h4>
-                    <p className="text-sm text-muted-foreground truncate">
+                    <p className="text-sm text-muted-foreground break-words">
                         {item.value ? item.value : <span className="italic">Not found</span>}
                     </p>
                 </div>

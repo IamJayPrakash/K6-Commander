@@ -4,6 +4,9 @@ import { spawn } from 'child_process';
 import fs from 'fs/promises';
 import path from 'path';
 
+// Increase the timeout for this route
+export const maxDuration = 300; // 5 minutes
+
 // This is a simplified, non-production-ready example.
 // A robust solution would use a proper task queue and manage a pool of Chrome instances.
 export async function POST(req: NextRequest) {
