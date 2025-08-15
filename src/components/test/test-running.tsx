@@ -1,3 +1,4 @@
+
 'use client';
 
 import { useEffect, useState, useRef } from 'react';
@@ -23,6 +24,47 @@ export default function TestRunning({ testId, onTestComplete }: TestRunningProps
   const { toast } = useToast();
 
   const grafanaUrl = `${window.location.protocol}//${window.location.hostname}:3003/d/k6/k6-load-testing-results?orgId=1&var-testid=${testId}&refresh=5s`;
+  
+  useEffect(() => {
+    const pollForSummary = async () => {
+      if (attempts.current >= MAX_POLLING_ATTEMPTS) {
+        setError('Test timed out. The summary file was not found after 30 minutes.');
+        toast({
+          variant: 'destructive',
+          title: 'Test Timed Out',
+          description: 'Could not retrieve test summary.',
+        });
+        return;
+      }
+
+      try {
+        const response = await fetch(`/api/check-summary/${testId}`);
+        attempts.current += 1;
+        setProgress((attempts.current / MAX_POLLING_ATTEMPTS) * 100);
+
+        if (response.ok) {
+          const summary = await response.json();
+          onTestComplete(summary);
+        } else if (response.status === 404) {
+          // File not found, poll again
+          setTimeout(pollForSummary, POLLING_INTERVAL);
+        } else {
+          // Other server error
+          const errorData = await response.json();
+          throw new Error(errorData.error || `Server error: ${response.status}`);
+        }
+      } catch (e: any) {
+        setError(`Failed to poll for summary: ${e.message}`);
+        toast({
+            variant: 'destructive',
+            title: 'Polling Failed',
+            description: e.message,
+        });
+      }
+    };
+
+    pollForSummary();
+  }, [testId, onTestComplete, toast]);
 
   return (
     <Card className="max-w-2xl mx-auto">

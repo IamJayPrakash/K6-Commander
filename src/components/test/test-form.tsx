@@ -58,39 +58,40 @@ const formSchema = z.object({
 
 type TestFormValues = z.infer<typeof formSchema>;
 
-const newTestDefaultValues: Partial<TestFormValues> = {
-    url: '',
-    method: 'GET' as const,
-    headers: [],
-    body: '',
-    testPreset: 'baseline' as const,
-    runLoadTest: true,
-    runLighthouse: false,
-    runSeo: false,
-    ...TEST_PRESETS.baseline,
-};
-
 interface TestFormProps {
   initialValues: Partial<TestConfiguration> | null;
   onRunTest: (testId: string, config: TestConfiguration) => void;
 }
 
 const getInitialValues = (values: Partial<TestConfiguration> | null): TestFormValues => {
-  const defaults = {
-    ...newTestDefaultValues,
-    ...values,
-    headers: values?.headers ? Object.entries(values.headers).map(([key, value]) => ({ key, value: String(value) })) : [],
-    vus: values?.vus ?? newTestDefaultValues.vus,
-    duration: values?.duration ?? newTestDefaultValues.duration,
-    stages: values?.stages ?? newTestDefaultValues.stages,
-  };
-  return defaults as TestFormValues;
+    const newTestDefaultValues: Partial<TestFormValues> = {
+        url: '',
+        method: 'GET' as const,
+        headers: [],
+        body: '',
+        testPreset: 'baseline' as const,
+        runLoadTest: true,
+        runLighthouse: false,
+        runSeo: false,
+        ...TEST_PRESETS.baseline,
+    };
+    
+    if (!values) {
+        return newTestDefaultValues as TestFormValues;
+    }
+
+    const config = {
+        ...newTestDefaultValues,
+        ...values,
+        headers: values.headers ? Object.entries(values.headers).map(([key, value]) => ({ key, value: String(value) })) : [],
+    };
+    return config as TestFormValues;
 };
 
 
 export default function TestForm({ initialValues, onRunTest }: TestFormProps) {
   const { toast } = useToast();
-
+  
   const form = useForm<TestFormValues>({
     resolver: zodResolver(formSchema),
     defaultValues: getInitialValues(initialValues),
@@ -201,7 +202,12 @@ export default function TestForm({ initialValues, onRunTest }: TestFormProps) {
                                 <FormLabel className="text-base flex items-center gap-2"><Gauge/> k6 Load Test</FormLabel>
                                 <FormDescription>Simulate traffic to measure performance under pressure.</FormDescription>
                             </div>
-                            <FormControl><Switch checked={field.value} onCheckedChange={field.onChange} /></FormControl>
+                            <FormControl>
+                                <Switch
+                                    checked={field.value}
+                                    onCheckedChange={field.onChange}
+                                />
+                            </FormControl>
                         </FormItem>
                       )}
                     />
