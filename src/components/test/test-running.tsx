@@ -4,7 +4,7 @@
 import { useEffect, useState, useRef } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { ExternalLink, Loader, XCircle, CheckCircle, BrainCircuit } from 'lucide-react';
+import { ExternalLink, Loader, XCircle, CheckCircle } from 'lucide-react';
 import type { TestConfiguration, K6Summary, LighthouseSummary, SeoAnalysis } from '@/types';
 import { useToast } from '@/hooks/use-toast';
 import type { TestResults } from '@/types/index';
@@ -172,8 +172,8 @@ export default function TestRunning({ initialTestId, config, onTestComplete }: T
           </>
         ) : (
           <>
-            <div className="relative mx-auto">
-                <BrainCircuit className="h-12 w-12 text-primary animate-pulse" />
+            <div className="relative mx-auto flex items-center justify-center">
+                <Loader className="h-12 w-12 text-primary animate-spin" />
             </div>
             <CardTitle>{allDone ? 'Finalizing Results...' : 'Tests in Progress...'}</CardTitle>
             <CardDescription>Your tests are running. Results will appear here when complete.</CardDescription>

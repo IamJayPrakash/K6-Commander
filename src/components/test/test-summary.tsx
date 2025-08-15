@@ -14,7 +14,6 @@ import {
   Gauge,
   HeartPulse,
   Save,
-  Clock,
   Users,
   AlertTriangle,
   Play,
@@ -24,7 +23,7 @@ import {
   ShieldCheck,
   Search as SearchIcon
 } from 'lucide-react';
-import type { K6Summary, TestConfiguration, LighthouseSummary, SeoAnalysis } from '@/types';
+import type { TestConfiguration, TestResults } from '@/types';
 import {
   ChartContainer,
   ChartTooltip,
@@ -37,7 +36,8 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import LighthouseSummaryReport from './lighthouse-summary';
 import SeoSummaryReport from './seo-summary';
-import { TestResults } from '@/app/page';
+import K6SummaryReport from './k6-summary';
+
 
 interface TestSummaryProps {
   results: TestResults;
@@ -74,53 +74,6 @@ const MetricCard = ({ icon, title, value, unit, description }: { icon: React.Rea
     </Card>
 )
 
-const K6SummaryReport = ({ summary, config }: { summary: K6Summary, config: TestConfiguration }) => {
-    const metrics = summary.metrics;
-    const totalRequests = metrics.http_reqs.values.count || 0;
-    const failureRate = metrics.http_req_failed.values.rate || 0;
-    const failedRequests = Math.round(totalRequests * failureRate);
-
-    const durationData = [
-        { name: 'p(95)', value: metrics.http_req_duration.values['p(95)'] },
-        { name: 'p(90)', value: metrics.http_req_duration.values['p(90)'] },
-        { name: 'avg', value: metrics.http_req_duration.values.avg },
-        { name: 'med', value: metrics.http_req_duration.values.med },
-        { name: 'min', value: metrics.http_req_duration.values.min },
-        { name: 'max', value: metrics.http_req_duration.values.max },
-    ];
-    return (
-        <div className="space-y-6">
-            <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-                <MetricCard icon={<Gauge className="h-4 w-4"/>} title="Requests per Second" value={(metrics.http_reqs.values.rate || 0).toFixed(2)} description="Average requests processed" />
-                <MetricCard icon={<HeartPulse className="h-4 w-4"/>} title="Avg. Response Time" value={(metrics.http_req_duration.values.avg || 0).toFixed(2)} unit="ms" description={`p(95): ${metrics.http_req_duration.values['p(95)'].toFixed(2)}ms`} />
-                <MetricCard icon={<Users className="h-4 w-4"/>} title="Total Requests" value={totalRequests.toLocaleString()} description="Across all virtual users" />
-                <MetricCard icon={<AlertTriangle className="h-4 w-4"/>} title="Failed Requests" value={`${failedRequests.toLocaleString()} (${(failureRate * 100).toFixed(2)}%)`} description="Requests that did not pass checks" />
-            </div>
-
-            <Card>
-                <CardHeader>
-                    <CardTitle className="flex items-center gap-2"><BarChart/> Latency Distribution</CardTitle>
-                    <CardDescription>Response time percentiles in milliseconds (ms).</CardDescription>
-                </CardHeader>
-                <CardContent>
-                    <ChartContainer config={chartConfig} className="h-[250px] w-full">
-                        <RechartsBarChart data={durationData} accessibilityLayer>
-                            <XAxis dataKey="name" tickLine={false} axisLine={false} tickMargin={8} />
-                            <YAxis tickLine={false} axisLine={false} tickMargin={8} unit="ms" />
-                            <ChartTooltip content={<ChartTooltipContent />} />
-                            <Bar dataKey="value" radius={4}>
-                            {durationData.map((entry) => (
-                                <Cell key={`cell-${entry.name}`} fill={chartConfig[entry.name as keyof typeof chartConfig]?.color} />
-                            ))}
-                            </Bar>
-                        </RechartsBarChart>
-                    </ChartContainer>
-                </CardContent>
-            </Card>
-        </div>
-    )
-}
-
 export default function TestSummary({
   results,
   config,
@@ -134,77 +87,87 @@ export default function TestSummary({
 
   return (
     <div className="space-y-6">
-      <div className="flex flex-col md:flex-row gap-4 justify-between items-start">
-        <div>
-            <CardTitle className="flex items-center gap-2 text-3xl">
-                <CheckCircle2 className="h-10 w-10 text-green-500" />
-                Test Run Complete
-            </CardTitle>
-            <CardDescription className="mt-2">
-                Summary of tests for: {config.url}
-            </CardDescription>
+       <Card>
+            <CardHeader>
+                <CardTitle className="flex items-center gap-3 text-3xl">
+                    <CheckCircle2 className="h-10 w-10 text-green-500" />
+                    Test Run Complete
+                </CardTitle>
+                <CardDescription>
+                    Summary of tests for: <span className="font-semibold text-primary">{config.url}</span>
+                </CardDescription>
+            </CardHeader>
+            <CardContent>
+                <div className="flex flex-col sm:flex-row gap-2">
+                    <Button onClick={onSaveToHistory}><Save className="mr-2 h-4 w-4" /> Save to History</Button>
+                    <Button variant="outline" onClick={onRerun}><Play className="mr-2 h-4 w-4" /> Run Again</Button>
+                    <Button variant="secondary" onClick={onCreateNew}><Plus className="mr-2 h-4 w-4" /> New Test</Button>
+                </div>
+            </CardContent>
+       </Card>
+
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <div className="lg:col-span-2">
+            <Tabs defaultValue={defaultTab} className="w-full">
+                <TabsList className="grid w-full grid-cols-3">
+                    <TabsTrigger value="k6" disabled={!results.k6}><Gauge className="mr-2 h-4 w-4" /> Load Test</TabsTrigger>
+                    <TabsTrigger value="lighthouse" disabled={!results.lighthouse}><ShieldCheck className="mr-2 h-4 w-4" />Lighthouse</TabsTrigger>
+                    <TabsTrigger value="seo" disabled={!results.seo}><SearchIcon className="mr-2 h-4 w-4" />SEO</TabsTrigger>
+                </TabsList>
+                <TabsContent value="k6">
+                    {results.k6 ? <K6SummaryReport summary={results.k6} /> : <p>No load test data.</p>}
+                </TabsContent>
+                <TabsContent value="lighthouse">
+                    {results.lighthouse ? <LighthouseSummaryReport summary={results.lighthouse} testId={testId} /> : <p>No Lighthouse audit data.</p>}
+                </TabsContent>
+                <TabsContent value="seo">
+                    {results.seo ? <SeoSummaryReport analysis={results.seo} /> : <p>No SEO analysis data.</p>}
+                </TabsContent>
+            </Tabs>
         </div>
-        <div className="flex gap-2 flex-shrink-0">
-          <Button onClick={onSaveToHistory}><Save className="mr-2 h-4 w-4" /> Save to History</Button>
-          <Button variant="outline" onClick={onRerun}><Play className="mr-2 h-4 w-4" /> Run Again</Button>
-          <Button variant="secondary" onClick={onCreateNew}><Plus className="mr-2 h-4 w-4" /> New Test</Button>
+        <div className="lg:col-span-1">
+             <Card>
+                <CardHeader>
+                    <CardTitle className="flex items-center gap-2"><Settings/> Test Configuration</CardTitle>
+                </CardHeader>
+                <CardContent>
+                    <Table>
+                        <TableBody>
+                            <TableRow><TableHead className='w-1/3'>URL</TableHead><TableCell className="truncate max-w-[200px]"><span title={config.url}>{config.url}</span></TableCell></TableRow>
+                            <TableRow><TableHead>Method</TableHead><TableCell>{config.method}</TableCell></TableRow>
+                            <TableRow><TableHead>Preset</TableHead><TableCell className="capitalize">{config.testPreset}</TableCell></TableRow>
+                            {config.testPreset === 'custom' && (
+                                <>
+                                    {config.vus && <TableRow><TableHead>VUs</TableHead><TableCell>{config.vus}</TableCell></TableRow>}
+                                    {config.duration && <TableRow><TableHead>Duration</TableHead><TableCell>{config.duration}</TableCell></TableRow>}
+                                </>
+                            )}
+                        </TableBody>
+                    </Table>
+                     <Accordion type="single" collapsible className="w-full mt-4">
+                        <AccordionItem value="details">
+                            <AccordionTrigger>View Full Details</AccordionTrigger>
+                            <AccordionContent>
+                               <Table>
+                                    <TableBody>
+                                         <TableRow><TableHead className='w-1/3'>Stages</TableHead><TableCell>
+                                            <pre className="text-xs bg-muted p-2 rounded-md max-w-full overflow-auto">{JSON.stringify(config.stages, null, 2)}</pre>
+                                        </TableCell></TableRow>
+                                        <TableRow><TableHead>Headers</TableHead><TableCell>
+                                            <pre className="text-xs bg-muted p-2 rounded-md max-w-full overflow-auto">{JSON.stringify(config.headers, null, 2)}</pre>
+                                        </TableCell></TableRow>
+                                        <TableRow><TableHead>Body</TableHead><TableCell>
+                                            <pre className="text-xs bg-muted p-2 rounded-md max-w-full overflow-auto">{config.body || 'N/A'}</pre>
+                                        </TableCell></TableRow>
+                                    </TableBody>
+                                </Table>
+                            </AccordionContent>
+                        </AccordionItem>
+                    </Accordion>
+                </CardContent>
+            </Card>
         </div>
       </div>
-      
-      <Tabs defaultValue={defaultTab} className="w-full">
-        <TabsList className="grid w-full grid-cols-3">
-            <TabsTrigger value="k6" disabled={!results.k6}><Gauge className="mr-2 h-4 w-4" /> Load Test</TabsTrigger>
-            <TabsTrigger value="lighthouse" disabled={!results.lighthouse}><ShieldCheck className="mr-2 h-4 w-4" />Lighthouse</TabsTrigger>
-            <TabsTrigger value="seo" disabled={!results.seo}><SearchIcon className="mr-2 h-4 w-4" />SEO</TabsTrigger>
-        </TabsList>
-        <TabsContent value="k6">
-            {results.k6 ? <K6SummaryReport summary={results.k6} config={config} /> : <p>No load test data.</p>}
-        </TabsContent>
-        <TabsContent value="lighthouse">
-            {results.lighthouse ? <LighthouseSummaryReport summary={results.lighthouse} testId={testId} /> : <p>No Lighthouse audit data.</p>}
-        </TabsContent>
-        <TabsContent value="seo">
-            {results.seo ? <SeoSummaryReport analysis={results.seo} /> : <p>No SEO analysis data.</p>}
-        </TabsContent>
-      </Tabs>
-      
-      <Accordion type="single" collapsible>
-        <AccordionItem value="config">
-            <AccordionTrigger>
-                <div className="flex items-center gap-2"><Settings/> View Test Configuration</div>
-            </AccordionTrigger>
-            <AccordionContent>
-                <Card>
-                    <CardContent className="pt-6">
-                        <Table>
-                            <TableBody>
-                                <TableRow><TableHead>URL</TableHead><TableCell>{config.url}</TableCell></TableRow>
-                                <TableRow><TableHead>Method</TableHead><TableCell>{config.method}</TableCell></TableRow>
-                                <TableRow><TableHead>Test Preset</TableHead><TableCell className="capitalize">{config.testPreset}</TableCell></TableRow>
-                                {config.testPreset === 'custom' && (
-                                    <>
-                                        <TableRow><TableHead>VUs</TableHead><TableCell>{config.vus}</TableCell></TableRow>
-                                        <TableRow><TableHead>Duration</TableHead><TableCell>{config.duration}</TableCell></TableRow>
-                                    </>
-                                )}
-                                <TableRow><TableHead>Stages</TableHead><TableCell>
-                                    <pre className="text-xs bg-muted p-2 rounded-md">{JSON.stringify(config.stages, null, 2)}</pre>
-                                </TableCell></TableRow>
-                                <TableRow><TableHead>Headers</TableHead><TableCell>
-                                    <pre className="text-xs bg-muted p-2 rounded-md">{JSON.stringify(config.headers, null, 2)}</pre>
-                                </TableCell></TableRow>
-                                <TableRow><TableHead>Body</TableHead><TableCell>
-                                    <pre className="text-xs bg-muted p-2 rounded-md">{config.body || 'N/A'}</pre>
-                                </TableCell></TableRow>
-                            </TableBody>
-                        </Table>
-                    </CardContent>
-                </Card>
-            </AccordionContent>
-        </AccordionItem>
-      </Accordion>
-
     </div>
   );
 }
-
