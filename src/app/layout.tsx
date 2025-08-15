@@ -8,7 +8,8 @@ import { cn } from '@/lib/utils';
 import { Providers } from './providers';
 import { AppHeader } from '@/components/layout/app-header';
 import { AppFooter } from '@/components/layout/app-footer';
-import { useCallback } from 'react';
+import { useCallback, Suspense } from 'react';
+import { ProgressBar } from '@/components/layout/progress-bar';
 
 const inter = Inter({
   subsets: ['latin'],
@@ -87,6 +88,9 @@ export default function RootLayout({
       >
         <Providers>
            <div className="flex flex-col min-h-screen bg-gradient-to-br from-black to-[#1a1a1a]">
+              <Suspense>
+                <ProgressBar />
+              </Suspense>
               <AppHeader setView={setView} />
               <main className="flex-1 container mx-auto px-4 md:px-6 lg:px-8 py-8">
                 {children}
