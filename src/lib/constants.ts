@@ -50,13 +50,29 @@ export const TEST_PRESETS: Record<string, PresetConfig> = {
 
 export const TOUR_STEPS = [
   {
+    target: '[data-testid="home-link"]',
+    content: 'Welcome to K6 Commander! This is the main navigation header. Click here to always return to this main test form page.',
+    disableBeacon: true,
+  },
+   {
+    target: '[data-testid="header-history-link"]',
+    content: 'View your past test runs, load previous configurations, or export your entire test history from the History page.',
+  },
+  {
+    target: '[data-testid="header-about-link"]',
+    content: 'Learn more about how K6 Commander works under the hood on the About page.',
+  },
+   {
+    target: '[data-testid="github-link"]',
+    content: 'Check out the source code, report issues, or contribute to the project on GitHub.',
+  },
+  {
     target: 'form [name="url"]',
     content: 'Start by entering the full URL of the page or API endpoint you want to test.',
-    disableBeacon: true,
   },
   {
     target: '.test-suites',
-    content: 'Select one or more test suites to run. You can run a Load Test, a Lighthouse Audit, or a Basic SEO check.',
+    content: 'Select one or more test suites to run. You can run a Load Test, a Lighthouse Audit, or an AI-powered SEO analysis.',
   },
   {
     target: '.request-config',
