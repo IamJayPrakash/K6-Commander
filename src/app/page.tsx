@@ -108,7 +108,6 @@ export default function Home() {
       default:
         return (
           <TestForm
-            // Using a key to force re-mount when we want to reset the form
             key={JSON.stringify(rerunInitialValues)} 
             initialValues={rerunInitialValues}
             onRunTest={handleRunTest}

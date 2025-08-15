@@ -1,6 +1,7 @@
 
 'use client';
 
+import React, { useMemo } from 'react';
 import { useForm, useFieldArray } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
@@ -36,7 +37,6 @@ import { TEST_PRESETS } from '@/lib/constants';
 import type { TestConfiguration, TestPreset } from '@/types';
 import { useToast } from '@/hooks/use-toast';
 import { Switch } from '../ui/switch';
-import React from 'react';
 
 const stageSchema = z.object({
   duration: z.string().min(1, 'Duration is required'),
@@ -64,16 +64,20 @@ const formSchema = z.object({
 
 type TestFormValues = z.infer<typeof formSchema>;
 
-const newTestDefaultValues: Partial<TestConfiguration> = {
+const newTestDefaultValues: TestFormValues = {
     url: '',
     method: 'GET' as const,
-    headers: {},
+    headers: [],
     body: '',
     testPreset: 'baseline' as const,
     runLoadTest: true,
     runLighthouse: false,
     runSeo: false,
+    stages: TEST_PRESETS.baseline.stages,
+    vus: TEST_PRESETS.baseline.vus,
+    duration: TEST_PRESETS.baseline.duration,
 };
+
 
 interface TestFormProps {
   initialValues: Partial<TestConfiguration> | null;
@@ -84,25 +88,24 @@ interface TestFormProps {
 export default function TestForm({ initialValues, onRunTest }: TestFormProps) {
   const { toast } = useToast();
 
-  const getSanitizedInitialValues = (values: Partial<TestConfiguration> | null) => {
-    const baseConfig = values ? { ...newTestDefaultValues, ...values } : newTestDefaultValues;
+  const defaultValues = useMemo(() => {
+    if (!initialValues) {
+      return newTestDefaultValues;
+    }
+    const headersArray = initialValues.headers ? Object.entries(initialValues.headers).map(([key, value]) => ({ key, value: String(value) })) : [];
+    
     return {
-      ...baseConfig,
-      headers: baseConfig.headers ? Object.entries(baseConfig.headers).map(([key, value]) => ({ key, value: String(value) })) : [],
-      body: baseConfig.body || '',
+      ...newTestDefaultValues,
+      ...initialValues,
+      headers: headersArray,
+      body: initialValues.body || '',
     };
-  };
+  }, [initialValues]);
 
   const form = useForm<TestFormValues>({
     resolver: zodResolver(formSchema),
-    defaultValues: getSanitizedInitialValues(initialValues),
+    defaultValues,
   });
-
-  React.useEffect(() => {
-    // This effect ensures the form resets if the initialValues prop changes
-    // (e.g., when a user clicks 'Rerun' from the summary page).
-    form.reset(getSanitizedInitialValues(initialValues));
-  }, [initialValues, form]);
 
 
   const { fields: headerFields, append: appendHeader, remove: removeHeader } = useFieldArray({
