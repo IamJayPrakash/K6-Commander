@@ -139,6 +139,10 @@ export default function TestForm({ initialValues, onRunTest, setHistory }: TestF
 
   const clearRecentUrls = () => {
     setRecentUrls([]);
+    toast({
+        title: "Recent URLs cleared",
+        description: "Your list of recent URLs has been cleared."
+    })
   }
 
   const handleFormSubmit = (data: TestFormValues) => {
@@ -256,7 +260,7 @@ export default function TestForm({ initialValues, onRunTest, setHistory }: TestF
                                             </CommandGroup>
                                             {recentUrls.length > 0 && (
                                                 <CommandGroup className='border-t pt-1'>
-                                                    <CommandItem onSelect={clearRecentUrls} className="text-destructive focus:bg-destructive/10 focus:text-destructive justify-center">
+                                                    <CommandItem onSelect={clearRecentUrls} className="text-destructive focus:bg-destructive/10 focus:text-destructive justify-center" onClick={clearRecentUrls}>
                                                         <Trash2 className="mr-2 h-4 w-4"/> Clear all
                                                     </CommandItem>
                                                 </CommandGroup>
