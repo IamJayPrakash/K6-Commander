@@ -1,16 +1,19 @@
 'use client';
 
 import { useState } from 'react';
-import { Sidebar, SidebarInset } from '@/components/ui/sidebar';
-import { HistoryPanel } from '@/components/layout/history-panel';
-import { Header } from '@/components/layout/header';
 import TestForm from '@/components/test/test-form';
 import TestRunning from '@/components/test/test-running';
 import TestSummary from '@/components/test/test-summary';
 import type { TestConfiguration, K6Summary, HistoryItem } from '@/types';
 import { useLocalStorage } from '@/hooks/use-local-storage';
+import { AppHeader } from '@/components/layout/app-header';
+import { AppFooter } from '@/components/layout/app-footer';
+import AboutPage from '@/components/pages/about-page';
+import HelpPage from '@/components/pages/help-page';
+import ContactPage from '@/components/pages/contact-page';
+import HistoryPage from '@/components/pages/history-page';
 
-type View = 'form' | 'running' | 'summary';
+type View = 'form' | 'running' | 'summary' | 'about' | 'history' | 'help' | 'contact';
 
 export default function Home() {
   const [view, setView] = useState<View>('form');
@@ -41,9 +44,9 @@ export default function Home() {
         config: activeTestConfig,
         summary: activeTestSummary,
       };
-      setHistory([newHistoryItem, ...history]);
-      setView('form');
-      setFormSeed(Date.now()); // Reset form
+      const newHistory = [newHistoryItem, ...history];
+      setHistory(newHistory);
+      setView('history');
     }
   };
 
@@ -67,7 +70,7 @@ export default function Home() {
     setFormSeed(Date.now());
     setView('form');
   };
-
+  
   const renderView = () => {
     switch (view) {
       case 'running':
@@ -87,6 +90,19 @@ export default function Home() {
             onCreateNew={handleCreateNewTest}
           />
         );
+      case 'about':
+        return <AboutPage />;
+      case 'help':
+        return <HelpPage />;
+      case 'contact':
+        return <ContactPage />;
+      case 'history':
+        return <HistoryPage 
+                  history={history} 
+                  setHistory={setHistory}
+                  onLoad={handleLoadFromHistory}
+                  onRerun={handleRerun}
+                />;
       case 'form':
       default:
         return (
@@ -100,25 +116,12 @@ export default function Home() {
   };
 
   return (
-    <div className="flex min-h-screen">
-      <Sidebar
-        variant="sidebar"
-        collapsible="icon"
-        className="border-r border-sidebar-border"
-      >
-        <HistoryPanel
-          history={history}
-          setHistory={setHistory}
-          onLoad={handleLoadFromHistory}
-          onRerun={handleRerun}
-        />
-      </Sidebar>
-      <SidebarInset className="flex flex-col">
-        <Header />
-        <main className="flex-1 overflow-y-auto p-4 md:p-6 lg:p-8">
-          {renderView()}
+    <div className="flex flex-col min-h-screen bg-gradient-to-br from-[#000000] to-[#1a1a1a]">
+        <AppHeader setView={setView} />
+        <main className="flex-1 container mx-auto px-4 md:px-6 lg:px-8 py-8">
+            {renderView()}
         </main>
-      </SidebarInset>
+        <AppFooter />
     </div>
   );
 }
