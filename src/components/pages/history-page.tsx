@@ -157,6 +157,7 @@ export default function HistoryPageComponent({
                     onChange={handleFileChange}
                     accept=".json"
                     className="hidden"
+                    aria-hidden="true"
                 />
                 <Button variant="outline" onClick={handleExport} disabled={history.length === 0}>
                     <Download className="mr-2 h-4 w-4" /> Export
@@ -213,11 +214,11 @@ export default function HistoryPageComponent({
                                 </TableCell>
                                 <TableCell className="text-right">
                                     <div className="flex items-center justify-end gap-2">
-                                        <Button variant="ghost" size="icon" onClick={() => onLoad(item)}><Eye className="h-4 w-4"/></Button>
-                                        <Button variant="ghost" size="icon" onClick={() => onRerun(item.config)}><Play className="h-4 w-4"/></Button>
+                                        <Button variant="ghost" size="icon" onClick={() => onLoad(item)} aria-label={`View summary for ${item.config.url}`}><Eye className="h-4 w-4"/></Button>
+                                        <Button variant="ghost" size="icon" onClick={() => onRerun(item.config)} aria-label={`Rerun test for ${item.config.url}`}><Play className="h-4 w-4"/></Button>
                                         <AlertDialog>
                                             <AlertDialogTrigger asChild>
-                                                <Button variant="ghost" size="icon" className="hover:text-destructive"><Trash2 className="h-4 w-4"/></Button>
+                                                <Button variant="ghost" size="icon" className="hover:text-destructive" aria-label={`Delete test for ${item.config.url}`}><Trash2 className="h-4 w-4"/></Button>
                                             </AlertDialogTrigger>
                                             <AlertDialogContent>
                                                 <AlertDialogHeader>

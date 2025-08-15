@@ -140,7 +140,7 @@ export default function TestForm({ initialValues, onRunTest }: TestFormProps) {
   const isLoadTestEnabled = form.watch('runLoadTest');
 
   return (
-    <Card className="border-none shadow-none">
+    <Card className="bg-card/50 backdrop-blur-sm">
       <CardHeader>
         <CardTitle className="flex items-center gap-2 text-2xl font-bold">
           <TestTubeDiagonal />
@@ -172,7 +172,7 @@ export default function TestForm({ initialValues, onRunTest }: TestFormProps) {
                         </FormItem>
                       )}
                     />
-                     <Card className='test-suites'>
+                     <Card className='test-suites bg-card/50'>
                         <CardHeader>
                             <CardTitle>Test Suites</CardTitle>
                             <CardDescription>Select which tests you would like to run.</CardDescription>
@@ -182,7 +182,7 @@ export default function TestForm({ initialValues, onRunTest }: TestFormProps) {
                                 control={form.control}
                                 name="runLoadTest"
                                 render={({ field }) => (
-                                    <FormItem className="flex flex-row items-center justify-between rounded-lg border p-4 shadow-sm">
+                                    <FormItem className="flex flex-row items-center justify-between rounded-lg border p-4 shadow-sm bg-background/50">
                                         <div className="space-y-0.5">
                                             <FormLabel className="text-base flex items-center gap-2"><Gauge/> k6 Load Test</FormLabel>
                                             <FormDescription>Simulate traffic to measure performance under pressure.</FormDescription>
@@ -191,6 +191,7 @@ export default function TestForm({ initialValues, onRunTest }: TestFormProps) {
                                             <Switch
                                                 checked={field.value}
                                                 onCheckedChange={field.onChange}
+                                                aria-labelledby="load-test-label"
                                             />
                                         </FormControl>
                                     </FormItem>
@@ -200,7 +201,7 @@ export default function TestForm({ initialValues, onRunTest }: TestFormProps) {
                                 control={form.control}
                                 name="runLighthouse"
                                 render={({ field }) => (
-                                    <FormItem className="flex flex-row items-center justify-between rounded-lg border p-4 shadow-sm">
+                                    <FormItem className="flex flex-row items-center justify-between rounded-lg border p-4 shadow-sm bg-background/50">
                                         <div className="space-y-0.5">
                                             <FormLabel className="text-base flex items-center gap-2"><ShieldCheck/> Lighthouse Audit</FormLabel>
                                             <FormDescription>Run Google's Lighthouse to check PWA, SEO, and more.</FormDescription>
@@ -209,6 +210,7 @@ export default function TestForm({ initialValues, onRunTest }: TestFormProps) {
                                             <Switch
                                                 checked={field.value}
                                                 onCheckedChange={field.onChange}
+                                                aria-labelledby="lighthouse-label"
                                             />
                                         </FormControl>
                                     </FormItem>
@@ -218,7 +220,7 @@ export default function TestForm({ initialValues, onRunTest }: TestFormProps) {
                                 control={form.control}
                                 name="runSeo"
                                 render={({ field }) => (
-                                    <FormItem className="flex flex-row items-center justify-between rounded-lg border p-4 shadow-sm">
+                                    <FormItem className="flex flex-row items-center justify-between rounded-lg border p-4 shadow-sm bg-background/50">
                                         <div className="space-y-0.5">
                                             <FormLabel className="text-base flex items-center gap-2"><Search/> Basic SEO Check</FormLabel>
                                             <FormDescription>Analyze title, meta description, and other on-page factors.</FormDescription>
@@ -227,6 +229,7 @@ export default function TestForm({ initialValues, onRunTest }: TestFormProps) {
                                             <Switch
                                                 checked={field.value}
                                                 onCheckedChange={field.onChange}
+                                                aria-labelledby="seo-label"
                                             />
                                         </FormControl>
                                     </FormItem>
@@ -239,7 +242,7 @@ export default function TestForm({ initialValues, onRunTest }: TestFormProps) {
 
                 {/* Right Column */}
                 <div className="space-y-8 mt-8 lg:mt-0">
-                   <Card className={isLoadTestEnabled ? 'request-config' : 'request-config bg-muted/50 opacity-60'}>
+                   <Card className={`bg-card/50 ${isLoadTestEnabled ? '' : 'opacity-50 pointer-events-none'}`}>
                        <CardHeader>
                            <CardTitle className="flex items-center gap-2"><Settings /> Request Configuration</CardTitle>
                            <CardDescription>Define the HTTP request details for the load test.</CardDescription>
@@ -276,14 +279,14 @@ export default function TestForm({ initialValues, onRunTest }: TestFormProps) {
                                     <FormField
                                         control={form.control}
                                         name={`headers.${index}.key`}
-                                        render={({ field }) => <FormItem className="flex-1"><FormControl><Input placeholder="Header Name" {...field} disabled={!isLoadTestEnabled}/></FormControl></FormItem>}
+                                        render={({ field }) => <FormItem className="flex-1"><FormControl><Input aria-label="Header Key" placeholder="Header Name" {...field} disabled={!isLoadTestEnabled}/></FormControl></FormItem>}
                                     />
                                         <FormField
                                         control={form.control}
                                         name={`headers.${index}.value`}
-                                        render={({ field }) => <FormItem className="flex-1"><FormControl><Input placeholder="Header Value" {...field} disabled={!isLoadTestEnabled}/></FormControl></FormItem>}
+                                        render={({ field }) => <FormItem className="flex-1"><FormControl><Input aria-label="Header Value" placeholder="Header Value" {...field} disabled={!isLoadTestEnabled}/></FormControl></FormItem>}
                                     />
-                                    <Button type="button" variant="destructive" size="icon" onClick={() => removeHeader(index)} disabled={!isLoadTestEnabled}><Trash2 className="h-4 w-4" /></Button>
+                                    <Button type="button" variant="destructive" size="icon" onClick={() => removeHeader(index)} disabled={!isLoadTestEnabled} aria-label={`Remove header ${index + 1}`}><Trash2 className="h-4 w-4" /></Button>
                                     </div>
                                 ))}
                                 <Button type="button" variant="outline" size="sm" className="mt-2" onClick={() => appendHeader({ key: '', value: '' })} disabled={!isLoadTestEnabled}>
@@ -309,7 +312,7 @@ export default function TestForm({ initialValues, onRunTest }: TestFormProps) {
             </div>
 
             {isLoadTestEnabled && (
-                <Card className='load-test-profile'>
+                <Card className='load-test-profile bg-card/50'>
                     <CardHeader>
                         <CardTitle className="flex items-center gap-2"><Gauge/> Load Test Profile</CardTitle>
                         <CardDescription>Choose a preset or define a custom load profile.</CardDescription>
@@ -325,11 +328,12 @@ export default function TestForm({ initialValues, onRunTest }: TestFormProps) {
                                             onValueChange={handlePresetChange}
                                             defaultValue={field.value}
                                             className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-4"
+                                            aria-label="Load test presets"
                                         >
                                             {Object.entries(TEST_PRESETS).map(([key]) => (
                                                  <FormItem key={key} className="flex items-center space-x-3 space-y-0">
                                                     <FormControl>
-                                                        <Card className={`p-4 cursor-pointer hover:border-primary w-full ${field.value === key ? 'border-primary shadow-md' : ''}`}>
+                                                        <Card className={`p-4 cursor-pointer hover:border-primary w-full ${field.value === key ? 'border-primary ring-2 ring-primary' : ''}`}>
                                                           <RadioGroupItem value={key} id={key} className="sr-only"/>
                                                             <FormLabel htmlFor={key} className="font-semibold capitalize text-base cursor-pointer">
                                                                 {key}
@@ -340,7 +344,7 @@ export default function TestForm({ initialValues, onRunTest }: TestFormProps) {
                                             ))}
                                             <FormItem className="flex items-center space-x-3 space-y-0">
                                                 <FormControl>
-                                                    <Card className={`p-4 cursor-pointer hover:border-primary w-full ${field.value === 'custom' ? 'border-primary shadow-md' : ''}`}>
+                                                    <Card className={`p-4 cursor-pointer hover:border-primary w-full ${field.value === 'custom' ? 'border-primary ring-2 ring-primary' : ''}`}>
                                                         <RadioGroupItem value="custom" id="custom" className="sr-only"/>
                                                         <FormLabel htmlFor="custom" className="font-semibold capitalize text-base cursor-pointer">
                                                             Custom
@@ -398,15 +402,15 @@ export default function TestForm({ initialValues, onRunTest }: TestFormProps) {
                                       <FormField
                                         control={form.control}
                                         name={`stages.${index}.duration`}
-                                        render={({ field }) => <FormItem className="flex-1"><FormControl><Input placeholder="Duration (e.g., 1m)" {...field} /></FormControl><FormMessage /></FormItem>}
+                                        render={({ field }) => <FormItem className="flex-1"><FormLabel className="sr-only">Stage Duration</FormLabel><FormControl><Input placeholder="Duration (e.g., 1m)" {...field} /></FormControl><FormMessage /></FormItem>}
                                       />
                                       <ChevronsRightLeft className="h-5 w-5 text-muted-foreground mb-2"/>
                                       <FormField
                                         control={form.control}
                                         name={`stages.${index}.target`}
-                                        render={({ field }) => <FormItem className="flex-1"><FormControl><Input type="number" placeholder="Target VUs" {...field} onChange={e => field.onChange(parseInt(e.target.value, 10))} /></FormControl><FormMessage /></FormItem>}
+                                        render={({ field }) => <FormItem className="flex-1"><FormLabel className="sr-only">Stage Target VUs</FormLabel><FormControl><Input type="number" placeholder="Target VUs" {...field} onChange={e => field.onChange(parseInt(e.target.value, 10))} /></FormControl><FormMessage /></FormItem>}
                                       />
-                                      <Button type="button" variant="destructive" size="icon" onClick={() => removeStage(index)}><Trash2 className="h-4 w-4" /></Button>
+                                      <Button type="button" variant="destructive" size="icon" onClick={() => removeStage(index)} aria-label={`Remove stage ${index + 1}`}><Trash2 className="h-4 w-4" /></Button>
                                     </div>
                                   ))}
                                   <Button type="button" variant="outline" size="sm" className="mt-2" onClick={() => appendStage({ duration: '', target: 0 })}>
