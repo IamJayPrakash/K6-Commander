@@ -63,7 +63,7 @@ const formSchema = z.object({
 
 type TestFormValues = z.infer<typeof formSchema>;
 
-export const newTestDefaultValues: Partial<TestFormValues> = {
+const newTestDefaultValues: Partial<TestFormValues> = {
     url: '',
     method: 'GET' as const,
     headers: [],
@@ -77,12 +77,13 @@ export const newTestDefaultValues: Partial<TestFormValues> = {
     runSeo: false,
 };
 
+// This function is defined outside the component to ensure it's stable
 const getInitialValues = (initialValues: Partial<TestConfiguration> | null): Partial<TestFormValues> => {
     if (!initialValues || Object.keys(initialValues).length === 0) {
       return newTestDefaultValues;
     }
     // If we are re-running, the headers are an object. Convert to array for the form.
-    const headersArray = initialValues.headers 
+    const headersArray = initialValues.headers
       ? Object.entries(initialValues.headers)
           .map(([key, value]) => ({ key, value: String(value) }))
           .sort((a, b) => a.key.localeCompare(b.key)) // Sort for stability
@@ -106,6 +107,7 @@ export default function TestForm({ initialValues, onRunTest }: TestFormProps) {
 
   const form = useForm<TestFormValues>({
     resolver: zodResolver(formSchema),
+    // Call the stable function to get default values
     defaultValues: getInitialValues(initialValues),
   });
 

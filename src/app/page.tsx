@@ -2,7 +2,7 @@
 'use client';
 
 import { useState } from 'react';
-import TestForm, { newTestDefaultValues } from '@/components/test/test-form';
+import TestForm from '@/components/test/test-form';
 import TestRunning from '@/components/test/test-running';
 import TestSummary from '@/components/test/test-summary';
 import type { TestConfiguration, K6Summary, HistoryItem } from '@/types';
@@ -25,9 +25,10 @@ export default function Home() {
     useState<K6Summary | null>(null);
   const [history, setHistory] = useLocalStorage<HistoryItem[]>('k6-history', []);
   
-  // By using a key that changes, we can force React to re-mount the TestForm component.
+  // A key to force re-mounting of the TestForm component.
+  // This is the most reliable way to reset the form state.
   const [formKey, setFormKey] = useState(Date.now());
-  const [initialFormValues, setInitialFormValues] = useState<Partial<TestConfiguration>>(newTestDefaultValues);
+  const [rerunInitialValues, setRerunInitialValues] = useState<Partial<TestConfiguration> | null>(null);
 
 
   const handleRunTest = (testId: string, config: TestConfiguration) => {
@@ -63,17 +64,17 @@ export default function Home() {
   };
 
   const handleRerun = (config: TestConfiguration) => {
-    setInitialFormValues(config);
-    setFormKey(Date.now());
+    setRerunInitialValues(config);
+    setFormKey(Date.now()); // Change key to force re-mount
     setView('form');
   };
   
   const handleCreateNewTest = () => {
-    setInitialFormValues(newTestDefaultValues);
+    setRerunInitialValues(null); // Clear any rerun values
     setActiveTestConfig(null);
     setActiveTestSummary(null);
     setActiveTestId(null);
-    setFormKey(Date.now());
+    setFormKey(Date.now()); // Change key to force re-mount
     setView('form');
   };
 
@@ -114,7 +115,7 @@ export default function Home() {
         return (
           <TestForm
             key={formKey}
-            initialValues={initialFormValues}
+            initialValues={rerunInitialValues}
             onRunTest={handleRunTest}
           />
         );
