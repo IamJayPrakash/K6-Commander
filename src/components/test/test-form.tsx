@@ -36,6 +36,7 @@ import { TEST_PRESETS } from '@/lib/constants';
 import type { TestConfiguration, TestPreset } from '@/types';
 import { useToast } from '@/hooks/use-toast';
 import { Switch } from '../ui/switch';
+import React from 'react';
 
 const stageSchema = z.object({
   duration: z.string().min(1, 'Duration is required'),
@@ -63,23 +64,46 @@ const formSchema = z.object({
 
 type TestFormValues = z.infer<typeof formSchema>;
 
+const newTestDefaultValues: Partial<TestConfiguration> = {
+    url: '',
+    method: 'GET' as const,
+    headers: {},
+    body: '',
+    testPreset: 'baseline' as const,
+    runLoadTest: true,
+    runLighthouse: false,
+    runSeo: false,
+};
+
 interface TestFormProps {
-  initialValues: Partial<TestConfiguration>;
+  initialValues: Partial<TestConfiguration> | null;
   onRunTest: (testId: string, config: TestConfiguration) => void;
+  onCreateNew: () => void;
 }
 
 export default function TestForm({ initialValues, onRunTest }: TestFormProps) {
   const { toast } = useToast();
 
+  const getSanitizedInitialValues = (values: Partial<TestConfiguration> | null) => {
+    const baseConfig = values ? { ...newTestDefaultValues, ...values } : newTestDefaultValues;
+    return {
+      ...baseConfig,
+      headers: baseConfig.headers ? Object.entries(baseConfig.headers).map(([key, value]) => ({ key, value: String(value) })) : [],
+      body: baseConfig.body || '',
+    };
+  };
+
   const form = useForm<TestFormValues>({
     resolver: zodResolver(formSchema),
-    defaultValues: {
-      ...initialValues,
-      headers: initialValues.headers
-      ? Object.entries(initialValues.headers).map(([key, value]) => ({ key, value: String(value) }))
-      : [],
-    }
+    defaultValues: getSanitizedInitialValues(initialValues),
   });
+
+  React.useEffect(() => {
+    // This effect ensures the form resets if the initialValues prop changes
+    // (e.g., when a user clicks 'Rerun' from the summary page).
+    form.reset(getSanitizedInitialValues(initialValues));
+  }, [initialValues, form]);
+
 
   const { fields: headerFields, append: appendHeader, remove: removeHeader } = useFieldArray({
     control: form.control,
@@ -92,14 +116,12 @@ export default function TestForm({ initialValues, onRunTest }: TestFormProps) {
   });
 
   const handlePresetChange = (preset: string) => {
+    form.setValue('testPreset', preset as TestPreset | 'custom');
     if (preset !== 'custom') {
       const presetConfig = TEST_PRESETS[preset as TestPreset];
       form.setValue('vus', presetConfig.vus);
       form.setValue('duration', presetConfig.duration);
       form.setValue('stages', presetConfig.stages);
-      form.setValue('testPreset', preset as TestPreset);
-    } else {
-        form.setValue('testPreset', 'custom');
     }
   };
   
@@ -111,9 +133,9 @@ export default function TestForm({ initialValues, onRunTest }: TestFormProps) {
         return acc;
       }, {} as Record<string, string>),
       // Ensure VUs and duration are correctly set for non-custom presets
-      vus: data.testPreset === 'custom' ? data.vus! : (data.runLoadTest ? TEST_PRESETS[data.testPreset as TestPreset].vus! : 0),
-      duration: data.testPreset === 'custom' ? data.duration! : (data.runLoadTest ? TEST_PRESETS[data.testPreset as TestPreset].duration! : ''),
-      stages: data.testPreset === 'custom' ? data.stages! : (data.runLoadTest ? TEST_PRESETS[data.testPreset as TestPreset].stages! : []),
+      vus: data.testPreset !== 'custom' && data.runLoadTest ? TEST_PRESETS[data.testPreset as TestPreset].vus! : data.vus || 0,
+      duration: data.testPreset !== 'custom' && data.runLoadTest ? TEST_PRESETS[data.testPreset as TestPreset].duration! : data.duration || '',
+      stages: data.testPreset !== 'custom' && data.runLoadTest ? TEST_PRESETS[data.testPreset as TestPreset].stages! : data.stages || [],
       body: data.body || '',
     };
     
@@ -222,7 +244,7 @@ export default function TestForm({ initialValues, onRunTest }: TestFormProps) {
 
 
             {form.watch('runLoadTest') && (
-                <Accordion type="single" collapsible className="w-full">
+                <Accordion type="single" collapsible className="w-full" defaultValue="load-test-config">
                   <AccordionItem value="load-test-config">
                     <AccordionTrigger>
                         <div className="flex items-center gap-2"><Gauge /><span>Load Test Configuration</span></div>

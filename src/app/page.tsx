@@ -1,7 +1,7 @@
 
 'use client';
 
-import { useState, useMemo } from 'react';
+import { useState } from 'react';
 import TestForm from '@/components/test/test-form';
 import TestRunning from '@/components/test/test-running';
 import TestSummary from '@/components/test/test-summary';
@@ -15,17 +15,6 @@ import ContactPage from '@/components/pages/contact-page';
 import HistoryPage from '@/components/pages/history-page';
 
 type View = 'form' | 'running' | 'summary' | 'about' | 'history' | 'help' | 'contact';
-
-const newTestDefaultValues: Partial<TestConfiguration> = {
-    url: '',
-    method: 'GET' as const,
-    headers: {},
-    body: '',
-    testPreset: 'baseline' as const,
-    runLoadTest: true,
-    runLighthouse: false,
-    runSeo: false,
-};
 
 export default function Home() {
   const [view, setView] = useState<View>('form');
@@ -76,19 +65,12 @@ export default function Home() {
   };
   
   const handleCreateNewTest = () => {
-    setRerunInitialValues(null); // Clear any rerun values
+    setRerunInitialValues(null); 
     setActiveTestConfig(null);
     setActiveTestSummary(null);
     setActiveTestId(null);
     setView('form');
   };
-
-  const initialValues = useMemo(() => {
-    if (!rerunInitialValues) {
-        return newTestDefaultValues;
-    }
-    return { ...newTestDefaultValues, ...rerunInitialValues };
-  }, [rerunInitialValues]);
 
   const renderView = () => {
     switch (view) {
@@ -126,9 +108,11 @@ export default function Home() {
       default:
         return (
           <TestForm
-            key={JSON.stringify(initialValues)} // Force re-mount with new initial values
-            initialValues={initialValues}
+            // Using a key to force re-mount when we want to reset the form
+            key={JSON.stringify(rerunInitialValues)} 
+            initialValues={rerunInitialValues}
             onRunTest={handleRunTest}
+            onCreateNew={handleCreateNewTest}
           />
         );
     }
