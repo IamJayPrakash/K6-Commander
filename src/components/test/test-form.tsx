@@ -1,7 +1,7 @@
 
 'use client';
 
-import React, { useEffect } from 'react';
+import React from 'react';
 import { useForm, useFieldArray } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
@@ -86,24 +86,14 @@ export default function TestForm({ initialValues, onRunTest }: TestFormProps) {
 
   const form = useForm<TestFormValues>({
     resolver: zodResolver(formSchema),
-    defaultValues: newTestDefaultValues,
+    defaultValues: initialValues ? {
+        ...initialValues,
+        headers: initialValues.headers ? Object.entries(initialValues.headers).map(([key, value]) => ({ key, value: String(value) })) : [],
+        vus: initialValues.vus || undefined,
+        duration: initialValues.duration || undefined,
+        stages: initialValues.stages || [],
+    } : newTestDefaultValues,
   });
-
-  useEffect(() => {
-    if (initialValues) {
-        const headersArray = initialValues.headers ? Object.entries(initialValues.headers).map(([key, value]) => ({ key, value: String(value) })) : [];
-        form.reset({
-            ...initialValues,
-            headers: headersArray,
-            vus: initialValues.vus || undefined,
-            duration: initialValues.duration || undefined,
-            stages: initialValues.stages || [],
-        });
-    } else {
-        form.reset(newTestDefaultValues);
-    }
-  }, [initialValues, form]);
-
 
   const { fields: headerFields, append: appendHeader, remove: removeHeader } = useFieldArray({
     control: form.control,
@@ -132,7 +122,6 @@ export default function TestForm({ initialValues, onRunTest }: TestFormProps) {
         if(key) acc[key] = value;
         return acc;
       }, {} as Record<string, string>),
-      // Ensure VUs and duration are correctly set for non-custom presets
       vus: data.testPreset !== 'custom' && data.runLoadTest ? TEST_PRESETS[data.testPreset as TestPreset].vus! : data.vus || 0,
       duration: data.testPreset !== 'custom' && data.runLoadTest ? TEST_PRESETS[data.testPreset as TestPreset].duration! : data.duration || '',
       stages: data.testPreset !== 'custom' && data.runLoadTest ? TEST_PRESETS[data.testPreset as TestPreset].stages! : data.stages || [],

@@ -26,7 +26,8 @@ export default function Home() {
     useState<K6Summary | null>(null);
   const [history, setHistory] = useLocalStorage<HistoryItem[]>('k6-history', []);
   
-  const [initialValues, setInitialValues] = useState<Partial<TestConfiguration> | null>(null);
+  const [initialValuesForRerun, setInitialValuesForRerun] = useState<Partial<TestConfiguration> | null>(null);
+  const [formKey, setFormKey] = useState(0);
 
   const handleRunTest = (testId: string, config: TestConfiguration) => {
     setActiveTestId(testId);
@@ -61,12 +62,14 @@ export default function Home() {
   };
 
   const handleRerun = (config: TestConfiguration) => {
-    setInitialValues(config);
+    setInitialValuesForRerun(config);
+    setFormKey(prevKey => prevKey + 1);
     setView('form');
   };
   
   const handleCreateNewTest = () => {
-    setInitialValues(null); 
+    setInitialValuesForRerun(null);
+    setFormKey(prevKey => prevKey + 1); 
     setActiveTestConfig(null);
     setActiveTestSummary(null);
     setActiveTestId(null);
@@ -109,8 +112,8 @@ export default function Home() {
       default:
         return (
           <TestForm
-            key={initialValues ? JSON.stringify(initialValues) : 'new'}
-            initialValues={initialValues}
+            key={formKey}
+            initialValues={initialValuesForRerun}
             onRunTest={handleRunTest}
           />
         );
