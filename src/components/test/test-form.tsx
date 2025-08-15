@@ -147,6 +147,7 @@ export default function TestForm({ initialValues, onRunTest, setHistory }: TestF
 
   const handleFormSubmit = (data: TestFormValues) => {
     setFormData(data);
+    addUrlToRecents(data.url);
     setClearStorageDialogOpen(true);
   };
   
@@ -160,8 +161,6 @@ export default function TestForm({ initialValues, onRunTest, setHistory }: TestF
         description: 'Your test history has been cleared.',
       });
     }
-
-    addUrlToRecents(formData.url);
 
     const config: TestConfiguration = {
       ...formData,
@@ -260,7 +259,7 @@ export default function TestForm({ initialValues, onRunTest, setHistory }: TestF
                                             </CommandGroup>
                                             {recentUrls.length > 0 && (
                                                 <CommandGroup className='border-t pt-1'>
-                                                    <CommandItem onSelect={clearRecentUrls} className="text-destructive focus:bg-destructive/10 focus:text-destructive justify-center" onClick={clearRecentUrls}>
+                                                    <CommandItem onSelect={clearRecentUrls} className="text-destructive focus:bg-destructive/10 focus:text-destructive justify-center">
                                                         <Trash2 className="mr-2 h-4 w-4"/> Clear all
                                                     </CommandItem>
                                                 </CommandGroup>
