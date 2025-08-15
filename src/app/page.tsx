@@ -2,7 +2,7 @@
 'use client';
 
 import { useState } from 'react';
-import TestForm from '@/components/test/test-form';
+import TestForm, { newTestDefaultValues } from '@/components/test/test-form';
 import TestRunning from '@/components/test/test-running';
 import TestSummary from '@/components/test/test-summary';
 import type { TestConfiguration, K6Summary, HistoryItem } from '@/types';
@@ -25,10 +25,9 @@ export default function Home() {
     useState<K6Summary | null>(null);
   const [history, setHistory] = useLocalStorage<HistoryItem[]>('k6-history', []);
   
-  // By using a key that changes, we can force React to re-mount the TestForm component,
-  // ensuring a clean state for the form instead of trying to update the existing one.
+  // By using a key that changes, we can force React to re-mount the TestForm component.
   const [formKey, setFormKey] = useState(Date.now());
-  const [rerunConfig, setRerunConfig] = useState<TestConfiguration | null>(null);
+  const [initialFormValues, setInitialFormValues] = useState<Partial<TestConfiguration>>(newTestDefaultValues);
 
 
   const handleRunTest = (testId: string, config: TestConfiguration) => {
@@ -64,13 +63,13 @@ export default function Home() {
   };
 
   const handleRerun = (config: TestConfiguration) => {
-    setRerunConfig(config);
+    setInitialFormValues(config);
     setFormKey(Date.now());
     setView('form');
   };
   
   const handleCreateNewTest = () => {
-    setRerunConfig(null);
+    setInitialFormValues(newTestDefaultValues);
     setActiveTestConfig(null);
     setActiveTestSummary(null);
     setActiveTestId(null);
@@ -115,7 +114,7 @@ export default function Home() {
         return (
           <TestForm
             key={formKey}
-            rerunConfig={rerunConfig}
+            initialValues={initialFormValues}
             onRunTest={handleRunTest}
           />
         );

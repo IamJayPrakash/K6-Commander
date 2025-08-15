@@ -77,40 +77,36 @@ export const newTestDefaultValues: Partial<TestFormValues> = {
     runSeo: false,
 };
 
+const getInitialValues = (initialValues: Partial<TestConfiguration> | null): Partial<TestFormValues> => {
+    if (!initialValues || Object.keys(initialValues).length === 0) {
+      return newTestDefaultValues;
+    }
+    // If we are re-running, the headers are an object. Convert to array for the form.
+    const headersArray = initialValues.headers 
+      ? Object.entries(initialValues.headers)
+          .map(([key, value]) => ({ key, value: String(value) }))
+          .sort((a, b) => a.key.localeCompare(b.key)) // Sort for stability
+      : [];
+
+    return {
+        ...newTestDefaultValues, // Start with base defaults
+        ...initialValues, // Override with any rerun values
+        headers: headersArray, // Set the converted and sorted headers
+    };
+};
+
 
 interface TestFormProps {
-  rerunConfig: TestConfiguration | null;
+  initialValues: Partial<TestConfiguration> | null;
   onRunTest: (testId: string, config: TestConfiguration) => void;
 }
 
-export default function TestForm({ rerunConfig, onRunTest }: TestFormProps) {
+export default function TestForm({ initialValues, onRunTest }: TestFormProps) {
   const { toast } = useToast();
-
-  const getInitialValues = () => {
-    if (!rerunConfig) {
-      return newTestDefaultValues;
-    }
-    // Sort headers to ensure a stable order and prevent re-render loops
-    const sortedHeaders = rerunConfig.headers ? Object.entries(rerunConfig.headers).sort((a, b) => a[0].localeCompare(b[0])).map(([key, value]) => ({ key, value: String(value) })) : [];
-
-    return {
-        url: rerunConfig.url || '',
-        method: rerunConfig.method || 'GET',
-        headers: sortedHeaders,
-        body: rerunConfig.body || '',
-        testPreset: rerunConfig.testPreset || 'custom',
-        vus: rerunConfig.vus,
-        duration: rerunConfig.duration,
-        stages: rerunConfig.stages,
-        runLoadTest: rerunConfig.runLoadTest,
-        runLighthouse: rerunConfig.runLighthouse,
-        runSeo: rerunConfig.runSeo,
-    };
-  };
 
   const form = useForm<TestFormValues>({
     resolver: zodResolver(formSchema),
-    defaultValues: getInitialValues(),
+    defaultValues: getInitialValues(initialValues),
   });
 
   const { fields: headerFields, append: appendHeader, remove: removeHeader } = useFieldArray({
@@ -409,5 +405,3 @@ export default function TestForm({ rerunConfig, onRunTest }: TestFormProps) {
     </Card>
   );
 }
-
-    
