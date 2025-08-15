@@ -1,3 +1,4 @@
+
 'use client';
 
 import { useState, useMemo } from 'react';
@@ -73,20 +74,19 @@ export default function Home() {
   };
   
   const formDefaultValues = useMemo(() => {
-    const configToUse = rerunConfig;
-    if (configToUse) {
+    if (rerunConfig) {
         return {
-            url: configToUse.url || '',
-            method: configToUse.method || 'GET',
-            headers: configToUse.headers ? Object.entries(configToUse.headers).map(([key, value]) => ({ key, value })) : [],
-            body: configToUse.body || '',
-            testPreset: configToUse.testPreset || 'custom',
-            vus: configToUse.vus,
-            duration: configToUse.duration,
-            stages: configToUse.stages,
-            runLoadTest: configToUse.runLoadTest,
-            runLighthouse: configToUse.runLighthouse,
-            runSeo: configToUse.runSeo,
+            url: rerunConfig.url || '',
+            method: rerunConfig.method || 'GET',
+            headers: rerunConfig.headers ? Object.entries(rerunConfig.headers).map(([key, value]) => ({ key, value })) : [],
+            body: rerunConfig.body || '',
+            testPreset: rerunConfig.testPreset || 'custom',
+            vus: rerunConfig.vus,
+            duration: rerunConfig.duration,
+            stages: rerunConfig.stages,
+            runLoadTest: rerun-config.runLoadTest,
+            runLighthouse: rerunConfig.runLighthouse,
+            runSeo: rerunConfig.runSeo,
         }
     }
     // Default for a new form
@@ -159,3 +159,4 @@ export default function Home() {
     </div>
   );
 }
+
