@@ -1,7 +1,7 @@
 
 'use client';
 
-import { useState, useMemo, useEffect } from 'react';
+import { useState } from 'react';
 import TestForm from '@/components/test/test-form';
 import TestRunning from '@/components/test/test-running';
 import TestSummary from '@/components/test/test-summary';
@@ -17,19 +17,20 @@ import { TEST_PRESETS } from '@/lib/constants';
 
 type View = 'form' | 'running' | 'summary' | 'about' | 'history' | 'help' | 'contact';
 
+// Define default values outside the component to ensure it's a stable reference
 const newTestDefaultValues = {
     url: '',
-    method: 'GET',
+    method: 'GET' as const,
     headers: [],
     body: '',
-    testPreset: 'baseline',
+    testPreset: 'baseline' as const,
     vus: TEST_PRESETS.baseline.vus,
     duration: TEST_PRESETS.baseline.duration,
     stages: TEST_PRESETS.baseline.stages,
     runLoadTest: true,
     runLighthouse: false,
     runSeo: false,
-} as const;
+};
 
 export default function Home() {
   const [view, setView] = useState<View>('form');
@@ -39,6 +40,10 @@ export default function Home() {
   const [activeTestSummary, setActiveTestSummary] =
     useState<K6Summary | null>(null);
   const [history, setHistory] = useLocalStorage<HistoryItem[]>('k6-history', []);
+  
+  // By using a key that changes, we can force React to re-mount the TestForm component,
+  // ensuring a clean state for the form instead of trying to update the existing one.
+  const [formKey, setFormKey] = useState(Date.now());
   const [formInitialValues, setFormInitialValues] = useState(newTestDefaultValues);
 
   const handleRunTest = (testId: string, config: TestConfiguration) => {
@@ -74,6 +79,7 @@ export default function Home() {
   };
 
   const handleRerun = (config: TestConfiguration) => {
+    // Set the initial values for the form based on the historical run
     setFormInitialValues({
         url: config.url || '',
         method: config.method || 'GET',
@@ -87,14 +93,19 @@ export default function Home() {
         runLighthouse: config.runLighthouse,
         runSeo: config.runSeo,
     });
+    // Change the key to force re-mount and navigate to the form
+    setFormKey(Date.now());
     setView('form');
   };
   
   const handleCreateNewTest = () => {
+    // Reset to default values
     setFormInitialValues(newTestDefaultValues);
     setActiveTestConfig(null);
     setActiveTestSummary(null);
     setActiveTestId(null);
+    // Change the key to force re-mount
+    setFormKey(Date.now());
     setView('form');
   };
 
@@ -134,9 +145,7 @@ export default function Home() {
       default:
         return (
           <TestForm
-            // By using a key that changes only when we intend to re-run, 
-            // we ensure React creates a new form instance instead of re-rendering the existing one.
-            key={formInitialValues.url + (activeTestConfig?.url || '')}
+            key={formKey}
             defaultValues={formInitialValues}
             onRunTest={handleRunTest}
           />
