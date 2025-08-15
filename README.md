@@ -84,3 +84,4 @@ Once the services are up and running, you can access:
 6.  The **Grafana container** is pre-configured with a data source pointing to InfluxDB and a dashboard to visualize the k6 metrics. The dashboard is filterable by a unique `testId`.
 7.  The frontend polls another API endpoint to check for the `summary.json` file. Once available, it fetches the summary and displays the final report.
 8.  Test history is managed entirely within the browser's **LocalStorage**.
+# K6-Commander
