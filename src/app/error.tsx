@@ -1,53 +1,124 @@
+'use client';
 
-'use client'
-
-import { Button } from '@/components/ui/button'
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
-import { ServerCrash, RotateCw } from 'lucide-react'
+import { useState } from 'react';
+import { Button } from '@/components/ui/button';
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card';
+import {
+  ServerCrash,
+  RotateCw,
+  ClipboardCopy,
+  Check,
+  Code,
+} from 'lucide-react';
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from '@/components/ui/accordion';
+import { ScrollArea } from '@/components/ui/scroll-area';
+import { useToast } from '@/hooks/use-toast';
 
 export default function GlobalError({
   error,
   reset,
 }: {
-  error: Error & { digest?: string }
-  reset: () => void
+  error: Error & { digest?: string };
+  reset: () => void;
 }) {
+  const { toast } = useToast();
+  const [isCopied, setIsCopied] = useState(false);
+
+  const handleCopy = async () => {
+    try {
+      await navigator.clipboard.writeText(error.stack || '');
+      setIsCopied(true);
+      setTimeout(() => setIsCopied(false), 2000); // Reset after 2 seconds
+      toast({
+        title: 'Copied to clipboard!',
+        description: 'The error stack trace has been copied.',
+      });
+    } catch (err) {
+      toast({
+        variant: 'destructive',
+        title: 'Copy failed',
+        description: 'Could not copy the error to your clipboard.',
+      });
+    }
+  };
+
   return (
     <html lang="en" className="dark">
       <body>
-        <div className="flex items-center justify-center min-h-screen bg-gradient-to-br from-black to-[#1a1a1a] p-4">
-          <Card className="max-w-lg w-full bg-card/50 backdrop-blur-sm border border-destructive/50">
+        <div className="flex items-center justify-center min-h-screen bg-gradient-to-br from-black to-[#1a1a1a] p-4 font-mono">
+          <Card className="max-w-2xl w-full bg-card/50 backdrop-blur-sm border border-destructive/50 shadow-2xl shadow-destructive/10">
             <CardHeader className="text-center">
-                <div className="mx-auto bg-destructive/20 rounded-full p-4 w-fit">
-                    <ServerCrash className="h-12 w-12 text-destructive" />
-                </div>
-              <CardTitle className="text-3xl font-bold text-destructive mt-4">500 - Internal Server Error</CardTitle>
-              <CardDescription>
-                A critical error occurred on our end. Please try again.
+              <div className="mx-auto bg-destructive/10 rounded-full p-4 w-fit border-2 border-dashed border-destructive/20 animate-pulse">
+                <ServerCrash className="h-12 w-12 text-destructive" />
+              </div>
+              <CardTitle className="text-3xl font-bold text-destructive mt-4">
+                500 - System Fault
+              </CardTitle>
+              <CardDescription className="text-lg">
+                A critical error occurred on the server.
               </CardDescription>
             </CardHeader>
             <CardContent className="text-center">
               <p className="text-muted-foreground mb-6">
-                The technical team has been notified. You can attempt to reload the page.
+                Our systems have detected an anomaly. The technical team has
+                been notified. You can attempt to reload the page or review the
+                error details below.
               </p>
-              
+
               {process.env.NODE_ENV === 'development' && (
-                <details className="text-left bg-muted/50 p-4 rounded-md mb-6">
-                    <summary className="cursor-pointer font-medium">Error Details</summary>
-                    <pre className="mt-2 text-xs text-muted-foreground whitespace-pre-wrap">
-                    {error.stack}
-                    </pre>
-                </details>
+                <Accordion type="single" collapsible className="w-full mb-6">
+                  <AccordionItem value="error-details">
+                    <AccordionTrigger className="text-base">
+                      <div className="flex items-center gap-2">
+                        <Code className="h-4 w-4" />
+                        <span>Error Stack Trace</span>
+                      </div>
+                    </AccordionTrigger>
+                    <AccordionContent>
+                      <div className="relative bg-muted/50 p-4 rounded-md text-left">
+                        <Button
+                          variant="ghost"
+                          size="icon"
+                          className="absolute top-2 right-2 h-7 w-7"
+                          onClick={handleCopy}
+                        >
+                          {isCopied ? (
+                            <Check className="h-4 w-4 text-green-500" />
+                          ) : (
+                            <ClipboardCopy className="h-4 w-4" />
+                          )}
+                          <span className="sr-only">Copy error log</span>
+                        </Button>
+                        <ScrollArea className="h-48">
+                          <pre className="text-xs text-muted-foreground whitespace-pre-wrap">
+                            {error.stack}
+                          </pre>
+                        </ScrollArea>
+                      </div>
+                    </AccordionContent>
+                  </AccordionItem>
+                </Accordion>
               )}
 
               <Button onClick={() => reset()} size="lg">
                 <RotateCw className="mr-2 h-4 w-4" />
-                Try Again
+                Attempt Recovery
               </Button>
             </CardContent>
           </Card>
         </div>
       </body>
     </html>
-  )
+  );
 }
