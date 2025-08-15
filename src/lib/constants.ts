@@ -1,3 +1,4 @@
+
 import type { TestConfiguration } from '@/types';
 
 type PresetConfig = Pick<TestConfiguration, 'stages' | 'vus' | 'duration'>;
@@ -46,3 +47,27 @@ export const TEST_PRESETS: Record<string, PresetConfig> = {
     ],
   },
 };
+
+export const TOUR_STEPS = [
+  {
+    target: 'form [name="url"]',
+    content: 'Start by entering the full URL of the page or API endpoint you want to test.',
+    disableBeacon: true,
+  },
+  {
+    target: '.test-suites',
+    content: 'Select one or more test suites to run. You can run a Load Test, a Lighthouse Audit, or a Basic SEO check.',
+  },
+  {
+    target: '.request-config',
+    content: 'If you are running a load test, you can configure the HTTP Method, add custom headers, and include a request body for POST/PUT requests.',
+  },
+  {
+    target: '.load-test-profile',
+    content: 'Choose a pre-configured load test profile, or select "Custom" to define your own virtual users, duration, or ramping stages.',
+  },
+  {
+    target: 'button[type="submit"]',
+    content: 'Once everything is configured, click here to run your tests!',
+  },
+];

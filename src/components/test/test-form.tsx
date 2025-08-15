@@ -31,7 +31,6 @@ import type { TestConfiguration, TestPreset } from '@/types';
 import { useToast } from '@/hooks/use-toast';
 import { Switch } from '../ui/switch';
 import { RadioGroup, RadioGroupItem } from '../ui/radio-group';
-import { Separator } from '../ui/separator';
 
 const stageSchema = z.object({
   duration: z.string().min(1, 'Duration is required'),
@@ -139,8 +138,6 @@ export default function TestForm({ initialValues, onRunTest }: TestFormProps) {
   };
   
   const isLoadTestEnabled = form.watch('runLoadTest');
-  const isLighthouseEnabled = form.watch('runLighthouse');
-  const isSeoEnabled = form.watch('runSeo');
 
   return (
     <Card className="border-none shadow-none">
@@ -175,7 +172,7 @@ export default function TestForm({ initialValues, onRunTest }: TestFormProps) {
                         </FormItem>
                       )}
                     />
-                     <Card>
+                     <Card className='test-suites'>
                         <CardHeader>
                             <CardTitle>Test Suites</CardTitle>
                             <CardDescription>Select which tests you would like to run.</CardDescription>
@@ -242,7 +239,7 @@ export default function TestForm({ initialValues, onRunTest }: TestFormProps) {
 
                 {/* Right Column */}
                 <div className="space-y-8 mt-8 lg:mt-0">
-                   <Card className={isLoadTestEnabled ? '' : 'bg-muted/50 opacity-60'}>
+                   <Card className={isLoadTestEnabled ? 'request-config' : 'request-config bg-muted/50 opacity-60'}>
                        <CardHeader>
                            <CardTitle className="flex items-center gap-2"><Settings /> Request Configuration</CardTitle>
                            <CardDescription>Define the HTTP request details for the load test.</CardDescription>
@@ -312,7 +309,7 @@ export default function TestForm({ initialValues, onRunTest }: TestFormProps) {
             </div>
 
             {isLoadTestEnabled && (
-                <Card>
+                <Card className='load-test-profile'>
                     <CardHeader>
                         <CardTitle className="flex items-center gap-2"><Gauge/> Load Test Profile</CardTitle>
                         <CardDescription>Choose a preset or define a custom load profile.</CardDescription>

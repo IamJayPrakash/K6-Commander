@@ -1,8 +1,8 @@
+
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 
 export default function SecurityPage() {
   return (
-    <div className="container mx-auto py-10 px-4">
       <Card className="bg-card/50 backdrop-blur-sm">
         <CardHeader>
           <CardTitle>Security Policy</CardTitle>
@@ -39,6 +39,5 @@ export default function SecurityPage() {
           </p>
         </CardContent>
       </Card>
-    </div>
   );
 }

@@ -1,9 +1,9 @@
+
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import Link from 'next/link';
 
 export default function TermsPage() {
   return (
-    <div className="container mx-auto py-10 px-4">
       <Card className="bg-card/50 backdrop-blur-sm">
         <CardHeader>
           <CardTitle>Terms of Service</CardTitle>
@@ -40,6 +40,5 @@ export default function TermsPage() {
           </p>
         </CardContent>
       </Card>
-    </div>
   );
 }

@@ -1,20 +1,20 @@
 
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import TestForm from '@/components/test/test-form';
 import TestRunning from '@/components/test/test-running';
 import TestSummary from '@/components/test/test-summary';
 import type { TestConfiguration, K6Summary, HistoryItem, LighthouseSummary, SeoAnalysis } from '@/types';
 import { useLocalStorage } from '@/hooks/use-local-storage';
-import { AppHeader } from '@/components/layout/app-header';
-import { AppFooter } from '@/components/layout/app-footer';
 import AboutPage from '@/components/pages/about-page';
-import HelpPage from '@/components/pages/help-page';
-import ContactPage from '@/components/pages/contact-page';
 import HistoryPage from '@/components/pages/history-page';
+import Joyride, { STATUS } from 'react-joyride';
+import { TOUR_STEPS } from '@/lib/constants';
+import ConsentModal from '@/components/layout/consent-modal';
+import { useToast } from '@/hooks/use-toast';
 
-type View = 'form' | 'running' | 'summary' | 'about' | 'history' | 'help' | 'contact';
+type View = 'form' | 'running' | 'summary' | 'about' | 'history';
 
 export interface TestResults {
   k6?: K6Summary;
@@ -30,9 +30,10 @@ export default function Home() {
   const [activeTestResults, setActiveTestResults] =
     useState<TestResults | null>(null);
   const [history, setHistory] = useLocalStorage<HistoryItem[]>('k6-history', []);
-  
   const [rerunInitialValues, setRerunInitialValues] = useState<Partial<TestConfiguration> | null>(null);
   const [formKey, setFormKey] = useState(Date.now());
+  const [isTourRunning, setIsTourRunning] = useState(false);
+  const { toast } = useToast();
 
   const handleRunTest = (testId: string, config: TestConfiguration) => {
     setActiveTestId(testId);
@@ -57,6 +58,7 @@ export default function Home() {
       // Prevent duplicates
       const newHistory = [newHistoryItem, ...history.filter(h => h.id !== activeTestId)];
       setHistory(newHistory);
+      toast({ title: 'Saved to History', description: 'Test run has been saved.'})
       setView('history');
     }
   };
@@ -83,6 +85,25 @@ export default function Home() {
     setView('form');
   };
 
+  useEffect(() => {
+    // Expose startTour to the window object so the header can call it
+    (window as any).startTour = () => {
+      setView('form');
+      // A small delay to ensure the form view is rendered
+      setTimeout(() => setIsTourRunning(true), 100);
+    };
+    return () => {
+      delete (window as any).startTour;
+    }
+  }, []);
+
+  const handleJoyrideCallback = (data: any) => {
+    const { status } = data;
+    if ([STATUS.FINISHED, STATUS.SKIPPED].includes(status)) {
+      setIsTourRunning(false);
+    }
+  };
+  
   const renderView = () => {
     switch (view) {
       case 'running':
@@ -106,10 +127,6 @@ export default function Home() {
         );
       case 'about':
         return <AboutPage />;
-      case 'help':
-        return <HelpPage />;
-      case 'contact':
-        return <ContactPage />;
       case 'history':
         return <HistoryPage 
                   history={history} 
@@ -130,13 +147,26 @@ export default function Home() {
   };
 
   return (
-    <div className="flex flex-col min-h-screen bg-gradient-to-br from-black to-[#1a1a1a]">
-        <AppHeader setView={setView} />
-        <main className="flex-1 container mx-auto px-4 md:px-6 lg:px-8 py-8">
-            {renderView()}
-        </main>
-        <AppFooter />
-    </div>
+    <>
+      <Joyride
+        steps={TOUR_STEPS}
+        run={isTourRunning}
+        continuous
+        showProgress
+        showSkipButton
+        callback={handleJoyrideCallback}
+        styles={{
+          options: {
+            arrowColor: 'hsl(var(--card))',
+            backgroundColor: 'hsl(var(--card))',
+            primaryColor: 'hsl(var(--primary))',
+            textColor: 'hsl(var(--card-foreground))',
+            zIndex: 1000,
+          },
+        }}
+      />
+      <ConsentModal />
+      {renderView()}
+    </>
   );
 }
-

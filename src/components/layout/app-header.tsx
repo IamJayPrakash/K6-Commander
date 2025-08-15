@@ -1,6 +1,7 @@
+
 'use client';
 
-import { Rocket, History, Info, HelpCircle, Mail } from 'lucide-react';
+import { Rocket, History, Info, HelpCircle, Mail, PlayCircle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useTheme } from 'next-themes';
 import { Sun, Moon } from 'lucide-react';
@@ -10,6 +11,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
+import Link from 'next/link';
 
 type AppHeaderProps = {
   setView: (view: 'form' | 'history' | 'about' | 'help' | 'contact') => void;
@@ -18,34 +20,36 @@ type AppHeaderProps = {
 export function AppHeader({ setView }: AppHeaderProps) {
   const { setTheme } = useTheme();
 
+  const startTour = () => {
+    if (typeof window !== 'undefined' && (window as any).startTour) {
+      (window as any).startTour();
+    }
+  }
+
   return (
     <header className="sticky top-0 z-50 w-full border-b border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
       <div className="container flex h-16 max-w-screen-2xl items-center">
         <div className="mr-4 flex items-center">
-          <a className="mr-6 flex items-center space-x-2 cursor-pointer" onClick={() => setView('form')}>
+          <Link href="/" className="mr-6 flex items-center space-x-2 cursor-pointer">
             <Rocket className="h-6 w-6 text-primary" />
             <span className="font-bold">K6 Commander</span>
-          </a>
+          </Link>
           <nav className="hidden md:flex items-center gap-6 text-sm">
-            <a onClick={() => setView('history')} className="transition-colors hover:text-foreground/80 text-foreground/60 cursor-pointer">
+            <Link href="/history" className="transition-colors hover:text-foreground/80 text-foreground/60 cursor-pointer">
               <History className="inline-block h-4 w-4 mr-1" />
               History
-            </a>
-            <a onClick={() => setView('about')} className="transition-colors hover:text-foreground/80 text-foreground/60 cursor-pointer">
+            </Link>
+            <Link href="/about" className="transition-colors hover:text-foreground/80 text-foreground/60 cursor-pointer">
               <Info className="inline-block h-4 w-4 mr-1" />
               About
-            </a>
-             <a onClick={() => setView('help')} className="transition-colors hover:text-foreground/80 text-foreground/60 cursor-pointer">
-              <HelpCircle className="inline-block h-4 w-4 mr-1" />
-              Help
-            </a>
-            <a onClick={() => setView('contact')} className="transition-colors hover:text-foreground/80 text-foreground/60 cursor-pointer">
-              <Mail className="inline-block h-4 w-4 mr-1" />
-              Contact
-            </a>
+            </Link>
           </nav>
         </div>
-        <div className="flex flex-1 items-center justify-end">
+        <div className="flex flex-1 items-center justify-end gap-2">
+            <Button variant="outline" size="sm" onClick={startTour}>
+                <PlayCircle className='h-4 w-4 mr-2'/>
+                Start Tour
+            </Button>
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <Button variant="ghost" size="icon">

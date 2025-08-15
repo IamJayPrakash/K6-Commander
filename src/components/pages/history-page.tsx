@@ -48,7 +48,7 @@ interface HistoryPageProps {
   onRerun: (config: TestConfiguration) => void;
 }
 
-export default function HistoryPage({
+export default function HistoryPageComponent({
   history,
   setHistory,
   onLoad,
@@ -245,4 +245,3 @@ export default function HistoryPage({
     </>
   );
 }
-

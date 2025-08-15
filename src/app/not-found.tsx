@@ -4,17 +4,10 @@
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { AlertTriangle, Home } from 'lucide-react';
-import { AppHeader } from '@/components/layout/app-header';
-import { AppFooter } from '@/components/layout/app-footer';
-import { useState } from 'react';
 
 export default function NotFound() {
-  const [view, setView] = useState<'form' | 'history' | 'about' | 'help' | 'contact'>('form');
-
   return (
-    <div className="flex flex-col min-h-screen bg-gradient-to-br from-black to-[#1a1a1a]">
-      <AppHeader setView={setView} />
-      <main className="flex-1 flex items-center justify-center text-center px-4">
+        <div className="flex-1 flex items-center justify-center text-center px-4">
         <div className="max-w-md p-8 rounded-lg shadow-2xl bg-card/50 backdrop-blur-sm border border-border/20">
           <div className="relative mb-8 flex items-center justify-center">
             <AlertTriangle className="w-16 h-16 text-destructive animate-pulse mr-4" />
@@ -35,8 +28,6 @@ export default function NotFound() {
             </Link>
           </Button>
         </div>
-      </main>
-      <AppFooter />
-    </div>
+      </div>
   );
 }

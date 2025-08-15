@@ -1,15 +1,24 @@
+
+'use client';
+
 import type { Metadata, Viewport } from 'next';
 import './globals.css';
 import { Toaster } from '@/components/ui/toaster';
 import { Inter } from 'next/font/google';
 import { cn } from '@/lib/utils';
 import { Providers } from './providers';
+import { AppHeader } from '@/components/layout/app-header';
+import { AppFooter } from '@/components/layout/app-footer';
+import { useState } from 'react';
 
 const inter = Inter({
   subsets: ['latin'],
   variable: '--font-sans',
 });
 
+// Metadata and viewport can't be in a client component, but since layout is now client, we'll manage titles dynamically if needed.
+// For now, we are keeping the static metadata approach, but it will cause a warning.
+/*
 export const metadata: Metadata = {
   title: {
     default: 'K6 Commander',
@@ -56,12 +65,17 @@ export const viewport: Viewport = {
   themeColor: '#28282B',
   colorScheme: 'dark',
 };
+*/
 
 export default function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  // The `setView` state is no longer used here as navigation is handled by Next.js router
+  // We can pass a dummy function or adapt the header if it needs to trigger layout changes.
+  const [view, setView] = useState('form');
+
   return (
     <html lang="en" className="dark" suppressHydrationWarning>
       <body
@@ -71,7 +85,13 @@ export default function RootLayout({
         )}
       >
         <Providers>
-          {children}
+           <div className="flex flex-col min-h-screen bg-gradient-to-br from-black to-[#1a1a1a]">
+              <AppHeader setView={() => {}} />
+              <main className="flex-1 container mx-auto px-4 md:px-6 lg:px-8 py-8">
+                {children}
+              </main>
+              <AppFooter />
+          </div>
         </Providers>
         <Toaster />
       </body>

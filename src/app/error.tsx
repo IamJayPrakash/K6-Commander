@@ -25,8 +25,6 @@ import {
 } from '@/components/ui/accordion';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { useToast } from '@/hooks/use-toast';
-import { AppHeader } from '@/components/layout/app-header';
-import { AppFooter } from '@/components/layout/app-footer';
 
 export default function GlobalError({
   error,
@@ -37,7 +35,6 @@ export default function GlobalError({
 }) {
   const { toast } = useToast();
   const [isCopied, setIsCopied] = useState(false);
-  const [view, setView] = useState<'form' | 'history' | 'about' | 'help' | 'contact'>('form');
 
   const handleCopy = async () => {
     try {
@@ -58,8 +55,6 @@ export default function GlobalError({
   };
 
   return (
-    <div className="flex flex-col min-h-screen bg-gradient-to-br from-black to-[#1a1a1a]">
-      <AppHeader setView={setView} />
       <main className="flex-1 flex items-center justify-center p-4 font-mono">
         <Card className="max-w-2xl w-full bg-card/50 backdrop-blur-sm border border-destructive/50 shadow-2xl shadow-destructive/10">
           <CardHeader className="text-center">
@@ -130,7 +125,5 @@ export default function GlobalError({
           </CardContent>
         </Card>
       </main>
-      <AppFooter />
-    </div>
   );
 }

@@ -1,8 +1,8 @@
+
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 
 export default function PrivacyPage() {
   return (
-    <div className="container mx-auto py-10 px-4">
       <Card className="bg-card/50 backdrop-blur-sm">
         <CardHeader>
           <CardTitle>Privacy Policy</CardTitle>
@@ -48,6 +48,5 @@ export default function PrivacyPage() {
           </p>
         </CardContent>
       </Card>
-    </div>
   );
 }
