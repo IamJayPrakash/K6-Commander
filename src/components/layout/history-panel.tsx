@@ -1,6 +1,7 @@
 'use client';
 
 import type { Dispatch, SetStateAction } from 'react';
+import React from 'react';
 import { formatDistanceToNow } from 'date-fns';
 import {
   SidebarContent,
@@ -36,7 +37,6 @@ import {
   AlertDialogTrigger,
 } from '@/components/ui/alert-dialog';
 import { useToast } from '@/hooks/use-toast';
-import React from 'react';
 
 interface HistoryPanelProps {
   history: HistoryItem[];
@@ -53,6 +53,7 @@ export function HistoryPanel({
 }: HistoryPanelProps) {
   const { toast } = useToast();
   const fileInputRef = React.useRef<HTMLInputElement>(null);
+  const [itemToDelete, setItemToDelete] = React.useState<string | null>(null);
 
   const handleExport = React.useCallback(() => {
     try {
@@ -92,7 +93,6 @@ export function HistoryPanel({
           const content = e.target?.result;
           if (typeof content === 'string') {
             const importedHistory = JSON.parse(content) as HistoryItem[];
-            // Basic validation
             if (Array.isArray(importedHistory)) {
               setHistory(importedHistory);
               toast({
@@ -113,15 +113,17 @@ export function HistoryPanel({
       };
       reader.readAsText(file);
     }
-    // Reset file input
     if (fileInputRef.current) {
         fileInputRef.current.value = '';
     }
   }, [setHistory, toast]);
 
-  const handleDelete = React.useCallback((id: string) => {
-    setHistory(prevHistory => prevHistory.filter((item) => item.id !== id));
-  }, [setHistory]);
+  const confirmDelete = React.useCallback(() => {
+    if(itemToDelete) {
+        setHistory(prevHistory => prevHistory.filter((item) => item.id !== itemToDelete));
+        setItemToDelete(null);
+    }
+  }, [itemToDelete, setHistory]);
   
   const handleDeleteAll = React.useCallback(() => {
     setHistory([]);
@@ -131,15 +133,6 @@ export function HistoryPanel({
     });
   }, [setHistory, toast]);
   
-  const handleRerunClick = React.useCallback((e: React.MouseEvent, config: TestConfiguration) => {
-      e.stopPropagation();
-      onRerun(config);
-  }, [onRerun]);
-
-  const handleDeleteClick = React.useCallback((e: React.MouseEvent) => {
-      e.stopPropagation();
-  }, []);
-
   return (
     <>
       <SidebarHeader>
@@ -184,13 +177,13 @@ export function HistoryPanel({
                       variant="ghost"
                       size="icon"
                       className="h-7 w-7"
-                      onClick={(e) => handleRerunClick(e, item.config)}
+                      onClick={() => onRerun(item.config)}
                     >
                       <Play className="h-4 w-4" />
                     </Button>
                     <AlertDialog>
                       <AlertDialogTrigger asChild>
-                         <Button variant="ghost" size="icon" className="h-7 w-7 hover:bg-destructive/10 hover:text-destructive" onClick={handleDeleteClick}>
+                         <Button variant="ghost" size="icon" className="h-7 w-7 hover:bg-destructive/10 hover:text-destructive" onClick={() => setItemToDelete(item.id)}>
                            <Trash2 className="h-4 w-4" />
                          </Button>
                       </AlertDialogTrigger>
@@ -202,8 +195,8 @@ export function HistoryPanel({
                           </AlertDialogDescription>
                         </AlertDialogHeader>
                         <AlertDialogFooter>
-                          <AlertDialogCancel>Cancel</AlertDialogCancel>
-                          <AlertDialogAction onClick={() => handleDelete(item.id)} className="bg-destructive hover:bg-destructive/90">Delete</AlertDialogAction>
+                          <AlertDialogCancel onClick={() => setItemToDelete(null)}>Cancel</AlertDialogCancel>
+                          <AlertDialogAction onClick={confirmDelete} className="bg-destructive hover:bg-destructive/90">Delete</AlertDialogAction>
                         </AlertDialogFooter>
                       </AlertDialogContent>
                     </AlertDialog>
