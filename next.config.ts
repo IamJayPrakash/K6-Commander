@@ -1,3 +1,4 @@
+
 import type {NextConfig} from 'next';
 
 const nextConfig: NextConfig = {
@@ -17,6 +18,14 @@ const nextConfig: NextConfig = {
         pathname: '/**',
       },
     ],
+  },
+  async rewrites() {
+    return [
+      {
+        source: '/results/:path*',
+        destination: '/:path*', // This is a bit of a hack to serve static files from the results dir
+      },
+    ]
   },
 };
 

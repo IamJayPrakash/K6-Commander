@@ -1,3 +1,4 @@
+
 import { NextResponse } from 'next/server';
 import fs from 'fs/promises';
 import path from 'path';
@@ -15,9 +16,6 @@ export async function GET(
   const summaryFilePath = path.join(resultsDir, `summary-${testId}.json`);
 
   try {
-    // Ensure results directory exists
-    await fs.mkdir(resultsDir, { recursive: true });
-
     // Check if summary file exists
     await fs.access(summaryFilePath);
 
@@ -25,8 +23,9 @@ export async function GET(
     const summaryContent = await fs.readFile(summaryFilePath, 'utf-8');
     const summaryJson = JSON.parse(summaryContent);
     
-    // Delete the file after reading
-    await fs.unlink(summaryFilePath);
+    // We no longer delete the file so it can be saved in history if needed.
+    // A cleanup job could be added for a production system.
+    // await fs.unlink(summaryFilePath);
 
     return NextResponse.json(summaryJson);
   } catch (error: any) {

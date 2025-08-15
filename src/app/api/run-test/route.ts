@@ -1,3 +1,4 @@
+
 import { NextResponse, type NextRequest } from 'next/server';
 import { v4 as uuidv4 } from 'uuid';
 import { spawn } from 'child_process';
@@ -41,21 +42,39 @@ export async function POST(req: NextRequest) {
 
     const k6Process = spawn('docker', dockerArgs);
 
+    let stdout = '';
+    let stderr = '';
+
     k6Process.stdout.on('data', (data) => {
-      console.log(`k6 stdout (${testId}): ${data}`);
+        stdout += data.toString();
+        console.log(`k6 stdout (${testId}): ${data}`);
     });
 
     k6Process.stderr.on('data', (data) => {
-      console.error(`k6 stderr (${testId}): ${data}`);
+        stderr += data.toString();
+        console.error(`k6 stderr (${testId}): ${data}`);
     });
 
-    k6Process.on('close', (code) => {
-      console.log(`k6 process for test ${testId} exited with code ${code}`);
+    const k6Promise = new Promise((resolve, reject) => {
+        k6Process.on('close', (code) => {
+            if (code === 0) {
+              console.log(`k6 process for test ${testId} exited with code ${code}`);
+              resolve(code);
+            } else {
+              console.error(`k6 process for test ${testId} exited with code ${code}`);
+              reject(new Error(`k6 process exited with code ${code}. Stderr: ${stderr}`));
+            }
+        });
+        
+        k6Process.on('error', (err) => {
+            console.error(`Failed to start k6 container for test ${testId}:`, err);
+            reject(err);
+        });
     });
-    
-    k6Process.on('error', (err) => {
-        console.error(`Failed to start k6 container for test ${testId}:`, err);
-    });
+
+    // We don't await the promise here. We let the frontend poll for the result.
+    // This immediately returns the testId so the UI can update.
+    // The promise is used to handle logging and potential race conditions if needed later.
 
     return NextResponse.json({ testId });
 
@@ -65,3 +84,4 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: 'Failed to start test', details: errorMessage }, { status: 500 });
   }
 }
+

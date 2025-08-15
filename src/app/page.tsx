@@ -5,7 +5,7 @@ import { useState } from 'react';
 import TestForm from '@/components/test/test-form';
 import TestRunning from '@/components/test/test-running';
 import TestSummary from '@/components/test/test-summary';
-import type { TestConfiguration, K6Summary, HistoryItem } from '@/types';
+import type { TestConfiguration, K6Summary, HistoryItem, LighthouseSummary, SeoAnalysis } from '@/types';
 import { useLocalStorage } from '@/hooks/use-local-storage';
 import { AppHeader } from '@/components/layout/app-header';
 import { AppFooter } from '@/components/layout/app-footer';
@@ -16,39 +16,46 @@ import HistoryPage from '@/components/pages/history-page';
 
 type View = 'form' | 'running' | 'summary' | 'about' | 'history' | 'help' | 'contact';
 
+export interface TestResults {
+  k6?: K6Summary;
+  lighthouse?: LighthouseSummary;
+  seo?: SeoAnalysis;
+}
 
 export default function Home() {
   const [view, setView] = useState<View>('form');
   const [activeTestId, setActiveTestId] = useState<string | null>(null);
   const [activeTestConfig, setActiveTestConfig] =
     useState<TestConfiguration | null>(null);
-  const [activeTestSummary, setActiveTestSummary] =
-    useState<K6Summary | null>(null);
+  const [activeTestResults, setActiveTestResults] =
+    useState<TestResults | null>(null);
   const [history, setHistory] = useLocalStorage<HistoryItem[]>('k6-history', []);
   
-  const [initialValuesForRerun, setInitialValuesForRerun] = useState<Partial<TestConfiguration> | null>(null);
+  const [rerunInitialValues, setRerunInitialValues] = useState<Partial<TestConfiguration> | null>(null);
   const [formKey, setFormKey] = useState(Date.now());
 
   const handleRunTest = (testId: string, config: TestConfiguration) => {
     setActiveTestId(testId);
     setActiveTestConfig(config);
+    setActiveTestResults(null); // Reset previous results
     setView('running');
   };
 
-  const handleTestComplete = (summary: K6Summary) => {
-    setActiveTestSummary(summary);
+  const handleTestComplete = (results: TestResults) => {
+    setActiveTestResults(results);
     setView('summary');
   };
 
   const handleSaveToHistory = () => {
-    if (activeTestConfig && activeTestSummary && activeTestId) {
+    if (activeTestConfig && activeTestResults && activeTestId) {
       const newHistoryItem: HistoryItem = {
         id: activeTestId,
         timestamp: new Date().toISOString(),
         config: activeTestConfig,
-        summary: activeTestSummary,
+        results: activeTestResults,
       };
-      const newHistory = [newHistoryItem, ...history];
+      // Prevent duplicates
+      const newHistory = [newHistoryItem, ...history.filter(h => h.id !== activeTestId)];
       setHistory(newHistory);
       setView('history');
     }
@@ -56,22 +63,22 @@ export default function Home() {
 
   const handleLoadFromHistory = (item: HistoryItem) => {
     setActiveTestConfig(item.config);
-    setActiveTestSummary(item.summary);
+    setActiveTestResults(item.results);
     setActiveTestId(item.id);
     setView('summary');
   };
 
   const handleRerun = (config: TestConfiguration) => {
-    setInitialValuesForRerun(config);
+    setRerunInitialValues(config);
     setFormKey(Date.now());
     setView('form');
   };
   
   const handleCreateNewTest = () => {
-    setInitialValuesForRerun(null);
-    setFormKey(Date.now()); 
+    setRerunInitialValues(null);
+    setFormKey(Date.now());
     setActiveTestConfig(null);
-    setActiveTestSummary(null);
+    setActiveTestResults(null);
     setActiveTestId(null);
     setView('form');
   };
@@ -82,14 +89,16 @@ export default function Home() {
         return (
           <TestRunning
             testId={activeTestId!}
+            config={activeTestConfig!}
             onTestComplete={handleTestComplete}
           />
         );
       case 'summary':
         return (
           <TestSummary
-            summary={activeTestSummary!}
+            results={activeTestResults!}
             config={activeTestConfig!}
+            testId={activeTestId!}
             onSaveToHistory={handleSaveToHistory}
             onRerun={() => handleRerun(activeTestConfig!)}
             onCreateNew={handleCreateNewTest}
@@ -113,7 +122,7 @@ export default function Home() {
         return (
           <TestForm
             key={formKey}
-            initialValues={initialValuesForRerun}
+            initialValues={rerunInitialValues}
             onRunTest={handleRunTest}
           />
         );
@@ -130,3 +139,4 @@ export default function Home() {
     </div>
   );
 }
+

@@ -1,3 +1,6 @@
+
+import type { TestResults } from "@/app/page";
+
 export type TestPreset = 'baseline' | 'spike' | 'stress' | 'soak';
 
 export interface TestConfiguration {
@@ -59,9 +62,41 @@ export interface K6Summary {
   };
 }
 
+export interface LighthouseCategory {
+    id: string;
+    title: string;
+    score: number;
+}
+
+export interface LighthouseSummary {
+    requestedUrl: string;
+    finalUrl: string;
+    fetchTime: string;
+    categories: {
+        'performance': LighthouseCategory,
+        'accessibility': LighthouseCategory,
+        'best-practices': LighthouseCategory,
+        'seo': LighthouseCategory
+    }
+}
+
+export interface SeoCheck {
+    status: 'pass' | 'fail' | 'warning' | 'not_checked';
+}
+
+export interface SeoAnalysis {
+    title: SeoCheck & { text: string | null; length: number; };
+    description: SeoCheck & { text: string | null; length: number; };
+    h1: SeoCheck & { text: string | null };
+    canonical: SeoCheck & { url: string | null };
+    imageAlts: SeoCheck;
+}
+
+
 export interface HistoryItem {
   id: string;
   timestamp: string;
   config: TestConfiguration;
-  summary: K6Summary;
+  results: TestResults;
 }
+

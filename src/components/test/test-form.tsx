@@ -31,6 +31,7 @@ import type { TestConfiguration, TestPreset } from '@/types';
 import { useToast } from '@/hooks/use-toast';
 import { Switch } from '../ui/switch';
 import { RadioGroup, RadioGroupItem } from '../ui/radio-group';
+import { Separator } from '../ui/separator';
 
 const stageSchema = z.object({
   duration: z.string().min(1, 'Duration is required'),
@@ -54,6 +55,9 @@ const formSchema = z.object({
   runLoadTest: z.boolean().default(true),
   runLighthouse: z.boolean().default(false),
   runSeo: z.boolean().default(false),
+}).refine(data => data.runLoadTest || data.runLighthouse || data.runSeo, {
+    message: "Please select at least one test to run.",
+    path: ["runLoadTest"], // Attach error to a field for visibility
 });
 
 type TestFormValues = z.infer<typeof formSchema>;
@@ -63,38 +67,30 @@ interface TestFormProps {
   onRunTest: (testId: string, config: TestConfiguration) => void;
 }
 
-const getInitialValues = (values: Partial<TestConfiguration> | null): TestFormValues => {
-    const newTestDefaultValues: Partial<TestFormValues> = {
-        url: '',
-        method: 'GET' as const,
-        headers: [],
-        body: '',
-        testPreset: 'baseline' as const,
-        runLoadTest: true,
-        runLighthouse: false,
-        runSeo: false,
-        ...TEST_PRESETS.baseline,
-    };
-    
-    if (!values) {
-        return newTestDefaultValues as TestFormValues;
-    }
-
-    const config = {
-        ...newTestDefaultValues,
-        ...values,
-        headers: values.headers ? Object.entries(values.headers).map(([key, value]) => ({ key, value: String(value) })) : [],
-    };
-    return config as TestFormValues;
+const newTestDefaultValues: TestFormValues = {
+    url: '',
+    method: 'GET' as const,
+    headers: [],
+    body: '',
+    testPreset: 'baseline' as const,
+    runLoadTest: true,
+    runLighthouse: false,
+    runSeo: false,
+    ...TEST_PRESETS.baseline,
 };
-
 
 export default function TestForm({ initialValues, onRunTest }: TestFormProps) {
   const { toast } = useToast();
   
   const form = useForm<TestFormValues>({
     resolver: zodResolver(formSchema),
-    defaultValues: getInitialValues(initialValues),
+    defaultValues: initialValues 
+        ? {
+            ...newTestDefaultValues,
+            ...initialValues,
+            headers: initialValues.headers ? Object.entries(initialValues.headers).map(([key, value]) => ({ key, value: String(value) })) : [],
+          }
+        : newTestDefaultValues,
   });
   
   const { fields: headerFields, append: appendHeader, remove: removeHeader } = useFieldArray({
@@ -124,41 +120,27 @@ export default function TestForm({ initialValues, onRunTest }: TestFormProps) {
         if(key) acc[key] = value;
         return acc;
       }, {} as Record<string, string>),
-      vus: data.testPreset !== 'custom' && data.runLoadTest ? TEST_PRESETS[data.testPreset as TestPreset].vus! : data.vus || 0,
-      duration: data.testPreset !== 'custom' && data.runLoadTest ? TEST_PRESETS[data.testPreset as TestPreset].duration! : data.duration || '',
-      stages: data.testPreset !== 'custom' && data.runLoadTest ? TEST_PRESETS[data.testPreset as TestPreset].stages! : data.stages || [],
+      vus: data.vus || 0,
+      duration: data.duration || '',
+      stages: data.stages || [],
       body: data.body || '',
     };
     
-    try {
-      const response = await fetch('/api/run-test', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(config),
-      });
+    // This is a client-side temporary ID. The server will generate the real one for load tests.
+    // For client-side only tests, this is all we need.
+    const tempTestId = `test-${Date.now()}`;
+    
+    toast({
+        title: 'Starting Test(s)...',
+        description: 'Your tests have been dispatched.',
+    });
+    onRunTest(tempTestId, config);
 
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.error || 'Failed to start test');
-      }
-
-      const { testId } = await response.json();
-      toast({
-        title: 'Test Started!',
-        description: `Test ID: ${testId}`,
-      });
-      onRunTest(testId, config);
-
-    } catch (error) {
-        toast({
-            variant: 'destructive',
-            title: 'Error starting test',
-            description: error instanceof Error ? error.message : 'An unknown error occurred.',
-        });
-    }
   };
   
   const isLoadTestEnabled = form.watch('runLoadTest');
+  const isLighthouseEnabled = form.watch('runLighthouse');
+  const isSeoEnabled = form.watch('runSeo');
 
   return (
     <Card className="border-none shadow-none">
@@ -167,7 +149,7 @@ export default function TestForm({ initialValues, onRunTest }: TestFormProps) {
           <TestTubeDiagonal />
           New Test Run
         </CardTitle>
-        <CardDescription>Configure and launch k6 performance tests.</CardDescription>
+        <CardDescription>Configure and launch performance and SEO audits.</CardDescription>
       </CardHeader>
       <CardContent>
         <Form {...form}>
@@ -193,29 +175,74 @@ export default function TestForm({ initialValues, onRunTest }: TestFormProps) {
                         </FormItem>
                       )}
                     />
-                     <FormField
-                      control={form.control}
-                      name="runLoadTest"
-                      render={({ field }) => (
-                         <FormItem className="flex flex-row items-center justify-between rounded-lg border p-4 shadow-sm">
-                            <div className="space-y-0.5">
-                                <FormLabel className="text-base flex items-center gap-2"><Gauge/> k6 Load Test</FormLabel>
-                                <FormDescription>Simulate traffic to measure performance under pressure.</FormDescription>
-                            </div>
-                            <FormControl>
-                                <Switch
-                                    checked={field.value}
-                                    onCheckedChange={field.onChange}
-                                />
-                            </FormControl>
-                        </FormItem>
-                      )}
-                    />
+                     <Card>
+                        <CardHeader>
+                            <CardTitle>Test Suites</CardTitle>
+                            <CardDescription>Select which tests you would like to run.</CardDescription>
+                        </CardHeader>
+                        <CardContent className="space-y-4">
+                            <FormField
+                                control={form.control}
+                                name="runLoadTest"
+                                render={({ field }) => (
+                                    <FormItem className="flex flex-row items-center justify-between rounded-lg border p-4 shadow-sm">
+                                        <div className="space-y-0.5">
+                                            <FormLabel className="text-base flex items-center gap-2"><Gauge/> k6 Load Test</FormLabel>
+                                            <FormDescription>Simulate traffic to measure performance under pressure.</FormDescription>
+                                        </div>
+                                        <FormControl>
+                                            <Switch
+                                                checked={field.value}
+                                                onCheckedChange={field.onChange}
+                                            />
+                                        </FormControl>
+                                    </FormItem>
+                                )}
+                            />
+                             <FormField
+                                control={form.control}
+                                name="runLighthouse"
+                                render={({ field }) => (
+                                    <FormItem className="flex flex-row items-center justify-between rounded-lg border p-4 shadow-sm">
+                                        <div className="space-y-0.5">
+                                            <FormLabel className="text-base flex items-center gap-2"><ShieldCheck/> Lighthouse Audit</FormLabel>
+                                            <FormDescription>Run Google's Lighthouse to check PWA, SEO, and more.</FormDescription>
+                                        </div>
+                                        <FormControl>
+                                            <Switch
+                                                checked={field.value}
+                                                onCheckedChange={field.onChange}
+                                            />
+                                        </FormControl>
+                                    </FormItem>
+                                )}
+                            />
+                             <FormField
+                                control={form.control}
+                                name="runSeo"
+                                render={({ field }) => (
+                                    <FormItem className="flex flex-row items-center justify-between rounded-lg border p-4 shadow-sm">
+                                        <div className="space-y-0.5">
+                                            <FormLabel className="text-base flex items-center gap-2"><Search/> Basic SEO Check</FormLabel>
+                                            <FormDescription>Analyze title, meta description, and other on-page factors.</FormDescription>
+                                        </div>
+                                        <FormControl>
+                                            <Switch
+                                                checked={field.value}
+                                                onCheckedChange={field.onChange}
+                                            />
+                                        </FormControl>
+                                    </FormItem>
+                                )}
+                            />
+                            <FormMessage>{form.formState.errors.runLoadTest?.message}</FormMessage>
+                        </CardContent>
+                     </Card>
                 </div>
 
                 {/* Right Column */}
                 <div className="space-y-8 mt-8 lg:mt-0">
-                   <Card className={isLoadTestEnabled ? '' : 'bg-muted/50'}>
+                   <Card className={isLoadTestEnabled ? '' : 'bg-muted/50 opacity-60'}>
                        <CardHeader>
                            <CardTitle className="flex items-center gap-2"><Settings /> Request Configuration</CardTitle>
                            <CardDescription>Define the HTTP request details for the load test.</CardDescription>
@@ -399,7 +426,7 @@ export default function TestForm({ initialValues, onRunTest }: TestFormProps) {
             <div className="flex justify-end pt-8">
                 <Button type="submit" size="lg" className="w-full md:w-auto" disabled={form.formState.isSubmitting}>
                 <Rocket className="mr-2 h-5 w-5" />
-                {form.formState.isSubmitting ? 'Starting Test...' : 'Run Test'}
+                {form.formState.isSubmitting ? 'Starting Tests...' : `Run Test(s)`}
                 </Button>
             </div>
           </form>

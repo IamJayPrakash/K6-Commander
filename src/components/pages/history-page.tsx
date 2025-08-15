@@ -1,3 +1,4 @@
+
 'use client';
 
 import type { Dispatch, SetStateAction } from 'react';
@@ -19,6 +20,9 @@ import {
   Trash2,
   Upload,
   Eye,
+  Gauge,
+  Search,
+  ShieldCheck,
 } from 'lucide-react';
 import type { HistoryItem, TestConfiguration } from '@/types';
 import {
@@ -35,6 +39,7 @@ import {
 import { useToast } from '@/hooks/use-toast';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
+import { Badge } from '../ui/badge';
 
 interface HistoryPageProps {
   history: HistoryItem[];
@@ -59,7 +64,6 @@ export default function HistoryPage({
       const dataBlob = new Blob([dataStr], { type: 'application/json' });
       const url = window.URL.createObjectURL(dataBlob);
       const link = document.createElement('a');
-      link.href = url;
       link.download = `k6-commander-history-${new Date().toISOString()}.json`;
       document.body.appendChild(link);
       link.click();
@@ -92,7 +96,7 @@ export default function HistoryPage({
           if (typeof content === 'string') {
             const importedHistory = JSON.parse(content) as HistoryItem[];
             // Basic validation
-            if (Array.isArray(importedHistory) && importedHistory.every(item => item.id && item.timestamp && item.config && item.summary)) {
+            if (Array.isArray(importedHistory) && importedHistory.every(item => item.id && item.timestamp && item.config && item.results)) {
               setHistory(importedHistory);
               toast({
                 title: 'History Imported',
@@ -191,7 +195,7 @@ export default function HistoryPage({
                         <TableRow>
                             <TableHead>URL</TableHead>
                             <TableHead>Date</TableHead>
-                            <TableHead>Type</TableHead>
+                            <TableHead>Tests Run</TableHead>
                             <TableHead className="text-right">Actions</TableHead>
                         </TableRow>
                     </TableHeader>
@@ -200,7 +204,13 @@ export default function HistoryPage({
                             <TableRow key={item.id}>
                                 <TableCell className="font-medium truncate max-w-xs">{item.config.url}</TableCell>
                                 <TableCell>{format(new Date(item.timestamp), "PPp")}</TableCell>
-                                <TableCell className="capitalize">{item.config.testPreset}</TableCell>
+                                <TableCell>
+                                  <div className='flex gap-2'>
+                                    {item.config.runLoadTest && <Badge variant="outline"><Gauge className="mr-1 h-3 w-3"/>Load</Badge>}
+                                    {item.config.runLighthouse && <Badge variant="outline"><ShieldCheck className="mr-1 h-3 w-3"/>Lighthouse</Badge>}
+                                    {item.config.runSeo && <Badge variant="outline"><Search className="mr-1 h-3 w-3"/>SEO</Badge>}
+                                  </div>
+                                </TableCell>
                                 <TableCell className="text-right">
                                     <div className="flex items-center justify-end gap-2">
                                         <Button variant="ghost" size="icon" onClick={() => onLoad(item)}><Eye className="h-4 w-4"/></Button>
@@ -235,3 +245,4 @@ export default function HistoryPage({
     </>
   );
 }
+

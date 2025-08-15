@@ -1,3 +1,4 @@
+
 'use client';
 
 import {
@@ -19,9 +20,11 @@ import {
   Play,
   Plus,
   BarChart,
-  Settings
+  Settings,
+  ShieldCheck,
+  Search as SearchIcon
 } from 'lucide-react';
-import type { K6Summary, TestConfiguration } from '@/types';
+import type { K6Summary, TestConfiguration, LighthouseSummary, SeoAnalysis } from '@/types';
 import {
   ChartContainer,
   ChartTooltip,
@@ -31,10 +34,15 @@ import {
 import { Bar, BarChart as RechartsBarChart, XAxis, YAxis, Cell } from 'recharts';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import LighthouseSummaryReport from './lighthouse-summary';
+import SeoSummaryReport from './seo-summary';
+import { TestResults } from '@/app/page';
 
 interface TestSummaryProps {
-  summary: K6Summary;
+  results: TestResults;
   config: TestConfiguration;
+  testId: string;
   onSaveToHistory: () => void;
   onRerun: () => void;
   onCreateNew: () => void;
@@ -66,37 +74,74 @@ const MetricCard = ({ icon, title, value, unit, description }: { icon: React.Rea
     </Card>
 )
 
+const K6SummaryReport = ({ summary, config }: { summary: K6Summary, config: TestConfiguration }) => {
+    const metrics = summary.metrics;
+    const totalRequests = metrics.http_reqs.values.count || 0;
+    const failureRate = metrics.http_req_failed.values.rate || 0;
+    const failedRequests = Math.round(totalRequests * failureRate);
+
+    const durationData = [
+        { name: 'p(95)', value: metrics.http_req_duration.values['p(95)'] },
+        { name: 'p(90)', value: metrics.http_req_duration.values['p(90)'] },
+        { name: 'avg', value: metrics.http_req_duration.values.avg },
+        { name: 'med', value: metrics.http_req_duration.values.med },
+        { name: 'min', value: metrics.http_req_duration.values.min },
+        { name: 'max', value: metrics.http_req_duration.values.max },
+    ];
+    return (
+        <div className="space-y-6">
+            <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+                <MetricCard icon={<Gauge className="h-4 w-4"/>} title="Requests per Second" value={(metrics.http_reqs.values.rate || 0).toFixed(2)} description="Average requests processed" />
+                <MetricCard icon={<HeartPulse className="h-4 w-4"/>} title="Avg. Response Time" value={(metrics.http_req_duration.values.avg || 0).toFixed(2)} unit="ms" description={`p(95): ${metrics.http_req_duration.values['p(95)'].toFixed(2)}ms`} />
+                <MetricCard icon={<Users className="h-4 w-4"/>} title="Total Requests" value={totalRequests.toLocaleString()} description="Across all virtual users" />
+                <MetricCard icon={<AlertTriangle className="h-4 w-4"/>} title="Failed Requests" value={`${failedRequests.toLocaleString()} (${(failureRate * 100).toFixed(2)}%)`} description="Requests that did not pass checks" />
+            </div>
+
+            <Card>
+                <CardHeader>
+                    <CardTitle className="flex items-center gap-2"><BarChart/> Latency Distribution</CardTitle>
+                    <CardDescription>Response time percentiles in milliseconds (ms).</CardDescription>
+                </CardHeader>
+                <CardContent>
+                    <ChartContainer config={chartConfig} className="h-[250px] w-full">
+                        <RechartsBarChart data={durationData} accessibilityLayer>
+                            <XAxis dataKey="name" tickLine={false} axisLine={false} tickMargin={8} />
+                            <YAxis tickLine={false} axisLine={false} tickMargin={8} unit="ms" />
+                            <ChartTooltip content={<ChartTooltipContent />} />
+                            <Bar dataKey="value" radius={4}>
+                            {durationData.map((entry) => (
+                                <Cell key={`cell-${entry.name}`} fill={chartConfig[entry.name as keyof typeof chartConfig]?.color} />
+                            ))}
+                            </Bar>
+                        </RechartsBarChart>
+                    </ChartContainer>
+                </CardContent>
+            </Card>
+        </div>
+    )
+}
+
 export default function TestSummary({
-  summary,
+  results,
   config,
+  testId,
   onSaveToHistory,
   onRerun,
   onCreateNew,
 }: TestSummaryProps) {
-  const metrics = summary.metrics;
-  const totalRequests = metrics.http_reqs.values.count || 0;
-  const failureRate = metrics.http_req_failed.values.rate || 0;
-  const failedRequests = Math.round(totalRequests * failureRate);
-
-  const durationData = [
-    { name: 'p(95)', value: metrics.http_req_duration.values['p(95)'] },
-    { name: 'p(90)', value: metrics.http_req_duration.values['p(90)'] },
-    { name: 'avg', value: metrics.http_req_duration.values.avg },
-    { name: 'med', value: metrics.http_req_duration.values.med },
-    { name: 'min', value: metrics.http_req_duration.values.min },
-    { name: 'max', value: metrics.http_req_duration.values.max },
-  ];
   
+  const defaultTab = config.runLoadTest ? "k6" : (config.runLighthouse ? "lighthouse" : "seo");
+
   return (
     <div className="space-y-6">
       <div className="flex flex-col md:flex-row gap-4 justify-between items-start">
         <div>
             <CardTitle className="flex items-center gap-2 text-3xl">
                 <CheckCircle2 className="h-10 w-10 text-green-500" />
-                Test Complete
+                Test Run Complete
             </CardTitle>
             <CardDescription className="mt-2">
-                Summary of the load test for: {config.url}
+                Summary of tests for: {config.url}
             </CardDescription>
         </div>
         <div className="flex gap-2 flex-shrink-0">
@@ -106,33 +151,22 @@ export default function TestSummary({
         </div>
       </div>
       
-      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-        <MetricCard icon={<Gauge className="h-4 w-4"/>} title="Requests per Second" value={(metrics.http_reqs.values.rate || 0).toFixed(2)} description="Average requests processed" />
-        <MetricCard icon={<HeartPulse className="h-4 w-4"/>} title="Avg. Response Time" value={(metrics.http_req_duration.values.avg || 0).toFixed(2)} unit="ms" description={`p(95): ${metrics.http_req_duration.values['p(95)'].toFixed(2)}ms`} />
-        <MetricCard icon={<Users className="h-4 w-4"/>} title="Total Requests" value={totalRequests.toLocaleString()} description="Across all virtual users" />
-        <MetricCard icon={<AlertTriangle className="h-4 w-4"/>} title="Failed Requests" value={`${failedRequests.toLocaleString()} (${(failureRate * 100).toFixed(2)}%)`} description="Requests that did not pass checks" />
-      </div>
-
-      <Card>
-          <CardHeader>
-              <CardTitle className="flex items-center gap-2"><BarChart/> Latency Distribution</CardTitle>
-              <CardDescription>Response time percentiles in milliseconds (ms).</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <ChartContainer config={chartConfig} className="h-[250px] w-full">
-                <RechartsBarChart data={durationData} accessibilityLayer>
-                    <XAxis dataKey="name" tickLine={false} axisLine={false} tickMargin={8} />
-                    <YAxis tickLine={false} axisLine={false} tickMargin={8} unit="ms" />
-                    <ChartTooltip content={<ChartTooltipContent />} />
-                    <Bar dataKey="value" radius={4}>
-                       {durationData.map((entry) => (
-                         <Cell key={`cell-${entry.name}`} fill={chartConfig[entry.name as keyof typeof chartConfig]?.color} />
-                       ))}
-                    </Bar>
-                </RechartsBarChart>
-            </ChartContainer>
-          </CardContent>
-      </Card>
+      <Tabs defaultValue={defaultTab} className="w-full">
+        <TabsList className="grid w-full grid-cols-3">
+            <TabsTrigger value="k6" disabled={!results.k6}><Gauge className="mr-2 h-4 w-4" /> Load Test</TabsTrigger>
+            <TabsTrigger value="lighthouse" disabled={!results.lighthouse}><ShieldCheck className="mr-2 h-4 w-4" />Lighthouse</TabsTrigger>
+            <TabsTrigger value="seo" disabled={!results.seo}><SearchIcon className="mr-2 h-4 w-4" />SEO</TabsTrigger>
+        </TabsList>
+        <TabsContent value="k6">
+            {results.k6 ? <K6SummaryReport summary={results.k6} config={config} /> : <p>No load test data.</p>}
+        </TabsContent>
+        <TabsContent value="lighthouse">
+            {results.lighthouse ? <LighthouseSummaryReport summary={results.lighthouse} testId={testId} /> : <p>No Lighthouse audit data.</p>}
+        </TabsContent>
+        <TabsContent value="seo">
+            {results.seo ? <SeoSummaryReport analysis={results.seo} /> : <p>No SEO analysis data.</p>}
+        </TabsContent>
+      </Tabs>
       
       <Accordion type="single" collapsible>
         <AccordionItem value="config">
@@ -173,3 +207,4 @@ export default function TestSummary({
     </div>
   );
 }
+
