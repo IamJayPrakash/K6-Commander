@@ -1,7 +1,7 @@
 
 'use client';
 
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import TestForm from '@/components/test/test-form';
 import TestRunning from '@/components/test/test-running';
 import TestSummary from '@/components/test/test-summary';
@@ -17,6 +17,20 @@ import { TEST_PRESETS } from '@/lib/constants';
 
 type View = 'form' | 'running' | 'summary' | 'about' | 'history' | 'help' | 'contact';
 
+const newTestDefaultValues = {
+    url: '',
+    method: 'GET',
+    headers: [],
+    body: '',
+    testPreset: 'baseline',
+    vus: TEST_PRESETS.baseline.vus,
+    duration: TEST_PRESETS.baseline.duration,
+    stages: TEST_PRESETS.baseline.stages,
+    runLoadTest: true,
+    runLighthouse: false,
+    runSeo: false,
+} as const;
+
 export default function Home() {
   const [view, setView] = useState<View>('form');
   const [activeTestId, setActiveTestId] = useState<string | null>(null);
@@ -25,12 +39,11 @@ export default function Home() {
   const [activeTestSummary, setActiveTestSummary] =
     useState<K6Summary | null>(null);
   const [history, setHistory] = useLocalStorage<HistoryItem[]>('k6-history', []);
-  const [rerunConfig, setRerunConfig] = useState<TestConfiguration | null>(null);
+  const [formInitialValues, setFormInitialValues] = useState(newTestDefaultValues);
 
   const handleRunTest = (testId: string, config: TestConfiguration) => {
     setActiveTestId(testId);
     setActiveTestConfig(config);
-    setRerunConfig(null); // Clear any rerun config
     setView('running');
   };
 
@@ -61,50 +74,29 @@ export default function Home() {
   };
 
   const handleRerun = (config: TestConfiguration) => {
-    setRerunConfig(config);
+    setFormInitialValues({
+        url: config.url || '',
+        method: config.method || 'GET',
+        headers: config.headers ? Object.entries(config.headers).map(([key, value]) => ({ key, value })) : [],
+        body: config.body || '',
+        testPreset: config.testPreset || 'custom',
+        vus: config.vus,
+        duration: config.duration,
+        stages: config.stages,
+        runLoadTest: config.runLoadTest,
+        runLighthouse: config.runLighthouse,
+        runSeo: config.runSeo,
+    });
     setView('form');
   };
   
   const handleCreateNewTest = () => {
-    setRerunConfig(null);
+    setFormInitialValues(newTestDefaultValues);
     setActiveTestConfig(null);
     setActiveTestSummary(null);
     setActiveTestId(null);
     setView('form');
   };
-  
-  const formDefaultValues = useMemo(() => {
-    const config = rerunConfig;
-    if (config) {
-        return {
-            url: config.url || '',
-            method: config.method || 'GET',
-            headers: config.headers ? Object.entries(config.headers).map(([key, value]) => ({ key, value })) : [],
-            body: config.body || '',
-            testPreset: config.testPreset || 'custom',
-            vus: config.vus,
-            duration: config.duration,
-            stages: config.stages,
-            runLoadTest: config.runLoadTest,
-            runLighthouse: config.runLighthouse,
-            runSeo: config.runSeo,
-        }
-    }
-    // Default for a new form
-    return {
-        url: '',
-        method: 'GET',
-        headers: [],
-        body: '',
-        testPreset: 'baseline',
-        vus: TEST_PRESETS.baseline.vus,
-        duration: TEST_PRESETS.baseline.duration,
-        stages: TEST_PRESETS.baseline.stages,
-        runLoadTest: true,
-        runLighthouse: false,
-        runSeo: false,
-    }
-  }, [rerunConfig]);
 
   const renderView = () => {
     switch (view) {
@@ -142,8 +134,10 @@ export default function Home() {
       default:
         return (
           <TestForm
-            key={rerunConfig ? `rerun-${activeTestId}` : 'new-form'}
-            defaultValues={formDefaultValues}
+            // By using a key that changes only when we intend to re-run, 
+            // we ensure React creates a new form instance instead of re-rendering the existing one.
+            key={formInitialValues.url + (activeTestConfig?.url || '')}
+            defaultValues={formInitialValues}
             onRunTest={handleRunTest}
           />
         );
