@@ -4,6 +4,17 @@ import { Info, Rocket, Database, Shield, Code, Github } from "lucide-react";
 import Link from "next/link";
 
 export default function AboutPage() {
+    const techStack = [
+        { name: 'Frontend', value: 'Next.js & React' },
+        { name: 'Styling', value: 'Tailwind CSS' },
+        { name: 'UI', value: 'shadcn/ui' },
+        { name: 'Load Testing', value: 'k6' },
+        { name: 'Auditing', value: 'Lighthouse' },
+        { name: 'Metrics', value: 'InfluxDB' },
+        { name: 'Dashboards', value: 'Grafana' },
+        { name: 'Orchestration', value: 'Docker' },
+    ];
+    
     return (
         <div className="space-y-8">
             <Card className="bg-card/50 backdrop-blur-sm text-center">
@@ -69,14 +80,11 @@ export default function AboutPage() {
                 </CardHeader>
                 <CardContent className="space-y-4">
                     <ul className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
-                        <li className="flex items-center gap-2 p-2 bg-background/50 rounded-lg"><strong className="font-semibold">Frontend:</strong>Next.js & React</li>
-                        <li className="flex items-center gap-2 p-2 bg-background/50 rounded-lg"><strong className="font-semibold">Styling:</strong>Tailwind CSS</li>
-                        <li className="flex items-center gap-2 p-2 bg-background/50 rounded-lg"><strong className="font-semibold">UI:</strong>shadcn/ui</li>
-                        <li className="flex items-center gap-2 p-2 bg-background/50 rounded-lg"><strong className="font-semibold">Load Testing:</strong>k6</li>
-                        <li className="flex items-center gap-2 p-2 bg-background/50 rounded-lg"><strong className="font-semibold">Auditing:</strong>Lighthouse</li>
-                        <li className="flex items-center gap-2 p-2 bg-background/50 rounded-lg"><strong className="font-semibold">Metrics:</strong>InfluxDB</li>
-                        <li className="flex items-center gap-2 p-2 bg-background/50 rounded-lg"><strong className="font-semibold">Dashboards:</strong>Grafana</li>
-                        <li className="flex items-center gap-2 p-2 bg-background/50 rounded-lg"><strong className="font-semibold">Orchestration:</strong>Docker</li>
+                        {techStack.map((tech) => (
+                           <li key={tech.name} className="flex items-center gap-2 p-2 bg-background/50 rounded-lg">
+                               <strong className="font-semibold">{tech.name}:</strong>{tech.value}
+                           </li>
+                        ))}
                     </ul>
                 </CardContent>
             </Card>
