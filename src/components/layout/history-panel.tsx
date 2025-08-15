@@ -15,12 +15,10 @@ import {
 import { Button } from '@/components/ui/button';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import {
-  AlertCircle,
   Clock,
   Download,
   History,
   Info,
-  Loader,
   Play,
   Trash2,
   Upload,

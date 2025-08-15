@@ -5,13 +5,16 @@ export interface TestConfiguration {
   method: 'GET' | 'POST' | 'PUT' | 'DELETE' | 'PATCH';
   headers: Record<string, string>;
   body: string;
-  testPreset: TestPreset;
+  testPreset: TestPreset | 'custom';
   stages: {
     duration: string;
     target: number;
   }[];
   vus: number;
   duration: string;
+  runLoadTest: boolean;
+  runLighthouse: boolean;
+  runSeo: boolean;
 }
 
 export interface K6Metric {

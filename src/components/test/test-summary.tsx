@@ -28,7 +28,7 @@ import {
   ChartTooltipContent,
   ChartConfig,
 } from '@/components/ui/chart';
-import { Bar, BarChart as RechartsBarChart, XAxis, YAxis } from 'recharts';
+import { Bar, BarChart as RechartsBarChart, XAxis, YAxis, Cell } from 'recharts';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 
@@ -108,7 +108,7 @@ export default function TestSummary({
       
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
         <MetricCard icon={<Gauge className="h-4 w-4"/>} title="Requests per Second" value={(metrics.http_reqs.values.rate || 0).toFixed(2)} description="Average requests processed" />
-        <MetricCard icon={<HeartPulse className="h-4 w-4"/>} title="Avg. Response Time" value={(metrics.http_req_duration.values.avg || 0).toFixed(2)} unit="ms" description="P95: "/>
+        <MetricCard icon={<HeartPulse className="h-4 w-4"/>} title="Avg. Response Time" value={(metrics.http_req_duration.values.avg || 0).toFixed(2)} unit="ms" description={`p(95): ${metrics.http_req_duration.values['p(95)'].toFixed(2)}ms`} />
         <MetricCard icon={<Users className="h-4 w-4"/>} title="Total Requests" value={totalRequests.toLocaleString()} description="Across all virtual users" />
         <MetricCard icon={<AlertTriangle className="h-4 w-4"/>} title="Failed Requests" value={`${failedRequests.toLocaleString()} (${(failureRate * 100).toFixed(2)}%)`} description="Requests that did not pass checks" />
       </div>
