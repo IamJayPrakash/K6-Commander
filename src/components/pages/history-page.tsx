@@ -21,9 +21,10 @@ import {
   Upload,
   Eye,
   Gauge,
-  Search,
+  Search as SearchIcon,
   ShieldCheck,
   Clock,
+  X,
 } from 'lucide-react';
 import type { HistoryItem, TestConfiguration } from '@/types';
 import {
@@ -42,6 +43,7 @@ import { ScrollArea } from '@/components/ui/scroll-area';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Badge } from '../ui/badge';
 import { TEXT_CONSTANTS } from '@/lib/constants';
+import { Input } from '../ui/input';
 
 interface HistoryPageProps {
   history: HistoryItem[];
@@ -60,6 +62,12 @@ export default function HistoryPageComponent({
 }: HistoryPageProps) {
   const { toast } = useToast();
   const fileInputRef = React.useRef<HTMLInputElement>(null);
+  const [searchQuery, setSearchQuery] = React.useState('');
+
+  const filteredHistory = React.useMemo(() => {
+    if (!searchQuery) return history;
+    return history.filter(item => item.config.url.toLowerCase().includes(searchQuery.toLowerCase()));
+  }, [history, searchQuery]);
 
   const handleExport = React.useCallback(() => {
     if (history.length === 0) return;
@@ -164,7 +172,7 @@ export default function HistoryPageComponent({
           </div>
         </CardHeader>
         <CardContent>
-          <div className="flex justify-between items-center mb-4">
+          <div className="flex flex-col md:flex-row justify-between items-center mb-4 gap-4">
             <div className="flex gap-2">
                 <Button variant="outline" onClick={handleImportClick} data-testid="import-history-button">
                     <Upload className="mr-2 h-4 w-4" /> {TEXT_CONSTANTS.importButton}
@@ -181,6 +189,21 @@ export default function HistoryPageComponent({
                 <Button variant="outline" onClick={handleExport} disabled={history.length === 0} data-testid="export-history-button">
                     <Download className="mr-2 h-4 w-4" /> {TEXT_CONSTANTS.exportButton}
                 </Button>
+            </div>
+             <div className="relative w-full md:w-auto md:max-w-xs">
+                <SearchIcon className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                <Input
+                    placeholder="Search by URL..."
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    className="pl-10"
+                    data-testid="history-search-input"
+                />
+                {searchQuery && (
+                    <Button variant="ghost" size="icon" className="absolute right-1 top-1/2 -translate-y-1/2 h-7 w-7" onClick={() => setSearchQuery('')}>
+                        <X className="h-4 w-4" />
+                    </Button>
+                )}
             </div>
             <AlertDialog>
                 <AlertDialogTrigger asChild>
@@ -220,7 +243,7 @@ export default function HistoryPageComponent({
                         </TableRow>
                     </TableHeader>
                     <TableBody>
-                        {history.map((item) => (
+                        {filteredHistory.map((item) => (
                             <TableRow key={item.id} data-testid={`history-item-${item.id}`}>
                                 <TableCell className="font-medium truncate max-w-xs">{item.config.url}</TableCell>
                                 <TableCell>{format(new Date(item.timestamp), "PPp")}</TableCell>
@@ -228,7 +251,7 @@ export default function HistoryPageComponent({
                                   <div className='flex gap-2'>
                                     {item.config.runLoadTest && <Badge variant="outline"><Gauge className="mr-1 h-3 w-3"/>Load</Badge>}
                                     {item.config.runLighthouse && <Badge variant="outline"><ShieldCheck className="mr-1 h-3 w-3"/>Lighthouse</Badge>}
-                                    {item.config.runSeo && <Badge variant="outline"><Search className="mr-1 h-3 w-3"/>SEO</Badge>}
+                                    {item.config.runSeo && <Badge variant="outline"><SearchIcon className="mr-1 h-3 w-3"/>SEO</Badge>}
                                   </div>
                                 </TableCell>
                                 <TableCell className="text-right">
@@ -258,6 +281,13 @@ export default function HistoryPageComponent({
                         ))}
                     </TableBody>
                 </Table>
+            )}
+             {filteredHistory.length === 0 && history.length > 0 && (
+                <div className="flex flex-col items-center justify-center h-full p-4 text-center text-muted-foreground" data-testid="no-search-results-message">
+                    <Info className="mb-2 h-8 w-8" />
+                    <p>No results found for "{searchQuery}".</p>
+                    <Button variant="link" onClick={() => setSearchQuery('')}>Clear search</Button>
+                </div>
             )}
           </ScrollArea>
         </CardContent>
