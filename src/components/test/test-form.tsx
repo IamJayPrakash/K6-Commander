@@ -229,6 +229,7 @@ export default function TestForm({ initialValues, onRunTest, setHistory }: TestF
                                             aria-expanded={popoverOpen}
                                             className="absolute right-1 top-1/2 -translate-y-1/2 h-8 w-8 p-0"
                                             data-testid="url-popover-trigger"
+                                            aria-label="Toggle recent URLs"
                                         >
                                             <ChevronsUpDown className="h-4 w-4 shrink-0 opacity-50" />
                                         </Button>
@@ -254,7 +255,7 @@ export default function TestForm({ initialValues, onRunTest, setHistory }: TestF
                                                     >
                                                         <Check className={cn("mr-2 h-4 w-4", field.value === url ? "opacity-100" : "opacity-0")} />
                                                         <span className="truncate flex-1">{url}</span>
-                                                        <Button variant="ghost" size="icon" className="h-6 w-6 opacity-0 group-hover:opacity-100" onClick={(e) => { e.stopPropagation(); removeRecentUrl(url); }} data-testid={`remove-recent-url-${url}`}>
+                                                        <Button variant="ghost" size="icon" className="h-6 w-6 opacity-0 group-hover:opacity-100" onClick={(e) => { e.stopPropagation(); removeRecentUrl(url); }} data-testid={`remove-recent-url-${url}`} aria-label={`Remove ${url} from recent URLs`}>
                                                             <X className="h-4 w-4" />
                                                         </Button>
                                                     </CommandItem>
@@ -263,7 +264,7 @@ export default function TestForm({ initialValues, onRunTest, setHistory }: TestF
                                             </CommandGroup>
                                             {recentUrls.length > 0 && (
                                                 <CommandGroup className='border-t pt-1'>
-                                                    <CommandItem onSelect={clearRecentUrls} className="text-destructive focus:bg-destructive/10 focus:text-destructive justify-center" data-testid="clear-recent-urls-button">
+                                                    <CommandItem onSelect={clearRecentUrls} className="text-destructive focus:bg-destructive/10 focus:text-destructive justify-center" data-testid="clear-recent-urls-button" >
                                                         <Trash2 className="mr-2 h-4 w-4"/> Clear all
                                                     </CommandItem>
                                                 </CommandGroup>
@@ -288,8 +289,8 @@ export default function TestForm({ initialValues, onRunTest, setHistory }: TestF
                                 render={({ field }) => (
                                     <FormItem className="flex flex-row items-center justify-between rounded-lg border p-4 shadow-sm bg-background/50">
                                         <div className="space-y-0.5">
-                                            <FormLabel className="text-base flex items-center gap-2"><Gauge/> k6 Load Test</FormLabel>
-                                            <FormDescription>Simulate traffic to measure performance under pressure.</FormDescription>
+                                            <FormLabel id="load-test-label" className="text-base flex items-center gap-2"><Gauge/> k6 Load Test</FormLabel>
+                                            <FormDescription id="load-test-desc">Simulate traffic to measure performance under pressure.</FormDescription>
                                         </div>
                                         <FormControl>
                                             <Switch
@@ -297,6 +298,7 @@ export default function TestForm({ initialValues, onRunTest, setHistory }: TestF
                                                 checked={field.value}
                                                 onCheckedChange={field.onChange}
                                                 aria-labelledby="load-test-label"
+                                                aria-describedby="load-test-desc"
                                             />
                                         </FormControl>
                                     </FormItem>
@@ -308,8 +310,8 @@ export default function TestForm({ initialValues, onRunTest, setHistory }: TestF
                                 render={({ field }) => (
                                     <FormItem className="flex flex-row items-center justify-between rounded-lg border p-4 shadow-sm bg-background/50">
                                         <div className="space-y-0.5">
-                                            <FormLabel className="text-base flex items-center gap-2"><ShieldCheck/> Lighthouse Audit</FormLabel>
-                                            <FormDescription>Run Google's Lighthouse to check PWA, SEO, and more.</FormDescription>
+                                            <FormLabel id="lighthouse-label" className="text-base flex items-center gap-2"><ShieldCheck/> Lighthouse Audit</FormLabel>
+                                            <FormDescription id="lighthouse-desc">Run Google's Lighthouse to check PWA, SEO, and more.</FormDescription>
                                         </div>
                                         <FormControl>
                                             <Switch
@@ -317,6 +319,7 @@ export default function TestForm({ initialValues, onRunTest, setHistory }: TestF
                                                 checked={field.value}
                                                 onCheckedChange={field.onChange}
                                                 aria-labelledby="lighthouse-label"
+                                                aria-describedby='lighthouse-desc'
                                             />
                                         </FormControl>
                                     </FormItem>
@@ -328,8 +331,8 @@ export default function TestForm({ initialValues, onRunTest, setHistory }: TestF
                                 render={({ field }) => (
                                     <FormItem className="flex flex-row items-center justify-between rounded-lg border p-4 shadow-sm bg-background/50">
                                         <div className="space-y-0.5">
-                                            <FormLabel className="text-base flex items-center gap-2"><BrainCircuit/> AI-Powered SEO Analysis</FormLabel>
-                                            <FormDescription>Deep-dive analysis of on-page factors with AI suggestions.</FormDescription>
+                                            <FormLabel id="seo-label" className="text-base flex items-center gap-2"><BrainCircuit/> AI-Powered SEO Analysis</FormLabel>
+                                            <FormDescription id="seo-desc">Deep-dive analysis of on-page factors with AI suggestions.</FormDescription>
                                         </div>
                                         <FormControl>
                                             <Switch
@@ -337,6 +340,7 @@ export default function TestForm({ initialValues, onRunTest, setHistory }: TestF
                                                 checked={field.value}
                                                 onCheckedChange={field.onChange}
                                                 aria-labelledby="seo-label"
+                                                aria-describedby='seo-desc'
                                             />
                                         </FormControl>
                                     </FormItem>

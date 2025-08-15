@@ -50,15 +50,14 @@ export function AppHeader() {
             </Button>
 
             <a href="https://github.com/your-username/k6-commander" target="_blank" rel="noopener noreferrer" data-testid="github-link">
-                <Button variant="ghost" size="icon">
+                <Button variant="ghost" size="icon" aria-label="View on GitHub">
                     <Github className="h-5 w-5" />
-                    <span className="sr-only">GitHub</span>
                 </Button>
             </a>
 
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <Button variant="ghost" size="icon" data-testid="theme-switcher-trigger">
+                <Button variant="ghost" size="icon" data-testid="theme-switcher-trigger" aria-label="Toggle theme">
                   <Sun className="h-[1.2rem] w-[1.2rem] rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0" />
                   <Moon className="absolute h-[1.2rem] w-[1.2rem] rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100" />
                   <span className="sr-only">Toggle theme</span>
@@ -80,7 +79,7 @@ export function AppHeader() {
             {/* Mobile Menu */}
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <Button variant="ghost" size="icon" className="md:hidden" data-testid="mobile-menu-trigger">
+                <Button variant="ghost" size="icon" className="md:hidden" data-testid="mobile-menu-trigger" aria-label="Open menu">
                   <Menu className="h-5 w-5" />
                   <span className="sr-only">Open menu</span>
                 </Button>
