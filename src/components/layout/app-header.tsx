@@ -13,6 +13,7 @@ import {
   DropdownMenuSeparator,
 } from "@/components/ui/dropdown-menu"
 import Link from 'next/link';
+import { APP_CONFIG, TEXT_CONSTANTS } from '@/lib/constants';
 
 export function AppHeader() {
   const { setTheme } = useTheme();
@@ -29,16 +30,16 @@ export function AppHeader() {
         <div className="mr-4 flex items-center">
           <Link href="/" className="mr-6 flex items-center space-x-2 cursor-pointer" data-testid="home-link">
             <Rocket className="h-6 w-6 text-primary" />
-            <span className="font-bold hidden sm:inline-block">K6 Commander</span>
+            <span className="font-bold hidden sm:inline-block">{TEXT_CONSTANTS.headerTitle}</span>
           </Link>
           <nav className="hidden md:flex items-center gap-6 text-sm">
             <Link href="/history" className="transition-colors hover:text-foreground/80 text-foreground/60 cursor-pointer" data-testid="header-history-link">
               <History className="inline-block h-4 w-4 mr-1" />
-              History
+              {TEXT_CONSTANTS.historyLink}
             </Link>
             <Link href="/about" className="transition-colors hover:text-foreground/80 text-foreground/60 cursor-pointer" data-testid="header-about-link">
               <Info className="inline-block h-4 w-4 mr-1" />
-              About
+              {TEXT_CONSTANTS.aboutLink}
             </Link>
           </nav>
         </div>
@@ -46,10 +47,10 @@ export function AppHeader() {
         <div className="flex flex-1 items-center justify-end gap-2">
             <Button variant="outline" size="sm" onClick={startTour} data-testid="start-tour-button">
                 <PlayCircle className='h-4 w-4 mr-2'/>
-                Start Tour
+                {TEXT_CONSTANTS.startTourButton}
             </Button>
 
-            <a href="https://github.com/your-username/k6-commander" target="_blank" rel="noopener noreferrer" data-testid="github-link">
+            <a href={APP_CONFIG.githubUrl} target="_blank" rel="noopener noreferrer" data-testid="github-link">
                 <Button variant="ghost" size="icon" aria-label="View on GitHub">
                     <Github className="h-5 w-5" />
                 </Button>
@@ -85,16 +86,16 @@ export function AppHeader() {
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end" data-testid="mobile-menu-content">
-                <Link href="/history"><DropdownMenuItem><History className="mr-2 h-4 w-4" />History</DropdownMenuItem></Link>
-                <Link href="/about"><DropdownMenuItem><Info className="mr-2 h-4 w-4" />About</DropdownMenuItem></Link>
+                <Link href="/history"><DropdownMenuItem><History className="mr-2 h-4 w-4" />{TEXT_CONSTANTS.historyLink}</DropdownMenuItem></Link>
+                <Link href="/about"><DropdownMenuItem><Info className="mr-2 h-4 w-4" />{TEXT_CONSTANTS.aboutLink}</DropdownMenuItem></Link>
                 <DropdownMenuSeparator />
-                <a href="https://github.com/your-username/k6-commander/issues/new?template=bug_report.md" target="_blank" rel="noopener noreferrer">
+                <a href={APP_CONFIG.bugReportUrl} target="_blank" rel="noopener noreferrer">
                   <DropdownMenuItem>
                     <Bug className="mr-2 h-4 w-4" />
                     Report a Bug
                   </DropdownMenuItem>
                 </a>
-                <a href="https://github.com/your-username/k6-commander/issues/new?template=feature_request.md" target="_blank" rel="noopener noreferrer">
+                <a href={APP_CONFIG.featureRequestUrl} target="_blank" rel="noopener noreferrer">
                   <DropdownMenuItem>
                     <MessageSquarePlus className="mr-2 h-4 w-4" />
                     Request a Feature

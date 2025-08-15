@@ -1,7 +1,9 @@
+
 'use client';
 
 import { Rocket } from 'lucide-react';
 import Link from 'next/link';
+import { TEXT_CONSTANTS } from '@/lib/constants';
 
 export function AppFooter() {
   return (
@@ -11,18 +13,18 @@ export function AppFooter() {
           <div className="flex items-center gap-2">
             <Rocket className="h-5 w-5 text-primary" />
             <p className="text-sm text-muted-foreground">
-              K6 Commander &copy; {new Date().getFullYear()}
+              {TEXT_CONSTANTS.footerCopyright}
             </p>
           </div>
           <nav className="flex items-center gap-4 md:gap-6 text-sm">
             <Link href="/terms" className="transition-colors hover:text-foreground/80 text-foreground/60">
-              Terms of Service
+              {TEXT_CONSTANTS.termsLink}
             </Link>
             <Link href="/privacy" className="transition-colors hover:text-foreground/80 text-foreground/60">
-              Privacy Policy
+              {TEXT_CONSTANTS.privacyLink}
             </Link>
             <Link href="/security" className="transition-colors hover:text-foreground/80 text-foreground/60">
-              Security
+              {TEXT_CONSTANTS.securityLink}
             </Link>
           </nav>
         </div>

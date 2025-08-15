@@ -26,7 +26,7 @@ import {
 import { Textarea } from '@/components/ui/textarea';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Rocket, Trash2, Plus, Server, Settings, FileJson, ChevronsRightLeft, Search, Gauge, ShieldCheck, TestTubeDiagonal, ChevronsUpDown, Check, X, History, BrainCircuit } from 'lucide-react';
-import { TEST_PRESETS } from '@/lib/constants';
+import { TEST_PRESETS, TEXT_CONSTANTS } from '@/lib/constants';
 import type { TestConfiguration, TestPreset } from '@/types';
 import { useToast } from '@/hooks/use-toast';
 import { Switch } from '../ui/switch';
@@ -192,9 +192,9 @@ export default function TestForm({ initialValues, onRunTest, setHistory }: TestF
       <CardHeader>
         <CardTitle className="flex items-center gap-2 text-2xl font-bold">
           <TestTubeDiagonal />
-          New Test Run
+          {TEXT_CONSTANTS.formTitle}
         </CardTitle>
-        <CardDescription>Configure and launch performance and SEO audits.</CardDescription>
+        <CardDescription>{TEXT_CONSTANTS.formDescription}</CardDescription>
       </CardHeader>
       <CardContent>
         <Form {...form}>
@@ -208,8 +208,8 @@ export default function TestForm({ initialValues, onRunTest, setHistory }: TestF
                       name="url"
                       render={({ field }) => (
                         <FormItem className='flex flex-col'>
-                          <FormLabel className="text-lg">Target Endpoint</FormLabel>
-                          <FormDescription>The full URL of the API endpoint or page to test.</FormDescription>
+                          <FormLabel className="text-lg">{TEXT_CONSTANTS.urlLabel}</FormLabel>
+                          <FormDescription>{TEXT_CONSTANTS.urlDescription}</FormDescription>
                            <Popover open={popoverOpen} onOpenChange={setPopoverOpen}>
                                 <PopoverTrigger asChild>
                                     <div className="relative">
@@ -217,7 +217,7 @@ export default function TestForm({ initialValues, onRunTest, setHistory }: TestF
                                         <FormControl>
                                             <Input
                                                 data-testid="url-input"
-                                                placeholder="https://your-api.com/v1/users"
+                                                placeholder={TEXT_CONSTANTS.urlPlaceholder}
                                                 className="pl-10 h-11 text-base"
                                                 {...field}
                                             />
@@ -279,8 +279,8 @@ export default function TestForm({ initialValues, onRunTest, setHistory }: TestF
                     />
                      <Card className='test-suites bg-card/50' data-testid="test-suites-card">
                         <CardHeader>
-                            <CardTitle>Test Suites</CardTitle>
-                            <CardDescription>Select which tests you would like to run.</CardDescription>
+                            <CardTitle>{TEXT_CONSTANTS.testSuitesTitle}</CardTitle>
+                            <CardDescription>{TEXT_CONSTANTS.testSuitesDescription}</CardDescription>
                         </CardHeader>
                         <CardContent className="space-y-4">
                             <FormField
@@ -289,8 +289,8 @@ export default function TestForm({ initialValues, onRunTest, setHistory }: TestF
                                 render={({ field }) => (
                                     <FormItem className="flex flex-row items-center justify-between rounded-lg border p-4 shadow-sm bg-background/50">
                                         <div className="space-y-0.5">
-                                            <FormLabel id="load-test-label" className="text-base flex items-center gap-2"><Gauge/> k6 Load Test</FormLabel>
-                                            <FormDescription id="load-test-desc">Simulate traffic to measure performance under pressure.</FormDescription>
+                                            <FormLabel id="load-test-label" className="text-base flex items-center gap-2"><Gauge/>{TEXT_CONSTANTS.k6SwitchLabel}</FormLabel>
+                                            <FormDescription id="load-test-desc">{TEXT_CONSTANTS.k6SwitchDescription}</FormDescription>
                                         </div>
                                         <FormControl>
                                             <Switch
@@ -310,8 +310,8 @@ export default function TestForm({ initialValues, onRunTest, setHistory }: TestF
                                 render={({ field }) => (
                                     <FormItem className="flex flex-row items-center justify-between rounded-lg border p-4 shadow-sm bg-background/50">
                                         <div className="space-y-0.5">
-                                            <FormLabel id="lighthouse-label" className="text-base flex items-center gap-2"><ShieldCheck/> Lighthouse Audit</FormLabel>
-                                            <FormDescription id="lighthouse-desc">Run Google's Lighthouse to check PWA, SEO, and more.</FormDescription>
+                                            <FormLabel id="lighthouse-label" className="text-base flex items-center gap-2"><ShieldCheck/>{TEXT_CONSTANTS.lighthouseSwitchLabel}</FormLabel>
+                                            <FormDescription id="lighthouse-desc">{TEXT_CONSTANTS.lighthouseSwitchDescription}</FormDescription>
                                         </div>
                                         <FormControl>
                                             <Switch
@@ -331,8 +331,8 @@ export default function TestForm({ initialValues, onRunTest, setHistory }: TestF
                                 render={({ field }) => (
                                     <FormItem className="flex flex-row items-center justify-between rounded-lg border p-4 shadow-sm bg-background/50">
                                         <div className="space-y-0.5">
-                                            <FormLabel id="seo-label" className="text-base flex items-center gap-2"><BrainCircuit/> AI-Powered SEO Analysis</FormLabel>
-                                            <FormDescription id="seo-desc">Deep-dive analysis of on-page factors with AI suggestions.</FormDescription>
+                                            <FormLabel id="seo-label" className="text-base flex items-center gap-2"><BrainCircuit/>{TEXT_CONSTANTS.seoSwitchLabel}</FormLabel>
+                                            <FormDescription id="seo-desc">{TEXT_CONSTANTS.seoSwitchDescription}</FormDescription>
                                         </div>
                                         <FormControl>
                                             <Switch
@@ -355,8 +355,8 @@ export default function TestForm({ initialValues, onRunTest, setHistory }: TestF
                 <div className="space-y-8 mt-8 lg:mt-0">
                    <Card className={`bg-card/50 ${isLoadTestEnabled ? '' : 'opacity-50 pointer-events-none'}`} data-testid="request-config-card">
                        <CardHeader>
-                           <CardTitle className="flex items-center gap-2"><Settings /> Request Configuration</CardTitle>
-                           <CardDescription>Define the HTTP request details for the load test.</CardDescription>
+                           <CardTitle className="flex items-center gap-2"><Settings />{TEXT_CONSTANTS.requestConfigTitle}</CardTitle>
+                           <CardDescription>{TEXT_CONSTANTS.requestConfigDescription}</CardDescription>
                        </CardHeader>
                        <CardContent className="space-y-6">
                             <FormField
@@ -364,7 +364,7 @@ export default function TestForm({ initialValues, onRunTest, setHistory }: TestF
                             name="method"
                             render={({ field }) => (
                                 <FormItem>
-                                <FormLabel>HTTP Method</FormLabel>
+                                <FormLabel>{TEXT_CONSTANTS.methodLabel}</FormLabel>
                                 <Select onValueChange={field.onChange} defaultValue={field.value} disabled={!isLoadTestEnabled}>
                                     <FormControl>
                                     <SelectTrigger data-testid="method-select-trigger">
@@ -384,7 +384,7 @@ export default function TestForm({ initialValues, onRunTest, setHistory }: TestF
                             )}
                             />
                             <div>
-                                <FormLabel>Headers</FormLabel>
+                                <FormLabel>{TEXT_CONSTANTS.headersLabel}</FormLabel>
                                 {headerFields.map((field, index) => (
                                     <div key={field.id} className="flex items-center gap-2 mt-2">
                                     <FormField
@@ -401,7 +401,7 @@ export default function TestForm({ initialValues, onRunTest, setHistory }: TestF
                                     </div>
                                 ))}
                                 <Button type="button" variant="outline" size="sm" className="mt-2" onClick={() => appendHeader({ key: '', value: '' })} disabled={!isLoadTestEnabled} data-testid="add-header-button">
-                                    <Plus className="mr-2 h-4 w-4" /> Add Header
+                                    <Plus className="mr-2 h-4 w-4" />{TEXT_CONSTANTS.addHeaderButton}
                                 </Button>
                             </div>
                             <FormField
@@ -409,7 +409,7 @@ export default function TestForm({ initialValues, onRunTest, setHistory }: TestF
                                 name="body"
                                 render={({ field }) => (
                                     <FormItem>
-                                    <FormLabel className="flex items-center gap-2"><FileJson /><span>Request Body</span></FormLabel>
+                                    <FormLabel className="flex items-center gap-2"><FileJson /><span>{TEXT_CONSTANTS.requestBodyLabel}</span></FormLabel>
                                     <FormControl>
                                         <Textarea data-testid="body-textarea" placeholder='{ "key": "value" }' className="font-mono" rows={5} {...field} disabled={!isLoadTestEnabled}/>
                                     </FormControl>
@@ -425,8 +425,8 @@ export default function TestForm({ initialValues, onRunTest, setHistory }: TestF
             {isLoadTestEnabled && (
                 <Card className='load-test-profile bg-card/50' data-testid="load-test-profile-card">
                     <CardHeader>
-                        <CardTitle className="flex items-center gap-2"><Gauge/> Load Test Profile</CardTitle>
-                        <CardDescription>Choose a preset or define a custom load profile.</CardDescription>
+                        <CardTitle className="flex items-center gap-2"><Gauge/>{TEXT_CONSTANTS.loadProfileTitle}</CardTitle>
+                        <CardDescription>{TEXT_CONSTANTS.loadProfileDescription}</CardDescription>
                     </CardHeader>
                     <CardContent>
                          <FormField
@@ -473,8 +473,8 @@ export default function TestForm({ initialValues, onRunTest, setHistory }: TestF
                         {form.watch('testPreset') === 'custom' && (
                           <Card className="bg-muted/30 mt-6" data-testid="custom-profile-card">
                             <CardHeader>
-                                <CardTitle>Custom Load Profile</CardTitle>
-                                <CardDescription>Manually set Virtual Users (VUs) and duration, or define ramping stages.</CardDescription>
+                                <CardTitle>{TEXT_CONSTANTS.customProfileTitle}</CardTitle>
+                                <CardDescription>{TEXT_CONSTANTS.customProfileDescription}</CardDescription>
                             </CardHeader>
                             <CardContent>
                               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -483,7 +483,7 @@ export default function TestForm({ initialValues, onRunTest, setHistory }: TestF
                                   name="vus"
                                   render={({ field }) => (
                                     <FormItem>
-                                      <FormLabel>Virtual Users (VUs)</FormLabel>
+                                      <FormLabel>{TEXT_CONSTANTS.vusLabel}</FormLabel>
                                       <FormControl>
                                         <Input type="number" placeholder="e.g., 50" {...field} onChange={e => field.onChange(parseInt(e.target.value, 10))} data-testid="vus-input"/>
                                       </FormControl>
@@ -496,7 +496,7 @@ export default function TestForm({ initialValues, onRunTest, setHistory }: TestF
                                   name="duration"
                                   render={({ field }) => (
                                     <FormItem>
-                                      <FormLabel>Test Duration</FormLabel>
+                                      <FormLabel>{TEXT_CONSTANTS.durationLabel}</FormLabel>
                                       <FormControl>
                                         <Input placeholder="e.g., 10m" {...field} data-testid="duration-input"/>
                                       </FormControl>
@@ -506,8 +506,8 @@ export default function TestForm({ initialValues, onRunTest, setHistory }: TestF
                                 />
                               </div>
                               <div className="mt-6">
-                                 <FormLabel>Ramping Stages</FormLabel>
-                                  <FormDescription>Define ramping stages for VUs. This overrides fixed VUs and Duration.</FormDescription>
+                                 <FormLabel>{TEXT_CONSTANTS.stagesLabel}</FormLabel>
+                                  <FormDescription>{TEXT_CONSTANTS.stagesDescription}</FormDescription>
                                  {stageFields.map((field, index) => (
                                     <div key={field.id} className="flex items-end gap-2 mt-2">
                                       <FormField
@@ -525,7 +525,7 @@ export default function TestForm({ initialValues, onRunTest, setHistory }: TestF
                                     </div>
                                   ))}
                                   <Button type="button" variant="outline" size="sm" className="mt-2" onClick={() => appendStage({ duration: '', target: 0 })} data-testid="add-stage-button">
-                                    <Plus className="mr-2 h-4 w-4" /> Add Stage
+                                    <Plus className="mr-2 h-4 w-4" />{TEXT_CONSTANTS.addStageButton}
                                   </Button>
                               </div>
                             </CardContent>
@@ -538,7 +538,7 @@ export default function TestForm({ initialValues, onRunTest, setHistory }: TestF
             <div className="flex justify-end pt-8">
                 <Button type="submit" size="lg" className="w-full md:w-auto" disabled={form.formState.isSubmitting} data-testid="run-test-button">
                 <Rocket className="mr-2 h-5 w-5" />
-                {form.formState.isSubmitting ? 'Starting Tests...' : `Run Test(s)`}
+                {form.formState.isSubmitting ? TEXT_CONSTANTS.runningTestButton : TEXT_CONSTANTS.runTestButton}
                 </Button>
             </div>
           </form>
@@ -548,20 +548,19 @@ export default function TestForm({ initialValues, onRunTest, setHistory }: TestF
     <AlertDialog open={isClearStorageDialogOpen} onOpenChange={setClearStorageDialogOpen}>
       <AlertDialogContent data-testid="clear-storage-dialog">
         <AlertDialogHeader>
-          <AlertDialogTitle className="flex items-center gap-2"><History className="h-5 w-5"/>Before you run...</AlertDialogTitle>
+          <AlertDialogTitle className="flex items-center gap-2"><History className="h-5 w-5"/>{TEXT_CONSTANTS.clearHistoryDialogTitle}</AlertDialogTitle>
           <AlertDialogDescription>
-            Would you like to clear your local test history before starting this new run?
-            This can be useful to start a session with a clean slate.
+            {TEXT_CONSTANTS.clearHistoryDialogDescription}
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
-          <AlertDialogCancel onClick={() => { setClearStorageDialogOpen(false); proceedWithTest(false); }} data-testid="dont-clear-button">Don't Clear</AlertDialogCancel>
+          <AlertDialogCancel onClick={() => { setClearStorageDialogOpen(false); proceedWithTest(false); }} data-testid="dont-clear-button">{TEXT_CONSTANTS.clearHistoryDialogKeepButton}</AlertDialogCancel>
           <AlertDialogAction 
             className='bg-destructive hover:bg-destructive/90' 
             onClick={() => { setClearStorageDialogOpen(false); proceedWithTest(true); }}
             data-testid="clear-and-run-button"
             >
-            <Trash2 className="mr-2 h-4 w-4" /> Clear History & Run
+            <Trash2 className="mr-2 h-4 w-4" />{TEXT_CONSTANTS.clearHistoryDialogClearButton}
           </AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>
@@ -569,5 +568,3 @@ export default function TestForm({ initialValues, onRunTest, setHistory }: TestF
     </>
   );
 }
-
-    

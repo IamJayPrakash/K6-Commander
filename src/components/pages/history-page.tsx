@@ -41,6 +41,7 @@ import { useToast } from '@/hooks/use-toast';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Badge } from '../ui/badge';
+import { TEXT_CONSTANTS } from '@/lib/constants';
 
 interface HistoryPageProps {
   history: HistoryItem[];
@@ -148,10 +149,10 @@ export default function HistoryPageComponent({
           <div className="flex justify-between items-start">
             <div>
               <CardTitle className="flex items-center gap-2 text-2xl">
-                <History className="text-primary" /> Test History
+                <History className="text-primary" /> {TEXT_CONSTANTS.historyTitle}
               </CardTitle>
               <CardDescription>
-                Review, re-run, or manage your past test sessions. All data is stored in your browser.
+                {TEXT_CONSTANTS.historyDescription}
               </CardDescription>
             </div>
             {lastSaved && (
@@ -166,7 +167,7 @@ export default function HistoryPageComponent({
           <div className="flex justify-between items-center mb-4">
             <div className="flex gap-2">
                 <Button variant="outline" onClick={handleImportClick} data-testid="import-history-button">
-                    <Upload className="mr-2 h-4 w-4" /> Import
+                    <Upload className="mr-2 h-4 w-4" /> {TEXT_CONSTANTS.importButton}
                 </Button>
                 <input
                     type="file"
@@ -178,25 +179,25 @@ export default function HistoryPageComponent({
                     data-testid="import-history-input"
                 />
                 <Button variant="outline" onClick={handleExport} disabled={history.length === 0} data-testid="export-history-button">
-                    <Download className="mr-2 h-4 w-4" /> Export
+                    <Download className="mr-2 h-4 w-4" /> {TEXT_CONSTANTS.exportButton}
                 </Button>
             </div>
             <AlertDialog>
                 <AlertDialogTrigger asChild>
                     <Button variant="destructive" disabled={history.length === 0} data-testid="clear-all-history-button">
-                    <Trash2 className="mr-2 h-4 w-4" /> Clear All
+                    <Trash2 className="mr-2 h-4 w-4" /> {TEXT_CONSTANTS.clearAllButton}
                     </Button>
                 </AlertDialogTrigger>
                 <AlertDialogContent>
                     <AlertDialogHeader>
-                    <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+                    <AlertDialogTitle>{TEXT_CONSTANTS.clearAllDialogTitle}</AlertDialogTitle>
                     <AlertDialogDescription>
-                        This will permanently delete all test runs from your history. This action cannot be undone.
+                        {TEXT_CONSTANTS.clearAllDialogDescription}
                     </AlertDialogDescription>
                     </AlertDialogHeader>
                     <AlertDialogFooter>
                     <AlertDialogCancel>Cancel</AlertDialogCancel>
-                    <AlertDialogAction onClick={handleDeleteAll} className="bg-destructive hover:bg-destructive/90">Yes, delete all</AlertDialogAction>
+                    <AlertDialogAction onClick={handleDeleteAll} className="bg-destructive hover:bg-destructive/90">{TEXT_CONSTANTS.clearAllDialogConfirm}</AlertDialogAction>
                     </AlertDialogFooter>
                 </AlertDialogContent>
             </AlertDialog>
@@ -205,7 +206,7 @@ export default function HistoryPageComponent({
             {history.length === 0 ? (
               <div className="flex flex-col items-center justify-center h-full p-4 text-center text-muted-foreground" data-testid="no-history-message">
                 <Info className="mb-2 h-8 w-8" />
-                <p>No test history found.</p>
+                <p>{TEXT_CONSTANTS.noHistoryMessage}</p>
                 <p>Run tests to see them here.</p>
               </div>
             ) : (
@@ -240,14 +241,14 @@ export default function HistoryPageComponent({
                                             </AlertDialogTrigger>
                                             <AlertDialogContent>
                                                 <AlertDialogHeader>
-                                                <AlertDialogTitle>Are you sure?</AlertDialogTitle>
+                                                <AlertDialogTitle>{TEXT_CONSTANTS.deleteDialogTitle}</AlertDialogTitle>
                                                 <AlertDialogDescription>
-                                                    This action will permanently delete this test run.
+                                                    {TEXT_CONSTANTS.deleteDialogDescription}
                                                 </AlertDialogDescription>
                                                 </AlertDialogHeader>
                                                 <AlertDialogFooter>
                                                 <AlertDialogCancel>Cancel</AlertDialogCancel>
-                                                <AlertDialogAction onClick={() => handleDelete(item.id)} className="bg-destructive hover:bg-destructive/90">Delete</AlertDialogAction>
+                                                <AlertDialogAction onClick={() => handleDelete(item.id)} className="bg-destructive hover:bg-destructive/90">{TEXT_CONSTANTS.deleteDialogConfirm}</AlertDialogAction>
                                                 </AlertDialogFooter>
                                             </AlertDialogContent>
                                         </AlertDialog>
