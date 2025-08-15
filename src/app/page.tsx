@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 import TestForm from '@/components/test/test-form';
 import TestRunning from '@/components/test/test-running';
 import TestSummary from '@/components/test/test-summary';
@@ -12,6 +12,7 @@ import AboutPage from '@/components/pages/about-page';
 import HelpPage from '@/components/pages/help-page';
 import ContactPage from '@/components/pages/contact-page';
 import HistoryPage from '@/components/pages/history-page';
+import { TEST_PRESETS } from '@/lib/constants';
 
 type View = 'form' | 'running' | 'summary' | 'about' | 'history' | 'help' | 'contact';
 
@@ -24,10 +25,12 @@ export default function Home() {
     useState<K6Summary | null>(null);
   const [history, setHistory] = useLocalStorage<HistoryItem[]>('k6-history', []);
   const [formSeed, setFormSeed] = useState(Date.now());
+  const [rerunConfig, setRerunConfig] = useState<TestConfiguration | null>(null);
 
   const handleRunTest = (testId: string, config: TestConfiguration) => {
     setActiveTestId(testId);
     setActiveTestConfig(config);
+    setRerunConfig(null); // Clear rerun config
     setView('running');
   };
 
@@ -58,18 +61,52 @@ export default function Home() {
   };
 
   const handleRerun = (config: TestConfiguration) => {
-    setActiveTestConfig(config);
+    setRerunConfig(config);
     setFormSeed(Date.now()); // Re-seed form with this config
     setView('form');
   };
 
   const handleCreateNewTest = () => {
+    setRerunConfig(null);
     setActiveTestConfig(null);
     setActiveTestSummary(null);
     setActiveTestId(null);
     setFormSeed(Date.now());
     setView('form');
   };
+
+  const formDefaultValues = useMemo(() => {
+    const config = rerunConfig || activeTestConfig;
+    if (config) {
+        return {
+            url: config.url || '',
+            method: config.method || 'GET',
+            headers: config.headers ? Object.entries(config.headers).map(([key, value]) => ({ key, value })) : [],
+            body: config.body || '',
+            testPreset: config.testPreset || 'baseline',
+            vus: config.vus,
+            duration: config.duration,
+            stages: config.stages,
+            runLoadTest: config.runLoadTest,
+            runLighthouse: config.runLighthouse,
+            runSeo: config.runSeo,
+        }
+    }
+    // Default for a new form
+    return {
+        url: '',
+        method: 'GET',
+        headers: [],
+        body: '',
+        testPreset: 'baseline',
+        vus: TEST_PRESETS.baseline.vus,
+        duration: TEST_PRESETS.baseline.duration,
+        stages: TEST_PRESETS.baseline.stages,
+        runLoadTest: true,
+        runLighthouse: false,
+        runSeo: false,
+    }
+  }, [rerunConfig, activeTestConfig]);
   
   const renderView = () => {
     switch (view) {
@@ -108,7 +145,7 @@ export default function Home() {
         return (
           <TestForm
             key={formSeed}
-            initialConfig={activeTestConfig}
+            defaultValues={formDefaultValues}
             onRunTest={handleRunTest}
           />
         );

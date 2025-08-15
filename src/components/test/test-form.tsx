@@ -58,27 +58,15 @@ const formSchema = z.object({
 type TestFormValues = z.infer<typeof formSchema>;
 
 interface TestFormProps {
-  initialConfig?: TestConfiguration | null;
+  defaultValues: TestFormValues;
   onRunTest: (testId: string, config: TestConfiguration) => void;
 }
 
-export default function TestForm({ initialConfig, onRunTest }: TestFormProps) {
+export default function TestForm({ defaultValues, onRunTest }: TestFormProps) {
   const { toast } = useToast();
   const form = useForm<TestFormValues>({
     resolver: zodResolver(formSchema),
-    defaultValues: {
-      url: initialConfig?.url || '',
-      method: initialConfig?.method || 'GET',
-      headers: initialConfig?.headers ? Object.entries(initialConfig.headers).map(([key, value]) => ({ key, value })) : [],
-      body: initialConfig?.body || '',
-      testPreset: initialConfig?.testPreset || 'baseline',
-      vus: initialConfig?.vus || TEST_PRESETS.baseline.vus,
-      duration: initialConfig?.duration || TEST_PRESETS.baseline.duration,
-      stages: initialConfig?.stages || TEST_PRESETS.baseline.stages,
-      runLoadTest: initialConfig?.runLoadTest ?? true,
-      runLighthouse: initialConfig?.runLighthouse ?? false,
-      runSeo: initialConfig?.runSeo ?? false,
-    },
+    defaultValues,
   });
 
   const { fields: headerFields, append: appendHeader, remove: removeHeader } = useFieldArray({
@@ -228,7 +216,7 @@ export default function TestForm({ initialConfig, onRunTest }: TestFormProps) {
                         <div className="flex items-center gap-2"><Gauge /><span>Load Test Configuration</span></div>
                     </AccordionTrigger>
                     <AccordionContent className="space-y-6 pt-4">
-                        <Tabs defaultValue="baseline" onValueChange={handlePresetChange} className="w-full">
+                        <Tabs defaultValue={form.getValues('testPreset')} onValueChange={handlePresetChange} className="w-full">
                           <FormLabel>Test Type</FormLabel>
                           <TabsList className="grid w-full grid-cols-2 md:grid-cols-5 mt-2">
                             <TabsTrigger value="baseline">Baseline</TabsTrigger>
