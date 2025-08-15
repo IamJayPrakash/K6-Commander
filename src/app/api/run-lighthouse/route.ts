@@ -28,7 +28,7 @@ export async function POST(req: NextRequest) {
         '--output=html',
         `--output-path=${reportPath}`,
         '--only-categories=performance,accessibility,best-practices,seo',
-        '--chrome-flags="--headless --no-sandbox"',
+        '--chrome-flags=--headless --no-sandbox --disable-dev-shm-usage',
         '--quiet',
     ];
 
