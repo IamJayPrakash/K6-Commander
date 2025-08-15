@@ -26,7 +26,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import LighthouseSummaryReport from './lighthouse-summary';
 import SeoSummaryReport from './seo-summary';
 import K6SummaryReport from './k6-summary';
-import { TEXT_CONSTANTS } from '@/lib/constants';
+import { useTranslation } from 'react-i18next';
 
 interface TestSummaryProps {
   results: TestResults;
@@ -45,7 +45,7 @@ export default function TestSummary({
   onRerun,
   onCreateNew,
 }: TestSummaryProps) {
-  
+  const { t } = useTranslation();
   const defaultTab = config.runLoadTest ? "k6" : (config.runLighthouse ? "lighthouse" : "seo");
 
   return (
@@ -54,17 +54,17 @@ export default function TestSummary({
             <CardHeader>
                 <CardTitle className="flex items-center gap-3 text-3xl">
                     <CheckCircle2 className="h-10 w-10 text-green-500" />
-                    {TEXT_CONSTANTS.summaryTitle}
+                    {t('summary.title')}
                 </CardTitle>
                 <CardDescription>
-                    {TEXT_CONSTANTS.summaryDescription} <span className="font-semibold text-primary">{config.url}</span>
+                    {t('summary.description')} <span className="font-semibold text-primary">{config.url}</span>
                 </CardDescription>
             </CardHeader>
             <CardContent>
                 <div className="flex flex-col sm:flex-row gap-2">
-                    <Button onClick={onSaveToHistory} data-testid="save-to-history-button"><Save className="mr-2 h-4 w-4" />{TEXT_CONSTANTS.saveToHistoryButton}</Button>
-                    <Button variant="outline" onClick={onRerun} data-testid="rerun-button"><Play className="mr-2 h-4 w-4" />{TEXT_CONSTANTS.rerunButton}</Button>
-                    <Button variant="secondary" onClick={onCreateNew} data-testid="new-test-button"><Plus className="mr-2 h-4 w-4" />{TEXT_CONSTANTS.newTestButton}</Button>
+                    <Button onClick={onSaveToHistory} data-testid="save-to-history-button"><Save className="mr-2 h-4 w-4" />{t('summary.saveToHistoryButton')}</Button>
+                    <Button variant="outline" onClick={onRerun} data-testid="rerun-button"><Play className="mr-2 h-4 w-4" />{t('summary.rerunButton')}</Button>
+                    <Button variant="secondary" onClick={onCreateNew} data-testid="new-test-button"><Plus className="mr-2 h-4 w-4" />{t('summary.newTestButton')}</Button>
                 </div>
             </CardContent>
        </Card>
@@ -73,9 +73,9 @@ export default function TestSummary({
         <div className="lg:col-span-2">
             <Tabs defaultValue={defaultTab} className="w-full">
                 <TabsList className="grid w-full grid-cols-3" data-testid="results-tabs-list">
-                    <TabsTrigger value="k6" disabled={!results.k6} data-testid="k6-results-tab-trigger"><Gauge className="mr-2 h-4 w-4" />{TEXT_CONSTANTS.k6Tab}</TabsTrigger>
-                    <TabsTrigger value="lighthouse" disabled={!results.lighthouse} data-testid="lighthouse-results-tab-trigger"><ShieldCheck className="mr-2 h-4 w-4" />{TEXT_CONSTANTS.lighthouseTab}</TabsTrigger>
-                    <TabsTrigger value="seo" disabled={!results.seo} data-testid="seo-results-tab-trigger"><SearchIcon className="mr-2 h-4 w-4" />{TEXT_CONSTANTS.seoTab}</TabsTrigger>
+                    <TabsTrigger value="k6" disabled={!results.k6} data-testid="k6-results-tab-trigger"><Gauge className="mr-2 h-4 w-4" />{t('summary.k6Tab')}</TabsTrigger>
+                    <TabsTrigger value="lighthouse" disabled={!results.lighthouse} data-testid="lighthouse-results-tab-trigger"><ShieldCheck className="mr-2 h-4 w-4" />{t('summary.lighthouseTab')}</TabsTrigger>
+                    <TabsTrigger value="seo" disabled={!results.seo} data-testid="seo-results-tab-trigger"><SearchIcon className="mr-2 h-4 w-4" />{t('summary.seoTab')}</TabsTrigger>
                 </TabsList>
                 <TabsContent value="k6" data-testid="k6-results-tab-content">
                     {results.k6 ? <K6SummaryReport summary={results.k6} /> : <p>No load test data.</p>}
@@ -91,7 +91,7 @@ export default function TestSummary({
         <div className="lg:col-span-1">
              <Card data-testid="test-config-summary-card">
                 <CardHeader>
-                    <CardTitle className="flex items-center gap-2"><Settings/>{TEXT_CONSTANTS.configSummaryTitle}</CardTitle>
+                    <CardTitle className="flex items-center gap-2"><Settings/>{t('summary.configSummaryTitle')}</CardTitle>
                 </CardHeader>
                 <CardContent>
                     <Table>
@@ -109,7 +109,7 @@ export default function TestSummary({
                     </Table>
                      <Accordion type="single" collapsible className="w-full mt-4">
                         <AccordionItem value="details">
-                            <AccordionTrigger data-testid="config-details-accordion-trigger">{TEXT_CONSTANTS.viewFullDetails}</AccordionTrigger>
+                            <AccordionTrigger data-testid="config-details-accordion-trigger">{t('summary.viewFullDetails')}</AccordionTrigger>
                             <AccordionContent>
                                <Table>
                                     <TableBody>

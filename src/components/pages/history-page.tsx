@@ -42,8 +42,8 @@ import { useToast } from '@/hooks/use-toast';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Badge } from '../ui/badge';
-import { TEXT_CONSTANTS } from '@/lib/constants';
 import { Input } from '../ui/input';
+import { useTranslation } from 'react-i18next';
 
 interface HistoryPageProps {
   history: HistoryItem[];
@@ -61,6 +61,7 @@ export default function HistoryPageComponent({
   onRerun,
 }: HistoryPageProps) {
   const { toast } = useToast();
+  const { t } = useTranslation();
   const fileInputRef = React.useRef<HTMLInputElement>(null);
   const [searchQuery, setSearchQuery] = React.useState('');
 
@@ -157,10 +158,10 @@ export default function HistoryPageComponent({
           <div className="flex justify-between items-start">
             <div>
               <CardTitle className="flex items-center gap-2 text-2xl">
-                <History className="text-primary" /> {TEXT_CONSTANTS.historyTitle}
+                <History className="text-primary" /> {t('history.title')}
               </CardTitle>
               <CardDescription>
-                {TEXT_CONSTANTS.historyDescription}
+                {t('history.description')}
               </CardDescription>
             </div>
             {lastSaved && (
@@ -175,7 +176,7 @@ export default function HistoryPageComponent({
           <div className="flex flex-col md:flex-row justify-between items-center mb-4 gap-4">
             <div className="flex gap-2">
                 <Button variant="outline" onClick={handleImportClick} data-testid="import-history-button">
-                    <Upload className="mr-2 h-4 w-4" /> {TEXT_CONSTANTS.importButton}
+                    <Upload className="mr-2 h-4 w-4" /> {t('history.importButton')}
                 </Button>
                 <input
                     type="file"
@@ -187,13 +188,13 @@ export default function HistoryPageComponent({
                     data-testid="import-history-input"
                 />
                 <Button variant="outline" onClick={handleExport} disabled={history.length === 0} data-testid="export-history-button">
-                    <Download className="mr-2 h-4 w-4" /> {TEXT_CONSTANTS.exportButton}
+                    <Download className="mr-2 h-4 w-4" /> {t('history.exportButton')}
                 </Button>
             </div>
              <div className="relative w-full md:w-auto md:max-w-xs">
                 <SearchIcon className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
                 <Input
-                    placeholder="Search by URL..."
+                    placeholder={t('history.searchPlaceholder')}
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
                     className="pl-10"
@@ -208,19 +209,19 @@ export default function HistoryPageComponent({
             <AlertDialog>
                 <AlertDialogTrigger asChild>
                     <Button variant="destructive" disabled={history.length === 0} data-testid="clear-all-history-button">
-                    <Trash2 className="mr-2 h-4 w-4" /> {TEXT_CONSTANTS.clearAllButton}
+                    <Trash2 className="mr-2 h-4 w-4" /> {t('history.clearAllButton')}
                     </Button>
                 </AlertDialogTrigger>
                 <AlertDialogContent>
                     <AlertDialogHeader>
-                    <AlertDialogTitle>{TEXT_CONSTANTS.clearAllDialogTitle}</AlertDialogTitle>
+                    <AlertDialogTitle>{t('history.clearAllDialog.title')}</AlertDialogTitle>
                     <AlertDialogDescription>
-                        {TEXT_CONSTANTS.clearAllDialogDescription}
+                        {t('history.clearAllDialog.description')}
                     </AlertDialogDescription>
                     </AlertDialogHeader>
                     <AlertDialogFooter>
                     <AlertDialogCancel>Cancel</AlertDialogCancel>
-                    <AlertDialogAction onClick={handleDeleteAll} className="bg-destructive hover:bg-destructive/90">{TEXT_CONSTANTS.clearAllDialogConfirm}</AlertDialogAction>
+                    <AlertDialogAction onClick={handleDeleteAll} className="bg-destructive hover:bg-destructive/90">{t('history.clearAllDialog.confirm')}</AlertDialogAction>
                     </AlertDialogFooter>
                 </AlertDialogContent>
             </AlertDialog>
@@ -229,7 +230,7 @@ export default function HistoryPageComponent({
             {history.length === 0 ? (
               <div className="flex flex-col items-center justify-center h-full p-4 text-center text-muted-foreground" data-testid="no-history-message">
                 <Info className="mb-2 h-8 w-8" />
-                <p>{TEXT_CONSTANTS.noHistoryMessage}</p>
+                <p>{t('history.noHistoryMessage')}</p>
                 <p>Run tests to see them here.</p>
               </div>
             ) : (
@@ -264,14 +265,14 @@ export default function HistoryPageComponent({
                                             </AlertDialogTrigger>
                                             <AlertDialogContent>
                                                 <AlertDialogHeader>
-                                                <AlertDialogTitle>{TEXT_CONSTANTS.deleteDialogTitle}</AlertDialogTitle>
+                                                <AlertDialogTitle>{t('history.deleteDialog.title')}</AlertDialogTitle>
                                                 <AlertDialogDescription>
-                                                    {TEXT_CONSTANTS.deleteDialogDescription}
+                                                    {t('history.deleteDialog.description')}
                                                 </AlertDialogDescription>
                                                 </AlertDialogHeader>
                                                 <AlertDialogFooter>
                                                 <AlertDialogCancel>Cancel</AlertDialogCancel>
-                                                <AlertDialogAction onClick={() => handleDelete(item.id)} className="bg-destructive hover:bg-destructive/90">{TEXT_CONSTANTS.deleteDialogConfirm}</AlertDialogAction>
+                                                <AlertDialogAction onClick={() => handleDelete(item.id)} className="bg-destructive hover:bg-destructive/90">{t('history.deleteDialog.confirm')}</AlertDialogAction>
                                                 </AlertDialogFooter>
                                             </AlertDialogContent>
                                         </AlertDialog>

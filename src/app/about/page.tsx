@@ -1,11 +1,15 @@
 
+'use client';
+
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Info, Rocket, Database, Shield, Code, Github, BarChart2, Zap, Layers, Share2, BrainCircuit } from "lucide-react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import { APP_CONFIG, TECH_STACK, TEXT_CONSTANTS } from "@/lib/constants";
+import { APP_CONFIG, TECH_STACK } from "@/lib/constants";
+import { useTranslation } from "react-i18next";
 
 export default function AboutPage() {
+    const { t } = useTranslation();
     
     return (
         <div className="space-y-8">
@@ -14,9 +18,9 @@ export default function AboutPage() {
                     <div className="mx-auto bg-primary/10 rounded-full p-4 w-fit border-2 border-dashed border-primary/20">
                         <Rocket className="h-12 w-12 text-primary" />
                     </div>
-                    <CardTitle className="text-3xl font-bold pt-4">{TEXT_CONSTANTS.aboutTitle}</CardTitle>
+                    <CardTitle className="text-3xl font-bold pt-4">{t('about.title')}</CardTitle>
                     <CardDescription className="text-lg text-muted-foreground max-w-3xl mx-auto">
-                        {TEXT_CONSTANTS.aboutDescription}
+                        {t('about.description')}
                     </CardDescription>
                 </CardHeader>
             </Card>
@@ -25,22 +29,22 @@ export default function AboutPage() {
                 <CardHeader>
                     <CardTitle className="flex items-center gap-2 text-2xl">
                         <Zap className="text-primary" />
-                        {TEXT_CONSTANTS.philosophyTitle}
+                        {t('about.philosophyTitle')}
                     </CardTitle>
                 </CardHeader>
                 <CardContent className="grid md:grid-cols-2 gap-6 text-base text-foreground/80">
                    <div className="flex items-start gap-4 p-4 rounded-lg bg-background/50">
                         <Database size={24} className="text-accent flex-shrink-0 mt-1" />
                         <div>
-                            <h3 className="font-semibold text-lg">{TEXT_CONSTANTS.localFirstTitle}</h3>
-                            <p className="text-sm text-muted-foreground">{TEXT_CONSTANTS.localFirstDescription}</p>
+                            <h3 className="font-semibold text-lg">{t('about.localFirstTitle')}</h3>
+                            <p className="text-sm text-muted-foreground">{t('about.localFirstDescription')}</p>
                         </div>
                     </div>
                     <div className="flex items-start gap-4 p-4 rounded-lg bg-background/50">
                         <Layers size={24} className="text-accent flex-shrink-0 mt-1" />
                         <div>
-                            <h3 className="font-semibold text-lg">{TEXT_CONSTANTS.unifiedToolingTitle}</h3>
-                            <p className="text-sm text-muted-foreground">{TEXT_CONSTANTS.unifiedToolingDescription}</p>
+                            <h3 className="font-semibold text-lg">{t('about.unifiedToolingTitle')}</h3>
+                            <p className="text-sm text-muted-foreground">{t('about.unifiedToolingDescription')}</p>
                         </div>
                     </div>
                 </CardContent>
@@ -50,34 +54,34 @@ export default function AboutPage() {
                 <Card className="bg-card/50 backdrop-blur-sm">
                     <CardHeader>
                         <BarChart2 size={32} className="text-accent mb-2" />
-                        <CardTitle>{TEXT_CONSTANTS.k6FeatureTitle}</CardTitle>
-                        <CardDescription>{TEXT_CONSTANTS.k6FeatureDescription}</CardDescription>
+                        <CardTitle>{t('about.k6FeatureTitle')}</CardTitle>
+                        <CardDescription>{t('about.k6FeatureDescription')}</CardDescription>
                     </CardHeader>
                     <CardContent className="text-sm text-muted-foreground space-y-4">
-                        <p dangerouslySetInnerHTML={{ __html: TEXT_CONSTANTS.k6HowItWorks }} />
-                        <p dangerouslySetInnerHTML={{ __html: TEXT_CONSTANTS.k6HowItWorks2 }} />
+                        <p dangerouslySetInnerHTML={{ __html: t('about.k6HowItWorks') }} />
+                        <p dangerouslySetInnerHTML={{ __html: t('about.k6HowItWorks2') }} />
                     </CardContent>
                 </Card>
                 <Card className="bg-card/50 backdrop-blur-sm">
                     <CardHeader>
                         <Shield size={32} className="text-accent mb-2" />
-                        <CardTitle>{TEXT_CONSTANTS.lighthouseFeatureTitle}</CardTitle>
-                        <CardDescription>{TEXT_CONSTANTS.lighthouseFeatureDescription}</CardDescription>
+                        <CardTitle>{t('about.lighthouseFeatureTitle')}</CardTitle>
+                        <CardDescription>{t('about.lighthouseFeatureDescription')}</CardDescription>
                     </CardHeader>
                     <CardContent className="text-sm text-muted-foreground space-y-4">
-                        <p dangerouslySetInnerHTML={{ __html: TEXT_CONSTANTS.lighthouseHowItWorks }} />
-                        <p dangerouslySetInnerHTML={{ __html: TEXT_CONSTANTS.lighthouseHowItWorks2 }} />
+                        <p dangerouslySetInnerHTML={{ __html: t('about.lighthouseHowItWorks') }} />
+                        <p dangerouslySetInnerHTML={{ __html: t('about.lighthouseHowItWorks2') }} />
                     </CardContent>
                 </Card>
                 <Card className="bg-card/50 backdrop-blur-sm">
                     <CardHeader>
                          <BrainCircuit size={32} className="text-accent mb-2" />
-                        <CardTitle>{TEXT_CONSTANTS.seoFeatureTitle}</CardTitle>
-                        <CardDescription>{TEXT_CONSTANTS.seoFeatureDescription}</CardDescription>
+                        <CardTitle>{t('about.seoFeatureTitle')}</CardTitle>
+                        <CardDescription>{t('about.seoFeatureDescription')}</CardDescription>
                     </CardHeader>
                     <CardContent className="text-sm text-muted-foreground space-y-4">
-                        <p dangerouslySetInnerHTML={{ __html: TEXT_CONSTANTS.seoHowItWorks }} />
-                        <p dangerouslySetInnerHTML={{ __html: TEXT_CONSTANTS.seoHowItWorks2 }} />
+                        <p dangerouslySetInnerHTML={{ __html: t('about.seoHowItWorks') }} />
+                        <p dangerouslySetInnerHTML={{ __html: t('about.seoHowItWorks2') }} />
                     </CardContent>
                 </Card>
             </div>
@@ -86,10 +90,10 @@ export default function AboutPage() {
                 <CardHeader>
                     <CardTitle className="flex items-center gap-2 text-2xl">
                         <Code className="text-primary" />
-                        {TEXT_CONSTANTS.stackTitle}
+                        {t('about.stackTitle')}
                     </CardTitle>
                     <CardDescription>
-                        {TEXT_CONSTANTS.stackDescription}
+                        {t('about.stackDescription')}
                     </CardDescription>
                 </CardHeader>
                 <CardContent className="space-y-4">
@@ -110,15 +114,15 @@ export default function AboutPage() {
                 <CardHeader>
                     <CardTitle className="flex items-center gap-2 text-2xl">
                         <Share2 className="text-primary" />
-                        {TEXT_CONSTANTS.involvedTitle}
+                        {t('about.involvedTitle')}
                     </CardTitle>
                 </CardHeader>
                 <CardContent className="text-base text-foreground/80 space-y-4">
-                   <p>{TEXT_CONSTANTS.involvedDescription}</p>
+                   <p>{t('about.involvedDescription')}</p>
                    <Link href={APP_CONFIG.githubUrl} target="_blank">
                         <Button variant="outline">
                             <Github size={16} className="mr-2" />
-                            {TEXT_CONSTANTS.githubButton}
+                            {t('about.githubButton')}
                         </Button>
                    </Link>
                 </CardContent>

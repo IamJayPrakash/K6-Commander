@@ -8,7 +8,7 @@ import { ExternalLink, Loader, XCircle, CheckCircle } from 'lucide-react';
 import type { TestConfiguration, K6Summary, LighthouseSummary, SeoAnalysis } from '@/types';
 import { useToast } from '@/hooks/use-toast';
 import type { TestResults } from '@/types/index';
-import { TEXT_CONSTANTS } from '@/lib/constants';
+import { useTranslation } from 'react-i18next';
 
 interface TestRunningProps {
   initialTestId: string;
@@ -18,6 +18,7 @@ interface TestRunningProps {
 
 export default function TestRunning({ initialTestId, config, onTestComplete }: TestRunningProps) {
   const { toast } = useToast();
+  const { t } = useTranslation();
   const [error, setError] = useState<string | null>(null);
   const [runningStatus, setRunningStatus] = useState({
     k6: config.runLoadTest ? 'pending' : 'skipped',
@@ -176,8 +177,8 @@ export default function TestRunning({ initialTestId, config, onTestComplete }: T
             <div className="relative mx-auto flex items-center justify-center">
                 <Loader className="h-12 w-12 text-primary animate-spin" />
             </div>
-            <CardTitle>{allDone ? TEXT_CONSTANTS.finalizingTitle : TEXT_CONSTANTS.runningTitle}</CardTitle>
-            <CardDescription>{TEXT_CONSTANTS.runningDescription}</CardDescription>
+            <CardTitle>{allDone ? t('running.finalizingTitle') : t('running.title')}</CardTitle>
+            <CardDescription>{t('running.description')}</CardDescription>
           </>
         )}
       </CardHeader>
@@ -185,16 +186,16 @@ export default function TestRunning({ initialTestId, config, onTestComplete }: T
         <div className='w-full space-y-2 text-left bg-muted/50 p-4 rounded-lg'>
             <p className='text-sm font-medium text-center mb-2'>Status:</p>
             <ul className='text-sm text-muted-foreground space-y-2'>
-                {config.runLoadTest && <li className='flex items-center justify-between' data-testid="k6-status"><span>{TEXT_CONSTANTS.k6SwitchLabel}</span> <span className='flex items-center gap-2 capitalize'>{getStatusIcon(runningStatus.k6)} {runningStatus.k6}</span></li>}
-                {config.runLighthouse && <li className='flex items-center justify-between' data-testid="lighthouse-status"><span>{TEXT_CONSTANTS.lighthouseSwitchLabel}</span> <span className='flex items-center gap-2 capitalize'>{getStatusIcon(runningStatus.lighthouse)} {runningStatus.lighthouse}</span></li>}
-                {config.runSeo && <li className='flex items-center justify-between' data-testid="seo-status"><span>{TEXT_CONSTANTS.seoSwitchLabel}</span> <span className='flex items-center gap-2 capitalize'>{getStatusIcon(runningStatus.seo)} {runningStatus.seo}</span></li>}
+                {config.runLoadTest && <li className='flex items-center justify-between' data-testid="k6-status"><span>{t('form.k6SwitchLabel')}</span> <span className='flex items-center gap-2 capitalize'>{getStatusIcon(runningStatus.k6)} {runningStatus.k6}</span></li>}
+                {config.runLighthouse && <li className='flex items-center justify-between' data-testid="lighthouse-status"><span>{t('form.lighthouseSwitchLabel')}</span> <span className='flex items-center gap-2 capitalize'>{getStatusIcon(runningStatus.lighthouse)} {runningStatus.lighthouse}</span></li>}
+                {config.runSeo && <li className='flex items-center justify-between' data-testid="seo-status"><span>{t('form.seoSwitchLabel')}</span> <span className='flex items-center gap-2 capitalize'>{getStatusIcon(runningStatus.seo)} {runningStatus.seo}</span></li>}
             </ul>
         </div>
         {config.runLoadTest && (
             <Button asChild size="lg" disabled={runningStatus.k6 === 'pending'} data-testid="grafana-link-button">
                 <a href={grafanaUrl} target="_blank" rel="noopener noreferrer">
                     <ExternalLink className="mr-2 h-4 w-4" />
-                    {TEXT_CONSTANTS.grafanaLink}
+                    {t('running.grafanaLink')}
                 </a>
             </Button>
         )}

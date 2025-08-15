@@ -26,7 +26,7 @@ import {
 import { Textarea } from '@/components/ui/textarea';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Rocket, Trash2, Plus, Server, Settings, FileJson, ChevronsRightLeft, Search, Gauge, ShieldCheck, TestTubeDiagonal, ChevronsUpDown, Check, X, History, BrainCircuit } from 'lucide-react';
-import { TEST_PRESETS, TEXT_CONSTANTS } from '@/lib/constants';
+import { TEST_PRESETS } from '@/lib/constants';
 import type { TestConfiguration, TestPreset } from '@/types';
 import { useToast } from '@/hooks/use-toast';
 import { Switch } from '../ui/switch';
@@ -38,6 +38,7 @@ import { cn } from '@/lib/utils';
 import { ScrollArea } from '../ui/scroll-area';
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from '../ui/alert-dialog';
 import type { HistoryItem } from '@/types/index';
+import { useTranslation } from 'react-i18next';
 
 const stageSchema = z.object({
   duration: z.string().min(1, 'Duration is required'),
@@ -62,7 +63,7 @@ const formSchema = z.object({
   runLighthouse: z.boolean().default(false),
   runSeo: z.boolean().default(false),
 }).refine(data => data.runLoadTest || data.runLighthouse || data.runSeo, {
-    message: "Please select at least one test to run.",
+    message: "form.error.atLeastOne",
     path: ["runLoadTest"], // Attach error to a field for visibility
 });
 
@@ -88,6 +89,7 @@ const newTestDefaultValues: TestFormValues = {
 
 export default function TestForm({ initialValues, onRunTest, setHistory }: TestFormProps) {
   const { toast } = useToast();
+  const { t } = useTranslation();
   const [recentUrls, setRecentUrls] = useLocalStorage<string[]>('k6-recent-urls', []);
   const [popoverOpen, setPopoverOpen] = React.useState(false);
   const [isClearStorageDialogOpen, setClearStorageDialogOpen] = React.useState(false);
@@ -192,9 +194,9 @@ export default function TestForm({ initialValues, onRunTest, setHistory }: TestF
       <CardHeader>
         <CardTitle className="flex items-center gap-2 text-2xl font-bold">
           <TestTubeDiagonal />
-          {TEXT_CONSTANTS.formTitle}
+          {t('form.title')}
         </CardTitle>
-        <CardDescription>{TEXT_CONSTANTS.formDescription}</CardDescription>
+        <CardDescription>{t('form.description')}</CardDescription>
       </CardHeader>
       <CardContent>
         <Form {...form}>
@@ -208,8 +210,8 @@ export default function TestForm({ initialValues, onRunTest, setHistory }: TestF
                       name="url"
                       render={({ field }) => (
                         <FormItem className='flex flex-col'>
-                          <FormLabel className="text-lg">{TEXT_CONSTANTS.urlLabel}</FormLabel>
-                          <FormDescription>{TEXT_CONSTANTS.urlDescription}</FormDescription>
+                          <FormLabel className="text-lg">{t('form.urlLabel')}</FormLabel>
+                          <FormDescription>{t('form.urlDescription')}</FormDescription>
                            <Popover open={popoverOpen} onOpenChange={setPopoverOpen}>
                                 <PopoverTrigger asChild>
                                     <div className="relative">
@@ -217,7 +219,7 @@ export default function TestForm({ initialValues, onRunTest, setHistory }: TestF
                                         <FormControl>
                                             <Input
                                                 data-testid="url-input"
-                                                placeholder={TEXT_CONSTANTS.urlPlaceholder}
+                                                placeholder={t('form.urlPlaceholder')}
                                                 className="pl-10 h-11 text-base"
                                                 {...field}
                                             />
@@ -279,8 +281,8 @@ export default function TestForm({ initialValues, onRunTest, setHistory }: TestF
                     />
                      <Card className='test-suites bg-card/50' data-testid="test-suites-card">
                         <CardHeader>
-                            <CardTitle>{TEXT_CONSTANTS.testSuitesTitle}</CardTitle>
-                            <CardDescription>{TEXT_CONSTANTS.testSuitesDescription}</CardDescription>
+                            <CardTitle>{t('form.testSuitesTitle')}</CardTitle>
+                            <CardDescription>{t('form.testSuitesDescription')}</CardDescription>
                         </CardHeader>
                         <CardContent className="space-y-4">
                             <FormField
@@ -289,8 +291,8 @@ export default function TestForm({ initialValues, onRunTest, setHistory }: TestF
                                 render={({ field }) => (
                                     <FormItem className="flex flex-row items-center justify-between rounded-lg border p-4 shadow-sm bg-background/50">
                                         <div className="space-y-0.5">
-                                            <FormLabel id="load-test-label" className="text-base flex items-center gap-2"><Gauge/>{TEXT_CONSTANTS.k6SwitchLabel}</FormLabel>
-                                            <FormDescription id="load-test-desc">{TEXT_CONSTANTS.k6SwitchDescription}</FormDescription>
+                                            <FormLabel id="load-test-label" className="text-base flex items-center gap-2"><Gauge/>{t('form.k6SwitchLabel')}</FormLabel>
+                                            <FormDescription id="load-test-desc">{t('form.k6SwitchDescription')}</FormDescription>
                                         </div>
                                         <FormControl>
                                             <Switch
@@ -310,8 +312,8 @@ export default function TestForm({ initialValues, onRunTest, setHistory }: TestF
                                 render={({ field }) => (
                                     <FormItem className="flex flex-row items-center justify-between rounded-lg border p-4 shadow-sm bg-background/50">
                                         <div className="space-y-0.5">
-                                            <FormLabel id="lighthouse-label" className="text-base flex items-center gap-2"><ShieldCheck/>{TEXT_CONSTANTS.lighthouseSwitchLabel}</FormLabel>
-                                            <FormDescription id="lighthouse-desc">{TEXT_CONSTANTS.lighthouseSwitchDescription}</FormDescription>
+                                            <FormLabel id="lighthouse-label" className="text-base flex items-center gap-2"><ShieldCheck/>{t('form.lighthouseSwitchLabel')}</FormLabel>
+                                            <FormDescription id="lighthouse-desc">{t('form.lighthouseSwitchDescription')}</FormDescription>
                                         </div>
                                         <FormControl>
                                             <Switch
@@ -331,8 +333,8 @@ export default function TestForm({ initialValues, onRunTest, setHistory }: TestF
                                 render={({ field }) => (
                                     <FormItem className="flex flex-row items-center justify-between rounded-lg border p-4 shadow-sm bg-background/50">
                                         <div className="space-y-0.5">
-                                            <FormLabel id="seo-label" className="text-base flex items-center gap-2"><BrainCircuit/>{TEXT_CONSTANTS.seoSwitchLabel}</FormLabel>
-                                            <FormDescription id="seo-desc">{TEXT_CONSTANTS.seoSwitchDescription}</FormDescription>
+                                            <FormLabel id="seo-label" className="text-base flex items-center gap-2"><BrainCircuit/>{t('form.seoSwitchLabel')}</FormLabel>
+                                            <FormDescription id="seo-desc">{t('form.seoSwitchDescription')}</FormDescription>
                                         </div>
                                         <FormControl>
                                             <Switch
@@ -346,7 +348,7 @@ export default function TestForm({ initialValues, onRunTest, setHistory }: TestF
                                     </FormItem>
                                 )}
                             />
-                            <FormMessage>{form.formState.errors.runLoadTest?.message}</FormMessage>
+                            <FormMessage>{form.formState.errors.runLoadTest?.message && t(form.formState.errors.runLoadTest.message as any)}</FormMessage>
                         </CardContent>
                      </Card>
                 </div>
@@ -355,8 +357,8 @@ export default function TestForm({ initialValues, onRunTest, setHistory }: TestF
                 <div className="space-y-8 mt-8 lg:mt-0">
                    <Card className={`bg-card/50 ${isLoadTestEnabled ? '' : 'opacity-50 pointer-events-none'}`} data-testid="request-config-card">
                        <CardHeader>
-                           <CardTitle className="flex items-center gap-2"><Settings />{TEXT_CONSTANTS.requestConfigTitle}</CardTitle>
-                           <CardDescription>{TEXT_CONSTANTS.requestConfigDescription}</CardDescription>
+                           <CardTitle className="flex items-center gap-2"><Settings />{t('form.requestConfigTitle')}</CardTitle>
+                           <CardDescription>{t('form.requestConfigDescription')}</CardDescription>
                        </CardHeader>
                        <CardContent className="space-y-6">
                             <FormField
@@ -364,7 +366,7 @@ export default function TestForm({ initialValues, onRunTest, setHistory }: TestF
                             name="method"
                             render={({ field }) => (
                                 <FormItem>
-                                <FormLabel>{TEXT_CONSTANTS.methodLabel}</FormLabel>
+                                <FormLabel>{t('form.methodLabel')}</FormLabel>
                                 <Select onValueChange={field.onChange} defaultValue={field.value} disabled={!isLoadTestEnabled}>
                                     <FormControl>
                                     <SelectTrigger data-testid="method-select-trigger">
@@ -384,7 +386,7 @@ export default function TestForm({ initialValues, onRunTest, setHistory }: TestF
                             )}
                             />
                             <div>
-                                <FormLabel>{TEXT_CONSTANTS.headersLabel}</FormLabel>
+                                <FormLabel>{t('form.headersLabel')}</FormLabel>
                                 {headerFields.map((field, index) => (
                                     <div key={field.id} className="flex items-center gap-2 mt-2">
                                     <FormField
@@ -401,7 +403,7 @@ export default function TestForm({ initialValues, onRunTest, setHistory }: TestF
                                     </div>
                                 ))}
                                 <Button type="button" variant="outline" size="sm" className="mt-2" onClick={() => appendHeader({ key: '', value: '' })} disabled={!isLoadTestEnabled} data-testid="add-header-button">
-                                    <Plus className="mr-2 h-4 w-4" />{TEXT_CONSTANTS.addHeaderButton}
+                                    <Plus className="mr-2 h-4 w-4" />{t('form.addHeaderButton')}
                                 </Button>
                             </div>
                             <FormField
@@ -409,7 +411,7 @@ export default function TestForm({ initialValues, onRunTest, setHistory }: TestF
                                 name="body"
                                 render={({ field }) => (
                                     <FormItem>
-                                    <FormLabel className="flex items-center gap-2"><FileJson /><span>{TEXT_CONSTANTS.requestBodyLabel}</span></FormLabel>
+                                    <FormLabel className="flex items-center gap-2"><FileJson /><span>{t('form.requestBodyLabel')}</span></FormLabel>
                                     <FormControl>
                                         <Textarea data-testid="body-textarea" placeholder='{ "key": "value" }' className="font-mono" rows={5} {...field} disabled={!isLoadTestEnabled}/>
                                     </FormControl>
@@ -425,8 +427,8 @@ export default function TestForm({ initialValues, onRunTest, setHistory }: TestF
             {isLoadTestEnabled && (
                 <Card className='load-test-profile bg-card/50' data-testid="load-test-profile-card">
                     <CardHeader>
-                        <CardTitle className="flex items-center gap-2"><Gauge/>{TEXT_CONSTANTS.loadProfileTitle}</CardTitle>
-                        <CardDescription>{TEXT_CONSTANTS.loadProfileDescription}</CardDescription>
+                        <CardTitle className="flex items-center gap-2"><Gauge/>{t('form.loadProfileTitle')}</CardTitle>
+                        <CardDescription>{t('form.loadProfileDescription')}</CardDescription>
                     </CardHeader>
                     <CardContent>
                          <FormField
@@ -473,8 +475,8 @@ export default function TestForm({ initialValues, onRunTest, setHistory }: TestF
                         {form.watch('testPreset') === 'custom' && (
                           <Card className="bg-muted/30 mt-6" data-testid="custom-profile-card">
                             <CardHeader>
-                                <CardTitle>{TEXT_CONSTANTS.customProfileTitle}</CardTitle>
-                                <CardDescription>{TEXT_CONSTANTS.customProfileDescription}</CardDescription>
+                                <CardTitle>{t('form.customProfileTitle')}</CardTitle>
+                                <CardDescription>{t('form.customProfileDescription')}</CardDescription>
                             </CardHeader>
                             <CardContent>
                               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -483,7 +485,7 @@ export default function TestForm({ initialValues, onRunTest, setHistory }: TestF
                                   name="vus"
                                   render={({ field }) => (
                                     <FormItem>
-                                      <FormLabel>{TEXT_CONSTANTS.vusLabel}</FormLabel>
+                                      <FormLabel>{t('form.vusLabel')}</FormLabel>
                                       <FormControl>
                                         <Input type="number" placeholder="e.g., 50" {...field} onChange={e => field.onChange(parseInt(e.target.value, 10))} data-testid="vus-input"/>
                                       </FormControl>
@@ -496,7 +498,7 @@ export default function TestForm({ initialValues, onRunTest, setHistory }: TestF
                                   name="duration"
                                   render={({ field }) => (
                                     <FormItem>
-                                      <FormLabel>{TEXT_CONSTANTS.durationLabel}</FormLabel>
+                                      <FormLabel>{t('form.durationLabel')}</FormLabel>
                                       <FormControl>
                                         <Input placeholder="e.g., 10m" {...field} data-testid="duration-input"/>
                                       </FormControl>
@@ -506,8 +508,8 @@ export default function TestForm({ initialValues, onRunTest, setHistory }: TestF
                                 />
                               </div>
                               <div className="mt-6">
-                                 <FormLabel>{TEXT_CONSTANTS.stagesLabel}</FormLabel>
-                                  <FormDescription>{TEXT_CONSTANTS.stagesDescription}</FormDescription>
+                                 <FormLabel>{t('form.stagesLabel')}</FormLabel>
+                                  <FormDescription>{t('form.stagesDescription')}</FormDescription>
                                  {stageFields.map((field, index) => (
                                     <div key={field.id} className="flex items-end gap-2 mt-2">
                                       <FormField
@@ -525,7 +527,7 @@ export default function TestForm({ initialValues, onRunTest, setHistory }: TestF
                                     </div>
                                   ))}
                                   <Button type="button" variant="outline" size="sm" className="mt-2" onClick={() => appendStage({ duration: '', target: 0 })} data-testid="add-stage-button">
-                                    <Plus className="mr-2 h-4 w-4" />{TEXT_CONSTANTS.addStageButton}
+                                    <Plus className="mr-2 h-4 w-4" />{t('form.addStageButton')}
                                   </Button>
                               </div>
                             </CardContent>
@@ -538,7 +540,7 @@ export default function TestForm({ initialValues, onRunTest, setHistory }: TestF
             <div className="flex justify-end pt-8">
                 <Button type="submit" size="lg" className="w-full md:w-auto" disabled={form.formState.isSubmitting} data-testid="run-test-button">
                 <Rocket className="mr-2 h-5 w-5" />
-                {form.formState.isSubmitting ? TEXT_CONSTANTS.runningTestButton : TEXT_CONSTANTS.runTestButton}
+                {form.formState.isSubmitting ? t('form.runningTestButton') : t('form.runTestButton')}
                 </Button>
             </div>
           </form>
@@ -548,19 +550,19 @@ export default function TestForm({ initialValues, onRunTest, setHistory }: TestF
     <AlertDialog open={isClearStorageDialogOpen} onOpenChange={setClearStorageDialogOpen}>
       <AlertDialogContent data-testid="clear-storage-dialog">
         <AlertDialogHeader>
-          <AlertDialogTitle className="flex items-center gap-2"><History className="h-5 w-5"/>{TEXT_CONSTANTS.clearHistoryDialogTitle}</AlertDialogTitle>
+          <AlertDialogTitle className="flex items-center gap-2"><History className="h-5 w-5"/>{t('form.clearHistoryDialog.title')}</AlertDialogTitle>
           <AlertDialogDescription>
-            {TEXT_CONSTANTS.clearHistoryDialogDescription}
+            {t('form.clearHistoryDialog.description')}
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
-          <AlertDialogCancel onClick={() => { setClearStorageDialogOpen(false); proceedWithTest(false); }} data-testid="dont-clear-button">{TEXT_CONSTANTS.clearHistoryDialogKeepButton}</AlertDialogCancel>
+          <AlertDialogCancel onClick={() => { setClearStorageDialogOpen(false); proceedWithTest(false); }} data-testid="dont-clear-button">{t('form.clearHistoryDialog.keepButton')}</AlertDialogCancel>
           <AlertDialogAction 
             className='bg-destructive hover:bg-destructive/90' 
             onClick={() => { setClearStorageDialogOpen(false); proceedWithTest(true); }}
             data-testid="clear-and-run-button"
             >
-            <Trash2 className="mr-2 h-4 w-4" />{TEXT_CONSTANTS.clearHistoryDialogClearButton}
+            <Trash2 className="mr-2 h-4 w-4" />{t('form.clearHistoryDialog.clearButton')}
           </AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>

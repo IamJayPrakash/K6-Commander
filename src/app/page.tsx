@@ -16,6 +16,7 @@ import { Card, CardDescription } from '@/components/ui/card';
 import { Clock } from 'lucide-react';
 import { formatDistanceToNow } from 'date-fns';
 import Link from 'next/link';
+import { useTranslation } from 'react-i18next';
 
 type View = 'form' | 'running' | 'summary';
 
@@ -33,6 +34,12 @@ export default function Home() {
   const [isTourRunning, setIsTourRunning] = useState(false);
   const { toast } = useToast();
   const [isMounted, setIsMounted] = useState(false);
+  const { t } = useTranslation();
+
+  const tourSteps = TOUR_STEPS.map(step => ({
+    ...step,
+    content: t(step.content),
+  }));
 
   useEffect(() => {
     setIsMounted(true);
@@ -189,7 +196,7 @@ export default function Home() {
     <>
       {isMounted && (
           <Joyride
-          steps={TOUR_STEPS}
+          steps={tourSteps}
           run={isTourRunning}
           continuous
           showProgress

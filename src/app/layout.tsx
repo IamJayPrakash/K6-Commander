@@ -8,41 +8,106 @@ import { cn } from '@/lib/utils';
 import { Providers } from './providers';
 import { AppHeader } from '@/components/layout/app-header';
 import { AppFooter } from '@/components/layout/app-footer';
-import { Suspense } from 'react';
+import { Suspense, useEffect, useState } from 'react';
 import { ProgressBar } from '@/components/layout/progress-bar';
+import { I18nextProvider } from 'react-i18next';
+import i18n from '@/lib/i18n';
 
 const inter = Inter({
   subsets: ['latin'],
   variable: '--font-sans',
 });
 
+// Helper function to load translations
+async function loadTranslations(locale: string) {
+  try {
+    const response = await fetch(`/locales/${locale}.json`);
+    if (!response.ok) {
+      // Fallback to English if the locale is not found
+      console.warn(`Locale '${locale}' not found, falling back to 'en'.`);
+      const fallbackResponse = await fetch(`/locales/en.json`);
+      return await fallbackResponse.json();
+    }
+    return await response.json();
+  } catch (error) {
+    console.error('Failed to load translations, falling back to English.', error);
+    // Fallback to English in case of any network error
+    try {
+        const fallbackResponse = await fetch(`/locales/en.json`);
+        return await fallbackResponse.json();
+    } catch (fallbackError) {
+        console.error('Failed to load fallback English translations.', fallbackError);
+        return {}; // Return empty object if even fallback fails
+    }
+  }
+}
+
 export default function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const [isI18nInitialized, setIsI18nInitialized] = useState(false);
+
+  useEffect(() => {
+    const initializeI18n = async () => {
+      const detectedLng = i18n.language || 'en';
+      const translations = await loadTranslations(detectedLng);
+      
+      if (!i18n.hasResourceBundle(detectedLng, 'translation')) {
+        i18n.addResourceBundle(detectedLng, 'translation', translations);
+      }
+      i18n.changeLanguage(detectedLng);
+      setIsI18nInitialized(true);
+    };
+
+    if (!isI18nInitialized) {
+        initializeI18n();
+    }
+
+    const onLanguageChanged = async (lng: string) => {
+        if (!i18n.hasResourceBundle(lng, 'translation')) {
+            const translations = await loadTranslations(lng);
+            i18n.addResourceBundle(lng, 'translation', translations);
+        }
+    };
+    
+    i18n.on('languageChanged', onLanguageChanged);
+
+    return () => {
+      i18n.off('languageChanged', onLanguageChanged);
+    };
+
+  }, [isI18nInitialized]);
+
+  if (!isI18nInitialized) {
+    // You can render a loading state here if needed
+    return <body className={cn('min-h-screen bg-background font-sans antialiased', inter.variable)}></body>;
+  }
   
   return (
-    <html lang="en" className="dark" suppressHydrationWarning>
+    <html lang={i18n.language} className="dark" suppressHydrationWarning>
       <body
         className={cn(
           'min-h-screen bg-background font-sans antialiased',
           inter.variable
         )}
       >
-        <Providers>
-            <div className="relative flex flex-col min-h-screen bg-gradient-to-br from-black to-[#1a1a1a]">
-                <Suspense>
-                  <ProgressBar />
-                </Suspense>
-                <AppHeader />
-                <main className="flex-1 container max-w-screen-2xl mx-auto p-4 md:p-6 lg:p-8">
-                  {children}
-                </main>
-                <AppFooter />
-            </div>
-        </Providers>
-        <Toaster />
+        <I18nextProvider i18n={i18n}>
+            <Providers>
+                <div className="relative flex flex-col min-h-screen bg-gradient-to-br from-black to-[#1a1a1a]">
+                    <Suspense>
+                      <ProgressBar />
+                    </Suspense>
+                    <AppHeader />
+                    <main className="flex-1 container max-w-screen-2xl mx-auto p-4 md:p-6 lg:p-8">
+                      {children}
+                    </main>
+                    <AppFooter />
+                </div>
+            </Providers>
+            <Toaster />
+        </I18nextProvider>
       </body>
     </html>
   );
