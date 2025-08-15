@@ -197,11 +197,10 @@ export default function TestForm({ initialValues, onRunTest }: TestFormProps) {
                                                 placeholder="https://your-api.com/v1/users"
                                                 className="pl-10 h-11 text-base"
                                                 {...field}
-                                                onFocus={() => setPopoverOpen(true)}
-                                                onBlurCapture={() => addUrlToRecents(field.value)}
                                             />
                                         </FormControl>
                                         <Button
+                                            type="button"
                                             variant="ghost"
                                             role="combobox"
                                             aria-expanded={popoverOpen}
@@ -224,6 +223,7 @@ export default function TestForm({ initialValues, onRunTest }: TestFormProps) {
                                                         value={url}
                                                         onSelect={(currentValue) => {
                                                             form.setValue("url", currentValue);
+                                                            addUrlToRecents(currentValue);
                                                             setPopoverOpen(false);
                                                         }}
                                                         className="group"
