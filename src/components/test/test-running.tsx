@@ -4,139 +4,150 @@
 import { useEffect, useState, useRef } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { ExternalLink, Loader, XCircle } from 'lucide-react';
-import type { TestConfiguration } from '@/types';
+import { ExternalLink, Loader, XCircle, CheckCircle } from 'lucide-react';
+import type { TestConfiguration, K6Summary, LighthouseSummary, SeoAnalysis } from '@/types';
 import { useToast } from '@/hooks/use-toast';
 import type { TestResults } from '@/app/page';
 
 interface TestRunningProps {
-  testId: string;
+  testId: string; // This is the initial client-generated ID
   config: TestConfiguration;
   onTestComplete: (results: TestResults) => void;
 }
 
-export default function TestRunning({ testId, config, onTestComplete }: TestRunningProps) {
+export default function TestRunning({ testId: initialTestId, config, onTestComplete }: TestRunningProps) {
   const { toast } = useToast();
   const [error, setError] = useState<string | null>(null);
-  const [running, setRunning] = useState({
-    k6: config.runLoadTest,
-    lighthouse: config.runLighthouse,
-    seo: config.runSeo,
+  const [runningStatus, setRunningStatus] = useState({
+    k6: config.runLoadTest ? 'pending' : 'skipped',
+    lighthouse: config.runLighthouse ? 'pending' : 'skipped',
+    seo: config.runSeo ? 'pending' : 'skipped',
   });
-  const resultsRef = useRef<TestResults>({});
+  const [k6TestId, setK6TestId] = useState<string>(initialTestId);
 
-  const grafanaUrl = `${window.location.protocol}//${window.location.hostname}:3003/d/k6/k6-load-testing-results?orgId=1&var-testid=${testId}&refresh=5s`;
+  const grafanaUrl = `${window.location.protocol}//${window.location.hostname}:3003/d/k6/k6-load-testing-results?orgId=1&var-testid=${k6TestId}&refresh=5s`;
   
+  const hasCompleted = useRef(false);
+
   useEffect(() => {
-    let isMounted = true;
-    
-    const allTestsComplete = () => {
-      return !running.k6 && !running.lighthouse && !running.seo;
+    if (hasCompleted.current) return;
+
+    const runAllTests = async () => {
+        const testPromises: Promise<Partial<TestResults>>[] = [];
+        const results: TestResults = {};
+
+        // K6 Load Test
+        if (config.runLoadTest) {
+            const k6Promise = (async (): Promise<Partial<TestResults>> => {
+                try {
+                    setRunningStatus(s => ({ ...s, k6: 'running' }));
+                    const startResponse = await fetch('/api/run-test', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(config),
+                    });
+                    if (!startResponse.ok) throw new Error('Failed to start k6 test');
+                    const { testId: newTestId } = await startResponse.json();
+                    setK6TestId(newTestId); // Update the test ID for Grafana link
+
+                    // Polling for summary
+                    const summary = await new Promise<K6Summary>((resolve, reject) => {
+                        let attempts = 0;
+                        const maxAttempts = 100; // ~5 minutes
+                        const poll = () => {
+                            if (attempts++ > maxAttempts) return reject(new Error('k6 test timed out.'));
+                            fetch(`/api/check-summary/${newTestId}`)
+                                .then(res => {
+                                    if (res.ok) return res.json().then(resolve);
+                                    if (res.status === 404) setTimeout(poll, 3000);
+                                    else reject(new Error(`Server error: ${res.status}`));
+                                })
+                                .catch(reject);
+                        };
+                        poll();
+                    });
+                    
+                    setRunningStatus(s => ({ ...s, k6: 'completed' }));
+                    return { k6: summary };
+                } catch (e: any) {
+                    setRunningStatus(s => ({ ...s, k6: 'failed' }));
+                    toast({ variant: 'destructive', title: 'k6 Test Error', description: e.message });
+                    return {};
+                }
+            })();
+            testPromises.push(k6Promise);
+        }
+
+        // Lighthouse Test
+        if (config.runLighthouse) {
+            const lighthousePromise = (async (): Promise<Partial<TestResults>> => {
+                try {
+                    setRunningStatus(s => ({ ...s, lighthouse: 'running' }));
+                    const response = await fetch('/api/run-lighthouse', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ url: config.url, testId: initialTestId }),
+                    });
+                     if (!response.ok) {
+                        const errorData = await response.json();
+                        throw new Error(errorData.details || 'Lighthouse audit failed on the server.');
+                    }
+                    const report = await response.json();
+                    setRunningStatus(s => ({ ...s, lighthouse: 'completed' }));
+                    return { lighthouse: report };
+                } catch (e: any) {
+                    setRunningStatus(s => ({ ...s, lighthouse: 'failed' }));
+                    toast({ variant: 'destructive', title: 'Lighthouse Error', description: e.message });
+                    return {};
+                }
+            })();
+            testPromises.push(lighthousePromise);
+        }
+
+        // SEO Test
+        if (config.runSeo) {
+            const seoPromise = (async (): Promise<Partial<TestResults>> => {
+                try {
+                    setRunningStatus(s => ({ ...s, seo: 'running' }));
+                    const response = await fetch('/api/run-seo', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ url: config.url }),
+                    });
+                    if (!response.ok) throw new Error('SEO analysis failed');
+                    const analysis = await response.json();
+                    setRunningStatus(s => ({ ...s, seo: 'completed' }));
+                    return { seo: analysis };
+                } catch (e: any) {
+                    setRunningStatus(s => ({ ...s, seo: 'failed' }));
+                    toast({ variant: 'destructive', title: 'SEO Error', description: e.message });
+                    return {};
+                }
+            })();
+            testPromises.push(seoPromise);
+        }
+
+        const allResults = await Promise.all(testPromises);
+        const finalResults = allResults.reduce((acc, res) => ({ ...acc, ...res }), {});
+        
+        hasCompleted.current = true;
+        onTestComplete(finalResults);
     };
-    
-    // Check if all tests are complete after a state update
-    if (isMounted && allTestsComplete()) {
-      onTestComplete(resultsRef.current);
+
+    runAllTests();
+
+  }, [config, initialTestId, onTestComplete, toast]);
+  
+  const getStatusIcon = (status: string) => {
+    switch(status) {
+        case 'running': return <Loader className="h-4 w-4 animate-spin text-primary" />;
+        case 'completed': return <CheckCircle className="h-4 w-4 text-green-500" />;
+        case 'failed': return <XCircle className="h-4 w-4 text-destructive" />;
+        default: return null;
     }
-    
-    return () => { isMounted = false };
-  }, [running, onTestComplete]);
+  }
 
-
-  // K6 Load Test Runner
-  useEffect(() => {
-    if (!config.runLoadTest) return;
-
-    let pollTimeout: NodeJS.Timeout;
-    let attempts = 0;
-    const maxAttempts = 100; // ~5 minutes
-
-    const pollForK6Summary = async (k6TestId: string) => {
-      if (attempts >= maxAttempts) {
-        setError('k6 test timed out.');
-        setRunning(r => ({ ...r, k6: false }));
-        return;
-      }
-      try {
-        const response = await fetch(`/api/check-summary/${k6TestId}`);
-        attempts++;
-        if (response.ok) {
-          const summary = await response.json();
-          resultsRef.current.k6 = summary;
-          setRunning(r => ({ ...r, k6: false }));
-        } else if (response.status === 404) {
-          pollTimeout = setTimeout(() => pollForK6Summary(k6TestId), 3000);
-        } else {
-          throw new Error(`Server error: ${response.status}`);
-        }
-      } catch (e: any) {
-        setError(`Failed to poll for k6 summary: ${e.message}`);
-        setRunning(r => ({ ...r, k6: false }));
-      }
-    };
-    
-    const runK6Test = async () => {
-        try {
-            const response = await fetch('/api/run-test', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(config),
-            });
-            if (!response.ok) throw new Error('Failed to start k6 test');
-            const { testId: k6TestId } = await response.json();
-            pollForK6Summary(k6TestId);
-        } catch (e: any) {
-            setError(`Failed to start k6 test: ${e.message}`);
-            setRunning(r => ({ ...r, k6: false }));
-        }
-    };
-    runK6Test();
-    return () => clearTimeout(pollTimeout);
-  }, [config, testId]);
-
-  // Lighthouse Runner
-  useEffect(() => {
-    if (!config.runLighthouse) return;
-    const runLighthouse = async () => {
-        try {
-            const response = await fetch('/api/run-lighthouse', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ url: config.url, testId }),
-            });
-            if (!response.ok) throw new Error('Lighthouse audit failed');
-            const report = await response.json();
-            resultsRef.current.lighthouse = report;
-        } catch (e: any) {
-            toast({ variant: 'destructive', title: 'Lighthouse Error', description: e.message });
-        } finally {
-            setRunning(r => ({ ...r, lighthouse: false }));
-        }
-    };
-    runLighthouse();
-  }, [config.runLighthouse, config.url, testId, toast]);
-
-  // SEO Runner
-  useEffect(() => {
-    if (!config.runSeo) return;
-    const runSeo = async () => {
-        try {
-            const response = await fetch('/api/run-seo', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ url: config.url }),
-            });
-            if (!response.ok) throw new Error('SEO analysis failed');
-            const analysis = await response.json();
-            resultsRef.current.seo = analysis;
-        } catch (e: any) {
-            toast({ variant: 'destructive', title: 'SEO Error', description: e.message });
-        } finally {
-            setRunning(r => ({ ...r, seo: false }));
-        }
-    };
-    runSeo();
-  }, [config.runSeo, config.url, toast]);
+  const allDone = Object.values(runningStatus).every(s => s !== 'running' && s !== 'pending');
 
   return (
     <Card className="max-w-2xl mx-auto">
@@ -152,22 +163,22 @@ export default function TestRunning({ testId, config, onTestComplete }: TestRunn
             <div className="relative mx-auto">
                 <Loader className="h-12 w-12 text-primary animate-spin" />
             </div>
-            <CardTitle>Tests in Progress...</CardTitle>
+            <CardTitle>{allDone ? 'Finalizing Results...' : 'Tests in Progress...'}</CardTitle>
             <CardDescription>Your tests are running. Results will appear here when complete.</CardDescription>
           </>
         )}
       </CardHeader>
       <CardContent className="flex flex-col items-center gap-6">
-        <div className='w-full space-y-2 text-center'>
-            <p className='text-sm font-medium'>Status:</p>
-            <ul className='text-sm text-muted-foreground'>
-                {config.runLoadTest && <li>k6 Load Test: {running.k6 ? "Running..." : "Complete"}</li>}
-                {config.runLighthouse && <li>Lighthouse Audit: {running.lighthouse ? "Running..." : "Complete"}</li>}
-                {config.runSeo && <li>SEO Check: {running.seo ? "Running..." : "Complete"}</li>}
+        <div className='w-full space-y-2 text-left bg-muted/50 p-4 rounded-lg'>
+            <p className='text-sm font-medium text-center mb-2'>Status:</p>
+            <ul className='text-sm text-muted-foreground space-y-2'>
+                {config.runLoadTest && <li className='flex items-center justify-between'><span>k6 Load Test</span> <span className='flex items-center gap-2'>{getStatusIcon(runningStatus.k6)} {runningStatus.k6}</span></li>}
+                {config.runLighthouse && <li className='flex items-center justify-between'><span>Lighthouse Audit</span> <span className='flex items-center gap-2'>{getStatusIcon(runningStatus.lighthouse)} {runningStatus.lighthouse}</span></li>}
+                {config.runSeo && <li className='flex items-center justify-between'><span>SEO Check</span> <span className='flex items-center gap-2'>{getStatusIcon(runningStatus.seo)} {runningStatus.seo}</span></li>}
             </ul>
         </div>
         {config.runLoadTest && (
-            <Button asChild size="lg">
+            <Button asChild size="lg" disabled={runningStatus.k6 === 'pending'}>
                 <a href={grafanaUrl} target="_blank" rel="noopener noreferrer">
                     <ExternalLink className="mr-2 h-4 w-4" />
                     View Live Grafana Dashboard
