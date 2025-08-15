@@ -5,7 +5,7 @@ K6 Commander is a lightweight, local-first, authorized load-testing platform. It
 **Disclaimer:** This tool is intended for performance testing **your own applications** where you have explicit permission to do so. Unauthorized testing of third-party websites is illegal and unethical. The creators of this software are not responsible for its misuse.
 
 
-
+![alt text](image.png)
 ## ✨ Features
 
 - **Multi-Modal Testing**: Run k6 load tests, Google Lighthouse audits, and basic on-page SEO checks from a single interface.
