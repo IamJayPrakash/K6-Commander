@@ -35,7 +35,7 @@ import { Rocket, Trash2, Plus, Server, Settings, FileJson, ChevronsRightLeft, Se
 import { TEST_PRESETS } from '@/lib/constants';
 import type { TestConfiguration, TestPreset } from '@/types';
 import { useToast } from '@/hooks/use-toast';
-import { Checkbox } from '../ui/checkbox';
+import { Switch } from '../ui/switch';
 
 const stageSchema = z.object({
   duration: z.string().min(1, 'Duration is required'),
@@ -63,7 +63,7 @@ const formSchema = z.object({
 
 type TestFormValues = z.infer<typeof formSchema>;
 
-const newTestDefaultValues: Partial<TestFormValues> = {
+export const newTestDefaultValues: Partial<TestFormValues> = {
     url: '',
     method: 'GET' as const,
     headers: [],
@@ -215,7 +215,7 @@ export default function TestForm({ rerunConfig, onRunTest }: TestFormProps) {
                       name="runLoadTest"
                       render={({ field }) => (
                          <FormItem className="flex flex-row items-start space-x-3 space-y-0 rounded-md border p-4">
-                            <FormControl><Checkbox checked={field.value} onCheckedChange={field.onChange} /></FormControl>
+                            <FormControl><Switch checked={field.value} onCheckedChange={field.onChange} /></FormControl>
                             <div className="space-y-1 leading-none">
                                 <FormLabel className="flex items-center gap-2"><Gauge/> Load Test</FormLabel>
                                 <FormDescription>Run a k6 load test to measure performance under pressure.</FormDescription>
@@ -228,7 +228,7 @@ export default function TestForm({ rerunConfig, onRunTest }: TestFormProps) {
                       name="runLighthouse"
                       render={({ field }) => (
                          <FormItem className="flex flex-row items-start space-x-3 space-y-0 rounded-md border p-4">
-                            <FormControl><Checkbox checked={field.value} onCheckedChange={field.onChange} /></FormControl>
+                            <FormControl><Switch checked={field.value} onCheckedChange={field.onChange} /></FormControl>
                             <div className="space-y-1 leading-none">
                                 <FormLabel className="flex items-center gap-2"><ShieldCheck/> Lighthouse Audit</FormLabel>
                                 <FormDescription>Analyze Performance, SEO, and Accessibility scores.</FormDescription>
@@ -241,7 +241,7 @@ export default function TestForm({ rerunConfig, onRunTest }: TestFormProps) {
                       name="runSeo"
                       render={({ field }) => (
                          <FormItem className="flex flex-row items-start space-x-3 space-y-0 rounded-md border p-4">
-                            <FormControl><Checkbox checked={field.value} onCheckedChange={field.onChange} /></FormControl>
+                            <FormControl><Switch checked={field.value} onCheckedChange={field.onChange} /></FormControl>
                             <div className="space-y-1 leading-none">
                                 <FormLabel className="flex items-center gap-2"><Search/> SEO Analysis</FormLabel>
                                 <FormDescription>Check meta tags, sitemap, and other SEO factors.</FormDescription>
@@ -409,3 +409,5 @@ export default function TestForm({ rerunConfig, onRunTest }: TestFormProps) {
     </Card>
   );
 }
+
+    
