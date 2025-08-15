@@ -76,7 +76,7 @@ export default function Home() {
   };
 
   const formDefaultValues = useMemo(() => {
-    const config = rerunConfig || activeTestConfig;
+    const config = rerunConfig; // Prioritize rerun config
     if (config) {
         return {
             url: config.url || '',
@@ -106,7 +106,7 @@ export default function Home() {
         runLighthouse: false,
         runSeo: false,
     }
-  }, [rerunConfig, activeTestConfig]);
+  }, [rerunConfig]);
   
   const renderView = () => {
     switch (view) {
