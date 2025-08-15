@@ -80,10 +80,13 @@ export default function Home() {
 
   const handleRerun = (config: TestConfiguration) => {
     // Set the initial values for the form based on the historical run
+    // Sort headers to ensure a stable order and prevent re-render loops
+    const sortedHeaders = config.headers ? Object.entries(config.headers).sort((a, b) => a[0].localeCompare(b[0])).map(([key, value]) => ({ key, value: String(value) })) : [];
+    
     setFormInitialValues({
         url: config.url || '',
         method: config.method || 'GET',
-        headers: config.headers ? Object.entries(config.headers).map(([key, value]) => ({ key, value: String(value) })) : [],
+        headers: sortedHeaders,
         body: config.body || '',
         testPreset: config.testPreset || 'custom',
         vus: config.vus,
