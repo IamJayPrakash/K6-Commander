@@ -42,5 +42,8 @@ People *love* thorough bug reports. I'm not even kidding.
 ## Use a Consistent Coding Style
 We use Prettier and ESLint to maintain a consistent code style. Please run `npm run lint` and `npm run prettier:fix` before submitting a pull request.
 
+## Financial Contributions
+We also welcome financial contributions in any amount. If you find this project useful, please consider supporting its development. You can sponsor us through GitHub by clicking the "Sponsor" button at the top of the repository. Your sponsorship will help us dedicate more time to maintenance and new features.
+
 ## License
 By contributing, you agree that your contributions will be licensed under its MIT License.
