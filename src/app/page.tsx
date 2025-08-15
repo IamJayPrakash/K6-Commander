@@ -84,7 +84,7 @@ export default function Home() {
             vus: rerunConfig.vus,
             duration: rerunConfig.duration,
             stages: rerunConfig.stages,
-            runLoadTest: rerun-config.runLoadTest,
+            runLoadTest: rerunConfig.runLoadTest,
             runLighthouse: rerunConfig.runLighthouse,
             runSeo: rerunConfig.runSeo,
         }
