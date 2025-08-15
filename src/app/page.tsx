@@ -30,7 +30,7 @@ export default function Home() {
   const [activeTestResults, setActiveTestResults] =
     useState<TestResults | null>(null);
   const [history, setHistory] = useLocalStorage<HistoryItem[]>('k6-history', []);
-  const [rerunInitialValues, setRerunInitialValues] = useState<Partial<TestConfiguration> | null>(null);
+  const [initialValues, setInitialValues] = useState<Partial<TestConfiguration> | null>(null);
   const [formKey, setFormKey] = useState(Date.now());
   const [isTourRunning, setIsTourRunning] = useState(false);
   const { toast } = useToast();
@@ -38,6 +38,32 @@ export default function Home() {
 
   useEffect(() => {
     setIsMounted(true);
+  }, []);
+
+  // Check for history item to load from session storage on mount
+  useEffect(() => {
+      const itemToLoad = sessionStorage.getItem('load-history-item');
+      if(itemToLoad) {
+        try {
+          const item = JSON.parse(itemToLoad);
+          handleLoadFromHistory(item);
+        } catch (e) {
+            console.error("Failed to parse history item from session storage", e);
+        }
+        sessionStorage.removeItem('load-history-item');
+      }
+      
+      const configToRerun = sessionStorage.getItem('rerun-config');
+      if(configToRerun) {
+          try {
+              const config = JSON.parse(configToRerun);
+              handleRerun(config);
+          } catch(e) {
+              console.error("Failed to parse rerun config from session storage", e);
+          }
+          sessionStorage.removeItem('rerun-config');
+      }
+
   }, []);
 
   const handleRunTest = (testId: string, config: TestConfiguration) => {
@@ -75,13 +101,13 @@ export default function Home() {
   };
 
   const handleRerun = (config: TestConfiguration) => {
-    setRerunInitialValues(config);
+    setInitialValues(config);
     setFormKey(Date.now()); // Change key to force re-mount
     setView('form');
   };
   
   const handleCreateNewTest = () => {
-    setRerunInitialValues(null); // Clear initial values
+    setInitialValues(null); // Clear initial values
     setFormKey(Date.now()); // Change key to force re-mount
     setActiveTestConfig(null);
     setActiveTestResults(null);
@@ -135,7 +161,7 @@ export default function Home() {
         return (
           <TestForm
             key={formKey}
-            initialValues={rerunInitialValues}
+            initialValues={initialValues}
             onRunTest={handleRunTest}
           />
         );
@@ -153,7 +179,7 @@ export default function Home() {
             />
         </Sidebar>
         <SidebarInset>
-            <div className="p-4">
+            <div className="p-4 md:p-6 lg:p-8">
                 <SidebarTrigger className='md:hidden mb-4'/>
                 {isMounted && (
                     <Joyride

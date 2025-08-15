@@ -82,7 +82,7 @@ export default function RootLayout({
         )}
       >
         <Providers>
-           <div className="flex flex-col min-h-screen bg-gradient-to-br from-black to-[#1a1a1a]">
+           <div className="relative flex flex-col min-h-screen bg-gradient-to-br from-black to-[#1a1a1a]">
               <Suspense>
                 <ProgressBar />
               </Suspense>

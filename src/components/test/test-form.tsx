@@ -25,12 +25,17 @@ import {
 } from '@/components/ui/select';
 import { Textarea } from '@/components/ui/textarea';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Rocket, Trash2, Plus, Server, Settings, FileJson, ChevronsRightLeft, Search, Gauge, ShieldCheck, TestTubeDiagonal } from 'lucide-react';
+import { Rocket, Trash2, Plus, Server, Settings, FileJson, ChevronsRightLeft, Search, Gauge, ShieldCheck, TestTubeDiagonal, ChevronsUpDown, Check, X } from 'lucide-react';
 import { TEST_PRESETS } from '@/lib/constants';
 import type { TestConfiguration, TestPreset } from '@/types';
 import { useToast } from '@/hooks/use-toast';
 import { Switch } from '../ui/switch';
 import { RadioGroup, RadioGroupItem } from '../ui/radio-group';
+import { useLocalStorage } from '@/hooks/use-local-storage';
+import { Popover, PopoverContent, PopoverTrigger } from '../ui/popover';
+import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from '../ui/command';
+import { cn } from '@/lib/utils';
+import { ScrollArea } from '../ui/scroll-area';
 
 const stageSchema = z.object({
   duration: z.string().min(1, 'Duration is required'),
@@ -80,7 +85,9 @@ const newTestDefaultValues: TestFormValues = {
 
 export default function TestForm({ initialValues, onRunTest }: TestFormProps) {
   const { toast } = useToast();
-  
+  const [recentUrls, setRecentUrls] = useLocalStorage<string[]>('k6-recent-urls', []);
+  const [popoverOpen, setPopoverOpen] = React.useState(false);
+
   const form = useForm<TestFormValues>({
     resolver: zodResolver(formSchema),
     defaultValues: initialValues 
@@ -111,8 +118,27 @@ export default function TestForm({ initialValues, onRunTest }: TestFormProps) {
       form.setValue('stages', presetConfig.stages);
     }
   };
+
+  const addUrlToRecents = (url: string) => {
+    if (url && z.string().url().safeParse(url).success) {
+        setRecentUrls(prev => {
+            const newUrls = [url, ...prev.filter(u => u !== url)];
+            return [...new Set(newUrls)].slice(0, 10); // Keep unique and max 10
+        });
+    }
+  }
+
+  const removeRecentUrl = (url: string) => {
+    setRecentUrls(prev => prev.filter(u => u !== url));
+  }
+
+  const clearRecentUrls = () => {
+    setRecentUrls([]);
+  }
   
   const onSubmit = async (data: TestFormValues) => {
+    addUrlToRecents(data.url);
+
     const config: TestConfiguration = {
       ...data,
       headers: data.headers.reduce((acc, { key, value }) => {
@@ -159,15 +185,69 @@ export default function TestForm({ initialValues, onRunTest }: TestFormProps) {
                       control={form.control}
                       name="url"
                       render={({ field }) => (
-                        <FormItem>
+                        <FormItem className='flex flex-col'>
                           <FormLabel className="text-lg">Target Endpoint</FormLabel>
                           <FormDescription>The full URL of the API endpoint or page to test.</FormDescription>
-                          <FormControl>
-                            <div className="relative">
-                              <Server className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
-                              <Input placeholder="https://your-api.com/v1/users" {...field} className="pl-10 h-11 text-base" />
-                            </div>
-                          </FormControl>
+                           <Popover open={popoverOpen} onOpenChange={setPopoverOpen}>
+                                <div className="relative">
+                                    <Server className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
+                                    <FormControl>
+                                        <Input
+                                            placeholder="https://your-api.com/v1/users"
+                                            className="pl-10 h-11 text-base"
+                                            {...field}
+                                            onFocus={() => setPopoverOpen(true)}
+                                            onBlurCapture={() => addUrlToRecents(field.value)}
+                                        />
+                                    </FormControl>
+                                    <PopoverTrigger asChild>
+                                        <Button
+                                            variant="ghost"
+                                            role="combobox"
+                                            aria-expanded={popoverOpen}
+                                            className="absolute right-1 top-1/2 -translate-y-1/2 h-8 w-8 p-0"
+                                        >
+                                            <ChevronsUpDown className="h-4 w-4 shrink-0 opacity-50" />
+                                        </Button>
+                                    </PopoverTrigger>
+                                </div>
+                                <PopoverContent className="w-[--radix-popover-trigger-width] p-0">
+                                    <Command>
+                                        <CommandInput placeholder="Search or type a new URL..."/>
+                                        <CommandList>
+                                            <CommandEmpty>No recent URLs found.</CommandEmpty>
+                                            <CommandGroup heading="Recent URLs">
+                                                <ScrollArea className="h-48">
+                                                {recentUrls.map(url => (
+                                                    <CommandItem
+                                                        key={url}
+                                                        value={url}
+                                                        onSelect={(currentValue) => {
+                                                            form.setValue("url", currentValue);
+                                                            setPopoverOpen(false);
+                                                        }}
+                                                        className="group"
+                                                    >
+                                                        <Check className={cn("mr-2 h-4 w-4", field.value === url ? "opacity-100" : "opacity-0")} />
+                                                        <span className="truncate flex-1">{url}</span>
+                                                        <Button variant="ghost" size="icon" className="h-6 w-6 opacity-0 group-hover:opacity-100" onClick={(e) => { e.stopPropagation(); removeRecentUrl(url); }}>
+                                                            <X className="h-4 w-4" />
+                                                        </Button>
+                                                    </CommandItem>
+                                                ))}
+                                                </ScrollArea>
+                                            </CommandGroup>
+                                            {recentUrls.length > 0 && (
+                                                <CommandGroup className='border-t pt-1'>
+                                                    <CommandItem onSelect={clearRecentUrls} className="text-destructive focus:bg-destructive/10 focus:text-destructive justify-center">
+                                                        <Trash2 className="mr-2 h-4 w-4"/> Clear all
+                                                    </CommandItem>
+                                                </CommandGroup>
+                                            )}
+                                        </CommandList>
+                                    </Command>
+                                </PopoverContent>
+                            </Popover>
                           <FormMessage />
                         </FormItem>
                       )}
