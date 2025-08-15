@@ -11,7 +11,6 @@ import { Suspense, useEffect, useState } from 'react';
 import { ProgressBar } from '@/components/layout/progress-bar';
 import { I18nextProvider } from 'react-i18next';
 import i18n from '@/lib/i18n';
-import type { Metadata } from 'next';
 
 const inter = Inter({
   subsets: ['latin'],
@@ -41,63 +40,6 @@ async function loadTranslations(locale: string) {
     }
   }
 }
-
-export const metadata: Metadata = {
-  title: {
-    default: 'K6 Commander',
-    template: `%s | K6 Commander`,
-  },
-  description:
-    'A lightweight, local-first, authorized load-testing platform. Configure, run, and analyze k6 load tests, Lighthouse audits, and SEO checks from a sleek web UI.',
-  keywords: [
-    'k6',
-    'Lighthouse',
-    'SEO',
-    'load testing',
-    'performance',
-    'auditing',
-    'developer tools',
-    'Next.js',
-    'Grafana',
-  ],
-  applicationName: 'K6 Commander',
-  authors: [{ name: 'Your Name', url: 'https://github.com/your-username/k6-commander' }],
-  creator: 'Your Name',
-  publisher: 'Your Name',
-  themeColor: [
-    { media: '(prefers-color-scheme: light)', color: '#ffffff' },
-    { media: '(prefers-color-scheme: dark)', color: '#222326' },
-  ],
-  openGraph: {
-    type: 'website',
-    url: 'https://your-domain.com', // Replace with your actual domain
-    title: 'K6 Commander',
-    description:
-      'A lightweight, local-first, authorized load-testing platform. Configure, run, and analyze k6 load tests, Lighthouse audits, and SEO checks from a sleek web UI.',
-    siteName: 'K6 Commander',
-    images: [
-      {
-        url: 'https://your-domain.com/og-image.png', // Replace with your actual OG image URL
-        width: 1200,
-        height: 630,
-        alt: 'K6 Commander Dashboard',
-      },
-    ],
-  },
-  twitter: {
-    card: 'summary_large_image',
-    title: 'K6 Commander',
-    description:
-      'A lightweight, local-first, authorized load-testing platform. Configure, run, and analyze k6 load tests, Lighthouse audits, and SEO checks from a sleek web UI.',
-    creator: '@your_twitter_handle', // Replace with your Twitter handle
-    images: ['https://your-domain.com/twitter-image.png'], // Replace with your actual Twitter image URL
-  },
-  icons: {
-    icon: '/favicon.ico', // Make sure to add a favicon to your public folder
-    apple: '/apple-touch-icon.png', // Make sure to add an apple touch icon
-  },
-  manifest: '/manifest.json', // Make sure to add a web app manifest
-};
 
 export default function RootLayout({
   children,

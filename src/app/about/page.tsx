@@ -18,12 +18,6 @@ import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { APP_CONFIG, TECH_STACK } from '@/lib/constants';
 import { useTranslation } from 'react-i18next';
-import type { Metadata } from 'next';
-
-export const metadata: Metadata = {
-  title: 'About',
-  description: 'Learn about the philosophy, features, and technology behind K6 Commander.',
-};
 
 export default function AboutPage() {
   const { t } = useTranslation();
