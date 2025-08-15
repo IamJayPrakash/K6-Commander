@@ -5,20 +5,15 @@ import { useState, useEffect } from 'react';
 import TestForm from '@/components/test/test-form';
 import TestRunning from '@/components/test/test-running';
 import TestSummary from '@/components/test/test-summary';
-import type { TestConfiguration, K6Summary, HistoryItem, LighthouseSummary, SeoAnalysis } from '@/types';
+import type { TestConfiguration, HistoryItem, SeoAnalysis } from '@/types';
 import { useLocalStorage } from '@/hooks/use-local-storage';
 import Joyride, { STATUS } from 'react-joyride';
 import { TOUR_STEPS } from '@/lib/constants';
 import ConsentModal from '@/components/layout/consent-modal';
 import { useToast } from '@/hooks/use-toast';
+import type { TestResults } from '@/types/index';
 
 type View = 'form' | 'running' | 'summary';
-
-export interface TestResults {
-  k6?: K6Summary;
-  lighthouse?: LighthouseSummary;
-  seo?: SeoAnalysis;
-}
 
 export default function Home() {
   const [view, setView] = useState<View>('form');
@@ -28,6 +23,7 @@ export default function Home() {
   const [activeTestResults, setActiveTestResults] =
     useState<TestResults | null>(null);
   const [history, setHistory] = useLocalStorage<HistoryItem[]>('k6-history', []);
+  const [lastSaved, setLastSaved] = useLocalStorage<string | null>('k6-history-last-saved', null);
   const [initialValues, setInitialValues] = useState<Partial<TestConfiguration> | null>(null);
   const [formKey, setFormKey] = useState(Date.now());
   const [isTourRunning, setIsTourRunning] = useState(false);
@@ -72,22 +68,24 @@ export default function Home() {
     setView('running');
   };
 
-  const handleTestComplete = (results: TestResults) => {
-    if (activeTestConfig && activeTestId) {
+  const handleTestComplete = (results: TestResults, finalTestId: string) => {
+    if (activeTestConfig) {
+      setActiveTestId(finalTestId); // Update with the final ID from the server
       setActiveTestResults(results);
       // Auto-save to history on completion
       const newHistoryItem: HistoryItem = {
-        id: activeTestId,
+        id: finalTestId,
         timestamp: new Date().toISOString(),
         config: activeTestConfig,
         results: results,
       };
-      setHistory(prev => [newHistoryItem, ...prev.filter(h => h.id !== activeTestId)]);
+      setHistory(prev => [newHistoryItem, ...prev.filter(h => h.id !== finalTestId)]);
+      setLastSaved(new Date().toISOString());
       toast({ title: 'Test Complete & Saved', description: 'Your test results are ready and saved to history.'});
       setView('summary');
     }
   };
-
+  
   const handleSaveToHistory = () => {
     if (activeTestConfig && activeTestResults && activeTestId) {
       const newHistoryItem: HistoryItem = {
@@ -99,6 +97,7 @@ export default function Home() {
       // Prevent duplicates
       const newHistory = [newHistoryItem, ...history.filter(h => h.id !== activeTestId)];
       setHistory(newHistory);
+      setLastSaved(new Date().toISOString());
       toast({ title: 'Saved to History', description: 'Test run has been saved.'})
     }
   };
@@ -150,7 +149,7 @@ export default function Home() {
       case 'running':
         return (
           <TestRunning
-            testId={activeTestId!}
+            initialTestId={activeTestId!}
             config={activeTestConfig!}
             onTestComplete={handleTestComplete}
           />

@@ -3,7 +3,7 @@
 
 import type { Dispatch, SetStateAction } from 'react';
 import React from 'react';
-import { format } from 'date-fns';
+import { format, formatDistanceToNow } from 'date-fns';
 import {
   Card,
   CardContent,
@@ -23,6 +23,7 @@ import {
   Gauge,
   Search,
   ShieldCheck,
+  Clock,
 } from 'lucide-react';
 import type { HistoryItem, TestConfiguration } from '@/types';
 import {
@@ -43,7 +44,8 @@ import { Badge } from '../ui/badge';
 
 interface HistoryPageProps {
   history: HistoryItem[];
-  setHistory: Dispatch<SetStateAction<HistoryItem[]>>;
+  setHistory: (value: HistoryItem[] | ((prev: HistoryItem[]) => HistoryItem[])) => void;
+  lastSaved: string | null;
   onLoad: (item: HistoryItem) => void;
   onRerun: (config: TestConfiguration) => void;
 }
@@ -51,6 +53,7 @@ interface HistoryPageProps {
 export default function HistoryPageComponent({
   history,
   setHistory,
+  lastSaved,
   onLoad,
   onRerun,
 }: HistoryPageProps) {
@@ -124,7 +127,11 @@ export default function HistoryPageComponent({
 
   const handleDelete = React.useCallback((id: string) => {
     setHistory(prevHistory => prevHistory.filter((item) => item.id !== id));
-  }, [setHistory]);
+    toast({
+        title: 'Test Run Deleted',
+        description: 'The selected run has been removed from history.',
+    });
+  }, [setHistory, toast]);
 
   const handleDeleteAll = React.useCallback(() => {
     setHistory([]);
@@ -138,12 +145,22 @@ export default function HistoryPageComponent({
     <>
       <Card className="bg-card/50 backdrop-blur-sm">
         <CardHeader>
-          <CardTitle className="flex items-center gap-2 text-2xl">
-            <History className="text-primary" /> Test History
-          </CardTitle>
-          <CardDescription>
-            Review, re-run, or manage your past test sessions.
-          </CardDescription>
+          <div className="flex justify-between items-start">
+            <div>
+              <CardTitle className="flex items-center gap-2 text-2xl">
+                <History className="text-primary" /> Test History
+              </CardTitle>
+              <CardDescription>
+                Review, re-run, or manage your past test sessions. All data is stored in your browser.
+              </CardDescription>
+            </div>
+            {lastSaved && (
+                 <div className="text-xs text-muted-foreground text-right flex-shrink-0">
+                    <p>Last saved:</p>
+                    <p className='flex items-center gap-1 justify-end'><Clock className="h-3 w-3" /> {formatDistanceToNow(new Date(lastSaved), { addSuffix: true })}</p>
+                </div>
+            )}
+          </div>
         </CardHeader>
         <CardContent>
           <div className="flex justify-between items-center mb-4">

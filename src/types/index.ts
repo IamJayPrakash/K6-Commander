@@ -1,6 +1,4 @@
 
-import type { TestResults } from "@/app/page";
-
 export type TestPreset = 'baseline' | 'spike' | 'stress' | 'soak';
 
 export interface TestConfiguration {
@@ -80,18 +78,23 @@ export interface LighthouseSummary {
     }
 }
 
-export interface SeoCheck {
-    status: 'pass' | 'fail' | 'warning' | 'not_checked';
+export interface SeoAnalysisItem {
+  name: string;
+  value: string | null;
+  status: 'pass' | 'fail' | 'warning';
+  recommendation: string | null;
 }
 
 export interface SeoAnalysis {
-    title: SeoCheck & { text: string | null; length: number; };
-    description: SeoCheck & { text: string | null; length: number; };
-    h1: SeoCheck & { text: string | null };
-    canonical: SeoCheck & { url: string | null };
-    imageAlts: SeoCheck;
+  analysis: SeoAnalysisItem[];
+  rawHtml: string;
 }
 
+export interface TestResults {
+  k6?: K6Summary;
+  lighthouse?: LighthouseSummary;
+  seo?: SeoAnalysis;
+}
 
 export interface HistoryItem {
   id: string;
@@ -99,4 +102,3 @@ export interface HistoryItem {
   config: TestConfiguration;
   results: TestResults;
 }
-

@@ -4,18 +4,18 @@
 import { useEffect, useState, useRef } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { ExternalLink, Loader, XCircle, CheckCircle } from 'lucide-react';
+import { ExternalLink, Loader, XCircle, CheckCircle, BrainCircuit } from 'lucide-react';
 import type { TestConfiguration, K6Summary, LighthouseSummary, SeoAnalysis } from '@/types';
 import { useToast } from '@/hooks/use-toast';
-import type { TestResults } from '@/app/page';
+import type { TestResults } from '@/types/index';
 
 interface TestRunningProps {
-  testId: string; // This is the initial client-generated ID
+  initialTestId: string;
   config: TestConfiguration;
-  onTestComplete: (results: TestResults) => void;
+  onTestComplete: (results: TestResults, finalTestId: string) => void;
 }
 
-export default function TestRunning({ testId: initialTestId, config, onTestComplete }: TestRunningProps) {
+export default function TestRunning({ initialTestId, config, onTestComplete }: TestRunningProps) {
   const { toast } = useToast();
   const [error, setError] = useState<string | null>(null);
   const [runningStatus, setRunningStatus] = useState({
@@ -23,7 +23,8 @@ export default function TestRunning({ testId: initialTestId, config, onTestCompl
     lighthouse: config.runLighthouse ? 'pending' : 'skipped',
     seo: config.runSeo ? 'pending' : 'skipped',
   });
-  const [k6TestId, setK6TestId] = useState<string>(initialTestId);
+  const [k6TestId, setK6TestId] = useState<string>(initialTestId); // This can be updated by the API response
+  const [finalTestId, setFinalTestId] = useState<string>(initialTestId);
 
   const grafanaUrl = `${window.location.protocol}//${window.location.hostname}:3003/d/k6/k6-load-testing-results?orgId=1&var-testid=${k6TestId}&refresh=5s`;
   
@@ -34,7 +35,7 @@ export default function TestRunning({ testId: initialTestId, config, onTestCompl
 
     const runAllTests = async () => {
         const testPromises: Promise<Partial<TestResults>>[] = [];
-        const results: TestResults = {};
+        let serverGeneratedTestId = finalTestId;
 
         // K6 Load Test
         if (config.runLoadTest) {
@@ -48,7 +49,11 @@ export default function TestRunning({ testId: initialTestId, config, onTestCompl
                     });
                     if (!startResponse.ok) throw new Error('Failed to start k6 test');
                     const { testId: newTestId } = await startResponse.json();
-                    setK6TestId(newTestId); // Update the test ID for Grafana link
+                    
+                    // This is the definitive test ID for all reports
+                    serverGeneratedTestId = newTestId;
+                    setK6TestId(newTestId);
+                    setFinalTestId(newTestId);
 
                     // Polling for summary
                     const summary = await new Promise<K6Summary>((resolve, reject) => {
@@ -78,6 +83,12 @@ export default function TestRunning({ testId: initialTestId, config, onTestCompl
             testPromises.push(k6Promise);
         }
 
+        // Wait for k6 test to finish to get the definitive testId, if it's running
+        await Promise.all(testPromises);
+
+        // Run other tests in parallel now that we have the correct testId
+        const otherTestPromises: Promise<Partial<TestResults>>[] = [];
+
         // Lighthouse Test
         if (config.runLighthouse) {
             const lighthousePromise = (async (): Promise<Partial<TestResults>> => {
@@ -86,7 +97,7 @@ export default function TestRunning({ testId: initialTestId, config, onTestCompl
                     const response = await fetch('/api/run-lighthouse', {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ url: config.url, testId: initialTestId }),
+                        body: JSON.stringify({ url: config.url, testId: serverGeneratedTestId }),
                     });
                      if (!response.ok) {
                         const errorData = await response.json();
@@ -101,7 +112,7 @@ export default function TestRunning({ testId: initialTestId, config, onTestCompl
                     return {};
                 }
             })();
-            testPromises.push(lighthousePromise);
+            otherTestPromises.push(lighthousePromise);
         }
 
         // SEO Test
@@ -124,19 +135,20 @@ export default function TestRunning({ testId: initialTestId, config, onTestCompl
                     return {};
                 }
             })();
-            testPromises.push(seoPromise);
+            otherTestPromises.push(seoPromise);
         }
 
-        const allResults = await Promise.all(testPromises);
+        const allPromiseResults = await Promise.all([Promise.all(testPromises), Promise.all(otherTestPromises)]);
+        const allResults = allPromiseResults.flat();
         const finalResults = allResults.reduce((acc, res) => ({ ...acc, ...res }), {});
         
         hasCompleted.current = true;
-        onTestComplete(finalResults);
+        onTestComplete(finalResults, serverGeneratedTestId);
     };
 
     runAllTests();
 
-  }, [config, initialTestId, onTestComplete, toast]);
+  }, []); // Run only once on mount
   
   const getStatusIcon = (status: string) => {
     switch(status) {
@@ -161,7 +173,7 @@ export default function TestRunning({ testId: initialTestId, config, onTestCompl
         ) : (
           <>
             <div className="relative mx-auto">
-                <Loader className="h-12 w-12 text-primary animate-spin" />
+                <BrainCircuit className="h-12 w-12 text-primary animate-pulse" />
             </div>
             <CardTitle>{allDone ? 'Finalizing Results...' : 'Tests in Progress...'}</CardTitle>
             <CardDescription>Your tests are running. Results will appear here when complete.</CardDescription>
@@ -172,9 +184,9 @@ export default function TestRunning({ testId: initialTestId, config, onTestCompl
         <div className='w-full space-y-2 text-left bg-muted/50 p-4 rounded-lg'>
             <p className='text-sm font-medium text-center mb-2'>Status:</p>
             <ul className='text-sm text-muted-foreground space-y-2'>
-                {config.runLoadTest && <li className='flex items-center justify-between'><span>k6 Load Test</span> <span className='flex items-center gap-2'>{getStatusIcon(runningStatus.k6)} {runningStatus.k6}</span></li>}
-                {config.runLighthouse && <li className='flex items-center justify-between'><span>Lighthouse Audit</span> <span className='flex items-center gap-2'>{getStatusIcon(runningStatus.lighthouse)} {runningStatus.lighthouse}</span></li>}
-                {config.runSeo && <li className='flex items-center justify-between'><span>SEO Check</span> <span className='flex items-center gap-2'>{getStatusIcon(runningStatus.seo)} {runningStatus.seo}</span></li>}
+                {config.runLoadTest && <li className='flex items-center justify-between'><span>k6 Load Test</span> <span className='flex items-center gap-2 capitalize'>{getStatusIcon(runningStatus.k6)} {runningStatus.k6}</span></li>}
+                {config.runLighthouse && <li className='flex items-center justify-between'><span>Lighthouse Audit</span> <span className='flex items-center gap-2 capitalize'>{getStatusIcon(runningStatus.lighthouse)} {runningStatus.lighthouse}</span></li>}
+                {config.runSeo && <li className='flex items-center justify-between'><span>AI SEO Analysis</span> <span className='flex items-center gap-2 capitalize'>{getStatusIcon(runningStatus.seo)} {runningStatus.seo}</span></li>}
             </ul>
         </div>
         {config.runLoadTest && (

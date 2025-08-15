@@ -8,19 +8,19 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
-import { CheckCircle, XCircle, AlertCircle, HelpCircle } from 'lucide-react';
-import type { SeoAnalysis, SeoCheck } from '@/types';
+import { CheckCircle, XCircle, AlertCircle, Sparkles, BrainCircuit } from 'lucide-react';
+import type { SeoAnalysis } from '@/types';
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '../ui/accordion';
 
 interface SeoSummaryProps {
   analysis: SeoAnalysis;
 }
 
-const CheckItem = ({ label, check }: { label: string, check: SeoCheck & { text?: string | null; length?: number, url?: string | null } }) => {
+const AnalysisItem = ({ item }: { item: SeoAnalysis['analysis'][0] }) => {
     let Icon;
     let colorClass;
-    let description;
     
-    switch(check.status) {
+    switch(item.status) {
         case 'pass':
             Icon = CheckCircle;
             colorClass = 'text-green-500';
@@ -30,38 +30,32 @@ const CheckItem = ({ label, check }: { label: string, check: SeoCheck & { text?:
             colorClass = 'text-red-500';
             break;
         case 'warning':
+        default:
             Icon = AlertCircle;
             colorClass = 'text-yellow-500';
             break;
-        default:
-            Icon = HelpCircle;
-            colorClass = 'text-muted-foreground';
     }
-
-    if(label === 'Title') {
-        description = check.text ? `${check.text} (${check.length} chars)` : 'Missing title tag.';
-    } else if (label === 'Meta Description') {
-        description = check.text ? `${check.text} (${check.length} chars)` : 'Missing meta description.';
-    } else if (label === 'H1 Heading') {
-        description = check.text ? `"${check.text}"` : 'Missing H1 heading.';
-    } else if (label === 'Canonical Tag') {
-        if(check.status === 'pass') {
-            description = `Matches URL: ${check.url}`;
-        } else if (check.status === 'warning') {
-            description = `Mismatch: ${check.url}`;
-        } else if (check.status === 'fail') {
-            description = 'Missing canonical tag.';
-        }
-    }
-
 
     return (
-        <div className="flex items-start gap-4">
-            <Icon className={`h-5 w-5 mt-1 flex-shrink-0 ${colorClass}`} />
-            <div>
-                <h4 className="font-semibold">{label}</h4>
-                <p className="text-sm text-muted-foreground">{description}</p>
+        <div className="flex flex-col gap-2 rounded-lg border p-4">
+            <div className="flex items-center gap-3">
+                <Icon className={`h-6 w-6 flex-shrink-0 ${colorClass}`} />
+                <div className='flex-1'>
+                    <h4 className="font-semibold text-base">{item.name}</h4>
+                    <p className="text-sm text-muted-foreground truncate">
+                        {item.value ? item.value : <span className="italic">Not found</span>}
+                    </p>
+                </div>
             </div>
+            {item.recommendation && (
+                 <div className="mt-2 text-sm text-foreground/80 border-t pt-3 flex items-start gap-3">
+                    <Sparkles className="h-5 w-5 text-accent flex-shrink-0 mt-0.5" />
+                    <div>
+                        <h5 className="font-semibold text-accent/90">AI Recommendation</h5>
+                        <p className='text-muted-foreground'>{item.recommendation}</p>
+                    </div>
+                </div>
+            )}
         </div>
     )
 }
@@ -74,17 +68,32 @@ export default function SeoSummaryReport({
     <Card>
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
-          <CheckCircle className="h-6 w-6 text-primary" /> Basic SEO Checklist
+          <BrainCircuit className="h-6 w-6 text-primary" /> AI-Powered SEO Analysis
         </CardTitle>
         <CardDescription>
-          A quick check of on-page SEO fundamentals.
+          A deep analysis of on-page SEO factors with AI-powered recommendations for improvement.
         </CardDescription>
       </CardHeader>
-      <CardContent className="space-y-6">
-        <CheckItem label="Title" check={analysis.title} />
-        <CheckItem label="Meta Description" check={analysis.description} />
-        <CheckItem label="H1 Heading" check={analysis.h1} />
-        <CheckItem label="Canonical Tag" check={analysis.canonical} />
+      <CardContent className="space-y-4">
+        <div className="grid md:grid-cols-2 gap-4">
+            {analysis.analysis.map((item) => (
+                <AnalysisItem key={item.name} item={item} />
+            ))}
+        </div>
+
+        <Accordion type="single" collapsible className="w-full pt-4">
+            <AccordionItem value="raw-html">
+                <AccordionTrigger>View Raw HTML Content</AccordionTrigger>
+                <AccordionContent>
+                    <pre className="text-xs bg-muted p-4 rounded-md max-h-96 overflow-auto">
+                        <code>
+                            {analysis.rawHtml}
+                        </code>
+                    </pre>
+                </AccordionContent>
+            </AccordionItem>
+        </Accordion>
+
       </CardContent>
     </Card>
   );

@@ -12,6 +12,7 @@ import { useRouter } from 'next/navigation';
 // from the main page component.
 export default function HistoryPage() {
     const [history, setHistory] = useLocalStorage<HistoryItem[]>('k6-history', []);
+    const [lastSaved, setLastSaved] = useLocalStorage<string | null>('k6-history-last-saved', null);
     const router = useRouter();
 
     const handleLoadFromHistory = (item: HistoryItem) => {
@@ -26,10 +27,17 @@ export default function HistoryPage() {
         router.push('/');
     };
 
+    const updateHistory = (newHistory: HistoryItem[] | ((prev: HistoryItem[]) => HistoryItem[])) => {
+        const valueToSet = typeof newHistory === 'function' ? newHistory(history) : newHistory;
+        setHistory(valueToSet);
+        setLastSaved(new Date().toISOString());
+    }
+
     return (
         <HistoryPageComponent
             history={history}
-            setHistory={setHistory}
+            setHistory={updateHistory}
+            lastSaved={lastSaved}
             onLoad={handleLoadFromHistory}
             onRerun={handleRerun}
         />
