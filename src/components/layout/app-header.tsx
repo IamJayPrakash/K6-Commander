@@ -24,19 +24,19 @@ export function AppHeader() {
   }
 
   return (
-    <header className="sticky top-0 z-50 w-full border-b border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+    <header className="sticky top-0 z-50 w-full border-b border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60" data-testid="app-header">
       <div className="container flex h-16 max-w-screen-2xl items-center">
         <div className="mr-4 flex items-center">
-          <Link href="/" className="mr-6 flex items-center space-x-2 cursor-pointer">
+          <Link href="/" className="mr-6 flex items-center space-x-2 cursor-pointer" data-testid="home-link">
             <Rocket className="h-6 w-6 text-primary" />
             <span className="font-bold hidden sm:inline-block">K6 Commander</span>
           </Link>
           <nav className="hidden md:flex items-center gap-6 text-sm">
-            <Link href="/history" className="transition-colors hover:text-foreground/80 text-foreground/60 cursor-pointer">
+            <Link href="/history" className="transition-colors hover:text-foreground/80 text-foreground/60 cursor-pointer" data-testid="header-history-link">
               <History className="inline-block h-4 w-4 mr-1" />
               History
             </Link>
-            <Link href="/about" className="transition-colors hover:text-foreground/80 text-foreground/60 cursor-pointer">
+            <Link href="/about" className="transition-colors hover:text-foreground/80 text-foreground/60 cursor-pointer" data-testid="header-about-link">
               <Info className="inline-block h-4 w-4 mr-1" />
               About
             </Link>
@@ -44,12 +44,12 @@ export function AppHeader() {
         </div>
         
         <div className="flex flex-1 items-center justify-end gap-2">
-            <Button variant="outline" size="sm" onClick={startTour}>
+            <Button variant="outline" size="sm" onClick={startTour} data-testid="start-tour-button">
                 <PlayCircle className='h-4 w-4 mr-2'/>
                 Start Tour
             </Button>
 
-            <a href="https://github.com/your-username/k6-commander" target="_blank" rel="noopener noreferrer">
+            <a href="https://github.com/your-username/k6-commander" target="_blank" rel="noopener noreferrer" data-testid="github-link">
                 <Button variant="ghost" size="icon">
                     <Github className="h-5 w-5" />
                     <span className="sr-only">GitHub</span>
@@ -58,13 +58,13 @@ export function AppHeader() {
 
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <Button variant="ghost" size="icon">
+                <Button variant="ghost" size="icon" data-testid="theme-switcher-trigger">
                   <Sun className="h-[1.2rem] w-[1.2rem] rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0" />
                   <Moon className="absolute h-[1.2rem] w-[1.2rem] rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100" />
                   <span className="sr-only">Toggle theme</span>
                 </Button>
               </DropdownMenuTrigger>
-              <DropdownMenuContent align="end">
+              <DropdownMenuContent align="end" data-testid="theme-switcher-content">
                 <DropdownMenuItem onClick={() => setTheme("light")}>
                   Light
                 </DropdownMenuItem>
@@ -80,12 +80,12 @@ export function AppHeader() {
             {/* Mobile Menu */}
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <Button variant="ghost" size="icon" className="md:hidden">
+                <Button variant="ghost" size="icon" className="md:hidden" data-testid="mobile-menu-trigger">
                   <Menu className="h-5 w-5" />
                   <span className="sr-only">Open menu</span>
                 </Button>
               </DropdownMenuTrigger>
-              <DropdownMenuContent align="end">
+              <DropdownMenuContent align="end" data-testid="mobile-menu-content">
                 <Link href="/history"><DropdownMenuItem><History className="mr-2 h-4 w-4" />History</DropdownMenuItem></Link>
                 <Link href="/about"><DropdownMenuItem><Info className="mr-2 h-4 w-4" />About</DropdownMenuItem></Link>
                 <DropdownMenuSeparator />

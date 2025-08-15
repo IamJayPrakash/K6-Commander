@@ -143,7 +143,7 @@ export default function HistoryPageComponent({
 
   return (
     <>
-      <Card className="bg-card/50 backdrop-blur-sm">
+      <Card className="bg-card/50 backdrop-blur-sm" data-testid="history-page-card">
         <CardHeader>
           <div className="flex justify-between items-start">
             <div>
@@ -165,7 +165,7 @@ export default function HistoryPageComponent({
         <CardContent>
           <div className="flex justify-between items-center mb-4">
             <div className="flex gap-2">
-                <Button variant="outline" onClick={handleImportClick}>
+                <Button variant="outline" onClick={handleImportClick} data-testid="import-history-button">
                     <Upload className="mr-2 h-4 w-4" /> Import
                 </Button>
                 <input
@@ -175,14 +175,15 @@ export default function HistoryPageComponent({
                     accept=".json"
                     className="hidden"
                     aria-hidden="true"
+                    data-testid="import-history-input"
                 />
-                <Button variant="outline" onClick={handleExport} disabled={history.length === 0}>
+                <Button variant="outline" onClick={handleExport} disabled={history.length === 0} data-testid="export-history-button">
                     <Download className="mr-2 h-4 w-4" /> Export
                 </Button>
             </div>
             <AlertDialog>
                 <AlertDialogTrigger asChild>
-                    <Button variant="destructive" disabled={history.length === 0}>
+                    <Button variant="destructive" disabled={history.length === 0} data-testid="clear-all-history-button">
                     <Trash2 className="mr-2 h-4 w-4" /> Clear All
                     </Button>
                 </AlertDialogTrigger>
@@ -202,13 +203,13 @@ export default function HistoryPageComponent({
           </div>
           <ScrollArea className="h-[50vh] rounded-md border">
             {history.length === 0 ? (
-              <div className="flex flex-col items-center justify-center h-full p-4 text-center text-muted-foreground">
+              <div className="flex flex-col items-center justify-center h-full p-4 text-center text-muted-foreground" data-testid="no-history-message">
                 <Info className="mb-2 h-8 w-8" />
                 <p>No test history found.</p>
                 <p>Run tests to see them here.</p>
               </div>
             ) : (
-                <Table>
+                <Table data-testid="history-table">
                     <TableHeader>
                         <TableRow>
                             <TableHead>URL</TableHead>
@@ -219,7 +220,7 @@ export default function HistoryPageComponent({
                     </TableHeader>
                     <TableBody>
                         {history.map((item) => (
-                            <TableRow key={item.id}>
+                            <TableRow key={item.id} data-testid={`history-item-${item.id}`}>
                                 <TableCell className="font-medium truncate max-w-xs">{item.config.url}</TableCell>
                                 <TableCell>{format(new Date(item.timestamp), "PPp")}</TableCell>
                                 <TableCell>
@@ -231,11 +232,11 @@ export default function HistoryPageComponent({
                                 </TableCell>
                                 <TableCell className="text-right">
                                     <div className="flex items-center justify-end gap-2">
-                                        <Button variant="ghost" size="icon" onClick={() => onLoad(item)} aria-label={`View summary for ${item.config.url}`}><Eye className="h-4 w-4"/></Button>
-                                        <Button variant="ghost" size="icon" onClick={() => onRerun(item.config)} aria-label={`Rerun test for ${item.config.url}`}><Play className="h-4 w-4"/></Button>
+                                        <Button variant="ghost" size="icon" onClick={() => onLoad(item)} aria-label={`View summary for ${item.config.url}`} data-testid={`view-history-item-${item.id}`}><Eye className="h-4 w-4"/></Button>
+                                        <Button variant="ghost" size="icon" onClick={() => onRerun(item.config)} aria-label={`Rerun test for ${item.config.url}`} data-testid={`rerun-history-item-${item.id}`}><Play className="h-4 w-4"/></Button>
                                         <AlertDialog>
                                             <AlertDialogTrigger asChild>
-                                                <Button variant="ghost" size="icon" className="hover:text-destructive" aria-label={`Delete test for ${item.config.url}`}><Trash2 className="h-4 w-4"/></Button>
+                                                <Button variant="ghost" size="icon" className="hover:text-destructive" aria-label={`Delete test for ${item.config.url}`} data-testid={`delete-history-item-trigger-${item.id}`}><Trash2 className="h-4 w-4"/></Button>
                                             </AlertDialogTrigger>
                                             <AlertDialogContent>
                                                 <AlertDialogHeader>

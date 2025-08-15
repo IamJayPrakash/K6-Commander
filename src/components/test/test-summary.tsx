@@ -12,32 +12,20 @@ import { Button } from '@/components/ui/button';
 import {
   CheckCircle2,
   Gauge,
-  HeartPulse,
   Save,
-  Users,
-  AlertTriangle,
   Play,
   Plus,
-  BarChart,
   Settings,
   ShieldCheck,
   Search as SearchIcon
 } from 'lucide-react';
 import type { TestConfiguration, TestResults } from '@/types';
-import {
-  ChartContainer,
-  ChartTooltip,
-  ChartTooltipContent,
-  ChartConfig,
-} from '@/components/ui/chart';
-import { Bar, BarChart as RechartsBarChart, XAxis, YAxis, Cell } from 'recharts';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import LighthouseSummaryReport from './lighthouse-summary';
 import SeoSummaryReport from './seo-summary';
 import K6SummaryReport from './k6-summary';
-
 
 interface TestSummaryProps {
   results: TestResults;
@@ -47,32 +35,6 @@ interface TestSummaryProps {
   onRerun: () => void;
   onCreateNew: () => void;
 }
-
-const chartConfig = {
-  p95: { label: 'p(95)', color: 'hsl(var(--chart-1))' },
-  p90: { label: 'p(90)', color: 'hsl(var(--chart-2))' },
-  avg: { label: 'Average', color: 'hsl(var(--chart-3))' },
-  med: { label: 'Median', color: 'hsl(var(--chart-4))' },
-  min: { label: 'Min', color: 'hsl(var(--chart-5))' },
-  max: { label: 'Max', color: 'hsl(var(--chart-1))' },
-} satisfies ChartConfig;
-
-
-const MetricCard = ({ icon, title, value, unit, description }: { icon: React.ReactNode, title: string, value: string, unit?: string, description: string }) => (
-    <Card>
-        <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">{title}</CardTitle>
-            <div className="text-muted-foreground">{icon}</div>
-        </CardHeader>
-        <CardContent>
-            <div className="text-2xl font-bold">
-                {value}
-                {unit && <span className="text-xs text-muted-foreground ml-1">{unit}</span>}
-            </div>
-            <p className="text-xs text-muted-foreground">{description}</p>
-        </CardContent>
-    </Card>
-)
 
 export default function TestSummary({
   results,
@@ -87,7 +49,7 @@ export default function TestSummary({
 
   return (
     <div className="space-y-6">
-       <Card>
+       <Card data-testid="test-summary-header-card">
             <CardHeader>
                 <CardTitle className="flex items-center gap-3 text-3xl">
                     <CheckCircle2 className="h-10 w-10 text-green-500" />
@@ -99,9 +61,9 @@ export default function TestSummary({
             </CardHeader>
             <CardContent>
                 <div className="flex flex-col sm:flex-row gap-2">
-                    <Button onClick={onSaveToHistory}><Save className="mr-2 h-4 w-4" /> Save to History</Button>
-                    <Button variant="outline" onClick={onRerun}><Play className="mr-2 h-4 w-4" /> Run Again</Button>
-                    <Button variant="secondary" onClick={onCreateNew}><Plus className="mr-2 h-4 w-4" /> New Test</Button>
+                    <Button onClick={onSaveToHistory} data-testid="save-to-history-button"><Save className="mr-2 h-4 w-4" /> Save to History</Button>
+                    <Button variant="outline" onClick={onRerun} data-testid="rerun-button"><Play className="mr-2 h-4 w-4" /> Run Again</Button>
+                    <Button variant="secondary" onClick={onCreateNew} data-testid="new-test-button"><Plus className="mr-2 h-4 w-4" /> New Test</Button>
                 </div>
             </CardContent>
        </Card>
@@ -109,24 +71,24 @@ export default function TestSummary({
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         <div className="lg:col-span-2">
             <Tabs defaultValue={defaultTab} className="w-full">
-                <TabsList className="grid w-full grid-cols-3">
-                    <TabsTrigger value="k6" disabled={!results.k6}><Gauge className="mr-2 h-4 w-4" /> Load Test</TabsTrigger>
-                    <TabsTrigger value="lighthouse" disabled={!results.lighthouse}><ShieldCheck className="mr-2 h-4 w-4" />Lighthouse</TabsTrigger>
-                    <TabsTrigger value="seo" disabled={!results.seo}><SearchIcon className="mr-2 h-4 w-4" />SEO</TabsTrigger>
+                <TabsList className="grid w-full grid-cols-3" data-testid="results-tabs-list">
+                    <TabsTrigger value="k6" disabled={!results.k6} data-testid="k6-results-tab-trigger"><Gauge className="mr-2 h-4 w-4" /> Load Test</TabsTrigger>
+                    <TabsTrigger value="lighthouse" disabled={!results.lighthouse} data-testid="lighthouse-results-tab-trigger"><ShieldCheck className="mr-2 h-4 w-4" />Lighthouse</TabsTrigger>
+                    <TabsTrigger value="seo" disabled={!results.seo} data-testid="seo-results-tab-trigger"><SearchIcon className="mr-2 h-4 w-4" />SEO</TabsTrigger>
                 </TabsList>
-                <TabsContent value="k6">
+                <TabsContent value="k6" data-testid="k6-results-tab-content">
                     {results.k6 ? <K6SummaryReport summary={results.k6} /> : <p>No load test data.</p>}
                 </TabsContent>
-                <TabsContent value="lighthouse">
+                <TabsContent value="lighthouse" data-testid="lighthouse-results-tab-content">
                     {results.lighthouse ? <LighthouseSummaryReport summary={results.lighthouse} testId={testId} /> : <p>No Lighthouse audit data.</p>}
                 </TabsContent>
-                <TabsContent value="seo">
+                <TabsContent value="seo" data-testid="seo-results-tab-content">
                     {results.seo ? <SeoSummaryReport analysis={results.seo} /> : <p>No SEO analysis data.</p>}
                 </TabsContent>
             </Tabs>
         </div>
         <div className="lg:col-span-1">
-             <Card>
+             <Card data-testid="test-config-summary-card">
                 <CardHeader>
                     <CardTitle className="flex items-center gap-2"><Settings/> Test Configuration</CardTitle>
                 </CardHeader>
@@ -146,7 +108,7 @@ export default function TestSummary({
                     </Table>
                      <Accordion type="single" collapsible className="w-full mt-4">
                         <AccordionItem value="details">
-                            <AccordionTrigger>View Full Details</AccordionTrigger>
+                            <AccordionTrigger data-testid="config-details-accordion-trigger">View Full Details</AccordionTrigger>
                             <AccordionContent>
                                <Table>
                                     <TableBody>

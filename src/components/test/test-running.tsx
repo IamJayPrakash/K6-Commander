@@ -148,7 +148,7 @@ export default function TestRunning({ initialTestId, config, onTestComplete }: T
 
     runAllTests();
 
-  }, []); // Run only once on mount
+  }, [config, finalTestId, onTestComplete, toast]); // Make sure dependencies are correct
   
   const getStatusIcon = (status: string) => {
     switch(status) {
@@ -162,7 +162,7 @@ export default function TestRunning({ initialTestId, config, onTestComplete }: T
   const allDone = Object.values(runningStatus).every(s => s !== 'running' && s !== 'pending');
 
   return (
-    <Card className="max-w-2xl mx-auto">
+    <Card className="max-w-2xl mx-auto" data-testid="test-running-card">
       <CardHeader className="text-center">
         {error ? (
           <>
@@ -184,13 +184,13 @@ export default function TestRunning({ initialTestId, config, onTestComplete }: T
         <div className='w-full space-y-2 text-left bg-muted/50 p-4 rounded-lg'>
             <p className='text-sm font-medium text-center mb-2'>Status:</p>
             <ul className='text-sm text-muted-foreground space-y-2'>
-                {config.runLoadTest && <li className='flex items-center justify-between'><span>k6 Load Test</span> <span className='flex items-center gap-2 capitalize'>{getStatusIcon(runningStatus.k6)} {runningStatus.k6}</span></li>}
-                {config.runLighthouse && <li className='flex items-center justify-between'><span>Lighthouse Audit</span> <span className='flex items-center gap-2 capitalize'>{getStatusIcon(runningStatus.lighthouse)} {runningStatus.lighthouse}</span></li>}
-                {config.runSeo && <li className='flex items-center justify-between'><span>AI SEO Analysis</span> <span className='flex items-center gap-2 capitalize'>{getStatusIcon(runningStatus.seo)} {runningStatus.seo}</span></li>}
+                {config.runLoadTest && <li className='flex items-center justify-between' data-testid="k6-status"><span>k6 Load Test</span> <span className='flex items-center gap-2 capitalize'>{getStatusIcon(runningStatus.k6)} {runningStatus.k6}</span></li>}
+                {config.runLighthouse && <li className='flex items-center justify-between' data-testid="lighthouse-status"><span>Lighthouse Audit</span> <span className='flex items-center gap-2 capitalize'>{getStatusIcon(runningStatus.lighthouse)} {runningStatus.lighthouse}</span></li>}
+                {config.runSeo && <li className='flex items-center justify-between' data-testid="seo-status"><span>AI SEO Analysis</span> <span className='flex items-center gap-2 capitalize'>{getStatusIcon(runningStatus.seo)} {runningStatus.seo}</span></li>}
             </ul>
         </div>
         {config.runLoadTest && (
-            <Button asChild size="lg" disabled={runningStatus.k6 === 'pending'}>
+            <Button asChild size="lg" disabled={runningStatus.k6 === 'pending'} data-testid="grafana-link-button">
                 <a href={grafanaUrl} target="_blank" rel="noopener noreferrer">
                     <ExternalLink className="mr-2 h-4 w-4" />
                     View Live Grafana Dashboard
