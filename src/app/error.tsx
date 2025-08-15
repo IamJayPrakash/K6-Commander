@@ -86,21 +86,29 @@ export default function GlobalError({
                       </div>
                     </AccordionTrigger>
                     <AccordionContent>
-                      <div className="relative bg-muted/50 p-4 rounded-md text-left">
-                        <Button
-                          variant="ghost"
-                          size="icon"
-                          className="absolute top-2 right-2 h-7 w-7"
-                          onClick={handleCopy}
-                        >
-                          {isCopied ? (
-                            <Check className="h-4 w-4 text-green-500" />
-                          ) : (
-                            <ClipboardCopy className="h-4 w-4" />
-                          )}
-                          <span className="sr-only">Copy error log</span>
-                        </Button>
-                        <ScrollArea className="h-48">
+                      <div className="bg-muted/50 p-4 rounded-md text-left">
+                         <div className="flex justify-end mb-2">
+                            <Button
+                              variant="ghost"
+                              size="sm"
+                              className="h-7"
+                              onClick={handleCopy}
+                            >
+                              {isCopied ? (
+                                <>
+                                  <Check className="mr-2 h-4 w-4 text-green-500" />
+                                  Copied
+                                </>
+                              ) : (
+                                <>
+                                  <ClipboardCopy className="mr-2 h-4 w-4" />
+                                  Copy
+                                </>
+                              )}
+                              <span className="sr-only">Copy error log</span>
+                            </Button>
+                         </div>
+                        <ScrollArea className="h-48 border rounded-md p-2">
                           <pre className="text-xs text-muted-foreground whitespace-pre-wrap">
                             {error.stack}
                           </pre>
