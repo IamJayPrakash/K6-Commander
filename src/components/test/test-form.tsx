@@ -1,7 +1,7 @@
 
 'use client';
 
-import React, { useMemo } from 'react';
+import React, { useEffect } from 'react';
 import { useForm, useFieldArray } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
@@ -64,35 +64,45 @@ const formSchema = z.object({
 
 type TestFormValues = z.infer<typeof formSchema>;
 
+const newTestDefaultValues: Partial<TestFormValues> = {
+    url: '',
+    method: 'GET' as const,
+    headers: [],
+    body: '',
+    testPreset: 'baseline' as const,
+    runLoadTest: true,
+    runLighthouse: false,
+    runSeo: false,
+    ...TEST_PRESETS.baseline,
+};
+
 interface TestFormProps {
-  initialValues: Partial<TestConfiguration>;
+  initialValues: Partial<TestConfiguration> | null;
   onRunTest: (testId: string, config: TestConfiguration) => void;
 }
 
 export default function TestForm({ initialValues, onRunTest }: TestFormProps) {
   const { toast } = useToast();
 
-  const defaultValues = useMemo(() => {
-    const headersArray = initialValues.headers ? Object.entries(initialValues.headers).map(([key, value]) => ({ key, value: String(value) })) : [];
-    return {
-      url: initialValues.url || '',
-      method: initialValues.method || 'GET',
-      headers: headersArray,
-      body: initialValues.body || '',
-      testPreset: initialValues.testPreset || 'baseline',
-      runLoadTest: initialValues.runLoadTest !== false,
-      runLighthouse: initialValues.runLighthouse || false,
-      runSeo: initialValues.runSeo || false,
-      stages: initialValues.stages || TEST_PRESETS[initialValues.testPreset as keyof typeof TEST_PRESETS]?.stages || [],
-      vus: initialValues.vus || TEST_PRESETS[initialValues.testPreset as keyof typeof TEST_PRESETS]?.vus || 1,
-      duration: initialValues.duration || TEST_PRESETS[initialValues.testPreset as keyof typeof TEST_PRESETS]?.duration || '1m',
-    };
-  }, [initialValues]);
-
   const form = useForm<TestFormValues>({
     resolver: zodResolver(formSchema),
-    defaultValues,
+    defaultValues: newTestDefaultValues,
   });
+
+  useEffect(() => {
+    if (initialValues) {
+        const headersArray = initialValues.headers ? Object.entries(initialValues.headers).map(([key, value]) => ({ key, value: String(value) })) : [];
+        form.reset({
+            ...initialValues,
+            headers: headersArray,
+            vus: initialValues.vus || 0,
+            duration: initialValues.duration || '',
+            stages: initialValues.stages || [],
+        });
+    } else {
+        form.reset(newTestDefaultValues);
+    }
+  }, [initialValues, form]);
 
 
   const { fields: headerFields, append: appendHeader, remove: removeHeader } = useFieldArray({

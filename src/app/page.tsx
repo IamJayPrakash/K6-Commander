@@ -1,7 +1,7 @@
 
 'use client';
 
-import { useMemo, useState } from 'react';
+import { useState } from 'react';
 import TestForm from '@/components/test/test-form';
 import TestRunning from '@/components/test/test-running';
 import TestSummary from '@/components/test/test-summary';
@@ -13,21 +13,8 @@ import AboutPage from '@/components/pages/about-page';
 import HelpPage from '@/components/pages/help-page';
 import ContactPage from '@/components/pages/contact-page';
 import HistoryPage from '@/components/pages/history-page';
-import { TEST_PRESETS } from '@/lib/constants';
 
 type View = 'form' | 'running' | 'summary' | 'about' | 'history' | 'help' | 'contact';
-
-const newTestDefaultValues: Partial<TestConfiguration> = {
-    url: '',
-    method: 'GET' as const,
-    headers: {},
-    body: '',
-    testPreset: 'baseline' as const,
-    runLoadTest: true,
-    runLighthouse: false,
-    runSeo: false,
-    ...TEST_PRESETS.baseline,
-};
 
 
 export default function Home() {
@@ -39,7 +26,7 @@ export default function Home() {
     useState<K6Summary | null>(null);
   const [history, setHistory] = useLocalStorage<HistoryItem[]>('k6-history', []);
   
-  const [rerunInitialValues, setRerunInitialValues] = useState<Partial<TestConfiguration> | null>(null);
+  const [initialValues, setInitialValues] = useState<Partial<TestConfiguration> | null>(null);
 
   const handleRunTest = (testId: string, config: TestConfiguration) => {
     setActiveTestId(testId);
@@ -74,25 +61,17 @@ export default function Home() {
   };
 
   const handleRerun = (config: TestConfiguration) => {
-    setRerunInitialValues(config);
+    setInitialValues(config);
     setView('form');
   };
   
   const handleCreateNewTest = () => {
-    setRerunInitialValues(null); 
+    setInitialValues(null); 
     setActiveTestConfig(null);
     setActiveTestSummary(null);
     setActiveTestId(null);
     setView('form');
   };
-
-  const initialValues = useMemo(() => {
-    if (rerunInitialValues) {
-      return rerunInitialValues;
-    }
-    return newTestDefaultValues;
-  }, [rerunInitialValues]);
-
 
   const renderView = () => {
     switch (view) {
@@ -130,7 +109,7 @@ export default function Home() {
       default:
         return (
           <TestForm
-            key={JSON.stringify(initialValues)}
+            key={initialValues ? JSON.stringify(initialValues) : 'new'}
             initialValues={initialValues}
             onRunTest={handleRunTest}
           />
