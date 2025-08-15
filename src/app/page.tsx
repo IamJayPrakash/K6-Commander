@@ -11,7 +11,7 @@ import Joyride, { STATUS } from 'react-joyride';
 import { TOUR_STEPS } from '@/lib/constants';
 import ConsentModal from '@/components/layout/consent-modal';
 import { useToast } from '@/hooks/use-toast';
-import { Sidebar, SidebarInset, SidebarRail } from '@/components/ui/sidebar';
+import { Sidebar } from '@/components/ui/sidebar';
 import { HistoryPanel } from '@/components/layout/history-panel';
 
 type View = 'form' | 'running' | 'summary';
@@ -181,7 +181,7 @@ export default function Home() {
   };
 
   return (
-    <>
+    <div className="flex flex-1">
       <Sidebar>
           <HistoryPanel 
               history={history}
@@ -189,33 +189,30 @@ export default function Home() {
               onLoad={handleLoadFromHistory}
               onRerun={handleRerun}
           />
-          <SidebarRail />
       </Sidebar>
-      <SidebarInset>
-          <div className="p-0 md:p-6 lg:p-8">
-              {isMounted && (
-                  <Joyride
-                  steps={TOUR_STEPS}
-                  run={isTourRunning}
-                  continuous
-                  showProgress
-                  showSkipButton
-                  callback={handleJoyrideCallback}
-                  styles={{
-                      options: {
-                      arrowColor: 'hsl(var(--card))',
-                      backgroundColor: 'hsl(var(--card))',
-                      primaryColor: 'hsl(var(--primary))',
-                      textColor: 'hsl(var(--card-foreground))',
-                      zIndex: 1000,
-                      },
-                  }}
-                  />
-              )}
-              <ConsentModal />
-              {renderView()}
-          </div>
-      </SidebarInset>
-    </>
+       <main className="flex-1 p-4 md:p-6 lg:p-8">
+        {isMounted && (
+            <Joyride
+            steps={TOUR_STEPS}
+            run={isTourRunning}
+            continuous
+            showProgress
+            showSkipButton
+            callback={handleJoyrideCallback}
+            styles={{
+                options: {
+                arrowColor: 'hsl(var(--card))',
+                backgroundColor: 'hsl(var(--card))',
+                primaryColor: 'hsl(var(--primary))',
+                textColor: 'hsl(var(--card-foreground))',
+                zIndex: 1000,
+                },
+            }}
+            />
+        )}
+        <ConsentModal />
+        {renderView()}
+       </main>
+    </div>
   );
 }

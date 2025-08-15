@@ -13,6 +13,7 @@ import {
   SidebarFooter,
   SidebarGroup,
   SidebarGroupLabel,
+  useSidebar,
 } from '@/components/ui/sidebar';
 import { Button } from '@/components/ui/button';
 import { ScrollArea } from '@/components/ui/scroll-area';
@@ -38,6 +39,7 @@ import {
   AlertDialogTrigger,
 } from '@/components/ui/alert-dialog';
 import { useToast } from '@/hooks/use-toast';
+import { cn } from '@/lib/utils';
 
 interface HistoryPanelProps {
   history: HistoryItem[];
@@ -55,6 +57,7 @@ export function HistoryPanel({
   const { toast } = useToast();
   const fileInputRef = React.useRef<HTMLInputElement>(null);
   const [itemToDelete, setItemToDelete] = React.useState<string | null>(null);
+  const { state: sidebarState } = useSidebar();
 
   const handleExport = React.useCallback(() => {
     try {
@@ -134,7 +137,8 @@ export function HistoryPanel({
     });
   }, [setHistory, toast]);
 
-  const handleDeleteClick = React.useCallback((id: string) => {
+  const handleDeleteClick = React.useCallback((e: React.MouseEvent, id: string) => {
+    e.stopPropagation();
     setItemToDelete(id);
   }, []);
 
@@ -146,13 +150,14 @@ export function HistoryPanel({
     onLoad(item);
   }, [onLoad]);
 
-  const handleRerunItem = React.useCallback((config: TestConfiguration) => {
+  const handleRerunItem = React.useCallback((e: React.MouseEvent, config: TestConfiguration) => {
+    e.stopPropagation();
     onRerun(config);
   }, [onRerun]);
 
   return (
     <>
-      <SidebarHeader>
+      <SidebarHeader className={cn(sidebarState === 'collapsed' && "hidden")}>
         <div className="flex items-center justify-center gap-2 p-2">
           <History className="h-6 w-6" />
           <h2 className="text-lg font-semibold tracking-tight">Test History</h2>
@@ -162,25 +167,24 @@ export function HistoryPanel({
         <SidebarContent>
           <SidebarMenu>
             {history.length === 0 ? (
-              <div className="flex flex-col items-center justify-center p-4 text-center text-sm text-muted-foreground">
-                <Info className="mb-2 h-8 w-8" />
-                <p>No test history found.</p>
-                <p>Run tests to see them here.</p>
-              </div>
+                <div className={cn("flex flex-col items-center justify-center p-4 text-center text-sm text-muted-foreground", sidebarState === 'collapsed' ? 'hidden' : 'flex')}>
+                    <Info className="mb-2 h-8 w-8" />
+                    <p>No test history found.</p>
+                </div>
             ) : (
               history.map((item) => (
-                <SidebarMenuItem key={item.id} className="group/menu-item">
-                  <SidebarMenuButton
-                    className="h-auto flex-col items-start p-2"
-                    onClick={() => handleLoadItem(item)}
-                    tooltip={{
-                      children: 'View Summary',
-                      side: 'right',
-                      align: 'center',
-                    }}
-                  >
-                    <span className="font-semibold truncate w-full" title={item.config.url}>{item.config.url}</span>
-                    <div className="flex items-center gap-2 text-xs text-muted-foreground">
+                <SidebarMenuItem key={item.id}>
+                    <SidebarMenuButton
+                        className="h-auto flex-col items-start p-2"
+                        onClick={() => handleLoadItem(item)}
+                        tooltip={{
+                        children: 'View Summary',
+                        side: 'right',
+                        align: 'center',
+                        }}
+                    >
+                    <span className={cn("font-semibold truncate w-full", sidebarState === 'collapsed' && "hidden")}>{item.config.url}</span>
+                    <div className={cn("flex items-center gap-2 text-xs text-muted-foreground", sidebarState === 'collapsed' && "hidden")}>
                       <Clock className="h-3 w-3" />
                       <span>
                         {formatDistanceToNow(new Date(item.timestamp), {
@@ -188,19 +192,20 @@ export function HistoryPanel({
                         })}
                       </span>
                     </div>
+                     <History className={cn("h-5 w-5", sidebarState === 'expanded' && "hidden")} />
                   </SidebarMenuButton>
-                  <div className="absolute right-1 top-1 flex items-center gap-1 opacity-0 group-hover/menu-item:opacity-100 transition-opacity">
+                  <div className={cn("absolute right-1 top-1/2 -translate-y-1/2 flex items-center gap-1 opacity-0 group-hover/menu-item:opacity-100 transition-opacity", sidebarState === 'collapsed' && "hidden")}>
                     <Button
                       variant="ghost"
                       size="icon"
                       className="h-7 w-7"
-                      onClick={() => handleRerunItem(item.config)}
+                      onClick={(e) => handleRerunItem(e, item.config)}
                     >
                       <Play className="h-4 w-4" />
                     </Button>
-                    <AlertDialog>
+                    <AlertDialog open={itemToDelete === item.id} onOpenChange={(open) => !open && handleCancelDelete()}>
                       <AlertDialogTrigger asChild>
-                         <Button variant="ghost" size="icon" className="h-7 w-7 hover:bg-destructive/10 hover:text-destructive" onClick={() => handleDeleteClick(item.id)}>
+                         <Button variant="ghost" size="icon" className="h-7 w-7 hover:bg-destructive/10 hover:text-destructive" onClick={(e) => handleDeleteClick(e, item.id)}>
                            <Trash2 className="h-4 w-4" />
                          </Button>
                       </AlertDialogTrigger>
@@ -224,7 +229,7 @@ export function HistoryPanel({
           </SidebarMenu>
         </SidebarContent>
       </ScrollArea>
-      <SidebarFooter>
+      <SidebarFooter className={cn(sidebarState === 'collapsed' && "hidden")}>
         <SidebarGroup>
           <SidebarGroupLabel>Manage History</SidebarGroupLabel>
           <div className="flex flex-col gap-2">
