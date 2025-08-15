@@ -15,6 +15,21 @@ import {
 import Link from 'next/link';
 import { APP_CONFIG } from '@/lib/constants';
 import { useTranslation } from 'react-i18next';
+import { ScrollArea } from '../ui/scroll-area';
+
+const languages = [
+    { code: 'en', name: 'English' },
+    { code: 'es', name: 'Español' },
+    { code: 'zh', name: '中文 (Chinese)' },
+    { code: 'hi', name: 'हिन्दी (Hindi)' },
+    { code: 'fr', name: 'Français' },
+    { code: 'de', name: 'Deutsch' },
+    { code: 'ja', name: '日本語 (Japanese)' },
+    { code: 'ru', name: 'Русский (Russian)' },
+    { code: 'ko', name: '한국어 (Korean)' },
+    { code: 'pa', name: 'ਪੰਜਾਬੀ (Punjabi)' },
+    { code: 'ta', name: 'தமிழ் (Tamil)' },
+]
 
 export function AppHeader() {
   const { setTheme } = useTheme();
@@ -69,12 +84,13 @@ export function AppHeader() {
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end">
-                <DropdownMenuItem onClick={() => changeLanguage('en')}>
-                  English
-                </DropdownMenuItem>
-                <DropdownMenuItem onClick={() => changeLanguage('es')}>
-                  Español
-                </DropdownMenuItem>
+                <ScrollArea className="h-72 w-48 rounded-md">
+                    {languages.map((lang) => (
+                        <DropdownMenuItem key={lang.code} onClick={() => changeLanguage(lang.code)}>
+                            {lang.name}
+                        </DropdownMenuItem>
+                    ))}
+                </ScrollArea>
               </DropdownMenuContent>
             </DropdownMenu>
 
