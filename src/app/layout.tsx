@@ -48,42 +48,41 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   const [isI18nInitialized, setIsI18nInitialized] = useState(false);
+  const [currentLanguage, setCurrentLanguage] = useState(i18n.language);
 
   useEffect(() => {
-    const initializeI18n = async () => {
-      const detectedLng = i18n.language || 'en';
-      const translations = await loadTranslations(detectedLng);
-      
-      if (!i18n.hasResourceBundle(detectedLng, 'translation')) {
-        i18n.addResourceBundle(detectedLng, 'translation', translations);
+    const init = async () => {
+      const lng = i18n.language || 'en';
+      if (!i18n.hasResourceBundle(lng, 'translation')) {
+        const translations = await loadTranslations(lng);
+        i18n.addResourceBundle(lng, 'translation', translations, true, true);
       }
-      if (i18n.language !== detectedLng) {
-        await i18n.changeLanguage(detectedLng);
+      if (i18n.language !== lng) {
+        await i18n.changeLanguage(lng);
       }
+      setCurrentLanguage(lng);
       setIsI18nInitialized(true);
     };
 
-    if (!isI18nInitialized) {
-        initializeI18n();
-    }
+    init();
 
     const onLanguageChanged = async (lng: string) => {
         if (!i18n.hasResourceBundle(lng, 'translation')) {
             const translations = await loadTranslations(lng);
-            i18n.addResourceBundle(lng, 'translation', translations);
+            i18n.addResourceBundle(lng, 'translation', translations, true, true);
         }
+        setCurrentLanguage(lng);
     };
-    
+
     i18n.on('languageChanged', onLanguageChanged);
 
     return () => {
-      i18n.off('languageChanged', onLanguageChanged);
+        i18n.off('languageChanged', onLanguageChanged);
     };
-
-  }, [isI18nInitialized]);
+  }, []);
   
   return (
-    <html lang={i18n.language} className="dark" suppressHydrationWarning>
+    <html lang={currentLanguage} className="dark" suppressHydrationWarning>
       <body
         className={cn(
           'min-h-screen bg-background font-sans antialiased',
