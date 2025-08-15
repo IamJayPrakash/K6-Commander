@@ -18,7 +18,7 @@ All code changes happen through Pull Requests. We actively welcome your pull req
 2. If you've added code that should be tested, add tests.
 3. If you've changed APIs, update the documentation.
 4. Ensure the test suite passes.
-5. Make sure your code lints.
+5. Make sure your code lints and is formatted correctly by running the scripts below.
 6. Issue that pull request!
 
 ## Any contributions you make will be under the MIT Software License
@@ -40,7 +40,15 @@ We use GitHub issues to track public bugs. Report a bug by [opening a new issue]
 People *love* thorough bug reports. I'm not even kidding.
 
 ## Use a Consistent Coding Style
-We use Prettier and ESLint to maintain a consistent code style. Please run `npm run lint` and `npm run prettier:fix` before submitting a pull request.
+We use ESLint for linting and Prettier for code formatting to maintain a consistent code style. Before submitting a pull request, please run the following commands to ensure your code adheres to our standards:
+
+```bash
+# Check for linting errors
+npm run lint
+
+# Automatically format all code
+npm run prettier:fix
+```
 
 ## Financial Contributions
 We also welcome financial contributions in any amount. If you find this project useful, please consider supporting its development. You can sponsor us through GitHub by clicking the "Sponsor" button at the top of the repository. Your sponsorship will help us dedicate more time to maintenance and new features.

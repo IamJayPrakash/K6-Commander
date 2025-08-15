@@ -27,7 +27,7 @@ K6 Commander is a lightweight, local-first, authorized load-testing platform. It
 - **Dashboards:** Grafana
 - **Orchestration:** Docker Compose
 
-## 🚀 Getting Started
+## 🚀 Getting Started (Local Development)
 
 ### Prerequisites
 
@@ -42,7 +42,14 @@ git clone https://github.com/your-username/k6-commander.git
 cd k6-commander
 ```
 
-### 2. Build and Run with Docker Compose
+### 2. Set Up Environment Variables
+Create a `.env` file by copying the example file:
+```bash
+cp .env.example .env
+```
+Open the `.env` file and add your `GEMINI_API_KEY` to enable the AI-powered SEO analysis feature.
+
+### 3. Build and Run with Docker Compose
 
 From the root directory of the project, run:
 
@@ -61,7 +68,7 @@ Once the services are up, you can access:
 - **Grafana Dashboard**: [http://localhost:3003](http://localhost:3003)
   - Login with default credentials: `admin` / `admin`. You will be prompted to change the password on first login.
 
-### 3. Running Your First Test
+### 4. Running Your First Test
 
 1.  Navigate to [http://localhost:3000](http://localhost:3000).
 2.  Accept the terms of service.
@@ -71,6 +78,34 @@ Once the services are up, you can access:
 6.  Click "Run Test(s)".
 7.  Monitor the "Test Running" view. For load tests, a link to the live Grafana dashboard will be available.
 8.  Once the test is complete, a summary report will be displayed.
+
+
+## 🚢 Deployment
+
+K6 Commander is designed to be a self-hosted application. The recommended deployment method is using Docker on a virtual private server (e.g., AWS EC2, DigitalOcean Droplet, Google Cloud VM).
+
+### Server Requirements
+- A server with Docker and Docker Compose installed.
+- At least 2GB of RAM is recommended.
+- A firewall configured to allow traffic on the ports you intend to expose (e.g., port 80/443 for the web app).
+
+### Steps for Deployment
+1. **Clone the repository** onto your server.
+2. **Configure environment variables**: Create a `.env` file with your `GEMINI_API_KEY`.
+3. **Build and run the application**:
+   ```bash
+   docker-compose up --build -d
+   ```
+   The `-d` flag runs the containers in detached mode.
+4. **Set up a reverse proxy (Recommended)**: To serve the application over standard HTTP/S ports and handle SSL, you should use a reverse proxy like Nginx or Caddy.
+   - Configure your reverse proxy to forward requests to the K6 Commander app running on `http://localhost:3000`.
+   - Configure another subdomain (e.g., `grafana.your-domain.com`) to point to the Grafana instance on `http://localhost:3003`.
+
+### Important Note on Platform Compatibility
+
+K6 Commander's architecture relies on running Docker containers and spawning system processes (`npx`) directly from its backend. This architecture is **not compatible with serverless deployment platforms** like **Vercel** or **Netlify**. These platforms have limitations that prevent the execution of Docker containers and arbitrary shell commands, which are essential for the k6 and Lighthouse functionalities.
+
+**Attempting to deploy this application on Vercel or Netlify will result in failure.** You must use a hosting environment that provides full control over the operating system and allows Docker to run, such as a traditional VM or a dedicated server.
 
 ## 📁 Project Structure
 
@@ -97,6 +132,8 @@ Once the services are up, you can access:
 │   ├── hooks/          # Custom React hooks
 │   ├── lib/            # Utility functions and constants
 │   └── types/          # TypeScript type definitions
+├── .env.example      # Example environment variables
+├── .gitignore        # Files and directories to ignore in version control
 ├── docker-compose.yml  # Orchestrates all services (app, grafana, influxdb)
 ├── Dockerfile          # Defines the Next.js application container
 ├── next.config.ts      # Next.js configuration
@@ -105,7 +142,7 @@ Once the services are up, you can access:
 
 ## ⚙️ Configuration
 
-The primary configuration is handled within `docker-compose.yml` and the Next.js application itself. There is no need for a `.env` file for basic operation.
+The primary configuration is handled within `docker-compose.yml` and the Next.js application itself. You must create a `.env` file for the `GEMINI_API_KEY`.
 
 ### k6 Script Environment Variables
 
