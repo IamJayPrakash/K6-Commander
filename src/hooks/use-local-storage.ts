@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useCallback } from 'react';
 
 export function useLocalStorage<T>(key: string, initialValue: T): [T, (value: T | ((val: T) => T)) => void] {
   const readValue = useCallback((): T => {
@@ -30,10 +30,6 @@ export function useLocalStorage<T>(key: string, initialValue: T): [T, (value: T 
       console.warn(`Error setting localStorage key “${key}”:`, error);
     }
   };
-  
-  useEffect(() => {
-    setStoredValue(readValue());
-  }, [readValue]);
 
   return [storedValue, setValue];
 }

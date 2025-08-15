@@ -24,52 +24,6 @@ export default function TestRunning({ testId, onTestComplete }: TestRunningProps
 
   const grafanaUrl = `${window.location.protocol}//${window.location.hostname}:3003/d/k6/k6-load-testing-results?orgId=1&var-testid=${testId}&refresh=5s`;
 
-  useEffect(() => {
-    const pollForSummary = async () => {
-      if (attempts.current >= MAX_POLLING_ATTEMPTS) {
-        setError('Test timed out. The test ran for too long or failed to start.');
-        toast({
-          variant: 'destructive',
-          title: 'Test Timed Out',
-          description: 'Please check the container logs for more details.',
-        });
-        return;
-      }
-
-      try {
-        const response = await fetch(`/api/check-summary/${testId}`);
-
-        if (response.ok) {
-          const summary: K6Summary = await response.json();
-          setProgress(100);
-          onTestComplete(summary);
-          return; // Stop polling
-        }
-        
-        if (response.status === 404) {
-          // File not found, continue polling
-          attempts.current += 1;
-          setProgress((attempts.current / MAX_POLLING_ATTEMPTS) * 100);
-          setTimeout(pollForSummary, POLLING_INTERVAL);
-        } else {
-           const errorData = await response.json();
-           throw new Error(errorData.error || `Server responded with status ${response.status}`);
-        }
-      } catch (err) {
-        console.error('Polling error:', err);
-        setError(err instanceof Error ? err.message : 'An unknown error occurred while checking test status.');
-        toast({
-            variant: 'destructive',
-            title: 'Polling Error',
-            description: err instanceof Error ? err.message : 'Could not retrieve test status.',
-        });
-      }
-    };
-
-    setTimeout(pollForSummary, POLLING_INTERVAL);
-    
-  }, [testId, onTestComplete, toast]);
-
   return (
     <Card className="max-w-2xl mx-auto">
       <CardHeader className="text-center">

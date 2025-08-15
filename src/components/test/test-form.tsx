@@ -81,21 +81,23 @@ interface TestFormProps {
   onRunTest: (testId: string, config: TestConfiguration) => void;
 }
 
+const getInitialValues = (values: Partial<TestConfiguration> | null) => {
+  if (!values) {
+    return newTestDefaultValues;
+  }
+  return {
+    ...newTestDefaultValues,
+    ...values,
+    headers: values.headers ? Object.entries(values.headers).map(([key, value]) => ({ key, value: String(value) })) : [],
+    vus: values.vus || undefined,
+    duration: values.duration || undefined,
+    stages: values.stages || [],
+  };
+};
+
+
 export default function TestForm({ initialValues, onRunTest }: TestFormProps) {
   const { toast } = useToast();
-
-  const getInitialValues = (values: Partial<TestConfiguration> | null) => {
-    if (!values) {
-      return newTestDefaultValues;
-    }
-    return {
-      ...values,
-      headers: values.headers ? Object.entries(values.headers).map(([key, value]) => ({ key, value: String(value) })) : [],
-      vus: values.vus || undefined,
-      duration: values.duration || undefined,
-      stages: values.stages || [],
-    };
-  }
 
   const form = useForm<TestFormValues>({
     resolver: zodResolver(formSchema),
