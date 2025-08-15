@@ -10,15 +10,10 @@ import {
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-  DropdownMenuSeparator,
 } from "@/components/ui/dropdown-menu"
 import Link from 'next/link';
 
-type AppHeaderProps = {
-  setView: (view: 'form' | 'history' | 'about' | 'help' | 'contact') => void;
-};
-
-export function AppHeader({ setView }: AppHeaderProps) {
+export function AppHeader() {
   const { setTheme } = useTheme();
 
   const startTour = () => {

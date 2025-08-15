@@ -7,14 +7,14 @@ import TestRunning from '@/components/test/test-running';
 import TestSummary from '@/components/test/test-summary';
 import type { TestConfiguration, K6Summary, HistoryItem, LighthouseSummary, SeoAnalysis } from '@/types';
 import { useLocalStorage } from '@/hooks/use-local-storage';
-import AboutPage from '@/app/about/page';
-import HistoryPage from './history/page';
 import Joyride, { STATUS } from 'react-joyride';
 import { TOUR_STEPS } from '@/lib/constants';
 import ConsentModal from '@/components/layout/consent-modal';
 import { useToast } from '@/hooks/use-toast';
+import { Sidebar, SidebarProvider, SidebarInset, SidebarTrigger } from '@/components/ui/sidebar';
+import { HistoryPanel } from '@/components/layout/history-panel';
 
-type View = 'form' | 'running' | 'summary' | 'about' | 'history';
+type View = 'form' | 'running' | 'summary';
 
 export interface TestResults {
   k6?: K6Summary;
@@ -64,7 +64,6 @@ export default function Home() {
       const newHistory = [newHistoryItem, ...history.filter(h => h.id !== activeTestId)];
       setHistory(newHistory);
       toast({ title: 'Saved to History', description: 'Test run has been saved.'})
-      // setView('history'); This was causing a jump to the history page which might not be desired.
     }
   };
 
@@ -76,16 +75,12 @@ export default function Home() {
   };
 
   const handleRerun = (config: TestConfiguration) => {
-    // Setting initial values for the form when "Run Again" is clicked
-    sessionStorage.setItem('rerun-config', JSON.stringify(config));
     setRerunInitialValues(config);
     setFormKey(Date.now()); // Change key to force re-mount
     setView('form');
   };
   
   const handleCreateNewTest = () => {
-    sessionStorage.removeItem('rerun-config');
-    sessionStorage.removeItem('load-history-item');
     setRerunInitialValues(null); // Clear initial values
     setFormKey(Date.now()); // Change key to force re-mount
     setActiveTestConfig(null);
@@ -101,30 +96,6 @@ export default function Home() {
       // A small delay to ensure the form view is rendered
       setTimeout(() => setIsTourRunning(true), 100);
     };
-
-    // Check for history item to load from session storage
-    const itemToLoad = sessionStorage.getItem('load-history-item');
-    if (itemToLoad) {
-        try {
-            handleLoadFromHistory(JSON.parse(itemToLoad));
-        } catch (e) {
-            console.error("Failed to parse history item from session storage", e);
-        } finally {
-            sessionStorage.removeItem('load-history-item');
-        }
-    }
-
-    // Check for rerun config from session storage
-    const configToRerun = sessionStorage.getItem('rerun-config');
-    if (configToRerun) {
-        try {
-            handleRerun(JSON.parse(configToRerun));
-        } catch (e) {
-            console.error("Failed to parse rerun config from session storage", e);
-        } finally {
-            sessionStorage.removeItem('rerun-config');
-        }
-    }
 
     return () => {
       delete (window as any).startTour;
@@ -159,10 +130,6 @@ export default function Home() {
             onCreateNew={handleCreateNewTest}
           />
         );
-      case 'about':
-        return <AboutPage />;
-      case 'history':
-        return <HistoryPage />;
       case 'form':
       default:
         return (
@@ -176,28 +143,41 @@ export default function Home() {
   };
 
   return (
-    <>
-      {isMounted && (
-        <Joyride
-          steps={TOUR_STEPS}
-          run={isTourRunning}
-          continuous
-          showProgress
-          showSkipButton
-          callback={handleJoyrideCallback}
-          styles={{
-            options: {
-              arrowColor: 'hsl(var(--card))',
-              backgroundColor: 'hsl(var(--card))',
-              primaryColor: 'hsl(var(--primary))',
-              textColor: 'hsl(var(--card-foreground))',
-              zIndex: 1000,
-            },
-          }}
-        />
-      )}
-      <ConsentModal />
-      {renderView()}
-    </>
+    <SidebarProvider>
+        <Sidebar>
+            <HistoryPanel 
+                history={history}
+                setHistory={setHistory}
+                onLoad={handleLoadFromHistory}
+                onRerun={handleRerun}
+            />
+        </Sidebar>
+        <SidebarInset>
+            <div className="p-4">
+                <SidebarTrigger className='md:hidden mb-4'/>
+                {isMounted && (
+                    <Joyride
+                    steps={TOUR_STEPS}
+                    run={isTourRunning}
+                    continuous
+                    showProgress
+                    showSkipButton
+                    callback={handleJoyrideCallback}
+                    styles={{
+                        options: {
+                        arrowColor: 'hsl(var(--card))',
+                        backgroundColor: 'hsl(var(--card))',
+                        primaryColor: 'hsl(var(--primary))',
+                        textColor: 'hsl(var(--card-foreground))',
+                        zIndex: 1000,
+                        },
+                    }}
+                    />
+                )}
+                <ConsentModal />
+                {renderView()}
+            </div>
+        </SidebarInset>
+    </SidebarProvider>
   );
 }

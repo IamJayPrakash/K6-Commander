@@ -8,7 +8,7 @@ import { cn } from '@/lib/utils';
 import { Providers } from './providers';
 import { AppHeader } from '@/components/layout/app-header';
 import { AppFooter } from '@/components/layout/app-footer';
-import { useCallback, Suspense } from 'react';
+import { Suspense } from 'react';
 import { ProgressBar } from '@/components/layout/progress-bar';
 
 const inter = Inter({
@@ -72,12 +72,7 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  // Using useCallback to ensure the function reference is stable
-  const setView = useCallback(() => {
-    // This function is now just a placeholder for the prop,
-    // as navigation is handled by Next.js router.
-  }, []);
-
+  
   return (
     <html lang="en" className="dark" suppressHydrationWarning>
       <body
@@ -91,7 +86,7 @@ export default function RootLayout({
               <Suspense>
                 <ProgressBar />
               </Suspense>
-              <AppHeader setView={setView} />
+              <AppHeader />
               <main className="flex-1 container mx-auto px-4 md:px-6 lg:px-8 py-8">
                 {children}
               </main>
