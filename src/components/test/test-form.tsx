@@ -85,7 +85,7 @@ interface TestFormProps {
   onCreateNew: () => void;
 }
 
-export default function TestForm({ initialValues, onRunTest }: TestFormProps) {
+export default function TestForm({ initialValues, onRunTest, onCreateNew }: TestFormProps) {
   const { toast } = useToast();
 
   const defaultValues = useMemo(() => {
