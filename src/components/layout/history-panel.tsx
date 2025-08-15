@@ -124,7 +124,7 @@ export function HistoryPanel({
         setItemToDelete(null);
     }
   }, [itemToDelete, setHistory]);
-  
+
   const handleDeleteAll = React.useCallback(() => {
     setHistory([]);
     toast({
@@ -132,7 +132,15 @@ export function HistoryPanel({
       description: 'All test runs have been deleted.',
     });
   }, [setHistory, toast]);
-  
+
+  const handleDeleteClick = React.useCallback((id: string) => {
+    setItemToDelete(id);
+  }, []);
+
+  const handleCancelDelete = React.useCallback(() => {
+    setItemToDelete(null);
+  }, []);
+
   return (
     <>
       <SidebarHeader>
@@ -183,7 +191,7 @@ export function HistoryPanel({
                     </Button>
                     <AlertDialog>
                       <AlertDialogTrigger asChild>
-                         <Button variant="ghost" size="icon" className="h-7 w-7 hover:bg-destructive/10 hover:text-destructive" onClick={() => setItemToDelete(item.id)}>
+                         <Button variant="ghost" size="icon" className="h-7 w-7 hover:bg-destructive/10 hover:text-destructive" onClick={() => handleDeleteClick(item.id)}>
                            <Trash2 className="h-4 w-4" />
                          </Button>
                       </AlertDialogTrigger>
@@ -195,7 +203,7 @@ export function HistoryPanel({
                           </AlertDialogDescription>
                         </AlertDialogHeader>
                         <AlertDialogFooter>
-                          <AlertDialogCancel onClick={() => setItemToDelete(null)}>Cancel</AlertDialogCancel>
+                          <AlertDialogCancel onClick={handleCancelDelete}>Cancel</AlertDialogCancel>
                           <AlertDialogAction onClick={confirmDelete} className="bg-destructive hover:bg-destructive/90">Delete</AlertDialogAction>
                         </AlertDialogFooter>
                       </AlertDialogContent>
