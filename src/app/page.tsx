@@ -12,6 +12,9 @@ import { TOUR_STEPS } from '@/lib/constants';
 import ConsentModal from '@/components/layout/consent-modal';
 import { useToast } from '@/hooks/use-toast';
 import type { TestResults } from '@/types/index';
+import { Card, CardDescription } from '@/components/ui/card';
+import { Clock } from 'lucide-react';
+import { formatDistanceToNow } from 'date-fns';
 
 type View = 'form' | 'running' | 'summary';
 
@@ -33,6 +36,12 @@ export default function Home() {
   useEffect(() => {
     setIsMounted(true);
   }, []);
+
+  const updateHistory = (newHistory: HistoryItem[] | ((prev: HistoryItem[]) => HistoryItem[])) => {
+      const valueToSet = typeof newHistory === 'function' ? newHistory(history) : newHistory;
+      setHistory(valueToSet);
+      setLastSaved(new Date().toISOString());
+  }
 
   // Check for history item to load from session storage on mount
   useEffect(() => {
@@ -79,8 +88,7 @@ export default function Home() {
         config: activeTestConfig,
         results: results,
       };
-      setHistory(prev => [newHistoryItem, ...prev.filter(h => h.id !== finalTestId)]);
-      setLastSaved(new Date().toISOString());
+      updateHistory(prev => [newHistoryItem, ...prev.filter(h => h.id !== finalTestId)]);
       toast({ title: 'Test Complete & Saved', description: 'Your test results are ready and saved to history.'});
       setView('summary');
     }
@@ -95,9 +103,7 @@ export default function Home() {
         results: activeTestResults,
       };
       // Prevent duplicates
-      const newHistory = [newHistoryItem, ...history.filter(h => h.id !== activeTestId)];
-      setHistory(newHistory);
-      setLastSaved(new Date().toISOString());
+      updateHistory([newHistoryItem, ...history.filter(h => h.id !== activeTestId)]);
       toast({ title: 'Saved to History', description: 'Test run has been saved.'})
     }
   };
@@ -172,6 +178,7 @@ export default function Home() {
             key={formKey}
             initialValues={initialValues}
             onRunTest={handleRunTest}
+            setHistory={updateHistory}
           />
         );
     }
@@ -199,6 +206,13 @@ export default function Home() {
           />
       )}
       <ConsentModal />
+       {view === 'form' && lastSaved && (
+        <Card className="mb-6 bg-blue-900/10 border-blue-500/20">
+            <CardDescription className="text-center p-2 text-xs text-blue-300 flex items-center justify-center gap-2">
+                <Clock className="h-3 w-3"/> Local history last saved: {formatDistanceToNow(new Date(lastSaved), { addSuffix: true })}
+            </CardDescription>
+        </Card>
+      )}
       {renderView()}
     </>
   );

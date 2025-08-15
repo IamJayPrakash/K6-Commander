@@ -25,7 +25,7 @@ import {
 } from '@/components/ui/select';
 import { Textarea } from '@/components/ui/textarea';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Rocket, Trash2, Plus, Server, Settings, FileJson, ChevronsRightLeft, Search, Gauge, ShieldCheck, TestTubeDiagonal, ChevronsUpDown, Check, X } from 'lucide-react';
+import { Rocket, Trash2, Plus, Server, Settings, FileJson, ChevronsRightLeft, Search, Gauge, ShieldCheck, TestTubeDiagonal, ChevronsUpDown, Check, X, History } from 'lucide-react';
 import { TEST_PRESETS } from '@/lib/constants';
 import type { TestConfiguration, TestPreset } from '@/types';
 import { useToast } from '@/hooks/use-toast';
@@ -36,6 +36,8 @@ import { Popover, PopoverContent, PopoverTrigger } from '../ui/popover';
 import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from '../ui/command';
 import { cn } from '@/lib/utils';
 import { ScrollArea } from '../ui/scroll-area';
+import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from '../ui/alert-dialog';
+import type { HistoryItem } from '@/types/index';
 
 const stageSchema = z.object({
   duration: z.string().min(1, 'Duration is required'),
@@ -69,6 +71,7 @@ type TestFormValues = z.infer<typeof formSchema>;
 interface TestFormProps {
   initialValues: Partial<TestConfiguration> | null;
   onRunTest: (testId: string, config: TestConfiguration) => void;
+  setHistory: (value: HistoryItem[] | ((prev: HistoryItem[]) => HistoryItem[])) => void;
 }
 
 const newTestDefaultValues: TestFormValues = {
@@ -83,10 +86,12 @@ const newTestDefaultValues: TestFormValues = {
     ...TEST_PRESETS.baseline,
 };
 
-export default function TestForm({ initialValues, onRunTest }: TestFormProps) {
+export default function TestForm({ initialValues, onRunTest, setHistory }: TestFormProps) {
   const { toast } = useToast();
   const [recentUrls, setRecentUrls] = useLocalStorage<string[]>('k6-recent-urls', []);
   const [popoverOpen, setPopoverOpen] = React.useState(false);
+  const [isClearStorageDialogOpen, setClearStorageDialogOpen] = React.useState(false);
+  const [formData, setFormData] = React.useState<TestFormValues | null>(null);
 
   const form = useForm<TestFormValues>({
     resolver: zodResolver(formSchema),
@@ -135,24 +140,37 @@ export default function TestForm({ initialValues, onRunTest }: TestFormProps) {
   const clearRecentUrls = () => {
     setRecentUrls([]);
   }
+
+  const handleFormSubmit = (data: TestFormValues) => {
+    setFormData(data);
+    setClearStorageDialogOpen(true);
+  };
   
-  const onSubmit = async (data: TestFormValues) => {
-    addUrlToRecents(data.url);
+  const proceedWithTest = async (clearStorage: boolean) => {
+    if (!formData) return;
+    
+    if (clearStorage) {
+      setHistory([]);
+      toast({
+        title: 'History Cleared',
+        description: 'Your test history has been cleared.',
+      });
+    }
+
+    addUrlToRecents(formData.url);
 
     const config: TestConfiguration = {
-      ...data,
-      headers: data.headers.reduce((acc, { key, value }) => {
+      ...formData,
+      headers: formData.headers.reduce((acc, { key, value }) => {
         if(key) acc[key] = value;
         return acc;
       }, {} as Record<string, string>),
-      vus: data.vus || 0,
-      duration: data.duration || '',
-      stages: data.stages || [],
-      body: data.body || '',
+      vus: formData.vus || 0,
+      duration: formData.duration || '',
+      stages: formData.stages || [],
+      body: formData.body || '',
     };
     
-    // This is a client-side temporary ID. The server will generate the real one for load tests.
-    // For client-side only tests, this is all we need.
     const tempTestId = `test-${Date.now()}`;
     
     toast({
@@ -160,12 +178,12 @@ export default function TestForm({ initialValues, onRunTest }: TestFormProps) {
         description: 'Your tests have been dispatched.',
     });
     onRunTest(tempTestId, config);
-
   };
   
   const isLoadTestEnabled = form.watch('runLoadTest');
 
   return (
+    <>
     <Card className="bg-card/50 backdrop-blur-sm">
       <CardHeader>
         <CardTitle className="flex items-center gap-2 text-2xl font-bold">
@@ -176,7 +194,7 @@ export default function TestForm({ initialValues, onRunTest }: TestFormProps) {
       </CardHeader>
       <CardContent>
         <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+          <form onSubmit={form.handleSubmit(handleFormSubmit)} className="space-y-8">
             
             <div className="grid grid-cols-1 lg:grid-cols-2 lg:gap-8">
                 {/* Left Column */}
@@ -223,7 +241,6 @@ export default function TestForm({ initialValues, onRunTest }: TestFormProps) {
                                                         value={url}
                                                         onSelect={(currentValue) => {
                                                             form.setValue("url", currentValue);
-                                                            addUrlToRecents(currentValue);
                                                             setPopoverOpen(false);
                                                         }}
                                                         className="group"
@@ -514,5 +531,25 @@ export default function TestForm({ initialValues, onRunTest }: TestFormProps) {
         </Form>
       </CardContent>
     </Card>
+    <AlertDialog open={isClearStorageDialogOpen} onOpenChange={setClearStorageDialogOpen}>
+      <AlertDialogContent>
+        <AlertDialogHeader>
+          <AlertDialogTitle className="flex items-center gap-2"><History className="h-5 w-5"/>Before you run...</AlertDialogTitle>
+          <AlertDialogDescription>
+            Would you like to clear your local test history before starting this new run?
+            This can be useful to start a session with a clean slate.
+          </AlertDialogDescription>
+        </AlertDialogHeader>
+        <AlertDialogFooter>
+          <AlertDialogCancel onClick={() => proceedWithTest(false)}>Don't Clear</AlertDialogCancel>
+          <AlertDialogAction 
+            className='bg-destructive hover:bg-destructive/90' 
+            onClick={() => proceedWithTest(true)}>
+            <Trash2 className="mr-2 h-4 w-4" /> Clear History & Run
+          </AlertDialogAction>
+        </AlertDialogFooter>
+      </AlertDialogContent>
+    </AlertDialog>
+    </>
   );
 }
