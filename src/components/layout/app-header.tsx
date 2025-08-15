@@ -34,11 +34,11 @@ export function AppHeader() {
             <span className="font-bold hidden sm:inline-block">K6 Commander</span>
           </Link>
           <nav className="hidden md:flex items-center gap-6 text-sm">
-            <Link href="/history" className="transition-colors hover:text-foreground/80 text-foreground/60 cursor-pointer">
+            <Link key="history" href="/history" className="transition-colors hover:text-foreground/80 text-foreground/60 cursor-pointer">
               <History className="inline-block h-4 w-4 mr-1" />
               History
             </Link>
-            <Link href="/about" className="transition-colors hover:text-foreground/80 text-foreground/60 cursor-pointer">
+            <Link key="about" href="/about" className="transition-colors hover:text-foreground/80 text-foreground/60 cursor-pointer">
               <Info className="inline-block h-4 w-4 mr-1" />
               About
             </Link>
