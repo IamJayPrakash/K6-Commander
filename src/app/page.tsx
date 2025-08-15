@@ -83,7 +83,7 @@ export default function Home() {
     setFormInitialValues({
         url: config.url || '',
         method: config.method || 'GET',
-        headers: config.headers ? Object.entries(config.headers).map(([key, value]) => ({ key, value })) : [],
+        headers: config.headers ? Object.entries(config.headers).map(([key, value]) => ({ key, value: String(value) })) : [],
         body: config.body || '',
         testPreset: config.testPreset || 'custom',
         vus: config.vus,

@@ -42,10 +42,15 @@ const stageSchema = z.object({
   target: z.number().min(0, 'Target VUs must be non-negative'),
 });
 
+const headerSchema = z.object({
+    key: z.string(),
+    value: z.string(),
+})
+
 const formSchema = z.object({
   url: z.string().url('Please enter a valid URL'),
   method: z.enum(['GET', 'POST', 'PUT', 'DELETE', 'PATCH']),
-  headers: z.array(z.object({ key: z.string(), value: z.string() })),
+  headers: z.array(headerSchema),
   body: z.string().optional(),
   testPreset: z.enum(['baseline', 'spike', 'stress', 'soak', 'custom']),
   vus: z.number().min(1, 'At least one VU is required').optional(),
@@ -67,7 +72,10 @@ export default function TestForm({ defaultValues, onRunTest }: TestFormProps) {
   const { toast } = useToast();
   const form = useForm<TestFormValues>({
     resolver: zodResolver(formSchema),
-    defaultValues,
+    defaultValues: {
+      ...defaultValues,
+      headers: defaultValues.headers || [],
+    }
   });
 
   const { fields: headerFields, append: appendHeader, remove: removeHeader } = useFieldArray({
