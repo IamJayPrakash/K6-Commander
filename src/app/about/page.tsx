@@ -2,6 +2,7 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Info, Rocket, Database, Shield, Code, Github, BarChart2, Search, Zap, Layers, Share2 } from "lucide-react";
 import Link from "next/link";
+import { Button } from "@/components/ui/button";
 
 export default function AboutPage() {
     const techStack = [
