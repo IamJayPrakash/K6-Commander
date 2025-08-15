@@ -79,10 +79,10 @@ export default function LighthouseSummaryReport({
       </CardHeader>
       <CardContent className="space-y-6">
         <div className="grid grid-cols-2 md:grid-cols-4 gap-6 justify-items-center">
-            <ScoreCircle score={Math.round(summary.categories.performance.score * 100)} label="Performance" />
-            <ScoreCircle score={Math.round(summary.categories.accessibility.score * 100)} label="Accessibility" />
-            <ScoreCircle score={Math.round(summary.categories['best-practices'].score * 100)} label="Best Practices" />
-            <ScoreCircle score={Math.round(summary.categories.seo.score * 100)} label="SEO" />
+            <ScoreCircle key="performance" score={Math.round(summary.categories.performance.score * 100)} label="Performance" />
+            <ScoreCircle key="accessibility" score={Math.round(summary.categories.accessibility.score * 100)} label="Accessibility" />
+            <ScoreCircle key="best-practices" score={Math.round(summary.categories['best-practices'].score * 100)} label="Best Practices" />
+            <ScoreCircle key="seo" score={Math.round(summary.categories.seo.score * 100)} label="SEO" />
         </div>
         <div className="flex justify-center">
             <Button asChild>
