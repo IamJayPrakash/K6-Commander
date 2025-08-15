@@ -27,7 +27,7 @@ export default function Home() {
   const [history, setHistory] = useLocalStorage<HistoryItem[]>('k6-history', []);
   
   const [initialValuesForRerun, setInitialValuesForRerun] = useState<Partial<TestConfiguration> | null>(null);
-  const [formKey, setFormKey] = useState(0);
+  const [formKey, setFormKey] = useState(Date.now());
 
   const handleRunTest = (testId: string, config: TestConfiguration) => {
     setActiveTestId(testId);
@@ -63,13 +63,13 @@ export default function Home() {
 
   const handleRerun = (config: TestConfiguration) => {
     setInitialValuesForRerun(config);
-    setFormKey(prevKey => prevKey + 1);
+    setFormKey(Date.now());
     setView('form');
   };
   
   const handleCreateNewTest = () => {
     setInitialValuesForRerun(null);
-    setFormKey(prevKey => prevKey + 1); 
+    setFormKey(Date.now()); 
     setActiveTestConfig(null);
     setActiveTestSummary(null);
     setActiveTestId(null);
