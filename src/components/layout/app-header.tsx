@@ -1,7 +1,7 @@
 
 'use client';
 
-import { Rocket, History, Info, Github, PlayCircle } from 'lucide-react';
+import { Rocket, History, Info, Github, PlayCircle, MessageSquarePlus, Bug } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useTheme } from 'next-themes';
 import { Sun, Moon } from 'lucide-react';
@@ -10,6 +10,7 @@ import {
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
+  DropdownMenuSeparator,
 } from "@/components/ui/dropdown-menu"
 import Link from 'next/link';
 
@@ -50,6 +51,28 @@ export function AppHeader({ setView }: AppHeaderProps) {
                 <PlayCircle className='h-4 w-4 mr-2'/>
                 Start Tour
             </Button>
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant="outline" size="sm">
+                  Feedback
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end">
+                <a href="https://github.com/IamJayPrakash/K6-Commander/issues/new?template=bug_report.md" target="_blank" rel="noopener noreferrer">
+                  <DropdownMenuItem>
+                    <Bug className="mr-2 h-4 w-4" />
+                    Report a Bug
+                  </DropdownMenuItem>
+                </a>
+                <a href="https://github.com/IamJayPrakash/K6-Commander/issues/new?template=feature_request.md" target="_blank" rel="noopener noreferrer">
+                  <DropdownMenuItem>
+                    <MessageSquarePlus className="mr-2 h-4 w-4" />
+                    Request a Feature
+                  </DropdownMenuItem>
+                </a>
+              </DropdownMenuContent>
+            </DropdownMenu>
+
              <a href="https://github.com/IamJayPrakash/K6-Commander" target="_blank" rel="noopener noreferrer">
                 <Button variant="ghost" size="icon">
                     <Github className="h-5 w-5" />
