@@ -74,7 +74,7 @@ export default function LighthouseSummaryReport({
           <ShieldCheck className="h-6 w-6 text-primary" /> Lighthouse Audit
         </CardTitle>
         <CardDescription>
-          Performance, accessibility, and SEO scores for your page. Higher is better.
+          A summary of the official Google Lighthouse audit. Click the button below to view the full, detailed HTML report.
         </CardDescription>
       </CardHeader>
       <CardContent className="space-y-6">
