@@ -10,7 +10,6 @@ import { AppHeader } from '@/components/layout/app-header';
 import { AppFooter } from '@/components/layout/app-footer';
 import { Suspense } from 'react';
 import { ProgressBar } from '@/components/layout/progress-bar';
-import { SidebarProvider } from '@/components/ui/sidebar';
 
 const inter = Inter({
   subsets: ['latin'],
@@ -32,16 +31,16 @@ export default function RootLayout({
         )}
       >
         <Providers>
-          <SidebarProvider>
             <div className="relative flex flex-col min-h-screen bg-gradient-to-br from-black to-[#1a1a1a]">
                 <Suspense>
                   <ProgressBar />
                 </Suspense>
                 <AppHeader />
-                {children}
+                <main className="flex-1 container max-w-screen-2xl mx-auto p-4 md:p-6 lg:p-8">
+                  {children}
+                </main>
                 <AppFooter />
             </div>
-          </SidebarProvider>
         </Providers>
         <Toaster />
       </body>

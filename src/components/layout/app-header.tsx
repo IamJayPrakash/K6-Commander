@@ -1,7 +1,7 @@
 
 'use client';
 
-import { Rocket, History, Info, Github, PlayCircle, MessageSquarePlus, Bug, PanelLeft } from 'lucide-react';
+import { Rocket, History, Info, Github, PlayCircle, MessageSquarePlus, Bug, Menu } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useTheme } from 'next-themes';
 import { Sun, Moon } from 'lucide-react';
@@ -10,10 +10,9 @@ import {
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
+  DropdownMenuSeparator,
 } from "@/components/ui/dropdown-menu"
 import Link from 'next/link';
-import { useSidebar } from '../ui/sidebar';
-import { SidebarTrigger } from '../ui/sidebar';
 
 export function AppHeader() {
   const { setTheme } = useTheme();
@@ -28,55 +27,35 @@ export function AppHeader() {
     <header className="sticky top-0 z-50 w-full border-b border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
       <div className="container flex h-16 max-w-screen-2xl items-center">
         <div className="mr-4 flex items-center">
-           <SidebarTrigger className="md:hidden" />
           <Link href="/" className="mr-6 flex items-center space-x-2 cursor-pointer">
             <Rocket className="h-6 w-6 text-primary" />
             <span className="font-bold hidden sm:inline-block">K6 Commander</span>
           </Link>
           <nav className="hidden md:flex items-center gap-6 text-sm">
-            <Link key="history" href="/history" className="transition-colors hover:text-foreground/80 text-foreground/60 cursor-pointer">
+            <Link href="/history" className="transition-colors hover:text-foreground/80 text-foreground/60 cursor-pointer">
               <History className="inline-block h-4 w-4 mr-1" />
               History
             </Link>
-            <Link key="about" href="/about" className="transition-colors hover:text-foreground/80 text-foreground/60 cursor-pointer">
+            <Link href="/about" className="transition-colors hover:text-foreground/80 text-foreground/60 cursor-pointer">
               <Info className="inline-block h-4 w-4 mr-1" />
               About
             </Link>
           </nav>
         </div>
+        
         <div className="flex flex-1 items-center justify-end gap-2">
             <Button variant="outline" size="sm" onClick={startTour}>
                 <PlayCircle className='h-4 w-4 mr-2'/>
                 Start Tour
             </Button>
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button variant="outline" size="sm">
-                  Feedback
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent align="end">
-                <a href="https://github.com/your-username/k6-commander/issues/new?template=bug_report.md" target="_blank" rel="noopener noreferrer">
-                  <DropdownMenuItem>
-                    <Bug className="mr-2 h-4 w-4" />
-                    Report a Bug
-                  </DropdownMenuItem>
-                </a>
-                <a href="https://github.com/your-username/k6-commander/issues/new?template=feature_request.md" target="_blank" rel="noopener noreferrer">
-                  <DropdownMenuItem>
-                    <MessageSquarePlus className="mr-2 h-4 w-4" />
-                    Request a Feature
-                  </DropdownMenuItem>
-                </a>
-              </DropdownMenuContent>
-            </DropdownMenu>
 
-             <a href="https://github.com/your-username/k6-commander" target="_blank" rel="noopener noreferrer">
+            <a href="https://github.com/your-username/k6-commander" target="_blank" rel="noopener noreferrer">
                 <Button variant="ghost" size="icon">
                     <Github className="h-5 w-5" />
                     <span className="sr-only">GitHub</span>
                 </Button>
             </a>
+
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <Button variant="ghost" size="icon">
@@ -95,6 +74,33 @@ export function AppHeader() {
                 <DropdownMenuItem onClick={() => setTheme("system")}>
                   System
                 </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+
+            {/* Mobile Menu */}
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant="ghost" size="icon" className="md:hidden">
+                  <Menu className="h-5 w-5" />
+                  <span className="sr-only">Open menu</span>
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end">
+                <Link href="/history"><DropdownMenuItem><History className="mr-2 h-4 w-4" />History</DropdownMenuItem></Link>
+                <Link href="/about"><DropdownMenuItem><Info className="mr-2 h-4 w-4" />About</DropdownMenuItem></Link>
+                <DropdownMenuSeparator />
+                <a href="https://github.com/your-username/k6-commander/issues/new?template=bug_report.md" target="_blank" rel="noopener noreferrer">
+                  <DropdownMenuItem>
+                    <Bug className="mr-2 h-4 w-4" />
+                    Report a Bug
+                  </DropdownMenuItem>
+                </a>
+                <a href="https://github.com/your-username/k6-commander/issues/new?template=feature_request.md" target="_blank" rel="noopener noreferrer">
+                  <DropdownMenuItem>
+                    <MessageSquarePlus className="mr-2 h-4 w-4" />
+                    Request a Feature
+                  </DropdownMenuItem>
+                </a>
               </DropdownMenuContent>
             </DropdownMenu>
         </div>
