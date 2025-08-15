@@ -54,7 +54,7 @@ export function HistoryPanel({
   const { toast } = useToast();
   const fileInputRef = React.useRef<HTMLInputElement>(null);
 
-  const handleExport = () => {
+  const handleExport = React.useCallback(() => {
     try {
       const dataStr = JSON.stringify(history, null, 2);
       const dataBlob = new Blob([dataStr], { type: 'application/json' });
@@ -77,13 +77,13 @@ export function HistoryPanel({
         description: 'Could not export history.',
       });
     }
-  };
+  }, [history, toast]);
 
-  const handleImportClick = () => {
+  const handleImportClick = React.useCallback(() => {
     fileInputRef.current?.click();
-  };
+  }, []);
 
-  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleFileChange = React.useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (file) {
       const reader = new FileReader();
@@ -117,19 +117,19 @@ export function HistoryPanel({
     if (fileInputRef.current) {
         fileInputRef.current.value = '';
     }
-  };
+  }, [setHistory, toast]);
 
-  const handleDelete = (id: string) => {
-    setHistory(history.filter((item) => item.id !== id));
-  };
+  const handleDelete = React.useCallback((id: string) => {
+    setHistory(prevHistory => prevHistory.filter((item) => item.id !== id));
+  }, [setHistory]);
   
-  const handleDeleteAll = () => {
+  const handleDeleteAll = React.useCallback(() => {
     setHistory([]);
     toast({
       title: 'History Cleared',
       description: 'All test runs have been deleted.',
     });
-  }
+  }, [setHistory, toast]);
   
   const handleRerunClick = React.useCallback((e: React.MouseEvent, config: TestConfiguration) => {
       e.stopPropagation();
