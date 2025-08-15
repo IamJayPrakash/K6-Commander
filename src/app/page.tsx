@@ -218,7 +218,8 @@ export default function Home() {
         <Card className="mb-6 bg-blue-900/10 border-blue-500/20 hover:border-blue-500/50 transition-colors">
             <Link href="/history">
                 <CardDescription className="text-center p-2 text-xs text-blue-300 flex items-center justify-center gap-2 cursor-pointer">
-                    <Clock className="h-3 w-3"/> Local history last saved: {formatDistanceToNow(new Date(lastSaved), { addSuffix: true })}
+                    <Clock className="h-3 w-3"/> 
+                    {t('home.lastSaved', { distance: formatDistanceToNow(new Date(lastSaved), { addSuffix: true }) })}
                 </CardDescription>
             </Link>
         </Card>
@@ -227,3 +228,5 @@ export default function Home() {
     </>
   );
 }
+
+    
