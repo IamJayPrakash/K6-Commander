@@ -1,7 +1,7 @@
 
 'use client';
 
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import TestForm from '@/components/test/test-form';
 import TestRunning from '@/components/test/test-running';
 import TestSummary from '@/components/test/test-summary';
@@ -13,8 +13,22 @@ import AboutPage from '@/components/pages/about-page';
 import HelpPage from '@/components/pages/help-page';
 import ContactPage from '@/components/pages/contact-page';
 import HistoryPage from '@/components/pages/history-page';
+import { TEST_PRESETS } from '@/lib/constants';
 
 type View = 'form' | 'running' | 'summary' | 'about' | 'history' | 'help' | 'contact';
+
+const newTestDefaultValues: Partial<TestConfiguration> = {
+    url: '',
+    method: 'GET' as const,
+    headers: {},
+    body: '',
+    testPreset: 'baseline' as const,
+    runLoadTest: true,
+    runLighthouse: false,
+    runSeo: false,
+    ...TEST_PRESETS.baseline,
+};
+
 
 export default function Home() {
   const [view, setView] = useState<View>('form');
@@ -72,6 +86,14 @@ export default function Home() {
     setView('form');
   };
 
+  const initialValues = useMemo(() => {
+    if (rerunInitialValues) {
+      return rerunInitialValues;
+    }
+    return newTestDefaultValues;
+  }, [rerunInitialValues]);
+
+
   const renderView = () => {
     switch (view) {
       case 'running':
@@ -108,8 +130,8 @@ export default function Home() {
       default:
         return (
           <TestForm
-            key={JSON.stringify(rerunInitialValues)} 
-            initialValues={rerunInitialValues}
+            key={JSON.stringify(initialValues)}
+            initialValues={initialValues}
             onRunTest={handleRunTest}
             onCreateNew={handleCreateNewTest}
           />

@@ -64,23 +64,8 @@ const formSchema = z.object({
 
 type TestFormValues = z.infer<typeof formSchema>;
 
-const newTestDefaultValues: TestFormValues = {
-    url: '',
-    method: 'GET' as const,
-    headers: [],
-    body: '',
-    testPreset: 'baseline' as const,
-    runLoadTest: true,
-    runLighthouse: false,
-    runSeo: false,
-    stages: TEST_PRESETS.baseline.stages,
-    vus: TEST_PRESETS.baseline.vus,
-    duration: TEST_PRESETS.baseline.duration,
-};
-
-
 interface TestFormProps {
-  initialValues: Partial<TestConfiguration> | null;
+  initialValues: Partial<TestConfiguration>;
   onRunTest: (testId: string, config: TestConfiguration) => void;
   onCreateNew: () => void;
 }
@@ -89,16 +74,19 @@ export default function TestForm({ initialValues, onRunTest, onCreateNew }: Test
   const { toast } = useToast();
 
   const defaultValues = useMemo(() => {
-    if (!initialValues) {
-      return newTestDefaultValues;
-    }
     const headersArray = initialValues.headers ? Object.entries(initialValues.headers).map(([key, value]) => ({ key, value: String(value) })) : [];
-    
     return {
-      ...newTestDefaultValues,
-      ...initialValues,
+      url: initialValues.url || '',
+      method: initialValues.method || 'GET',
       headers: headersArray,
       body: initialValues.body || '',
+      testPreset: initialValues.testPreset || 'baseline',
+      runLoadTest: initialValues.runLoadTest !== false,
+      runLighthouse: initialValues.runLighthouse || false,
+      runSeo: initialValues.runSeo || false,
+      stages: initialValues.stages || TEST_PRESETS[initialValues.testPreset || 'baseline'].stages,
+      vus: initialValues.vus || TEST_PRESETS[initialValues.testPreset || 'baseline'].vus,
+      duration: initialValues.duration || TEST_PRESETS[initialValues.testPreset || 'baseline'].duration,
     };
   }, [initialValues]);
 
