@@ -130,6 +130,15 @@ export function HistoryPanel({
       description: 'All test runs have been deleted.',
     });
   }
+  
+  const handleRerunClick = React.useCallback((e: React.MouseEvent, config: TestConfiguration) => {
+      e.stopPropagation();
+      onRerun(config);
+  }, [onRerun]);
+
+  const handleDeleteClick = React.useCallback((e: React.MouseEvent) => {
+      e.stopPropagation();
+  }, []);
 
   return (
     <>
@@ -175,16 +184,13 @@ export function HistoryPanel({
                       variant="ghost"
                       size="icon"
                       className="h-7 w-7"
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        onRerun(item.config);
-                      }}
+                      onClick={(e) => handleRerunClick(e, item.config)}
                     >
                       <Play className="h-4 w-4" />
                     </Button>
                     <AlertDialog>
                       <AlertDialogTrigger asChild>
-                         <Button variant="ghost" size="icon" className="h-7 w-7 hover:bg-destructive/10 hover:text-destructive" onClick={(e) => e.stopPropagation()}>
+                         <Button variant="ghost" size="icon" className="h-7 w-7 hover:bg-destructive/10 hover:text-destructive" onClick={handleDeleteClick}>
                            <Trash2 className="h-4 w-4" />
                          </Button>
                       </AlertDialogTrigger>
