@@ -1,203 +1,200 @@
-
 {
-    "header": {
-        "title": "ਕੇ6 ਕਮਾਂਡਰ",
-        "historyLink": "ਇਤਿਹਾਸ",
-        "aboutLink": "ਬਾਰੇ",
-        "startTourButton": "ਟੂਰ ਸ਼ੁਰੂ ਕਰੋ",
-        "bugReport": "ਬੱਗ ਦੀ ਰਿਪੋਰਟ ਕਰੋ",
-        "featureRequest": "ਵਿਸ਼ੇਸ਼ਤਾ ਲਈ ਬੇਨਤੀ ਕਰੋ"
-    },
-    "footer": {
-        "copyright": "© {{year}} K6 Commander. ਸਾਰੇ ਹੱਕ ਰਾਖਵੇਂ ਹਨ।",
-        "termsLink": "ਸ਼ਰਤਾਂ",
-        "privacyLink": "ਗੋਪਨੀਯਤਾ",
-        "securityLink": "ਸੁਰੱਖਿਆ"
-    },
-    "about": {
-        "title": "ਕੇ6 ਕਮਾਂਡਰ ਬਾਰੇ",
-        "description": "ਇੱਕ ਹਲਕਾ, ਸਥਾਨਕ-ਪਹਿਲਾ, ਅਧਿਕਾਰਤ ਲੋਡ-ਟੈਸਟਿੰਗ ਪਲੇਟਫਾਰਮ ਜੋ k6, ਲਾਈਟਹਾਊਸ, ਅਤੇ AI ਵਿਸ਼ਲੇਸ਼ਣ ਦੀ ਸ਼ਕਤੀ ਨੂੰ ਇੱਕ ਸਿੰਗਲ, ਸਲੀਕ UI ਵਿੱਚ ਜੋੜਦਾ ਹੈ।",
-        "philosophyTitle": "ਸਾਡਾ ਫਲਸਫਾ",
-        "localFirstTitle": "ਸਥਾਨਕ-ਪਹਿਲਾ",
-        "localFirstDescription": "ਤੁਹਾਡੇ ਸਾਰੇ ਟੈਸਟ ਕੌਂਫਿਗਰੇਸ਼ਨ ਅਤੇ ਇਤਿਹਾਸ ਤੁਹਾਡੇ ਬ੍ਰਾਊਜ਼ਰ ਵਿੱਚ ਸਟੋਰ ਕੀਤੇ ਜਾਂਦੇ ਹਨ। ਕੋਈ ਕਲਾਉਡ ਖਾਤਿਆਂ ਦੀ ਲੋੜ ਨਹੀਂ ਹੈ।",
-        "unifiedToolingTitle": "ਇਕਸਾਰ ਟੂਲਿੰਗ",
-        "unifiedToolingDescription": "ਇੱਕ ਸਿੰਗਲ ਇੰਟਰਫੇਸ ਤੋਂ ਲੋਡ ਟੈਸਟ, ਲਾਈਟਹਾਊਸ ਆਡਿਟ, ਅਤੇ SEO ਵਿਸ਼ਲੇਸ਼ਣ ਚਲਾਓ।",
-        "k6FeatureTitle": "ਕੇ6 ਲੋਡ ਟੈਸਟਿੰਗ",
-        "k6FeatureDescription": "ਪ੍ਰਦਰਸ਼ਨ ਦੀਆਂ ਰੁਕਾਵਟਾਂ ਨੂੰ ਲੱਭਣ ਲਈ ਟ੍ਰੈਫਿਕ ਦੀ ਨਕਲ ਕਰੋ।",
-        "k6HowItWorks": "Leverage the full power of Grafana k6 to understand how your system behaves under load. Configure virtual users (VUs), duration, and custom ramping stages.",
-        "k6HowItWorks2": "Live results are streamed to a pre-configured Grafana dashboard, giving you real-time insights into request rates, response times, and errors.",
-        "lighthouseFeatureTitle": "ਲਾਈਟਹਾਊਸ ਆਡਿਟ",
-        "lighthouseFeatureDescription": "ਪ੍ਰਦਰਸ਼ਨ, ਪਹੁੰਚਯੋਗਤਾ, ਅਤੇ ਹੋਰ ਲਈ ਆਡਿਟ ਕਰੋ।",
-        "lighthouseHowItWorks": "Run Google Lighthouse audits directly from the UI. Get scores for Performance, Accessibility, Best Practices, and SEO.",
-        "lighthouseHowItWorks2": "The application provides a high-level summary, and you can access the full, interactive HTML report for a deep-dive analysis and actionable recommendations.",
-        "seoFeatureTitle": "ਏਆਈ-ਪਾਵਰਡ ਐਸਈਓ ਵਿਸ਼ਲੇਸ਼ਣ",
-        "seoFeatureDescription": "ਏਆਈ ਸਿਫਾਰਸ਼ਾਂ ਦੇ ਨਾਲ ਡੂੰਘਾਈ ਨਾਲ ਵਿਸ਼ਲੇਸ਼ਣ।",
-        "seoHowItWorks": "Get a deep, AI-powered analysis of the most critical on-page SEO elements to ensure your pages are optimized for search engines.",
-        "seoHowItWorks2": "This includes checks for title tags, meta descriptions, H1s, canonicals, and Open Graph tags, complete with AI-generated suggestions for improvement.",
-        "stackTitle": "ਟੈਕਨਾਲੋਜੀ ਸਟੈਕ",
-        "stackDescription": "ਕੇ6 ਕਮਾਂਡਰ ਆਧੁਨਿਕ, ਉਦਯੋਗ-ਮਿਆਰੀ ਟੈਕਨਾਲੋਜੀਆਂ ਨਾਲ ਬਣਾਇਆ ਗਿਆ ਹੈ।",
-        "involvedTitle": "ਸ਼ਾਮਲ ਹੋਵੋ",
-        "involvedDescription": "ਇਹ ਇੱਕ ਓਪਨ ਸੋਰਸ ਪ੍ਰੋਜੈਕਟ ਹੈ। ਯੋਗਦਾਨ, ਮੁੱਦਿਆਂ, ਅਤੇ ਵਿਸ਼ੇਸ਼ਤਾ ਬੇਨਤੀਆਂ ਦਾ ਸੁਆਗਤ ਹੈ!",
-        "githubButton": "GitHub 'ਤੇ ਦੇਖੋ"
-    },
-    "tour": {
-        "steps": {
-            "welcome": "ਕੇ6 ਕਮਾਂਡਰ ਵਿੱਚ ਤੁਹਾਡਾ ਸੁਆਗਤ ਹੈ! ਇਹ ਤੁਹਾਡਾ ਮੁੱਖ ਡੈਸ਼ਬੋਰਡ ਹੈ।",
-            "history": "ਤੁਸੀਂ ਇੱਥੇ ਆਪਣੇ ਪਿਛਲੇ ਟੈਸਟ ਰਨ ਦੇਖ ਅਤੇ ਪ੍ਰਬੰਧਿਤ ਕਰ ਸਕਦੇ ਹੋ।",
-            "about": "ਐਪਲੀਕੇਸ਼ਨ ਕਿਵੇਂ ਕੰਮ ਕਰਦੀ ਹੈ ਇਸ ਬਾਰੇ ਇੱਥੇ ਹੋਰ ਜਾਣੋ।",
-            "github": "ਸਰੋਤ ਕੋਡ ਦੇਖੋ ਜਾਂ ਇੱਥੇ GitHub 'ਤੇ ਮੁੱਦਿਆਂ ਦੀ ਰਿਪੋਰਟ ਕਰੋ।",
-            "urlInput": "ਉਹ URL ਦਾਖਲ ਕਰੋ ਜਿਸਦੀ ਤੁਸੀਂ ਇੱਥੇ ਜਾਂਚ ਕਰਨਾ ਚਾਹੁੰਦੇ ਹੋ। ਤੁਸੀਂ ਹਾਲੀਆ URL ਤੋਂ ਚੁਣ ਸਕਦੇ ਹੋ।",
-            "testSuites": "ਚੁਣੋ ਕਿ ਤੁਸੀਂ ਕਿਹੜੇ ਟੈਸਟ ਸੂਟ ਚਲਾਉਣਾ ਚਾਹੁੰਦੇ ਹੋ: ਲੋਡ ਟੈਸਟ, ਲਾਈਟਹਾਊਸ ਆਡਿਟ, ਜਾਂ ਏਆਈ ਐਸਈਓ ਵਿਸ਼ਲੇਸ਼ਣ।",
-            "requestConfig": "ਆਪਣੀ HTTP ਬੇਨਤੀ ਦੇ ਵੇਰਵਿਆਂ ਨੂੰ ਇੱਥੇ ਕੌਂਫਿਗਰ ਕਰੋ, ਜਿਵੇਂ ਕਿ ਵਿਧੀ, ਸਿਰਲੇਖ, ਅਤੇ ਬਾਡੀ।",
-            "loadProfile": "ਇੱਕ ਪੂਰਵ-ਪਰਿਭਾਸ਼ਿਤ ਲੋਡ ਪ੍ਰੋਫਾਈਲ ਚੁਣੋ ਜਾਂ ਆਪਣਾ ਖੁਦ ਦਾ ਕਸਟਮ ਦ੍ਰਿਸ਼ ਬਣਾਓ।",
-            "runTest": "ਜਦੋਂ ਤੁਸੀਂ ਤਿਆਰ ਹੋਵੋ, ਤਾਂ ਆਪਣੇ ਟੈਸਟ ਸ਼ੁਰੂ ਕਰਨ ਲਈ ਇੱਥੇ ਕਲਿੱਕ ਕਰੋ!"
-        }
-    },
-    "form": {
-        "title": "ਨਵਾਂ ਟੈਸਟ ਰਨ",
-        "description": "ਆਪਣੇ ਅਗਲੇ ਟੈਸਟ ਰਨ ਲਈ ਪੈਰਾਮੀਟਰ ਕੌਂਫਿਗਰ ਕਰੋ।",
-        "urlLabel": "ਟੀਚਾ URL",
-        "urlDescription": "ਉਸ ਪੰਨੇ ਜਾਂ ਐਂਡਪੁਆਇੰਟ ਦਾ ਪੂਰਾ URL ਜਿਸਦੀ ਤੁਸੀਂ ਜਾਂਚ ਕਰਨਾ ਚਾਹੁੰਦੇ ਹੋ।",
-        "urlPlaceholder": "https://example.com",
-        "toggleRecentUrlsLabel": "ਹਾਲੀਆ URL ਟੌਗਲ ਕਰੋ",
-        "searchUrlPlaceholder": "ਹਾਲੀਆ URL ਖੋਜੋ...",
-        "noRecentUrls": "ਕੋਈ ਹਾਲੀਆ URL ਨਹੀਂ ਮਿਲਿਆ।",
-        "recentUrlsHeading": "ਹਾਲੀਆ URL",
-        "removeRecentUrlLabel": "ਹਾਲੀਆ ਤੋਂ '{{url}}' ਹਟਾਓ",
-        "clearRecentUrlsButton": "ਹਾਲੀਆ URL ਸਾਫ਼ ਕਰੋ",
-        "testSuitesTitle": "ਟੈਸਟ ਸੂਟ",
-        "testSuitesDescription": "ਚਲਾਉਣ ਲਈ ਇੱਕ ਜਾਂ ਇੱਕ ਤੋਂ ਵੱਧ ਟੈਸਟ ਸੂਟ ਚੁਣੋ।",
-        "k6SwitchLabel": "ਕੇ6 ਲੋਡ ਟੈਸਟ",
-        "k6SwitchDescription": "ਲੋਡ ਦੇ ਅਧੀਨ ਪ੍ਰਦਰਸ਼ਨ ਨੂੰ ਮਾਪੋ।",
-        "lighthouseSwitchLabel": "ਲਾਈਟਹਾਊਸ ਆਡਿਟ",
-        "lighthouseSwitchDescription": "ਗੁਣਵੱਤਾ, ਪ੍ਰਦਰਸ਼ਨ, ਅਤੇ SEO ਦੀ ਜਾਂਚ ਕਰੋ।",
-        "seoSwitchLabel": "ਏਆਈ ਐਸਈਓ ਵਿਸ਼ਲੇਸ਼ਣ",
-        "seoSwitchDescription": "ਇੱਕ ਡੂੰਘਾਈ ਨਾਲ ਆਨ-ਪੇਜ SEO ਵਿਸ਼ਲੇਸ਼ਣ ਕਰੋ।",
-        "requestConfigTitle": "ਬੇਨਤੀ ਸੰਰਚਨਾ",
-        "requestConfigDescription": "ਲੋਡ ਟੈਸਟ ਲਈ HTTP ਬੇਨਤੀ ਨੂੰ ਅਨੁਕੂਲਿਤ ਕਰੋ।",
-        "methodLabel": "ਵਿਧੀ",
-        "methodPlaceholder": "ਇੱਕ ਵਿਧੀ ਚੁਣੋ",
-        "headersLabel": "ਸਿਰਲੇਖ",
-        "headerNamePlaceholder": "ਸਿਰਲੇਖ ਦਾ ਨਾਮ",
-        "headerValuePlaceholder": "ਸਿਰਲੇਖ ਦਾ ਮੁੱਲ",
-        "removeHeaderLabel": "ਸਿਰਲੇਖ {{index}} ਹਟਾਓ",
-        "addHeaderButton": "ਸਿਰਲੇਖ ਸ਼ਾਮਲ ਕਰੋ",
-        "requestBodyLabel": "ਬੇਨਤੀ ਬਾਡੀ",
-        "loadProfileTitle": "ਲੋਡ ਪ੍ਰੋਫਾਈਲ",
-        "loadProfileDescription": "ਟੈਸਟ ਦੌਰਾਨ ਪੈਦਾ ਹੋਣ ਵਾਲੇ ਲੋਡ ਦੀ ਮਾਤਰਾ ਨੂੰ ਪਰਿਭਾਸ਼ਿਤ ਕਰੋ।",
-        "loadTestPresetsLabel": "ਲੋਡ ਟੈਸਟ ਪ੍ਰੀਸੈੱਟ",
-        "customProfileTitle": "ਕਸਟਮ ਲੋਡ ਪ੍ਰੋਫਾਈਲ",
-        "customProfileDescription": "VUs, ਮਿਆਦ, ਜਾਂ ਪੜਾਵਾਂ ਲਈ ਆਪਣੀ ਖੁਦ ਦੀ ਸੰਰਚਨਾ ਨੂੰ ਪਰਿਭਾਸ਼ਿਤ ਕਰੋ।",
-        "vusLabel": "ਵਰਚੁਅਲ ਉਪਭੋਗਤਾ (VUs)",
-        "vusPlaceholder": "ਉਦਾਹਰਨ ਲਈ, 100",
-        "durationLabel": "ਮਿਆਦ",
-        "durationPlaceholder": "ਉਦਾਹਰਨ ਲਈ, 5m30s",
-        "stagesLabel": "ਪੜਾਅ",
-        "stagesDescription": "ਸਮੇਂ ਦੇ ਨਾਲ VUs ਨੂੰ ਵਧਾਉਣ/ਘਟਾਉਣ ਵਾਲੇ ਗੁੰਝਲਦਾਰ ਲੋਡ ਦ੍ਰਿਸ਼ਾਂ ਲਈ।",
-        "stageDurationLabel": "ਪੜਾਅ ਦੀ ਮਿਆਦ",
-        "stageDurationPlaceholder": "ਉਦਾਹਰਨ ਲਈ, 1m",
-        "stageTargetVusLabel": "ਟੀਚਾ VUs",
-        "stageTargetVusPlaceholder": "ਉਦਾਹਰਨ ਲਈ, 50",
-        "removeStageLabel": "ਪੜਾਅ {{index}} ਹਟਾਓ",
-        "addStageButton": "ਪੜਾਅ ਸ਼ਾਮਲ ਕਰੋ",
-        "runTestButton": "ਟੈਸਟ ਚਲਾਓ",
-        "runningTestButton": "ਚੱਲ ਰਿਹਾ ਹੈ...",
-        "error": {
-            "atLeastOne": "ਘੱਟੋ-ਘੱਟ ਇੱਕ ਟੈਸਟ ਸੂਟ ਚੁਣਿਆ ਜਾਣਾ ਚਾਹੀਦਾ ਹੈ।"
-        },
-        "toast": {
-            "historyClearedTitle": "ਇਤਿਹਾਸ ਸਾਫ਼ ਹੋ ਗਿਆ",
-            "historyClearedDescription": "ਤੁਹਾਡਾ ਸਥਾਨਕ ਟੈਸਟ ਇਤਿਹਾਸ ਸਾਫ਼ ਕਰ ਦਿੱਤਾ ਗਿਆ ਹੈ।",
-            "testStartedTitle": "ਟੈਸਟ ਸ਼ੁਰੂ ਹੋ ਗਿਆ!",
-            "testStartedDescription": "ਤੁਹਾਡੇ ਟੈਸਟ ਹੁਣ ਚੱਲ ਰਹੇ ਹਨ। ਹੇਠਾਂ ਪ੍ਰਗਤੀ ਦੀ ਨਿਗਰਾਨੀ ਕਰੋ।"
-        },
-        "clearHistoryDialog": {
-            "title": "ਮੌਜੂਦਾ ਇਤਿਹਾਸ ਸਾਫ਼ ਕਰੀਏ?",
-            "description": "ਤੁਹਾਡੇ ਕੋਲ ਮੌਜੂਦਾ ਟੈਸਟ ਇਤਿਹਾਸ ਹੈ। ਕੀ ਤੁਸੀਂ ਇਸ ਨਵੇਂ ਟੈਸਟ ਨੂੰ ਚਲਾਉਣ ਤੋਂ ਪਹਿਲਾਂ ਇਸਨੂੰ ਸਾਫ਼ ਕਰਨਾ ਚਾਹੁੰਦੇ ਹੋ?",
-            "keepButton": "ਨਹੀਂ, ਇਤਿਹਾਸ ਰੱਖੋ",
-            "clearButton": "ਹਾਂ, ਸਾਫ਼ ਕਰੋ ਅਤੇ ਚਲਾਓ"
-        }
-    },
-    "running": {
-        "title": "ਟੈਸਟ ਚੱਲ ਰਹੇ ਹਨ...",
-        "description": "ਕਿਰਪਾ ਕਰਕੇ ਉਡੀਕ ਕਰੋ ਜਦੋਂ ਤੱਕ ਚੁਣੇ ਹੋਏ ਸੂਟ ਪੂਰੇ ਨਹੀਂ ਹੋ ਜਾਂਦੇ। ਇਸ ਵਿੱਚ ਕੁਝ ਮਿੰਟ ਲੱਗ ਸਕਦੇ ਹਨ।",
-        "finalizingTitle": "ਨਤੀਜਿਆਂ ਨੂੰ ਅੰਤਿਮ ਰੂਪ ਦਿੱਤਾ ਜਾ ਰਿਹਾ ਹੈ...",
-        "grafanaLink": "ਗ੍ਰਾਫਾਨਾ 'ਤੇ ਲਾਈਵ ਡੈਸ਼ਬੋਰਡ ਦੇਖੋ"
-    },
-    "summary": {
-        "title": "ਟੈਸਟ ਸੰਖੇਪ",
-        "description": "ਤੁਹਾਡੇ ਟੈਸਟ ਰਨ ਦੇ ਨਤੀਜੇ",
-        "saveToHistoryButton": "ਇਤਿਹਾਸ ਵਿੱਚ ਸੁਰੱਖਿਅਤ ਕਰੋ",
-        "rerunButton": "ਮੁੜ ਚਲਾਓ",
-        "newTestButton": "ਨਵਾਂ ਟੈਸਟ ਬਣਾਓ",
-        "k6Tab": "ਲੋਡ ਟੈਸਟ",
-        "lighthouseTab": "ਲਾਈਟਹਾਊਸ",
-        "seoTab": "ਐਸਈਓ",
-        "configSummaryTitle": "ਟੈਸਟ ਸੰਰਚਨਾ",
-        "viewFullDetails": "ਪੂਰੀ ਸੰਰਚਨਾ ਵੇਰਵੇ ਦੇਖੋ"
-    },
-    "history": {
-        "title": "ਟੈਸਟ ਇਤਿਹਾਸ",
-        "description": "ਆਪਣੇ ਪਿਛਲੇ ਟੈਸਟ ਰਨ ਨੂੰ ਬ੍ਰਾਊਜ਼ ਕਰੋ ਅਤੇ ਪ੍ਰਬੰਧਿਤ ਕਰੋ।",
-        "lastSaved": "ਆਖਰੀ ਵਾਰ ਸੁਰੱਖਿਅਤ ਕੀਤਾ ਗਿਆ",
-        "importButton": "ਆਯਾਤ ਕਰੋ",
-        "exportButton": "ਨਿਰਯਾਤ ਕਰੋ",
-        "searchPlaceholder": "URL ਜਾਂ ID ਦੁਆਰਾ ਖੋਜੋ...",
-        "clearSearchLabel": "ਖੋਜ ਸਾਫ਼ ਕਰੋ",
-        "clearAllButton": "ਸਾਰਾ ਇਤਿਹਾਸ ਸਾਫ਼ ਕਰੋ",
-        "noHistoryMessage": "ਕੋਈ ਇਤਿਹਾਸ ਨਹੀਂ ਮਿਲਿਆ।",
-        "noHistoryDescription": "ਆਪਣਾ ਇਤਿਹਾਸ ਸ਼ੁਰੂ ਕਰਨ ਲਈ ਇੱਕ ਨਵਾਂ ਟੈਸਟ ਚਲਾਓ।",
-        "noResultsFound": "'{{query}}' ਲਈ ਕੋਈ ਨਤੀਜਾ ਨਹੀਂ ਮਿਲਿਆ।",
-        "clearSearch": "ਖੋਜ ਸਾਫ਼ ਕਰੋ",
-        "clearAllDialog": {
-            "title": "ਕੀ ਤੁਸੀਂ ਯਕੀਨੀ ਹੋ?",
-            "description": "ਇਹ ਕਾਰਵਾਈ ਵਾਪਸ ਨਹੀਂ ਕੀਤੀ ਜਾ ਸਕਦੀ। ਇਹ ਤੁਹਾਡੇ ਸਾਰੇ ਟੈਸਟ ਇਤਿਹਾਸ ਡੇਟਾ ਅਤੇ ਹਾਲੀਆ URL ਨੂੰ ਸਥਾਈ ਤੌਰ 'ਤੇ ਮਿਟਾ ਦੇਵੇਗਾ।",
-            "cancel": "ਰੱਦ ਕਰੋ",
-            "confirm": "ਮਿਟਾਓ"
-        },
-        "deleteDialog": {
-            "title": "ਇਸ ਐਂਟਰੀ ਨੂੰ ਮਿਟਾਉਣਾ ਹੈ?",
-            "description": "ਇਹ ਕਾਰਵਾਈ ਵਾਪਸ ਨਹੀਂ ਕੀਤੀ ਜਾ ਸਕਦੀ। ਇਹ ਇਸ ਟੈਸਟ ਰਨ ਨੂੰ ਤੁਹਾਡੇ ਇਤਿਹਾਸ ਤੋਂ ਸਥਾਈ ਤੌਰ 'ਤੇ ਮਿਟਾ ਦੇਵੇਗਾ।",
-            "cancel": "ਰੱਦ ਕਰੋ",
-            "confirm": "ਮਿਟਾਓ"
-        },
-        "table": {
-            "url": "URL",
-            "date": "ਮਿਤੀ",
-            "testsRun": "ਚਲਾਏ ਗਏ ਟੈਸਟ",
-            "actions": "ਕਾਰਵਾਈਆਂ"
-        },
-        "actions": {
-            "view": "{{url}} ਲਈ ਸੰਖੇਪ ਦੇਖੋ",
-            "rerun": "{{url}} ਲਈ ਟੈਸਟ ਮੁੜ ਚਲਾਓ",
-            "delete": "{{url}} ਲਈ ਇਤਿਹਾਸ ਆਈਟਮ ਮਿਟਾਓ"
-        },
-        "toast": {
-            "exportSuccessTitle": "ਇਤਿਹਾਸ ਨਿਰਯਾਤ ਕੀਤਾ ਗਿਆ",
-            "exportSuccessDescription": "ਤੁਹਾਡਾ ਟੈਸਟ ਇਤਿਹਾਸ ਇੱਕ JSON ਫਾਈਲ ਵਜੋਂ ਡਾਊਨਲੋਡ ਕੀਤਾ ਗਿਆ ਹੈ।",
-            "exportFailTitle": "ਨਿਰਯਾਤ ਅਸਫਲ",
-            "exportFailDescription": "ਇਤਿਹਾਸ ਨਿਰਯਾਤ ਨਹੀਂ ਕੀਤਾ ਜਾ ਸਕਿਆ।",
-            "importSuccessTitle": "ਇਤਿਹਾਸ ਆਯਾਤ ਕੀਤਾ ਗਿਆ",
-            "importSuccessDescription": "ਟੈਸਟ ਇਤਿਹਾਸ ਸਫਲਤਾਪੂਰਵਕ ਲੋਡ ਕੀਤਾ ਗਿਆ।",
-            "importFailTitle": "ਆਯਾਤ ਅਸਫਲ",
-            "importFailDescription": "ਚੁਣੀ ਹੋਈ ਫਾਈਲ ਨੂੰ ਪੜ੍ਹਿਆ ਨਹੀਂ ਜਾ ਸਕਿਆ।",
-            "importInvalidFormat": "ਅਵੈਧ ਫਾਈਲ ਫਾਰਮੈਟ।",
-            "deleteSuccessTitle": "ਐਂਟਰੀ ਮਿਟਾਈ ਗਈ",
-            "deleteSuccessDescription": "ਟੈਸਟ ਰਨ ਤੁਹਾਡੇ ਇਤਿਹਾਸ ਤੋਂ ਹਟਾ ਦਿੱਤਾ ਗਿਆ ਹੈ।",
-            "clearSuccessTitle": "ਇਤਿਹਾਸ ਸਾਫ਼ ਹੋ ਗਿਆ",
-            "clearSuccessDescription": "ਤੁਹਾਡਾ ਪੂਰਾ ਟੈਸਟ ਇਤਿਹਾਸ ਹਟਾ ਦਿੱਤਾ ਗਿਆ ਹੈ।"
-        }
-    },
-    "presets": {
-        "baseline": "ਬੇਸਲਾਈਨ",
-        "spike": "ਸਪਾਈਕ",
-        "stress": "ਤਣਾਅ",
-        "soak": "ਸੋਕ",
-        "custom": "ਕਸਟਮ"
-    },
-    "home": {
-        "lastSaved": "ਸਥਾਨਕ ਇਤਿਹਾਸ ਆਖਰੀ ਵਾਰ ਸੁਰੱਖਿਅਤ ਕੀਤਾ ਗਿਆ: {{distance}}"
+  "header": {
+    "title": "ਕੇ6 ਕਮਾਂਡਰ",
+    "historyLink": "ਇਤਿਹਾਸ",
+    "aboutLink": "ਬਾਰੇ",
+    "startTourButton": "ਟੂਰ ਸ਼ੁਰੂ ਕਰੋ",
+    "bugReport": "ਬੱਗ ਦੀ ਰਿਪੋਰਟ ਕਰੋ",
+    "featureRequest": "ਵਿਸ਼ੇਸ਼ਤਾ ਲਈ ਬੇਨਤੀ ਕਰੋ"
+  },
+  "footer": {
+    "copyright": "© {{year}} K6 Commander. ਸਾਰੇ ਹੱਕ ਰਾਖਵੇਂ ਹਨ।",
+    "termsLink": "ਸ਼ਰਤਾਂ",
+    "privacyLink": "ਗੋਪਨੀਯਤਾ",
+    "securityLink": "ਸੁਰੱਖਿਆ"
+  },
+  "about": {
+    "title": "ਕੇ6 ਕਮਾਂਡਰ ਬਾਰੇ",
+    "description": "ਇੱਕ ਹਲਕਾ, ਸਥਾਨਕ-ਪਹਿਲਾ, ਅਧਿਕਾਰਤ ਲੋਡ-ਟੈਸਟਿੰਗ ਪਲੇਟਫਾਰਮ ਜੋ k6, ਲਾਈਟਹਾਊਸ, ਅਤੇ AI ਵਿਸ਼ਲੇਸ਼ਣ ਦੀ ਸ਼ਕਤੀ ਨੂੰ ਇੱਕ ਸਿੰਗਲ, ਸਲੀਕ UI ਵਿੱਚ ਜੋੜਦਾ ਹੈ।",
+    "philosophyTitle": "ਸਾਡਾ ਫਲਸਫਾ",
+    "localFirstTitle": "ਸਥਾਨਕ-ਪਹਿਲਾ",
+    "localFirstDescription": "ਤੁਹਾਡੇ ਸਾਰੇ ਟੈਸਟ ਕੌਂਫਿਗਰੇਸ਼ਨ ਅਤੇ ਇਤਿਹਾਸ ਤੁਹਾਡੇ ਬ੍ਰਾਊਜ਼ਰ ਵਿੱਚ ਸਟੋਰ ਕੀਤੇ ਜਾਂਦੇ ਹਨ। ਕੋਈ ਕਲਾਉਡ ਖਾਤਿਆਂ ਦੀ ਲੋੜ ਨਹੀਂ ਹੈ।",
+    "unifiedToolingTitle": "ਇਕਸਾਰ ਟੂਲਿੰਗ",
+    "unifiedToolingDescription": "ਇੱਕ ਸਿੰਗਲ ਇੰਟਰਫੇਸ ਤੋਂ ਲੋਡ ਟੈਸਟ, ਲਾਈਟਹਾਊਸ ਆਡਿਟ, ਅਤੇ SEO ਵਿਸ਼ਲੇਸ਼ਣ ਚਲਾਓ।",
+    "k6FeatureTitle": "ਕੇ6 ਲੋਡ ਟੈਸਟਿੰਗ",
+    "k6FeatureDescription": "ਪ੍ਰਦਰਸ਼ਨ ਦੀਆਂ ਰੁਕਾਵਟਾਂ ਨੂੰ ਲੱਭਣ ਲਈ ਟ੍ਰੈਫਿਕ ਦੀ ਨਕਲ ਕਰੋ।",
+    "k6HowItWorks": "Leverage the full power of Grafana k6 to understand how your system behaves under load. Configure virtual users (VUs), duration, and custom ramping stages.",
+    "k6HowItWorks2": "Live results are streamed to a pre-configured Grafana dashboard, giving you real-time insights into request rates, response times, and errors.",
+    "lighthouseFeatureTitle": "ਲਾਈਟਹਾਊਸ ਆਡਿਟ",
+    "lighthouseFeatureDescription": "ਪ੍ਰਦਰਸ਼ਨ, ਪਹੁੰਚਯੋਗਤਾ, ਅਤੇ ਹੋਰ ਲਈ ਆਡਿਟ ਕਰੋ।",
+    "lighthouseHowItWorks": "Run Google Lighthouse audits directly from the UI. Get scores for Performance, Accessibility, Best Practices, and SEO.",
+    "lighthouseHowItWorks2": "The application provides a high-level summary, and you can access the full, interactive HTML report for a deep-dive analysis and actionable recommendations.",
+    "seoFeatureTitle": "ਏਆਈ-ਪਾਵਰਡ ਐਸਈਓ ਵਿਸ਼ਲੇਸ਼ਣ",
+    "seoFeatureDescription": "ਏਆਈ ਸਿਫਾਰਸ਼ਾਂ ਦੇ ਨਾਲ ਡੂੰਘਾਈ ਨਾਲ ਵਿਸ਼ਲੇਸ਼ਣ।",
+    "seoHowItWorks": "Get a deep, AI-powered analysis of the most critical on-page SEO elements to ensure your pages are optimized for search engines.",
+    "seoHowItWorks2": "This includes checks for title tags, meta descriptions, H1s, canonicals, and Open Graph tags, complete with AI-generated suggestions for improvement.",
+    "stackTitle": "ਟੈਕਨਾਲੋਜੀ ਸਟੈਕ",
+    "stackDescription": "ਕੇ6 ਕਮਾਂਡਰ ਆਧੁਨਿਕ, ਉਦਯੋਗ-ਮਿਆਰੀ ਟੈਕਨਾਲੋਜੀਆਂ ਨਾਲ ਬਣਾਇਆ ਗਿਆ ਹੈ।",
+    "involvedTitle": "ਸ਼ਾਮਲ ਹੋਵੋ",
+    "involvedDescription": "ਇਹ ਇੱਕ ਓਪਨ ਸੋਰਸ ਪ੍ਰੋਜੈਕਟ ਹੈ। ਯੋਗਦਾਨ, ਮੁੱਦਿਆਂ, ਅਤੇ ਵਿਸ਼ੇਸ਼ਤਾ ਬੇਨਤੀਆਂ ਦਾ ਸੁਆਗਤ ਹੈ!",
+    "githubButton": "GitHub 'ਤੇ ਦੇਖੋ"
+  },
+  "tour": {
+    "steps": {
+      "welcome": "ਕੇ6 ਕਮਾਂਡਰ ਵਿੱਚ ਤੁਹਾਡਾ ਸੁਆਗਤ ਹੈ! ਇਹ ਤੁਹਾਡਾ ਮੁੱਖ ਡੈਸ਼ਬੋਰਡ ਹੈ।",
+      "history": "ਤੁਸੀਂ ਇੱਥੇ ਆਪਣੇ ਪਿਛਲੇ ਟੈਸਟ ਰਨ ਦੇਖ ਅਤੇ ਪ੍ਰਬੰਧਿਤ ਕਰ ਸਕਦੇ ਹੋ।",
+      "about": "ਐਪਲੀਕੇਸ਼ਨ ਕਿਵੇਂ ਕੰਮ ਕਰਦੀ ਹੈ ਇਸ ਬਾਰੇ ਇੱਥੇ ਹੋਰ ਜਾਣੋ।",
+      "github": "ਸਰੋਤ ਕੋਡ ਦੇਖੋ ਜਾਂ ਇੱਥੇ GitHub 'ਤੇ ਮੁੱਦਿਆਂ ਦੀ ਰਿਪੋਰਟ ਕਰੋ।",
+      "urlInput": "ਉਹ URL ਦਾਖਲ ਕਰੋ ਜਿਸਦੀ ਤੁਸੀਂ ਇੱਥੇ ਜਾਂਚ ਕਰਨਾ ਚਾਹੁੰਦੇ ਹੋ। ਤੁਸੀਂ ਹਾਲੀਆ URL ਤੋਂ ਚੁਣ ਸਕਦੇ ਹੋ।",
+      "testSuites": "ਚੁਣੋ ਕਿ ਤੁਸੀਂ ਕਿਹੜੇ ਟੈਸਟ ਸੂਟ ਚਲਾਉਣਾ ਚਾਹੁੰਦੇ ਹੋ: ਲੋਡ ਟੈਸਟ, ਲਾਈਟਹਾਊਸ ਆਡਿਟ, ਜਾਂ ਏਆਈ ਐਸਈਓ ਵਿਸ਼ਲੇਸ਼ਣ।",
+      "requestConfig": "ਆਪਣੀ HTTP ਬੇਨਤੀ ਦੇ ਵੇਰਵਿਆਂ ਨੂੰ ਇੱਥੇ ਕੌਂਫਿਗਰ ਕਰੋ, ਜਿਵੇਂ ਕਿ ਵਿਧੀ, ਸਿਰਲੇਖ, ਅਤੇ ਬਾਡੀ।",
+      "loadProfile": "ਇੱਕ ਪੂਰਵ-ਪਰਿਭਾਸ਼ਿਤ ਲੋਡ ਪ੍ਰੋਫਾਈਲ ਚੁਣੋ ਜਾਂ ਆਪਣਾ ਖੁਦ ਦਾ ਕਸਟਮ ਦ੍ਰਿਸ਼ ਬਣਾਓ।",
+      "runTest": "ਜਦੋਂ ਤੁਸੀਂ ਤਿਆਰ ਹੋਵੋ, ਤਾਂ ਆਪਣੇ ਟੈਸਟ ਸ਼ੁਰੂ ਕਰਨ ਲਈ ਇੱਥੇ ਕਲਿੱਕ ਕਰੋ!"
     }
+  },
+  "form": {
+    "title": "ਨਵਾਂ ਟੈਸਟ ਰਨ",
+    "description": "ਆਪਣੇ ਅਗਲੇ ਟੈਸਟ ਰਨ ਲਈ ਪੈਰਾਮੀਟਰ ਕੌਂਫਿਗਰ ਕਰੋ।",
+    "urlLabel": "ਟੀਚਾ URL",
+    "urlDescription": "ਉਸ ਪੰਨੇ ਜਾਂ ਐਂਡਪੁਆਇੰਟ ਦਾ ਪੂਰਾ URL ਜਿਸਦੀ ਤੁਸੀਂ ਜਾਂਚ ਕਰਨਾ ਚਾਹੁੰਦੇ ਹੋ।",
+    "urlPlaceholder": "https://example.com",
+    "toggleRecentUrlsLabel": "ਹਾਲੀਆ URL ਟੌਗਲ ਕਰੋ",
+    "searchUrlPlaceholder": "ਹਾਲੀਆ URL ਖੋਜੋ...",
+    "noRecentUrls": "ਕੋਈ ਹਾਲੀਆ URL ਨਹੀਂ ਮਿਲਿਆ।",
+    "recentUrlsHeading": "ਹਾਲੀਆ URL",
+    "removeRecentUrlLabel": "ਹਾਲੀਆ ਤੋਂ '{{url}}' ਹਟਾਓ",
+    "clearRecentUrlsButton": "ਹਾਲੀਆ URL ਸਾਫ਼ ਕਰੋ",
+    "testSuitesTitle": "ਟੈਸਟ ਸੂਟ",
+    "testSuitesDescription": "ਚਲਾਉਣ ਲਈ ਇੱਕ ਜਾਂ ਇੱਕ ਤੋਂ ਵੱਧ ਟੈਸਟ ਸੂਟ ਚੁਣੋ।",
+    "k6SwitchLabel": "ਕੇ6 ਲੋਡ ਟੈਸਟ",
+    "k6SwitchDescription": "ਲੋਡ ਦੇ ਅਧੀਨ ਪ੍ਰਦਰਸ਼ਨ ਨੂੰ ਮਾਪੋ।",
+    "lighthouseSwitchLabel": "ਲਾਈਟਹਾਊਸ ਆਡਿਟ",
+    "lighthouseSwitchDescription": "ਗੁਣਵੱਤਾ, ਪ੍ਰਦਰਸ਼ਨ, ਅਤੇ SEO ਦੀ ਜਾਂਚ ਕਰੋ।",
+    "seoSwitchLabel": "ਏਆਈ ਐਸਈਓ ਵਿਸ਼ਲੇਸ਼ਣ",
+    "seoSwitchDescription": "ਇੱਕ ਡੂੰਘਾਈ ਨਾਲ ਆਨ-ਪੇਜ SEO ਵਿਸ਼ਲੇਸ਼ਣ ਕਰੋ।",
+    "requestConfigTitle": "ਬੇਨਤੀ ਸੰਰਚਨਾ",
+    "requestConfigDescription": "ਲੋਡ ਟੈਸਟ ਲਈ HTTP ਬੇਨਤੀ ਨੂੰ ਅਨੁਕੂਲਿਤ ਕਰੋ।",
+    "methodLabel": "ਵਿਧੀ",
+    "methodPlaceholder": "ਇੱਕ ਵਿਧੀ ਚੁਣੋ",
+    "headersLabel": "ਸਿਰਲੇਖ",
+    "headerNamePlaceholder": "ਸਿਰਲੇਖ ਦਾ ਨਾਮ",
+    "headerValuePlaceholder": "ਸਿਰਲੇਖ ਦਾ ਮੁੱਲ",
+    "removeHeaderLabel": "ਸਿਰਲੇਖ {{index}} ਹਟਾਓ",
+    "addHeaderButton": "ਸਿਰਲੇਖ ਸ਼ਾਮਲ ਕਰੋ",
+    "requestBodyLabel": "ਬੇਨਤੀ ਬਾਡੀ",
+    "loadProfileTitle": "ਲੋਡ ਪ੍ਰੋਫਾਈਲ",
+    "loadProfileDescription": "ਟੈਸਟ ਦੌਰਾਨ ਪੈਦਾ ਹੋਣ ਵਾਲੇ ਲੋਡ ਦੀ ਮਾਤਰਾ ਨੂੰ ਪਰਿਭਾਸ਼ਿਤ ਕਰੋ।",
+    "loadTestPresetsLabel": "ਲੋਡ ਟੈਸਟ ਪ੍ਰੀਸੈੱਟ",
+    "customProfileTitle": "ਕਸਟਮ ਲੋਡ ਪ੍ਰੋਫਾਈਲ",
+    "customProfileDescription": "VUs, ਮਿਆਦ, ਜਾਂ ਪੜਾਵਾਂ ਲਈ ਆਪਣੀ ਖੁਦ ਦੀ ਸੰਰਚਨਾ ਨੂੰ ਪਰਿਭਾਸ਼ਿਤ ਕਰੋ।",
+    "vusLabel": "ਵਰਚੁਅਲ ਉਪਭੋਗਤਾ (VUs)",
+    "vusPlaceholder": "ਉਦਾਹਰਨ ਲਈ, 100",
+    "durationLabel": "ਮਿਆਦ",
+    "durationPlaceholder": "ਉਦਾਹਰਨ ਲਈ, 5m30s",
+    "stagesLabel": "ਪੜਾਅ",
+    "stagesDescription": "ਸਮੇਂ ਦੇ ਨਾਲ VUs ਨੂੰ ਵਧਾਉਣ/ਘਟਾਉਣ ਵਾਲੇ ਗੁੰਝਲਦਾਰ ਲੋਡ ਦ੍ਰਿਸ਼ਾਂ ਲਈ।",
+    "stageDurationLabel": "ਪੜਾਅ ਦੀ ਮਿਆਦ",
+    "stageDurationPlaceholder": "ਉਦਾਹਰਨ ਲਈ, 1m",
+    "stageTargetVusLabel": "ਟੀਚਾ VUs",
+    "stageTargetVusPlaceholder": "ਉਦਾਹਰਨ ਲਈ, 50",
+    "removeStageLabel": "ਪੜਾਅ {{index}} ਹਟਾਓ",
+    "addStageButton": "ਪੜਾਅ ਸ਼ਾਮਲ ਕਰੋ",
+    "runTestButton": "ਟੈਸਟ ਚਲਾਓ",
+    "runningTestButton": "ਚੱਲ ਰਿਹਾ ਹੈ...",
+    "error": {
+      "atLeastOne": "ਘੱਟੋ-ਘੱਟ ਇੱਕ ਟੈਸਟ ਸੂਟ ਚੁਣਿਆ ਜਾਣਾ ਚਾਹੀਦਾ ਹੈ।"
+    },
+    "toast": {
+      "historyClearedTitle": "ਇਤਿਹਾਸ ਸਾਫ਼ ਹੋ ਗਿਆ",
+      "historyClearedDescription": "ਤੁਹਾਡਾ ਸਥਾਨਕ ਟੈਸਟ ਇਤਿਹਾਸ ਸਾਫ਼ ਕਰ ਦਿੱਤਾ ਗਿਆ ਹੈ।",
+      "testStartedTitle": "ਟੈਸਟ ਸ਼ੁਰੂ ਹੋ ਗਿਆ!",
+      "testStartedDescription": "ਤੁਹਾਡੇ ਟੈਸਟ ਹੁਣ ਚੱਲ ਰਹੇ ਹਨ। ਹੇਠਾਂ ਪ੍ਰਗਤੀ ਦੀ ਨਿਗਰਾਨੀ ਕਰੋ।"
+    },
+    "clearHistoryDialog": {
+      "title": "ਮੌਜੂਦਾ ਇਤਿਹਾਸ ਸਾਫ਼ ਕਰੀਏ?",
+      "description": "ਤੁਹਾਡੇ ਕੋਲ ਮੌਜੂਦਾ ਟੈਸਟ ਇਤਿਹਾਸ ਹੈ। ਕੀ ਤੁਸੀਂ ਇਸ ਨਵੇਂ ਟੈਸਟ ਨੂੰ ਚਲਾਉਣ ਤੋਂ ਪਹਿਲਾਂ ਇਸਨੂੰ ਸਾਫ਼ ਕਰਨਾ ਚਾਹੁੰਦੇ ਹੋ?",
+      "keepButton": "ਨਹੀਂ, ਇਤਿਹਾਸ ਰੱਖੋ",
+      "clearButton": "ਹਾਂ, ਸਾਫ਼ ਕਰੋ ਅਤੇ ਚਲਾਓ"
+    }
+  },
+  "running": {
+    "title": "ਟੈਸਟ ਚੱਲ ਰਹੇ ਹਨ...",
+    "description": "ਕਿਰਪਾ ਕਰਕੇ ਉਡੀਕ ਕਰੋ ਜਦੋਂ ਤੱਕ ਚੁਣੇ ਹੋਏ ਸੂਟ ਪੂਰੇ ਨਹੀਂ ਹੋ ਜਾਂਦੇ। ਇਸ ਵਿੱਚ ਕੁਝ ਮਿੰਟ ਲੱਗ ਸਕਦੇ ਹਨ।",
+    "finalizingTitle": "ਨਤੀਜਿਆਂ ਨੂੰ ਅੰਤਿਮ ਰੂਪ ਦਿੱਤਾ ਜਾ ਰਿਹਾ ਹੈ...",
+    "grafanaLink": "ਗ੍ਰਾਫਾਨਾ 'ਤੇ ਲਾਈਵ ਡੈਸ਼ਬੋਰਡ ਦੇਖੋ"
+  },
+  "summary": {
+    "title": "ਟੈਸਟ ਸੰਖੇਪ",
+    "description": "ਤੁਹਾਡੇ ਟੈਸਟ ਰਨ ਦੇ ਨਤੀਜੇ",
+    "saveToHistoryButton": "ਇਤਿਹਾਸ ਵਿੱਚ ਸੁਰੱਖਿਅਤ ਕਰੋ",
+    "rerunButton": "ਮੁੜ ਚਲਾਓ",
+    "newTestButton": "ਨਵਾਂ ਟੈਸਟ ਬਣਾਓ",
+    "k6Tab": "ਲੋਡ ਟੈਸਟ",
+    "lighthouseTab": "ਲਾਈਟਹਾਊਸ",
+    "seoTab": "ਐਸਈਓ",
+    "configSummaryTitle": "ਟੈਸਟ ਸੰਰਚਨਾ",
+    "viewFullDetails": "ਪੂਰੀ ਸੰਰਚਨਾ ਵੇਰਵੇ ਦੇਖੋ"
+  },
+  "history": {
+    "title": "ਟੈਸਟ ਇਤਿਹਾਸ",
+    "description": "ਆਪਣੇ ਪਿਛਲੇ ਟੈਸਟ ਰਨ ਨੂੰ ਬ੍ਰਾਊਜ਼ ਕਰੋ ਅਤੇ ਪ੍ਰਬੰਧਿਤ ਕਰੋ।",
+    "lastSaved": "ਆਖਰੀ ਵਾਰ ਸੁਰੱਖਿਅਤ ਕੀਤਾ ਗਿਆ",
+    "importButton": "ਆਯਾਤ ਕਰੋ",
+    "exportButton": "ਨਿਰਯਾਤ ਕਰੋ",
+    "searchPlaceholder": "URL ਜਾਂ ID ਦੁਆਰਾ ਖੋਜੋ...",
+    "clearSearchLabel": "ਖੋਜ ਸਾਫ਼ ਕਰੋ",
+    "clearAllButton": "ਸਾਰਾ ਇਤਿਹਾਸ ਸਾਫ਼ ਕਰੋ",
+    "noHistoryMessage": "ਕੋਈ ਇਤਿਹਾਸ ਨਹੀਂ ਮਿਲਿਆ।",
+    "noHistoryDescription": "ਆਪਣਾ ਇਤਿਹਾਸ ਸ਼ੁਰੂ ਕਰਨ ਲਈ ਇੱਕ ਨਵਾਂ ਟੈਸਟ ਚਲਾਓ।",
+    "noResultsFound": "'{{query}}' ਲਈ ਕੋਈ ਨਤੀਜਾ ਨਹੀਂ ਮਿਲਿਆ।",
+    "clearSearch": "ਖੋਜ ਸਾਫ਼ ਕਰੋ",
+    "clearAllDialog": {
+      "title": "ਕੀ ਤੁਸੀਂ ਯਕੀਨੀ ਹੋ?",
+      "description": "ਇਹ ਕਾਰਵਾਈ ਵਾਪਸ ਨਹੀਂ ਕੀਤੀ ਜਾ ਸਕਦੀ। ਇਹ ਤੁਹਾਡੇ ਸਾਰੇ ਟੈਸਟ ਇਤਿਹਾਸ ਡੇਟਾ ਅਤੇ ਹਾਲੀਆ URL ਨੂੰ ਸਥਾਈ ਤੌਰ 'ਤੇ ਮਿਟਾ ਦੇਵੇਗਾ।",
+      "cancel": "ਰੱਦ ਕਰੋ",
+      "confirm": "ਮਿਟਾਓ"
+    },
+    "deleteDialog": {
+      "title": "ਇਸ ਐਂਟਰੀ ਨੂੰ ਮਿਟਾਉਣਾ ਹੈ?",
+      "description": "ਇਹ ਕਾਰਵਾਈ ਵਾਪਸ ਨਹੀਂ ਕੀਤੀ ਜਾ ਸਕਦੀ। ਇਹ ਇਸ ਟੈਸਟ ਰਨ ਨੂੰ ਤੁਹਾਡੇ ਇਤਿਹਾਸ ਤੋਂ ਸਥਾਈ ਤੌਰ 'ਤੇ ਮਿਟਾ ਦੇਵੇਗਾ।",
+      "cancel": "ਰੱਦ ਕਰੋ",
+      "confirm": "ਮਿਟਾਓ"
+    },
+    "table": {
+      "url": "URL",
+      "date": "ਮਿਤੀ",
+      "testsRun": "ਚਲਾਏ ਗਏ ਟੈਸਟ",
+      "actions": "ਕਾਰਵਾਈਆਂ"
+    },
+    "actions": {
+      "view": "{{url}} ਲਈ ਸੰਖੇਪ ਦੇਖੋ",
+      "rerun": "{{url}} ਲਈ ਟੈਸਟ ਮੁੜ ਚਲਾਓ",
+      "delete": "{{url}} ਲਈ ਇਤਿਹਾਸ ਆਈਟਮ ਮਿਟਾਓ"
+    },
+    "toast": {
+      "exportSuccessTitle": "ਇਤਿਹਾਸ ਨਿਰਯਾਤ ਕੀਤਾ ਗਿਆ",
+      "exportSuccessDescription": "ਤੁਹਾਡਾ ਟੈਸਟ ਇਤਿਹਾਸ ਇੱਕ JSON ਫਾਈਲ ਵਜੋਂ ਡਾਊਨਲੋਡ ਕੀਤਾ ਗਿਆ ਹੈ।",
+      "exportFailTitle": "ਨਿਰਯਾਤ ਅਸਫਲ",
+      "exportFailDescription": "ਇਤਿਹਾਸ ਨਿਰਯਾਤ ਨਹੀਂ ਕੀਤਾ ਜਾ ਸਕਿਆ।",
+      "importSuccessTitle": "ਇਤਿਹਾਸ ਆਯਾਤ ਕੀਤਾ ਗਿਆ",
+      "importSuccessDescription": "ਟੈਸਟ ਇਤਿਹਾਸ ਸਫਲਤਾਪੂਰਵਕ ਲੋਡ ਕੀਤਾ ਗਿਆ।",
+      "importFailTitle": "ਆਯਾਤ ਅਸਫਲ",
+      "importFailDescription": "ਚੁਣੀ ਹੋਈ ਫਾਈਲ ਨੂੰ ਪੜ੍ਹਿਆ ਨਹੀਂ ਜਾ ਸਕਿਆ।",
+      "importInvalidFormat": "ਅਵੈਧ ਫਾਈਲ ਫਾਰਮੈਟ।",
+      "deleteSuccessTitle": "ਐਂਟਰੀ ਮਿਟਾਈ ਗਈ",
+      "deleteSuccessDescription": "ਟੈਸਟ ਰਨ ਤੁਹਾਡੇ ਇਤਿਹਾਸ ਤੋਂ ਹਟਾ ਦਿੱਤਾ ਗਿਆ ਹੈ।",
+      "clearSuccessTitle": "ਇਤਿਹਾਸ ਸਾਫ਼ ਹੋ ਗਿਆ",
+      "clearSuccessDescription": "ਤੁਹਾਡਾ ਪੂਰਾ ਟੈਸਟ ਇਤਿਹਾਸ ਹਟਾ ਦਿੱਤਾ ਗਿਆ ਹੈ।"
+    }
+  },
+  "presets": {
+    "baseline": "ਬੇਸਲਾਈਨ",
+    "spike": "ਸਪਾਈਕ",
+    "stress": "ਤਣਾਅ",
+    "soak": "ਸੋਕ",
+    "custom": "ਕਸਟਮ"
+  },
+  "home": {
+    "lastSaved": "ਸਥਾਨਕ ਇਤਿਹਾਸ ਆਖਰੀ ਵਾਰ ਸੁਰੱਖਿਅਤ ਕੀਤਾ ਗਿਆ: {{distance}}"
+  }
 }
-
-    

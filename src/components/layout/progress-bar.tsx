@@ -16,7 +16,7 @@ export function ProgressBar() {
 
     // We use a timeout to avoid a flash of the progress bar on fast page loads
     const timer = setTimeout(() => {
-        handleStop();
+      handleStop();
     }, 500);
 
     handleStart();

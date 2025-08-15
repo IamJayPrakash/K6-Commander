@@ -1,203 +1,200 @@
-
 {
-    "header": {
-        "title": "K6コマンダー",
-        "historyLink": "履歴",
-        "aboutLink": "概要",
-        "startTourButton": "ツアーを開始",
-        "bugReport": "バグを報告",
-        "featureRequest": "機能をリクエスト"
-    },
-    "footer": {
-        "copyright": "© {{year}} K6 Commander. All rights reserved.",
-        "termsLink": "利用規約",
-        "privacyLink": "プライバシー",
-        "securityLink": "セキュリティ"
-    },
-    "about": {
-        "title": "K6コマンダーについて",
-        "description": "k6、Lighthouse、AI分析のパワーを1つの洗練されたUIに組み合わせた、軽量でローカルファーストの認証済み負荷テストプラットフォーム。",
-        "philosophyTitle": "私たちの哲学",
-        "localFirstTitle": "ローカルファースト",
-        "localFirstDescription": "すべてのテスト構成と履歴はブラウザに保存されます。クラウドアカウントは不要です。",
-        "unifiedToolingTitle": "統一されたツール",
-        "unifiedToolingDescription": "単一のインターフェースから負荷テスト、Lighthouse監査、SEO分析を実行します。",
-        "k6FeatureTitle": "k6負荷テスト",
-        "k6FeatureDescription": "トラフィックをシミュレートしてパフォーマンスのボトルネックを見つけます。",
-        "k6HowItWorks": "Leverage the full power of Grafana k6 to understand how your system behaves under load. Configure virtual users (VUs), duration, and custom ramping stages.",
-        "k6HowItWorks2": "Live results are streamed to a pre-configured Grafana dashboard, giving you real-time insights into request rates, response times, and errors.",
-        "lighthouseFeatureTitle": "Lighthouse監査",
-        "lighthouseFeatureDescription": "パフォーマンス、アクセシビリティなどを監査します。",
-        "lighthouseHowItWorks": "Run Google Lighthouse audits directly from the UI. Get scores for Performance, Accessibility, Best Practices, and SEO.",
-        "lighthouseHowItWorks2": "The application provides a high-level summary, and you can access the full, interactive HTML report for a deep-dive analysis and actionable recommendations.",
-        "seoFeatureTitle": "AIによるSEO分析",
-        "seoFeatureDescription": "AIの推奨事項による詳細な分析。",
-        "seoHowItWorks": "Get a deep, AI-powered analysis of the most critical on-page SEO elements to ensure your pages are optimized for search engines.",
-        "seoHowItWorks2": "This includes checks for title tags, meta descriptions, H1s, canonicals, and Open Graph tags, complete with AI-generated suggestions for improvement.",
-        "stackTitle": "技術スタック",
-        "stackDescription": "K6コマンダーは、最新の業界標準技術で構築されています。",
-        "involvedTitle": "参加する",
-        "involvedDescription": "これはオープンソースプロジェクトです。貢献、問題、機能のリクエストを歓迎します！",
-        "githubButton": "GitHubで見る"
-    },
-    "tour": {
-        "steps": {
-            "welcome": "K6コマンダーへようこそ！これがメインダッシュボードです。",
-            "history": "過去のテスト実行をここで表示および管理できます。",
-            "about": "アプリケーションの仕組みについて詳しくはこちらをご覧ください。",
-            "github": "ソースコードを表示したり、GitHubで問題を報告したりできます。",
-            "urlInput": "テストしたいURLをここに入力します。最近のURLから選択できます。",
-            "testSuites": "実行するテストスイートを選択します：負荷テスト、Lighthouse監査、またはAI SEO分析。",
-            "requestConfig": "HTTPリクエストの詳細（メソッド、ヘッダー、ボディなど）をここで構成します。",
-            "loadProfile": "事前定義された負荷プロファイルを選択するか、独自のカスタムシナリオを作成します。",
-            "runTest": "準備ができたら、ここをクリックしてテストを開始してください！"
-        }
-    },
-    "form": {
-        "title": "新規テスト実行",
-        "description": "次回のテスト実行のパラメータを構成します。",
-        "urlLabel": "ターゲットURL",
-        "urlDescription": "テストしたいページまたはエンドポイントの完全なURL。",
-        "urlPlaceholder": "https://example.com",
-        "toggleRecentUrlsLabel": "最近のURLを切り替える",
-        "searchUrlPlaceholder": "最近のURLを検索...",
-        "noRecentUrls": "最近のURLは見つかりません。",
-        "recentUrlsHeading": "最近のURL",
-        "removeRecentUrlLabel": "最近のURLから '{{url}}' を削除",
-        "clearRecentUrlsButton": "最近のURLをクリア",
-        "testSuitesTitle": "テストスイート",
-        "testSuitesDescription": "実行する1つ以上のテストスイートを選択します。",
-        "k6SwitchLabel": "k6負荷テスト",
-        "k6SwitchDescription": "負荷時のパフォーマンスを測定します。",
-        "lighthouseSwitchLabel": "Lighthouse監査",
-        "lighthouseSwitchDescription": "品質、パフォーマンス、SEOをチェックします。",
-        "seoSwitchLabel": "AI SEO分析",
-        "seoSwitchDescription": "詳細なオンページSEO分析を実行します。",
-        "requestConfigTitle": "リクエスト構成",
-        "requestConfigDescription": "負荷テスト用のHTTPリクエストをカスタマイズします。",
-        "methodLabel": "メソッド",
-        "methodPlaceholder": "メソッドを選択",
-        "headersLabel": "ヘッダー",
-        "headerNamePlaceholder": "ヘッダー名",
-        "headerValuePlaceholder": "ヘッダー値",
-        "removeHeaderLabel": "ヘッダー{{index}}を削除",
-        "addHeaderButton": "ヘッダーを追加",
-        "requestBodyLabel": "リクエストボディ",
-        "loadProfileTitle": "負荷プロファイル",
-        "loadProfileDescription": "テスト中に生成する負荷の量を定義します。",
-        "loadTestPresetsLabel": "負荷テストプリセット",
-        "customProfileTitle": "カスタム負荷プロファイル",
-        "customProfileDescription": "VU、期間、またはステージの独自の構成を定義します。",
-        "vusLabel": "仮想ユーザー（VU）",
-        "vusPlaceholder": "例：100",
-        "durationLabel": "期間",
-        "durationPlaceholder": "例：5m30s",
-        "stagesLabel": "ステージ",
-        "stagesDescription": "時間とともにVUを増減させる複雑な負荷シナリオ用。",
-        "stageDurationLabel": "ステージ期間",
-        "stageDurationPlaceholder": "例：1m",
-        "stageTargetVusLabel": "ターゲットVU",
-        "stageTargetVusPlaceholder": "例：50",
-        "removeStageLabel": "ステージ{{index}}を削除",
-        "addStageButton": "ステージを追加",
-        "runTestButton": "テストを実行",
-        "runningTestButton": "実行中...",
-        "error": {
-            "atLeastOne": "少なくとも1つのテストスイートを選択する必要があります。"
-        },
-        "toast": {
-            "historyClearedTitle": "履歴がクリアされました",
-            "historyClearedDescription": "ローカルのテスト履歴がクリアされました。",
-            "testStartedTitle": "テストが開始されました！",
-            "testStartedDescription": "テストが実行中です。以下の進行状況を監視してください。"
-        },
-        "clearHistoryDialog": {
-            "title": "既存の履歴をクリアしますか？",
-            "description": "既存のテスト履歴があります。この新しいテストを実行する前にクリアしますか？",
-            "keepButton": "いいえ、履歴を保持",
-            "clearButton": "はい、クリアして実行"
-        }
-    },
-    "running": {
-        "title": "テストを実行中...",
-        "description": "選択したスイートが完了するまでお待ちください。これには数分かかる場合があります。",
-        "finalizingTitle": "結果を最終処理中...",
-        "grafanaLink": "Grafanaでライブダッシュボードを表示"
-    },
-    "summary": {
-        "title": "テストの概要",
-        "description": "テスト実行の結果",
-        "saveToHistoryButton": "履歴に保存",
-        "rerunButton": "再実行",
-        "newTestButton": "新規テストを作成",
-        "k6Tab": "負荷テスト",
-        "lighthouseTab": "Lighthouse",
-        "seoTab": "SEO",
-        "configSummaryTitle": "テスト構成",
-        "viewFullDetails": "完全な構成詳細を表示"
-    },
-    "history": {
-        "title": "テスト履歴",
-        "description": "過去のテスト実行を閲覧および管理します。",
-        "lastSaved": "最終保存日時",
-        "importButton": "インポート",
-        "exportButton": "エクスポート",
-        "searchPlaceholder": "URLまたはIDで検索...",
-        "clearSearchLabel": "検索をクリア",
-        "clearAllButton": "すべての履歴をクリア",
-        "noHistoryMessage": "履歴が見つかりません。",
-        "noHistoryDescription": "新しいテストを実行して履歴を開始します。",
-        "noResultsFound": "'{{query}}'の検索結果はありません。",
-        "clearSearch": "検索をクリア",
-        "clearAllDialog": {
-            "title": "よろしいですか？",
-            "description": "この操作は元に戻せません。これにより、すべてのテスト履歴データと最近のURLが完全に削除されます。",
-            "cancel": "キャンセル",
-            "confirm": "削除"
-        },
-        "deleteDialog": {
-            "title": "このエントリを削除しますか？",
-            "description": "この操作は元に戻せません。これにより、このテスト実行が履歴から完全に削除されます。",
-            "cancel": "キャンセル",
-            "confirm": "削除"
-        },
-        "table": {
-            "url": "URL",
-            "date": "日付",
-            "testsRun": "実行されたテスト",
-            "actions": "アクション"
-        },
-        "actions": {
-            "view": "{{url}}の概要を表示",
-            "rerun": "{{url}}のテストを再実行",
-            "delete": "{{url}}の履歴項目を削除"
-        },
-        "toast": {
-            "exportSuccessTitle": "履歴がエクスポートされました",
-            "exportSuccessDescription": "テスト履歴がJSONファイルとしてダウンロードされました。",
-            "exportFailTitle": "エクスポートに失敗しました",
-            "exportFailDescription": "履歴をエクスポートできませんでした。",
-            "importSuccessTitle": "履歴がインポートされました",
-            "importSuccessDescription": "テスト履歴が正常に読み込まれました。",
-            "importFailTitle": "インポートに失敗しました",
-            "importFailDescription": "選択したファイルを読み取れませんでした。",
-            "importInvalidFormat": "無効なファイル形式です。",
-            "deleteSuccessTitle": "エントリが削除されました",
-            "deleteSuccessDescription": "テスト実行が履歴から削除されました。",
-            "clearSuccessTitle": "履歴がクリアされました",
-            "clearSuccessDescription": "すべてのテスト履歴が削除されました。"
-        }
-    },
-    "presets": {
-        "baseline": "ベースライン",
-        "spike": "スパイク",
-        "stress": "ストレス",
-        "soak": "ソーク",
-        "custom": "カスタム"
-    },
-    "home": {
-        "lastSaved": "ローカル履歴の最終保存日時：{{distance}}"
+  "header": {
+    "title": "K6コマンダー",
+    "historyLink": "履歴",
+    "aboutLink": "概要",
+    "startTourButton": "ツアーを開始",
+    "bugReport": "バグを報告",
+    "featureRequest": "機能をリクエスト"
+  },
+  "footer": {
+    "copyright": "© {{year}} K6 Commander. All rights reserved.",
+    "termsLink": "利用規約",
+    "privacyLink": "プライバシー",
+    "securityLink": "セキュリティ"
+  },
+  "about": {
+    "title": "K6コマンダーについて",
+    "description": "k6、Lighthouse、AI分析のパワーを1つの洗練されたUIに組み合わせた、軽量でローカルファーストの認証済み負荷テストプラットフォーム。",
+    "philosophyTitle": "私たちの哲学",
+    "localFirstTitle": "ローカルファースト",
+    "localFirstDescription": "すべてのテスト構成と履歴はブラウザに保存されます。クラウドアカウントは不要です。",
+    "unifiedToolingTitle": "統一されたツール",
+    "unifiedToolingDescription": "単一のインターフェースから負荷テスト、Lighthouse監査、SEO分析を実行します。",
+    "k6FeatureTitle": "k6負荷テスト",
+    "k6FeatureDescription": "トラフィックをシミュレートしてパフォーマンスのボトルネックを見つけます。",
+    "k6HowItWorks": "Leverage the full power of Grafana k6 to understand how your system behaves under load. Configure virtual users (VUs), duration, and custom ramping stages.",
+    "k6HowItWorks2": "Live results are streamed to a pre-configured Grafana dashboard, giving you real-time insights into request rates, response times, and errors.",
+    "lighthouseFeatureTitle": "Lighthouse監査",
+    "lighthouseFeatureDescription": "パフォーマンス、アクセシビリティなどを監査します。",
+    "lighthouseHowItWorks": "Run Google Lighthouse audits directly from the UI. Get scores for Performance, Accessibility, Best Practices, and SEO.",
+    "lighthouseHowItWorks2": "The application provides a high-level summary, and you can access the full, interactive HTML report for a deep-dive analysis and actionable recommendations.",
+    "seoFeatureTitle": "AIによるSEO分析",
+    "seoFeatureDescription": "AIの推奨事項による詳細な分析。",
+    "seoHowItWorks": "Get a deep, AI-powered analysis of the most critical on-page SEO elements to ensure your pages are optimized for search engines.",
+    "seoHowItWorks2": "This includes checks for title tags, meta descriptions, H1s, canonicals, and Open Graph tags, complete with AI-generated suggestions for improvement.",
+    "stackTitle": "技術スタック",
+    "stackDescription": "K6コマンダーは、最新の業界標準技術で構築されています。",
+    "involvedTitle": "参加する",
+    "involvedDescription": "これはオープンソースプロジェクトです。貢献、問題、機能のリクエストを歓迎します！",
+    "githubButton": "GitHubで見る"
+  },
+  "tour": {
+    "steps": {
+      "welcome": "K6コマンダーへようこそ！これがメインダッシュボードです。",
+      "history": "過去のテスト実行をここで表示および管理できます。",
+      "about": "アプリケーションの仕組みについて詳しくはこちらをご覧ください。",
+      "github": "ソースコードを表示したり、GitHubで問題を報告したりできます。",
+      "urlInput": "テストしたいURLをここに入力します。最近のURLから選択できます。",
+      "testSuites": "実行するテストスイートを選択します：負荷テスト、Lighthouse監査、またはAI SEO分析。",
+      "requestConfig": "HTTPリクエストの詳細（メソッド、ヘッダー、ボディなど）をここで構成します。",
+      "loadProfile": "事前定義された負荷プロファイルを選択するか、独自のカスタムシナリオを作成します。",
+      "runTest": "準備ができたら、ここをクリックしてテストを開始してください！"
     }
+  },
+  "form": {
+    "title": "新規テスト実行",
+    "description": "次回のテスト実行のパラメータを構成します。",
+    "urlLabel": "ターゲットURL",
+    "urlDescription": "テストしたいページまたはエンドポイントの完全なURL。",
+    "urlPlaceholder": "https://example.com",
+    "toggleRecentUrlsLabel": "最近のURLを切り替える",
+    "searchUrlPlaceholder": "最近のURLを検索...",
+    "noRecentUrls": "最近のURLは見つかりません。",
+    "recentUrlsHeading": "最近のURL",
+    "removeRecentUrlLabel": "最近のURLから '{{url}}' を削除",
+    "clearRecentUrlsButton": "最近のURLをクリア",
+    "testSuitesTitle": "テストスイート",
+    "testSuitesDescription": "実行する1つ以上のテストスイートを選択します。",
+    "k6SwitchLabel": "k6負荷テスト",
+    "k6SwitchDescription": "負荷時のパフォーマンスを測定します。",
+    "lighthouseSwitchLabel": "Lighthouse監査",
+    "lighthouseSwitchDescription": "品質、パフォーマンス、SEOをチェックします。",
+    "seoSwitchLabel": "AI SEO分析",
+    "seoSwitchDescription": "詳細なオンページSEO分析を実行します。",
+    "requestConfigTitle": "リクエスト構成",
+    "requestConfigDescription": "負荷テスト用のHTTPリクエストをカスタマイズします。",
+    "methodLabel": "メソッド",
+    "methodPlaceholder": "メソッドを選択",
+    "headersLabel": "ヘッダー",
+    "headerNamePlaceholder": "ヘッダー名",
+    "headerValuePlaceholder": "ヘッダー値",
+    "removeHeaderLabel": "ヘッダー{{index}}を削除",
+    "addHeaderButton": "ヘッダーを追加",
+    "requestBodyLabel": "リクエストボディ",
+    "loadProfileTitle": "負荷プロファイル",
+    "loadProfileDescription": "テスト中に生成する負荷の量を定義します。",
+    "loadTestPresetsLabel": "負荷テストプリセット",
+    "customProfileTitle": "カスタム負荷プロファイル",
+    "customProfileDescription": "VU、期間、またはステージの独自の構成を定義します。",
+    "vusLabel": "仮想ユーザー（VU）",
+    "vusPlaceholder": "例：100",
+    "durationLabel": "期間",
+    "durationPlaceholder": "例：5m30s",
+    "stagesLabel": "ステージ",
+    "stagesDescription": "時間とともにVUを増減させる複雑な負荷シナリオ用。",
+    "stageDurationLabel": "ステージ期間",
+    "stageDurationPlaceholder": "例：1m",
+    "stageTargetVusLabel": "ターゲットVU",
+    "stageTargetVusPlaceholder": "例：50",
+    "removeStageLabel": "ステージ{{index}}を削除",
+    "addStageButton": "ステージを追加",
+    "runTestButton": "テストを実行",
+    "runningTestButton": "実行中...",
+    "error": {
+      "atLeastOne": "少なくとも1つのテストスイートを選択する必要があります。"
+    },
+    "toast": {
+      "historyClearedTitle": "履歴がクリアされました",
+      "historyClearedDescription": "ローカルのテスト履歴がクリアされました。",
+      "testStartedTitle": "テストが開始されました！",
+      "testStartedDescription": "テストが実行中です。以下の進行状況を監視してください。"
+    },
+    "clearHistoryDialog": {
+      "title": "既存の履歴をクリアしますか？",
+      "description": "既存のテスト履歴があります。この新しいテストを実行する前にクリアしますか？",
+      "keepButton": "いいえ、履歴を保持",
+      "clearButton": "はい、クリアして実行"
+    }
+  },
+  "running": {
+    "title": "テストを実行中...",
+    "description": "選択したスイートが完了するまでお待ちください。これには数分かかる場合があります。",
+    "finalizingTitle": "結果を最終処理中...",
+    "grafanaLink": "Grafanaでライブダッシュボードを表示"
+  },
+  "summary": {
+    "title": "テストの概要",
+    "description": "テスト実行の結果",
+    "saveToHistoryButton": "履歴に保存",
+    "rerunButton": "再実行",
+    "newTestButton": "新規テストを作成",
+    "k6Tab": "負荷テスト",
+    "lighthouseTab": "Lighthouse",
+    "seoTab": "SEO",
+    "configSummaryTitle": "テスト構成",
+    "viewFullDetails": "完全な構成詳細を表示"
+  },
+  "history": {
+    "title": "テスト履歴",
+    "description": "過去のテスト実行を閲覧および管理します。",
+    "lastSaved": "最終保存日時",
+    "importButton": "インポート",
+    "exportButton": "エクスポート",
+    "searchPlaceholder": "URLまたはIDで検索...",
+    "clearSearchLabel": "検索をクリア",
+    "clearAllButton": "すべての履歴をクリア",
+    "noHistoryMessage": "履歴が見つかりません。",
+    "noHistoryDescription": "新しいテストを実行して履歴を開始します。",
+    "noResultsFound": "'{{query}}'の検索結果はありません。",
+    "clearSearch": "検索をクリア",
+    "clearAllDialog": {
+      "title": "よろしいですか？",
+      "description": "この操作は元に戻せません。これにより、すべてのテスト履歴データと最近のURLが完全に削除されます。",
+      "cancel": "キャンセル",
+      "confirm": "削除"
+    },
+    "deleteDialog": {
+      "title": "このエントリを削除しますか？",
+      "description": "この操作は元に戻せません。これにより、このテスト実行が履歴から完全に削除されます。",
+      "cancel": "キャンセル",
+      "confirm": "削除"
+    },
+    "table": {
+      "url": "URL",
+      "date": "日付",
+      "testsRun": "実行されたテスト",
+      "actions": "アクション"
+    },
+    "actions": {
+      "view": "{{url}}の概要を表示",
+      "rerun": "{{url}}のテストを再実行",
+      "delete": "{{url}}の履歴項目を削除"
+    },
+    "toast": {
+      "exportSuccessTitle": "履歴がエクスポートされました",
+      "exportSuccessDescription": "テスト履歴がJSONファイルとしてダウンロードされました。",
+      "exportFailTitle": "エクスポートに失敗しました",
+      "exportFailDescription": "履歴をエクスポートできませんでした。",
+      "importSuccessTitle": "履歴がインポートされました",
+      "importSuccessDescription": "テスト履歴が正常に読み込まれました。",
+      "importFailTitle": "インポートに失敗しました",
+      "importFailDescription": "選択したファイルを読み取れませんでした。",
+      "importInvalidFormat": "無効なファイル形式です。",
+      "deleteSuccessTitle": "エントリが削除されました",
+      "deleteSuccessDescription": "テスト実行が履歴から削除されました。",
+      "clearSuccessTitle": "履歴がクリアされました",
+      "clearSuccessDescription": "すべてのテスト履歴が削除されました。"
+    }
+  },
+  "presets": {
+    "baseline": "ベースライン",
+    "spike": "スパイク",
+    "stress": "ストレス",
+    "soak": "ソーク",
+    "custom": "カスタム"
+  },
+  "home": {
+    "lastSaved": "ローカル履歴の最終保存日時：{{distance}}"
+  }
 }
-
-    

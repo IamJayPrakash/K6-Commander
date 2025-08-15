@@ -4,8 +4,8 @@ K6 Commander is a lightweight, local-first, authorized load-testing platform. It
 
 **Disclaimer:** This tool is intended for performance testing **your own applications** where you have explicit permission to do so. Unauthorized testing of third-party websites is illegal and unethical. The creators of this software are not responsible for its misuse.
 
-
 ![alt text](image.png)
+
 ## ✨ Features
 
 - **Multi-Modal Testing**: Run k6 load tests, Google Lighthouse audits, and basic on-page SEO checks from a single interface.
@@ -43,10 +43,13 @@ cd k6-commander
 ```
 
 ### 2. Set Up Environment Variables
+
 Create a `.env` file by copying the example file:
+
 ```bash
 cp .env.example .env
 ```
+
 Open the `.env` file and add your `GEMINI_API_KEY` to enable the AI-powered SEO analysis feature.
 
 ### 3. Build and Run with Docker Compose
@@ -58,6 +61,7 @@ docker-compose up --build
 ```
 
 This command will:
+
 1.  Build the Next.js application's Docker image.
 2.  Pull the required images for InfluxDB and Grafana.
 3.  Start all services (`app`, `influxdb`, `grafana`).
@@ -79,17 +83,18 @@ Once the services are up, you can access:
 7.  Monitor the "Test Running" view. For load tests, a link to the live Grafana dashboard will be available.
 8.  Once the test is complete, a summary report will be displayed.
 
-
 ## 🚢 Deployment
 
 K6 Commander is designed to be a self-hosted application. The recommended deployment method is using Docker on a virtual private server (e.g., AWS EC2, DigitalOcean Droplet, Google Cloud VM).
 
 ### Server Requirements
+
 - A server with Docker and Docker Compose installed.
 - At least 2GB of RAM is recommended.
 - A firewall configured to allow traffic on the ports you intend to expose (e.g., port 80/443 for the web app).
 
 ### Steps for Deployment
+
 1. **Clone the repository** onto your server.
 2. **Configure environment variables**: Create a `.env` file with your `GEMINI_API_KEY`.
 3. **Build and run the application**:
@@ -101,7 +106,7 @@ K6 Commander is designed to be a self-hosted application. The recommended deploy
    - Configure your reverse proxy to forward requests to the K6 Commander app running on `http://localhost:3000`.
    - Configure another subdomain (e.g., `grafana.your-domain.com`) to point to the Grafana instance on `http://localhost:3003`.
 
-### Important Note on Platform Compatibility
+### ⚠️ Important Note on Platform Compatibility
 
 K6 Commander's architecture relies on running Docker containers and spawning system processes (`npx`) directly from its backend. This architecture is **not compatible with serverless deployment platforms** like **Vercel** or **Netlify**. These platforms have limitations that prevent the execution of Docker containers and arbitrary shell commands, which are essential for the k6 and Lighthouse functionalities.
 
@@ -112,6 +117,8 @@ K6 Commander's architecture relies on running Docker containers and spawning sys
 ```
 /
 ├── .github/          # GitHub templates (issues, funding)
+│   └── workflows/    # GitHub Actions CI/CD workflows
+│       └── e2e.yml
 ├── grafana/          # Grafana provisioning files
 │   ├── dashboards/     # Pre-configured dashboard JSON
 │   └── provisioning/   # Datasource and dashboard configurations
@@ -132,12 +139,16 @@ K6 Commander's architecture relies on running Docker containers and spawning sys
 │   ├── hooks/          # Custom React hooks
 │   ├── lib/            # Utility functions and constants
 │   └── types/          # TypeScript type definitions
+├── tests/
+│   └── e2e/
+│       └── app.spec.ts # Example Playwright E2E test
 ├── .env.example      # Example environment variables
 ├── .gitignore        # Files and directories to ignore in version control
 ├── docker-compose.yml  # Orchestrates all services (app, grafana, influxdb)
 ├── Dockerfile          # Defines the Next.js application container
 ├── next.config.ts      # Next.js configuration
-└── package.json        # Project dependencies and scripts
+├── package.json        # Project dependencies and scripts
+└── playwright.config.ts# Configuration for Playwright
 ```
 
 ## ⚙️ Configuration

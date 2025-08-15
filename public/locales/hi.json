@@ -1,203 +1,200 @@
-
 {
-    "header": {
-        "title": "K6 कमांडर",
-        "historyLink": "इतिहास",
-        "aboutLink": "बारे में",
-        "startTourButton": "टूर शुरू करें",
-        "bugReport": "बग की रिपोर्ट करें",
-        "featureRequest": "सुविधा का अनुरोध करें"
-    },
-    "footer": {
-        "copyright": "© {{year}} K6 कमांडर। सर्वाधिकार सुरक्षित।",
-        "termsLink": "शर्तें",
-        "privacyLink": "गोपनीयता",
-        "securityLink": "सुरक्षा"
-    },
-    "about": {
-        "title": "K6 कमांडर के बारे में",
-        "description": "एक हल्का, स्थानीय-प्रथम, अधिकृत लोड-परीक्षण प्लेटफ़ॉर्म जो k6, लाइटहाउस और AI विश्लेषण की शक्ति को एक ही आकर्षक UI में जोड़ता है।",
-        "philosophyTitle": "हमारा दर्शन",
-        "localFirstTitle": "स्थानीय-प्रथम",
-        "localFirstDescription": "आपके सभी परीक्षण कॉन्फ़िगरेशन और इतिहास आपके ब्राउज़र में संग्रहीत हैं। किसी क्लाउड खाते की आवश्यकता नहीं है।",
-        "unifiedToolingTitle": "एकीकृत उपकरण",
-        "unifiedToolingDescription": "एक ही इंटरफ़ेस से लोड परीक्षण, लाइटहाउस ऑडिट और SEO विश्लेषण चलाएँ।",
-        "k6FeatureTitle": "k6 लोड परीक्षण",
-        "k6FeatureDescription": "प्रदर्शन बाधाओं को खोजने के लिए ट्रैफ़िक का अनुकरण करें।",
-        "k6HowItWorks": "Leverage the full power of Grafana k6 to understand how your system behaves under load. Configure virtual users (VUs), duration, and custom ramping stages.",
-        "k6HowItWorks2": "Live results are streamed to a pre-configured Grafana dashboard, giving you real-time insights into request rates, response times, and errors.",
-        "lighthouseFeatureTitle": "लाइटहाउस ऑडिट",
-        "lighthouseFeatureDescription": "प्रदर्शन, पहुंच और अधिक के लिए ऑडिट करें।",
-        "lighthouseHowItWorks": "Run Google Lighthouse audits directly from the UI. Get scores for Performance, Accessibility, Best Practices, and SEO.",
-        "lighthouseHowItWorks2": "The application provides a high-level summary, and you can access the full, interactive HTML report for a deep-dive analysis and actionable recommendations.",
-        "seoFeatureTitle": "एआई-पावर्ड एसईओ विश्लेषण",
-        "seoFeatureDescription": "एआई सिफारिशों के साथ गहन विश्लेषण।",
-        "seoHowItWorks": "Get a deep, AI-powered analysis of the most critical on-page SEO elements to ensure your pages are optimized for search engines.",
-        "seoHowItWorks2": "This includes checks for title tags, meta descriptions, H1s, canonicals, and Open Graph tags, complete with AI-generated suggestions for improvement.",
-        "stackTitle": "प्रौद्योगिकी स्टैक",
-        "stackDescription": "K6 कमांडर आधुनिक, उद्योग-मानक प्रौद्योगिकियों के साथ बनाया गया है।",
-        "involvedTitle": "शामिल हों",
-        "involvedDescription": "यह एक ओपन सोर्स प्रोजेक्ट है। योगदान, मुद्दे और सुविधा अनुरोधों का स्वागत है!",
-        "githubButton": "GitHub पर देखें"
-    },
-    "tour": {
-        "steps": {
-            "welcome": "K6 कमांडर में आपका स्वागत है! यह आपका मुख्य डैशबोर्ड है।",
-            "history": "आप अपने पिछले परीक्षण रन यहाँ देख और प्रबंधित कर सकते हैं।",
-            "about": "एप्लिकेशन कैसे काम करता है, इसके बारे में यहाँ और जानें।",
-            "github": "स्रोत कोड देखें या यहाँ GitHub पर समस्याओं की रिपोर्ट करें।",
-            "urlInput": "यहाँ वह URL दर्ज करें जिसका आप परीक्षण करना चाहते हैं। आप हाल के URL से चयन कर सकते हैं।",
-            "testSuites": "चुनें कि आप कौन से परीक्षण सूट चलाना चाहते हैं: लोड टेस्ट, लाइटहाउस ऑडिट, या एआई एसईओ विश्लेषण।",
-            "requestConfig": "यहाँ अपनी HTTP अनुरोध का विवरण कॉन्फ़िगर करें, जैसे विधि, हेडर और बॉडी।",
-            "loadProfile": "एक पूर्वनिर्धारित लोड प्रोफ़ाइल चुनें या अपना स्वयं का कस्टम परिदृश्य बनाएँ।",
-            "runTest": "जब आप तैयार हों, तो अपने परीक्षण शुरू करने के लिए यहाँ क्लिक करें!"
-        }
-    },
-    "form": {
-        "title": "नया परीक्षण रन",
-        "description": "अपने अगले परीक्षण रन के लिए पैरामीटर कॉन्फ़िगर करें।",
-        "urlLabel": "लक्ष्य URL",
-        "urlDescription": "उस पृष्ठ या समापन बिंदु का पूरा URL जिसे आप परीक्षण करना चाहते हैं।",
-        "urlPlaceholder": "https://example.com",
-        "toggleRecentUrlsLabel": "हाल के URL टॉगल करें",
-        "searchUrlPlaceholder": "हाल के URL खोजें...",
-        "noRecentUrls": "कोई हाल का URL नहीं मिला।",
-        "recentUrlsHeading": "हाल के URL",
-        "removeRecentUrlLabel": "हाल के URL से '{{url}}' हटाएँ",
-        "clearRecentUrlsButton": "हाल के URL साफ़ करें",
-        "testSuitesTitle": "परीक्षण सूट",
-        "testSuitesDescription": "निष्पादित करने के लिए एक या अधिक परीक्षण सूट चुनें।",
-        "k6SwitchLabel": "k6 लोड टेस्ट",
-        "k6SwitchDescription": "लोड के तहत प्रदर्शन मापें।",
-        "lighthouseSwitchLabel": "लाइटहाउस ऑडिट",
-        "lighthouseSwitchDescription": "गुणवत्ता, प्रदर्शन और एसईओ की जाँच करें।",
-        "seoSwitchLabel": "एआई एसईओ विश्लेषण",
-        "seoSwitchDescription": "एक गहन ऑन-पेज एसईओ विश्लेषण करें।",
-        "requestConfigTitle": "अनुरोध कॉन्फ़िगरेशन",
-        "requestConfigDescription": "लोड परीक्षण के लिए HTTP अनुरोध को अनुकूलित करें।",
-        "methodLabel": "विधि",
-        "methodPlaceholder": "एक विधि चुनें",
-        "headersLabel": "हेडर",
-        "headerNamePlaceholder": "हेडर का नाम",
-        "headerValuePlaceholder": "हेडर का मान",
-        "removeHeaderLabel": "हेडर {{index}} हटाएँ",
-        "addHeaderButton": "हेडर जोड़ें",
-        "requestBodyLabel": "अनुरोध बॉडी",
-        "loadProfileTitle": "लोड प्रोफ़ाइल",
-        "loadProfileDescription": "परीक्षण के दौरान उत्पन्न होने वाले लोड की मात्रा को परिभाषित करें।",
-        "loadTestPresetsLabel": "लोड परीक्षण प्रीसेट",
-        "customProfileTitle": "कस्टम लोड प्रोफ़ाइल",
-        "customProfileDescription": "VUs, अवधि, या चरणों के लिए अपनी स्वयं की कॉन्फ़िगरेशन परिभाषित करें।",
-        "vusLabel": "वर्चुअल उपयोगकर्ता (VUs)",
-        "vusPlaceholder": "उदा., 100",
-        "durationLabel": "अवधि",
-        "durationPlaceholder": "उदा., 5m30s",
-        "stagesLabel": "चरण",
-        "stagesDescription": "समय के साथ VUs को बढ़ाने/घटाने वाले जटिल लोड परिदृश्यों के लिए।",
-        "stageDurationLabel": "चरण की अवधि",
-        "stageDurationPlaceholder": "उदा., 1m",
-        "stageTargetVusLabel": "लक्ष्य VUs",
-        "stageTargetVusPlaceholder": "उदा., 50",
-        "removeStageLabel": "चरण {{index}} हटाएँ",
-        "addStageButton": "चरण जोड़ें",
-        "runTestButton": "परीक्षण चलाएँ",
-        "runningTestButton": "चल रहा है...",
-        "error": {
-            "atLeastOne": "कम से कम एक परीक्षण सूट का चयन किया जाना चाहिए।"
-        },
-        "toast": {
-            "historyClearedTitle": "इतिहास साफ़ हो गया",
-            "historyClearedDescription": "आपका स्थानीय परीक्षण इतिहास साफ़ कर दिया गया है।",
-            "testStartedTitle": "परीक्षण शुरू हो गया!",
-            "testStartedDescription": "आपके परीक्षण अब चल रहे हैं। नीचे प्रगति की निगरानी करें।"
-        },
-        "clearHistoryDialog": {
-            "title": "मौजूदा इतिहास साफ़ करें?",
-            "description": "आपके पास मौजूदा परीक्षण इतिहास है। क्या आप इस नए परीक्षण को चलाने से पहले इसे साफ़ करना चाहेंगे?",
-            "keepButton": "नहीं, इतिहास रखें",
-            "clearButton": "हाँ, साफ़ करें और चलाएँ"
-        }
-    },
-    "running": {
-        "title": "परीक्षण चल रहे हैं...",
-        "description": "कृपया प्रतीक्षा करें जब तक चयनित सूट पूरे नहीं हो जाते। इसमें कुछ मिनट लग सकते हैं।",
-        "finalizingTitle": "परिणामों को अंतिम रूप दिया जा रहा है...",
-        "grafanaLink": "ग्राफाना पर लाइव डैशबोर्ड देखें"
-    },
-    "summary": {
-        "title": "परीक्षण सारांश",
-        "description": "आपके परीक्षण रन के परिणाम",
-        "saveToHistoryButton": "इतिहास में सहेजें",
-        "rerunButton": "फिर से चलाएँ",
-        "newTestButton": "नया परीक्षण बनाएँ",
-        "k6Tab": "लोड टेस्ट",
-        "lighthouseTab": "लाइटहाउस",
-        "seoTab": "एसईओ",
-        "configSummaryTitle": "परीक्षण कॉन्फ़िगरेशन",
-        "viewFullDetails": "पूर्ण कॉन्फ़िगरेशन विवरण देखें"
-    },
-    "history": {
-        "title": "परीक्षण इतिहास",
-        "description": "अपने पिछले परीक्षण रन ब्राउज़ करें और प्रबंधित करें।",
-        "lastSaved": "अंतिम बार सहेजा गया",
-        "importButton": "आयात करें",
-        "exportButton": "निर्यात करें",
-        "searchPlaceholder": "URL या ID द्वारा खोजें...",
-        "clearSearchLabel": "खोज साफ़ करें",
-        "clearAllButton": "सारा इतिहास साफ़ करें",
-        "noHistoryMessage": "कोई इतिहास नहीं मिला।",
-        "noHistoryDescription": "अपना इतिहास शुरू करने के लिए एक नया परीक्षण चलाएँ।",
-        "noResultsFound": "'{{query}}' के लिए कोई परिणाम नहीं मिला।",
-        "clearSearch": "खोज साफ़ करें",
-        "clearAllDialog": {
-            "title": "क्या आप निश्चित हैं?",
-            "description": "यह कार्रवाई पूर्ववत नहीं की जा सकती। यह आपके सभी परीक्षण इतिहास डेटा और हाल के URL को स्थायी रूप से हटा देगा।",
-            "cancel": "रद्द करें",
-            "confirm": "हटाएँ"
-        },
-        "deleteDialog": {
-            "title": "इस प्रविष्टि को हटाएँ?",
-            "description": "यह कार्रवाई पूर्ववत नहीं की जा सकती। यह इस परीक्षण रन को आपके इतिहास से स्थायी रूप से हटा देगा।",
-            "cancel": "रद्द करें",
-            "confirm": "हटाएँ"
-        },
-        "table": {
-            "url": "URL",
-            "date": "तिथि",
-            "testsRun": "चलाए गए परीक्षण",
-            "actions": "कार्रवाइयाँ"
-        },
-        "actions": {
-            "view": "{{url}} के लिए सारांश देखें",
-            "rerun": "{{url}} के लिए परीक्षण फिर से चलाएँ",
-            "delete": "{{url}} के लिए इतिहास आइटम हटाएँ"
-        },
-        "toast": {
-            "exportSuccessTitle": "इतिहास निर्यात किया गया",
-            "exportSuccessDescription": "आपका परीक्षण इतिहास एक JSON फ़ाइल के रूप में डाउनलोड किया गया है।",
-            "exportFailTitle": "निर्यात विफल",
-            "exportFailDescription": "इतिहास निर्यात नहीं किया जा सका।",
-            "importSuccessTitle": "इतिहास आयात किया गया",
-            "importSuccessDescription": "परीक्षण इतिहास सफलतापूर्वक लोड किया गया।",
-            "importFailTitle": "आयात विफल",
-            "importFailDescription": "चयनित फ़ाइल को पढ़ा नहीं जा सका।",
-            "importInvalidFormat": "अमान्य फ़ाइल स्वरूप।",
-            "deleteSuccessTitle": "प्रविष्टि हटाई गई",
-            "deleteSuccessDescription": "परीक्षण रन आपके इतिहास से हटा दिया गया है।",
-            "clearSuccessTitle": "इतिहास साफ़ हो गया",
-            "clearSuccessDescription": "आपका पूरा परीक्षण इतिहास हटा दिया गया है।"
-        }
-    },
-    "presets": {
-        "baseline": "आधार रेखा",
-        "spike": "स्पाइक",
-        "stress": "तनाव",
-        "soak": "सोखना",
-        "custom": "कस्टम"
-    },
-    "home": {
-        "lastSaved": "स्थानीय इतिहास अंतिम बार सहेजा गया: {{distance}}"
+  "header": {
+    "title": "K6 कमांडर",
+    "historyLink": "इतिहास",
+    "aboutLink": "बारे में",
+    "startTourButton": "टूर शुरू करें",
+    "bugReport": "बग की रिपोर्ट करें",
+    "featureRequest": "सुविधा का अनुरोध करें"
+  },
+  "footer": {
+    "copyright": "© {{year}} K6 कमांडर। सर्वाधिकार सुरक्षित।",
+    "termsLink": "शर्तें",
+    "privacyLink": "गोपनीयता",
+    "securityLink": "सुरक्षा"
+  },
+  "about": {
+    "title": "K6 कमांडर के बारे में",
+    "description": "एक हल्का, स्थानीय-प्रथम, अधिकृत लोड-परीक्षण प्लेटफ़ॉर्म जो k6, लाइटहाउस और AI विश्लेषण की शक्ति को एक ही आकर्षक UI में जोड़ता है।",
+    "philosophyTitle": "हमारा दर्शन",
+    "localFirstTitle": "स्थानीय-प्रथम",
+    "localFirstDescription": "आपके सभी परीक्षण कॉन्फ़िगरेशन और इतिहास आपके ब्राउज़र में संग्रहीत हैं। किसी क्लाउड खाते की आवश्यकता नहीं है।",
+    "unifiedToolingTitle": "एकीकृत उपकरण",
+    "unifiedToolingDescription": "एक ही इंटरफ़ेस से लोड परीक्षण, लाइटहाउस ऑडिट और SEO विश्लेषण चलाएँ।",
+    "k6FeatureTitle": "k6 लोड परीक्षण",
+    "k6FeatureDescription": "प्रदर्शन बाधाओं को खोजने के लिए ट्रैफ़िक का अनुकरण करें।",
+    "k6HowItWorks": "Leverage the full power of Grafana k6 to understand how your system behaves under load. Configure virtual users (VUs), duration, and custom ramping stages.",
+    "k6HowItWorks2": "Live results are streamed to a pre-configured Grafana dashboard, giving you real-time insights into request rates, response times, and errors.",
+    "lighthouseFeatureTitle": "लाइटहाउस ऑडिट",
+    "lighthouseFeatureDescription": "प्रदर्शन, पहुंच और अधिक के लिए ऑडिट करें।",
+    "lighthouseHowItWorks": "Run Google Lighthouse audits directly from the UI. Get scores for Performance, Accessibility, Best Practices, and SEO.",
+    "lighthouseHowItWorks2": "The application provides a high-level summary, and you can access the full, interactive HTML report for a deep-dive analysis and actionable recommendations.",
+    "seoFeatureTitle": "एआई-पावर्ड एसईओ विश्लेषण",
+    "seoFeatureDescription": "एआई सिफारिशों के साथ गहन विश्लेषण।",
+    "seoHowItWorks": "Get a deep, AI-powered analysis of the most critical on-page SEO elements to ensure your pages are optimized for search engines.",
+    "seoHowItWorks2": "This includes checks for title tags, meta descriptions, H1s, canonicals, and Open Graph tags, complete with AI-generated suggestions for improvement.",
+    "stackTitle": "प्रौद्योगिकी स्टैक",
+    "stackDescription": "K6 कमांडर आधुनिक, उद्योग-मानक प्रौद्योगिकियों के साथ बनाया गया है।",
+    "involvedTitle": "शामिल हों",
+    "involvedDescription": "यह एक ओपन सोर्स प्रोजेक्ट है। योगदान, मुद्दे और सुविधा अनुरोधों का स्वागत है!",
+    "githubButton": "GitHub पर देखें"
+  },
+  "tour": {
+    "steps": {
+      "welcome": "K6 कमांडर में आपका स्वागत है! यह आपका मुख्य डैशबोर्ड है।",
+      "history": "आप अपने पिछले परीक्षण रन यहाँ देख और प्रबंधित कर सकते हैं।",
+      "about": "एप्लिकेशन कैसे काम करता है, इसके बारे में यहाँ और जानें।",
+      "github": "स्रोत कोड देखें या यहाँ GitHub पर समस्याओं की रिपोर्ट करें।",
+      "urlInput": "यहाँ वह URL दर्ज करें जिसका आप परीक्षण करना चाहते हैं। आप हाल के URL से चयन कर सकते हैं।",
+      "testSuites": "चुनें कि आप कौन से परीक्षण सूट चलाना चाहते हैं: लोड टेस्ट, लाइटहाउस ऑडिट, या एआई एसईओ विश्लेषण।",
+      "requestConfig": "यहाँ अपनी HTTP अनुरोध का विवरण कॉन्फ़िगर करें, जैसे विधि, हेडर और बॉडी।",
+      "loadProfile": "एक पूर्वनिर्धारित लोड प्रोफ़ाइल चुनें या अपना स्वयं का कस्टम परिदृश्य बनाएँ।",
+      "runTest": "जब आप तैयार हों, तो अपने परीक्षण शुरू करने के लिए यहाँ क्लिक करें!"
     }
+  },
+  "form": {
+    "title": "नया परीक्षण रन",
+    "description": "अपने अगले परीक्षण रन के लिए पैरामीटर कॉन्फ़िगर करें।",
+    "urlLabel": "लक्ष्य URL",
+    "urlDescription": "उस पृष्ठ या समापन बिंदु का पूरा URL जिसे आप परीक्षण करना चाहते हैं।",
+    "urlPlaceholder": "https://example.com",
+    "toggleRecentUrlsLabel": "हाल के URL टॉगल करें",
+    "searchUrlPlaceholder": "हाल के URL खोजें...",
+    "noRecentUrls": "कोई हाल का URL नहीं मिला।",
+    "recentUrlsHeading": "हाल के URL",
+    "removeRecentUrlLabel": "हाल के URL से '{{url}}' हटाएँ",
+    "clearRecentUrlsButton": "हाल के URL साफ़ करें",
+    "testSuitesTitle": "परीक्षण सूट",
+    "testSuitesDescription": "निष्पादित करने के लिए एक या अधिक परीक्षण सूट चुनें।",
+    "k6SwitchLabel": "k6 लोड टेस्ट",
+    "k6SwitchDescription": "लोड के तहत प्रदर्शन मापें।",
+    "lighthouseSwitchLabel": "लाइटहाउस ऑडिट",
+    "lighthouseSwitchDescription": "गुणवत्ता, प्रदर्शन और एसईओ की जाँच करें।",
+    "seoSwitchLabel": "एआई एसईओ विश्लेषण",
+    "seoSwitchDescription": "एक गहन ऑन-पेज एसईओ विश्लेषण करें।",
+    "requestConfigTitle": "अनुरोध कॉन्फ़िगरेशन",
+    "requestConfigDescription": "लोड परीक्षण के लिए HTTP अनुरोध को अनुकूलित करें।",
+    "methodLabel": "विधि",
+    "methodPlaceholder": "एक विधि चुनें",
+    "headersLabel": "हेडर",
+    "headerNamePlaceholder": "हेडर का नाम",
+    "headerValuePlaceholder": "हेडर का मान",
+    "removeHeaderLabel": "हेडर {{index}} हटाएँ",
+    "addHeaderButton": "हेडर जोड़ें",
+    "requestBodyLabel": "अनुरोध बॉडी",
+    "loadProfileTitle": "लोड प्रोफ़ाइल",
+    "loadProfileDescription": "परीक्षण के दौरान उत्पन्न होने वाले लोड की मात्रा को परिभाषित करें।",
+    "loadTestPresetsLabel": "लोड परीक्षण प्रीसेट",
+    "customProfileTitle": "कस्टम लोड प्रोफ़ाइल",
+    "customProfileDescription": "VUs, अवधि, या चरणों के लिए अपनी स्वयं की कॉन्फ़िगरेशन परिभाषित करें।",
+    "vusLabel": "वर्चुअल उपयोगकर्ता (VUs)",
+    "vusPlaceholder": "उदा., 100",
+    "durationLabel": "अवधि",
+    "durationPlaceholder": "उदा., 5m30s",
+    "stagesLabel": "चरण",
+    "stagesDescription": "समय के साथ VUs को बढ़ाने/घटाने वाले जटिल लोड परिदृश्यों के लिए।",
+    "stageDurationLabel": "चरण की अवधि",
+    "stageDurationPlaceholder": "उदा., 1m",
+    "stageTargetVusLabel": "लक्ष्य VUs",
+    "stageTargetVusPlaceholder": "उदा., 50",
+    "removeStageLabel": "चरण {{index}} हटाएँ",
+    "addStageButton": "चरण जोड़ें",
+    "runTestButton": "परीक्षण चलाएँ",
+    "runningTestButton": "चल रहा है...",
+    "error": {
+      "atLeastOne": "कम से कम एक परीक्षण सूट का चयन किया जाना चाहिए।"
+    },
+    "toast": {
+      "historyClearedTitle": "इतिहास साफ़ हो गया",
+      "historyClearedDescription": "आपका स्थानीय परीक्षण इतिहास साफ़ कर दिया गया है।",
+      "testStartedTitle": "परीक्षण शुरू हो गया!",
+      "testStartedDescription": "आपके परीक्षण अब चल रहे हैं। नीचे प्रगति की निगरानी करें।"
+    },
+    "clearHistoryDialog": {
+      "title": "मौजूदा इतिहास साफ़ करें?",
+      "description": "आपके पास मौजूदा परीक्षण इतिहास है। क्या आप इस नए परीक्षण को चलाने से पहले इसे साफ़ करना चाहेंगे?",
+      "keepButton": "नहीं, इतिहास रखें",
+      "clearButton": "हाँ, साफ़ करें और चलाएँ"
+    }
+  },
+  "running": {
+    "title": "परीक्षण चल रहे हैं...",
+    "description": "कृपया प्रतीक्षा करें जब तक चयनित सूट पूरे नहीं हो जाते। इसमें कुछ मिनट लग सकते हैं।",
+    "finalizingTitle": "परिणामों को अंतिम रूप दिया जा रहा है...",
+    "grafanaLink": "ग्राफाना पर लाइव डैशबोर्ड देखें"
+  },
+  "summary": {
+    "title": "परीक्षण सारांश",
+    "description": "आपके परीक्षण रन के परिणाम",
+    "saveToHistoryButton": "इतिहास में सहेजें",
+    "rerunButton": "फिर से चलाएँ",
+    "newTestButton": "नया परीक्षण बनाएँ",
+    "k6Tab": "लोड टेस्ट",
+    "lighthouseTab": "लाइटहाउस",
+    "seoTab": "एसईओ",
+    "configSummaryTitle": "परीक्षण कॉन्फ़िगरेशन",
+    "viewFullDetails": "पूर्ण कॉन्फ़िगरेशन विवरण देखें"
+  },
+  "history": {
+    "title": "परीक्षण इतिहास",
+    "description": "अपने पिछले परीक्षण रन ब्राउज़ करें और प्रबंधित करें।",
+    "lastSaved": "अंतिम बार सहेजा गया",
+    "importButton": "आयात करें",
+    "exportButton": "निर्यात करें",
+    "searchPlaceholder": "URL या ID द्वारा खोजें...",
+    "clearSearchLabel": "खोज साफ़ करें",
+    "clearAllButton": "सारा इतिहास साफ़ करें",
+    "noHistoryMessage": "कोई इतिहास नहीं मिला।",
+    "noHistoryDescription": "अपना इतिहास शुरू करने के लिए एक नया परीक्षण चलाएँ।",
+    "noResultsFound": "'{{query}}' के लिए कोई परिणाम नहीं मिला।",
+    "clearSearch": "खोज साफ़ करें",
+    "clearAllDialog": {
+      "title": "क्या आप निश्चित हैं?",
+      "description": "यह कार्रवाई पूर्ववत नहीं की जा सकती। यह आपके सभी परीक्षण इतिहास डेटा और हाल के URL को स्थायी रूप से हटा देगा।",
+      "cancel": "रद्द करें",
+      "confirm": "हटाएँ"
+    },
+    "deleteDialog": {
+      "title": "इस प्रविष्टि को हटाएँ?",
+      "description": "यह कार्रवाई पूर्ववत नहीं की जा सकती। यह इस परीक्षण रन को आपके इतिहास से स्थायी रूप से हटा देगा।",
+      "cancel": "रद्द करें",
+      "confirm": "हटाएँ"
+    },
+    "table": {
+      "url": "URL",
+      "date": "तिथि",
+      "testsRun": "चलाए गए परीक्षण",
+      "actions": "कार्रवाइयाँ"
+    },
+    "actions": {
+      "view": "{{url}} के लिए सारांश देखें",
+      "rerun": "{{url}} के लिए परीक्षण फिर से चलाएँ",
+      "delete": "{{url}} के लिए इतिहास आइटम हटाएँ"
+    },
+    "toast": {
+      "exportSuccessTitle": "इतिहास निर्यात किया गया",
+      "exportSuccessDescription": "आपका परीक्षण इतिहास एक JSON फ़ाइल के रूप में डाउनलोड किया गया है।",
+      "exportFailTitle": "निर्यात विफल",
+      "exportFailDescription": "इतिहास निर्यात नहीं किया जा सका।",
+      "importSuccessTitle": "इतिहास आयात किया गया",
+      "importSuccessDescription": "परीक्षण इतिहास सफलतापूर्वक लोड किया गया।",
+      "importFailTitle": "आयात विफल",
+      "importFailDescription": "चयनित फ़ाइल को पढ़ा नहीं जा सका।",
+      "importInvalidFormat": "अमान्य फ़ाइल स्वरूप।",
+      "deleteSuccessTitle": "प्रविष्टि हटाई गई",
+      "deleteSuccessDescription": "परीक्षण रन आपके इतिहास से हटा दिया गया है।",
+      "clearSuccessTitle": "इतिहास साफ़ हो गया",
+      "clearSuccessDescription": "आपका पूरा परीक्षण इतिहास हटा दिया गया है।"
+    }
+  },
+  "presets": {
+    "baseline": "आधार रेखा",
+    "spike": "स्पाइक",
+    "stress": "तनाव",
+    "soak": "सोखना",
+    "custom": "कस्टम"
+  },
+  "home": {
+    "lastSaved": "स्थानीय इतिहास अंतिम बार सहेजा गया: {{distance}}"
+  }
 }
-
-    

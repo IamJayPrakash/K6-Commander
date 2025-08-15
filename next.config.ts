@@ -1,5 +1,4 @@
-
-import type {NextConfig} from 'next';
+import type { NextConfig } from 'next';
 
 const nextConfig: NextConfig = {
   /* config options here */
@@ -25,7 +24,7 @@ const nextConfig: NextConfig = {
         source: '/results/:path*',
         destination: '/:path*', // This is a bit of a hack to serve static files from the results dir
       },
-    ]
+    ];
   },
 };
 

@@ -27,9 +27,9 @@ try {
 
 // Set a default content-type for POST/PUT/PATCH if a body exists and it's not already set
 if (requestBody && ['POST', 'PUT', 'PATCH'].includes(httpMethod.toUpperCase())) {
-    if (!Object.keys(headers).some(h => h.toLowerCase() === 'content-type')) {
-        headers['Content-Type'] = 'application/json';
-    }
+  if (!Object.keys(headers).some((h) => h.toLowerCase() === 'content-type')) {
+    headers['Content-Type'] = 'application/json';
+  }
 }
 
 // --- k6 Options ---

@@ -1,4 +1,3 @@
-
 'use client';
 
 import { Rocket } from 'lucide-react';
@@ -18,13 +17,22 @@ export function AppFooter() {
             </p>
           </div>
           <nav className="flex items-center gap-4 md:gap-6 text-sm">
-            <Link href="/terms" className="transition-colors hover:text-foreground/80 text-foreground/60">
+            <Link
+              href="/terms"
+              className="transition-colors hover:text-foreground/80 text-foreground/60"
+            >
               {t('footer.termsLink')}
             </Link>
-            <Link href="/privacy" className="transition-colors hover:text-foreground/80 text-foreground/60">
+            <Link
+              href="/privacy"
+              className="transition-colors hover:text-foreground/80 text-foreground/60"
+            >
               {t('footer.privacyLink')}
             </Link>
-            <Link href="/security" className="transition-colors hover:text-foreground/80 text-foreground/60">
+            <Link
+              href="/security"
+              className="transition-colors hover:text-foreground/80 text-foreground/60"
+            >
               {t('footer.securityLink')}
             </Link>
           </nav>

@@ -1,12 +1,8 @@
-
 import { NextResponse } from 'next/server';
 import fs from 'fs/promises';
 import path from 'path';
 
-export async function GET(
-  request: Request,
-  { params }: { params: { testId: string } }
-) {
+export async function GET(request: Request, { params }: { params: { testId: string } }) {
   const { testId } = params;
   if (!testId) {
     return NextResponse.json({ error: 'Test ID is required' }, { status: 400 });
@@ -22,7 +18,7 @@ export async function GET(
     // Read the file content
     const summaryContent = await fs.readFile(summaryFilePath, 'utf-8');
     const summaryJson = JSON.parse(summaryContent);
-    
+
     // We no longer delete the file so it can be saved in history if needed.
     // A cleanup job could be added for a production system.
     // await fs.unlink(summaryFilePath);
@@ -33,9 +29,12 @@ export async function GET(
       // File not found, which is an expected state during polling
       return NextResponse.json({ message: 'Test summary not yet available.' }, { status: 404 });
     }
-    
+
     // Other errors
     console.error(`Error checking summary for test ${testId}:`, error);
-    return NextResponse.json({ error: 'Failed to check test summary', details: error.message }, { status: 500 });
+    return NextResponse.json(
+      { error: 'Failed to check test summary', details: error.message },
+      { status: 500 }
+    );
   }
 }

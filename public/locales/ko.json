@@ -1,203 +1,200 @@
-
 {
-    "header": {
-        "title": "K6 커맨더",
-        "historyLink": "기록",
-        "aboutLink": "정보",
-        "startTourButton": "투어 시작",
-        "bugReport": "버그 보고",
-        "featureRequest": "기능 요청"
-    },
-    "footer": {
-        "copyright": "© {{year}} K6 Commander. All rights reserved.",
-        "termsLink": "이용약관",
-        "privacyLink": "개인정보 보호",
-        "securityLink": "보안"
-    },
-    "about": {
-        "title": "K6 커맨더 정보",
-        "description": "k6, Lighthouse, AI 분석의 힘을 하나의 세련된 UI에 결합한 가볍고 로컬 우선의 승인된 부하 테스트 플랫폼입니다.",
-        "philosophyTitle": "우리의 철학",
-        "localFirstTitle": "로컬 우선",
-        "localFirstDescription": "모든 테스트 구성 및 기록은 브라우저에 저장됩니다. 클라우드 계정이 필요하지 않습니다.",
-        "unifiedToolingTitle": "통합 도구",
-        "unifiedToolingDescription": "단일 인터페이스에서 부하 테스트, Lighthouse 감사 및 SEO 분석을 실행합니다.",
-        "k6FeatureTitle": "k6 부하 테스트",
-        "k6FeatureDescription": "트래픽을 시뮬레이션하여 성능 병목 현상을 찾습니다.",
-        "k6HowItWorks": "Leverage the full power of Grafana k6 to understand how your system behaves under load. Configure virtual users (VUs), duration, and custom ramping stages.",
-        "k6HowItWorks2": "Live results are streamed to a pre-configured Grafana dashboard, giving you real-time insights into request rates, response times, and errors.",
-        "lighthouseFeatureTitle": "Lighthouse 감사",
-        "lighthouseFeatureDescription": "성능, 접근성 등을 감사합니다.",
-        "lighthouseHowItWorks": "Run Google Lighthouse audits directly from the UI. Get scores for Performance, Accessibility, Best Practices, and SEO.",
-        "lighthouseHowItWorks2": "The application provides a high-level summary, and you can access the full, interactive HTML report for a deep-dive analysis and actionable recommendations.",
-        "seoFeatureTitle": "AI 기반 SEO 분석",
-        "seoFeatureDescription": "AI 추천과 함께 심층 분석을 제공합니다.",
-        "seoHowItWorks": "Get a deep, AI-powered analysis of the most critical on-page SEO elements to ensure your pages are optimized for search engines.",
-        "seoHowItWorks2": "This includes checks for title tags, meta descriptions, H1s, canonicals, and Open Graph tags, complete with AI-generated suggestions for improvement.",
-        "stackTitle": "기술 스택",
-        "stackDescription": "K6 커맨더는 현대적인 산업 표준 기술로 구축되었습니다.",
-        "involvedTitle": "참여하기",
-        "involvedDescription": "이것은 오픈 소스 프로젝트입니다. 기여, 문제 및 기능 요청을 환영합니다!",
-        "githubButton": "GitHub에서 보기"
-    },
-    "tour": {
-        "steps": {
-            "welcome": "K6 커맨더에 오신 것을 환영합니다! 이것이 메인 대시보드입니다.",
-            "history": "여기에서 과거 테스트 실행을 보고 관리할 수 있습니다.",
-            "about": "여기에서 애플리케이션 작동 방식에 대해 자세히 알아보세요.",
-            "github": "여기에서 소스 코드를 보거나 GitHub에 문제를 보고하세요.",
-            "urlInput": "테스트할 URL을 여기에 입력하세요. 최근 URL에서 선택할 수 있습니다.",
-            "testSuites": "실행할 테스트 스위트를 선택하세요: 부하 테스트, Lighthouse 감사 또는 AI SEO 분석.",
-            "requestConfig": "메서드, 헤더, 본문과 같은 HTTP 요청의 세부 정보를 여기에서 구성하세요.",
-            "loadProfile": "미리 정의된 부하 프로필을 선택하거나 자신만의 사용자 지정 시나리오를 만드세요.",
-            "runTest": "준비가 되면 여기를 클릭하여 테스트를 시작하세요!"
-        }
-    },
-    "form": {
-        "title": "새 테스트 실행",
-        "description": "다음 테스트 실행을 위한 매개변수를 구성합니다.",
-        "urlLabel": "대상 URL",
-        "urlDescription": "테스트하려는 페이지 또는 엔드포인트의 전체 URL입니다.",
-        "urlPlaceholder": "https://example.com",
-        "toggleRecentUrlsLabel": "최근 URL 전환",
-        "searchUrlPlaceholder": "최근 URL 검색...",
-        "noRecentUrls": "최근 URL을 찾을 수 없습니다.",
-        "recentUrlsHeading": "최근 URL",
-        "removeRecentUrlLabel": "최근 항목에서 '{{url}}' 제거",
-        "clearRecentUrlsButton": "최근 URL 지우기",
-        "testSuitesTitle": "테스트 스위트",
-        "testSuitesDescription": "실행할 하나 이상의 테스트 스위트를 선택합니다.",
-        "k6SwitchLabel": "k6 부하 테스트",
-        "k6SwitchDescription": "부하 상태에서 성능을 측정합니다.",
-        "lighthouseSwitchLabel": "Lighthouse 감사",
-        "lighthouseSwitchDescription": "품질, 성능 및 SEO를 확인합니다.",
-        "seoSwitchLabel": "AI SEO 분석",
-        "seoSwitchDescription": "심층적인 온페이지 SEO 분석을 수행합니다.",
-        "requestConfigTitle": "요청 구성",
-        "requestConfigDescription": "부하 테스트를 위한 HTTP 요청을 사용자 지정합니다.",
-        "methodLabel": "메서드",
-        "methodPlaceholder": "메서드 선택",
-        "headersLabel": "헤더",
-        "headerNamePlaceholder": "헤더 이름",
-        "headerValuePlaceholder": "헤더 값",
-        "removeHeaderLabel": "헤더 {{index}} 제거",
-        "addHeaderButton": "헤더 추가",
-        "requestBodyLabel": "요청 본문",
-        "loadProfileTitle": "부하 프로필",
-        "loadProfileDescription": "테스트 중에 생성할 부하의 양을 정의합니다.",
-        "loadTestPresetsLabel": "부하 테스트 프리셋",
-        "customProfileTitle": "사용자 지정 부하 프로필",
-        "customProfileDescription": "VU, 기간 또는 단계에 대한 자신만의 구성을 정의합니다.",
-        "vusLabel": "가상 사용자(VU)",
-        "vusPlaceholder": "예: 100",
-        "durationLabel": "기간",
-        "durationPlaceholder": "예: 5m30s",
-        "stagesLabel": "단계",
-        "stagesDescription": "시간에 따라 VU를 증가/감소시키는 복잡한 부하 시나리오용입니다.",
-        "stageDurationLabel": "단계 기간",
-        "stageDurationPlaceholder": "예: 1m",
-        "stageTargetVusLabel": "대상 VU",
-        "stageTargetVusPlaceholder": "예: 50",
-        "removeStageLabel": "단계 {{index}} 제거",
-        "addStageButton": "단계 추가",
-        "runTestButton": "테스트 실행",
-        "runningTestButton": "실행 중...",
-        "error": {
-            "atLeastOne": "하나 이상의 테스트 스위트를 선택해야 합니다."
-        },
-        "toast": {
-            "historyClearedTitle": "기록이 지워졌습니다",
-            "historyClearedDescription": "로컬 테스트 기록이 지워졌습니다.",
-            "testStartedTitle": "테스트가 시작되었습니다!",
-            "testStartedDescription": "테스트가 지금 실행 중입니다. 아래에서 진행 상황을 모니터링하세요."
-        },
-        "clearHistoryDialog": {
-            "title": "기존 기록을 지우시겠습니까?",
-            "description": "기존 테스트 기록이 있습니다. 이 새 테스트를 실행하기 전에 지우시겠습니까?",
-            "keepButton": "아니요, 기록 유지",
-            "clearButton": "예, 지우고 실행"
-        }
-    },
-    "running": {
-        "title": "테스트 실행 중...",
-        "description": "선택한 스위트가 완료될 때까지 기다려 주십시오. 몇 분 정도 걸릴 수 있습니다.",
-        "finalizingTitle": "결과 마무리 중...",
-        "grafanaLink": "Grafana에서 실시간 대시보드 보기"
-    },
-    "summary": {
-        "title": "테스트 요약",
-        "description": "테스트 실행 결과",
-        "saveToHistoryButton": "기록에 저장",
-        "rerunButton": "다시 실행",
-        "newTestButton": "새 테스트 만들기",
-        "k6Tab": "부하 테스트",
-        "lighthouseTab": "Lighthouse",
-        "seoTab": "SEO",
-        "configSummaryTitle": "테스트 구성",
-        "viewFullDetails": "전체 구성 세부 정보 보기"
-    },
-    "history": {
-        "title": "테스트 기록",
-        "description": "과거 테스트 실행을 찾아보고 관리합니다.",
-        "lastSaved": "마지막 저장",
-        "importButton": "가져오기",
-        "exportButton": "내보내기",
-        "searchPlaceholder": "URL 또는 ID로 검색...",
-        "clearSearchLabel": "검색 지우기",
-        "clearAllButton": "모든 기록 지우기",
-        "noHistoryMessage": "기록을 찾을 수 없습니다.",
-        "noHistoryDescription": "기록을 시작하려면 새 테스트를 실행하세요.",
-        "noResultsFound": "'{{query}}'에 대한 결과가 없습니다.",
-        "clearSearch": "검색 지우기",
-        "clearAllDialog": {
-            "title": "확실합니까?",
-            "description": "이 작업은 되돌릴 수 없습니다. 이렇게 하면 모든 테스트 기록 데이터와 최근 URL이 영구적으로 삭제됩니다.",
-            "cancel": "취소",
-            "confirm": "삭제"
-        },
-        "deleteDialog": {
-            "title": "이 항목을 삭제하시겠습니까?",
-            "description": "이 작업은 되돌릴 수 없습니다. 이렇게 하면 이 테스트 실행이 기록에서 영구적으로 삭제됩니다.",
-            "cancel": "취소",
-            "confirm": "삭제"
-        },
-        "table": {
-            "url": "URL",
-            "date": "날짜",
-            "testsRun": "실행된 테스트",
-            "actions": "작업"
-        },
-        "actions": {
-            "view": "{{url}}의 요약 보기",
-            "rerun": "{{url}}의 테스트 다시 실행",
-            "delete": "{{url}}의 기록 항목 삭제"
-        },
-        "toast": {
-            "exportSuccessTitle": "기록 내보내기 완료",
-            "exportSuccessDescription": "테스트 기록이 JSON 파일로 다운로드되었습니다.",
-            "exportFailTitle": "내보내기 실패",
-            "exportFailDescription": "기록을 내보낼 수 없습니다.",
-            "importSuccessTitle": "기록 가져오기 완료",
-            "importSuccessDescription": "테스트 기록을 성공적으로 로드했습니다.",
-            "importFailTitle": "가져오기 실패",
-            "importFailDescription": "선택한 파일을 읽을 수 없습니다.",
-            "importInvalidFormat": "잘못된 파일 형식입니다.",
-            "deleteSuccessTitle": "항목 삭제됨",
-            "deleteSuccessDescription": "테스트 실행이 기록에서 제거되었습니다.",
-            "clearSuccessTitle": "기록이 지워졌습니다",
-            "clearSuccessDescription": "전체 테스트 기록이 제거되었습니다."
-        }
-    },
-    "presets": {
-        "baseline": "기준선",
-        "spike": "스파이크",
-        "stress": "스트레스",
-        "soak": "담그기",
-        "custom": "사용자 지정"
-    },
-    "home": {
-        "lastSaved": "로컬 기록 마지막 저장: {{distance}}"
+  "header": {
+    "title": "K6 커맨더",
+    "historyLink": "기록",
+    "aboutLink": "정보",
+    "startTourButton": "투어 시작",
+    "bugReport": "버그 보고",
+    "featureRequest": "기능 요청"
+  },
+  "footer": {
+    "copyright": "© {{year}} K6 Commander. All rights reserved.",
+    "termsLink": "이용약관",
+    "privacyLink": "개인정보 보호",
+    "securityLink": "보안"
+  },
+  "about": {
+    "title": "K6 커맨더 정보",
+    "description": "k6, Lighthouse, AI 분석의 힘을 하나의 세련된 UI에 결합한 가볍고 로컬 우선의 승인된 부하 테스트 플랫폼입니다.",
+    "philosophyTitle": "우리의 철학",
+    "localFirstTitle": "로컬 우선",
+    "localFirstDescription": "모든 테스트 구성 및 기록은 브라우저에 저장됩니다. 클라우드 계정이 필요하지 않습니다.",
+    "unifiedToolingTitle": "통합 도구",
+    "unifiedToolingDescription": "단일 인터페이스에서 부하 테스트, Lighthouse 감사 및 SEO 분석을 실행합니다.",
+    "k6FeatureTitle": "k6 부하 테스트",
+    "k6FeatureDescription": "트래픽을 시뮬레이션하여 성능 병목 현상을 찾습니다.",
+    "k6HowItWorks": "Leverage the full power of Grafana k6 to understand how your system behaves under load. Configure virtual users (VUs), duration, and custom ramping stages.",
+    "k6HowItWorks2": "Live results are streamed to a pre-configured Grafana dashboard, giving you real-time insights into request rates, response times, and errors.",
+    "lighthouseFeatureTitle": "Lighthouse 감사",
+    "lighthouseFeatureDescription": "성능, 접근성 등을 감사합니다.",
+    "lighthouseHowItWorks": "Run Google Lighthouse audits directly from the UI. Get scores for Performance, Accessibility, Best Practices, and SEO.",
+    "lighthouseHowItWorks2": "The application provides a high-level summary, and you can access the full, interactive HTML report for a deep-dive analysis and actionable recommendations.",
+    "seoFeatureTitle": "AI 기반 SEO 분석",
+    "seoFeatureDescription": "AI 추천과 함께 심층 분석을 제공합니다.",
+    "seoHowItWorks": "Get a deep, AI-powered analysis of the most critical on-page SEO elements to ensure your pages are optimized for search engines.",
+    "seoHowItWorks2": "This includes checks for title tags, meta descriptions, H1s, canonicals, and Open Graph tags, complete with AI-generated suggestions for improvement.",
+    "stackTitle": "기술 스택",
+    "stackDescription": "K6 커맨더는 현대적인 산업 표준 기술로 구축되었습니다.",
+    "involvedTitle": "참여하기",
+    "involvedDescription": "이것은 오픈 소스 프로젝트입니다. 기여, 문제 및 기능 요청을 환영합니다!",
+    "githubButton": "GitHub에서 보기"
+  },
+  "tour": {
+    "steps": {
+      "welcome": "K6 커맨더에 오신 것을 환영합니다! 이것이 메인 대시보드입니다.",
+      "history": "여기에서 과거 테스트 실행을 보고 관리할 수 있습니다.",
+      "about": "여기에서 애플리케이션 작동 방식에 대해 자세히 알아보세요.",
+      "github": "여기에서 소스 코드를 보거나 GitHub에 문제를 보고하세요.",
+      "urlInput": "테스트할 URL을 여기에 입력하세요. 최근 URL에서 선택할 수 있습니다.",
+      "testSuites": "실행할 테스트 스위트를 선택하세요: 부하 테스트, Lighthouse 감사 또는 AI SEO 분석.",
+      "requestConfig": "메서드, 헤더, 본문과 같은 HTTP 요청의 세부 정보를 여기에서 구성하세요.",
+      "loadProfile": "미리 정의된 부하 프로필을 선택하거나 자신만의 사용자 지정 시나리오를 만드세요.",
+      "runTest": "준비가 되면 여기를 클릭하여 테스트를 시작하세요!"
     }
+  },
+  "form": {
+    "title": "새 테스트 실행",
+    "description": "다음 테스트 실행을 위한 매개변수를 구성합니다.",
+    "urlLabel": "대상 URL",
+    "urlDescription": "테스트하려는 페이지 또는 엔드포인트의 전체 URL입니다.",
+    "urlPlaceholder": "https://example.com",
+    "toggleRecentUrlsLabel": "최근 URL 전환",
+    "searchUrlPlaceholder": "최근 URL 검색...",
+    "noRecentUrls": "최근 URL을 찾을 수 없습니다.",
+    "recentUrlsHeading": "최근 URL",
+    "removeRecentUrlLabel": "최근 항목에서 '{{url}}' 제거",
+    "clearRecentUrlsButton": "최근 URL 지우기",
+    "testSuitesTitle": "테스트 스위트",
+    "testSuitesDescription": "실행할 하나 이상의 테스트 스위트를 선택합니다.",
+    "k6SwitchLabel": "k6 부하 테스트",
+    "k6SwitchDescription": "부하 상태에서 성능을 측정합니다.",
+    "lighthouseSwitchLabel": "Lighthouse 감사",
+    "lighthouseSwitchDescription": "품질, 성능 및 SEO를 확인합니다.",
+    "seoSwitchLabel": "AI SEO 분석",
+    "seoSwitchDescription": "심층적인 온페이지 SEO 분석을 수행합니다.",
+    "requestConfigTitle": "요청 구성",
+    "requestConfigDescription": "부하 테스트를 위한 HTTP 요청을 사용자 지정합니다.",
+    "methodLabel": "메서드",
+    "methodPlaceholder": "메서드 선택",
+    "headersLabel": "헤더",
+    "headerNamePlaceholder": "헤더 이름",
+    "headerValuePlaceholder": "헤더 값",
+    "removeHeaderLabel": "헤더 {{index}} 제거",
+    "addHeaderButton": "헤더 추가",
+    "requestBodyLabel": "요청 본문",
+    "loadProfileTitle": "부하 프로필",
+    "loadProfileDescription": "테스트 중에 생성할 부하의 양을 정의합니다.",
+    "loadTestPresetsLabel": "부하 테스트 프리셋",
+    "customProfileTitle": "사용자 지정 부하 프로필",
+    "customProfileDescription": "VU, 기간 또는 단계에 대한 자신만의 구성을 정의합니다.",
+    "vusLabel": "가상 사용자(VU)",
+    "vusPlaceholder": "예: 100",
+    "durationLabel": "기간",
+    "durationPlaceholder": "예: 5m30s",
+    "stagesLabel": "단계",
+    "stagesDescription": "시간에 따라 VU를 증가/감소시키는 복잡한 부하 시나리오용입니다.",
+    "stageDurationLabel": "단계 기간",
+    "stageDurationPlaceholder": "예: 1m",
+    "stageTargetVusLabel": "대상 VU",
+    "stageTargetVusPlaceholder": "예: 50",
+    "removeStageLabel": "단계 {{index}} 제거",
+    "addStageButton": "단계 추가",
+    "runTestButton": "테스트 실행",
+    "runningTestButton": "실행 중...",
+    "error": {
+      "atLeastOne": "하나 이상의 테스트 스위트를 선택해야 합니다."
+    },
+    "toast": {
+      "historyClearedTitle": "기록이 지워졌습니다",
+      "historyClearedDescription": "로컬 테스트 기록이 지워졌습니다.",
+      "testStartedTitle": "테스트가 시작되었습니다!",
+      "testStartedDescription": "테스트가 지금 실행 중입니다. 아래에서 진행 상황을 모니터링하세요."
+    },
+    "clearHistoryDialog": {
+      "title": "기존 기록을 지우시겠습니까?",
+      "description": "기존 테스트 기록이 있습니다. 이 새 테스트를 실행하기 전에 지우시겠습니까?",
+      "keepButton": "아니요, 기록 유지",
+      "clearButton": "예, 지우고 실행"
+    }
+  },
+  "running": {
+    "title": "테스트 실행 중...",
+    "description": "선택한 스위트가 완료될 때까지 기다려 주십시오. 몇 분 정도 걸릴 수 있습니다.",
+    "finalizingTitle": "결과 마무리 중...",
+    "grafanaLink": "Grafana에서 실시간 대시보드 보기"
+  },
+  "summary": {
+    "title": "테스트 요약",
+    "description": "테스트 실행 결과",
+    "saveToHistoryButton": "기록에 저장",
+    "rerunButton": "다시 실행",
+    "newTestButton": "새 테스트 만들기",
+    "k6Tab": "부하 테스트",
+    "lighthouseTab": "Lighthouse",
+    "seoTab": "SEO",
+    "configSummaryTitle": "테스트 구성",
+    "viewFullDetails": "전체 구성 세부 정보 보기"
+  },
+  "history": {
+    "title": "테스트 기록",
+    "description": "과거 테스트 실행을 찾아보고 관리합니다.",
+    "lastSaved": "마지막 저장",
+    "importButton": "가져오기",
+    "exportButton": "내보내기",
+    "searchPlaceholder": "URL 또는 ID로 검색...",
+    "clearSearchLabel": "검색 지우기",
+    "clearAllButton": "모든 기록 지우기",
+    "noHistoryMessage": "기록을 찾을 수 없습니다.",
+    "noHistoryDescription": "기록을 시작하려면 새 테스트를 실행하세요.",
+    "noResultsFound": "'{{query}}'에 대한 결과가 없습니다.",
+    "clearSearch": "검색 지우기",
+    "clearAllDialog": {
+      "title": "확실합니까?",
+      "description": "이 작업은 되돌릴 수 없습니다. 이렇게 하면 모든 테스트 기록 데이터와 최근 URL이 영구적으로 삭제됩니다.",
+      "cancel": "취소",
+      "confirm": "삭제"
+    },
+    "deleteDialog": {
+      "title": "이 항목을 삭제하시겠습니까?",
+      "description": "이 작업은 되돌릴 수 없습니다. 이렇게 하면 이 테스트 실행이 기록에서 영구적으로 삭제됩니다.",
+      "cancel": "취소",
+      "confirm": "삭제"
+    },
+    "table": {
+      "url": "URL",
+      "date": "날짜",
+      "testsRun": "실행된 테스트",
+      "actions": "작업"
+    },
+    "actions": {
+      "view": "{{url}}의 요약 보기",
+      "rerun": "{{url}}의 테스트 다시 실행",
+      "delete": "{{url}}의 기록 항목 삭제"
+    },
+    "toast": {
+      "exportSuccessTitle": "기록 내보내기 완료",
+      "exportSuccessDescription": "테스트 기록이 JSON 파일로 다운로드되었습니다.",
+      "exportFailTitle": "내보내기 실패",
+      "exportFailDescription": "기록을 내보낼 수 없습니다.",
+      "importSuccessTitle": "기록 가져오기 완료",
+      "importSuccessDescription": "테스트 기록을 성공적으로 로드했습니다.",
+      "importFailTitle": "가져오기 실패",
+      "importFailDescription": "선택한 파일을 읽을 수 없습니다.",
+      "importInvalidFormat": "잘못된 파일 형식입니다.",
+      "deleteSuccessTitle": "항목 삭제됨",
+      "deleteSuccessDescription": "테스트 실행이 기록에서 제거되었습니다.",
+      "clearSuccessTitle": "기록이 지워졌습니다",
+      "clearSuccessDescription": "전체 테스트 기록이 제거되었습니다."
+    }
+  },
+  "presets": {
+    "baseline": "기준선",
+    "spike": "스파이크",
+    "stress": "스트레스",
+    "soak": "담그기",
+    "custom": "사용자 지정"
+  },
+  "home": {
+    "lastSaved": "로컬 기록 마지막 저장: {{distance}}"
+  }
 }
-
-    

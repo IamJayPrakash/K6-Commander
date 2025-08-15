@@ -1,4 +1,3 @@
-
 import { NextResponse, type NextRequest } from 'next/server';
 import { analyzeSeo } from '@/ai/flows/seo-analyzer-flow';
 
@@ -16,6 +15,9 @@ export async function POST(req: NextRequest) {
   } catch (error) {
     console.error('Error in /api/run-seo:', error);
     const errorMessage = error instanceof Error ? error.message : 'An unknown error occurred';
-    return NextResponse.json({ error: 'Failed to run AI SEO analysis', details: errorMessage }, { status: 500 });
+    return NextResponse.json(
+      { error: 'Failed to run AI SEO analysis', details: errorMessage },
+      { status: 500 }
+    );
   }
 }

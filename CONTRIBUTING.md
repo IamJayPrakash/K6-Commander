@@ -3,17 +3,21 @@
 First off, thank you for considering contributing to K6 Commander! It's people like you that make open source such a great community.
 
 We welcome any type of contribution, not only code. You can help with:
-* **Reporting a bug**
-* **Discussing the current state of the code**
-* **Submitting a fix**
-* **Proposing new features**
-* **Becoming a maintainer**
+
+- **Reporting a bug**
+- **Discussing the current state of the code**
+- **Submitting a fix**
+- **Proposing new features**
+- **Becoming a maintainer**
 
 ## We Develop with GitHub
+
 We use GitHub to host code, to track issues and feature requests, as well as accept pull requests.
 
 ## We Use [GitHub Flow](https://guides.github.com/introduction/flow/index.html)
+
 All code changes happen through Pull Requests. We actively welcome your pull requests:
+
 1. Fork the repo and create your branch from `main`.
 2. If you've added code that should be tested, add tests.
 3. If you've changed APIs, update the documentation.
@@ -22,13 +26,17 @@ All code changes happen through Pull Requests. We actively welcome your pull req
 6. Issue that pull request!
 
 ## Any contributions you make will be under the MIT Software License
+
 In short, when you submit code changes, your submissions are understood to be under the same [MIT License](http://choosealicense.com/licenses/mit/) that covers the project. Feel free to contact the maintainers if that's a concern.
 
 ## Report bugs using GitHub's [issues](https://github.com/your-username/k6-commander/issues)
+
 We use GitHub issues to track public bugs. Report a bug by [opening a new issue](https://github.com/your-username/k6-commander/issues/new/choose); it's that easy!
 
 ## Write bug reports with detail, background, and sample code
+
 **Great Bug Reports** tend to have:
+
 - A quick summary and/or background
 - Steps to reproduce
   - Be specific!
@@ -37,9 +45,10 @@ We use GitHub issues to track public bugs. Report a bug by [opening a new issue]
 - What actually happens
 - Notes (possibly including why you think this might be happening, or stuff you tried that didn't work)
 
-People *love* thorough bug reports. I'm not even kidding.
+People _love_ thorough bug reports. I'm not even kidding.
 
 ## Use a Consistent Coding Style
+
 We use ESLint for linting and Prettier for code formatting to maintain a consistent code style. Before submitting a pull request, please run the following commands to ensure your code adheres to our standards:
 
 ```bash
@@ -51,7 +60,9 @@ npm run prettier:fix
 ```
 
 ## Financial Contributions
+
 We also welcome financial contributions in any amount. If you find this project useful, please consider supporting its development. You can sponsor us through GitHub by clicking the "Sponsor" button at the top of the repository. Your sponsorship will help us dedicate more time to maintenance and new features.
 
 ## License
+
 By contributing, you agree that your contributions will be licensed under its MIT License.

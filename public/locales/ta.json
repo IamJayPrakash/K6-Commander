@@ -1,203 +1,200 @@
-
 {
-    "header": {
-        "title": "கே6 கமாண்டர்",
-        "historyLink": "வரலாறு",
-        "aboutLink": "பற்றி",
-        "startTourButton": "சுற்றுப்பயணத்தை தொடங்கு",
-        "bugReport": "பிழையை புகாரளி",
-        "featureRequest": "அம்சத்தை கோரு"
-    },
-    "footer": {
-        "copyright": "© {{year}} K6 Commander. அனைத்து உரிமைகளும் பாதுகாக்கப்பட்டவை.",
-        "termsLink": "விதிமுறைகள்",
-        "privacyLink": "தனியுரிமை",
-        "securityLink": "பாதுகாப்பு"
-    },
-    "about": {
-        "title": "கே6 கமாண்டர் பற்றி",
-        "description": "k6, Lighthouse மற்றும் AI பகுப்பாய்வின் ஆற்றலை ஒரே மெல்லிய UI இல் இணைக்கும் ஒரு இலகுரக, உள்ளூர்-முதல், அங்கீகரிக்கப்பட்ட சுமை-சோதனை தளம்.",
-        "philosophyTitle": "எங்கள் தத்துவம்",
-        "localFirstTitle": "உள்ளூர்-முதல்",
-        "localFirstDescription": "உங்கள் அனைத்து சோதனை கட்டமைப்புகளும் வரலாறும் உங்கள் உலாவியில் சேமிக்கப்படுகின்றன. கிளவுட் கணக்குகள் தேவையில்லை.",
-        "unifiedToolingTitle": "ஒருங்கிணைந்த கருவிகள்",
-        "unifiedToolingDescription": "ஒரே இடைமுகத்திலிருந்து சுமை சோதனைகள், Lighthouse தணிக்கைகள் மற்றும் SEO பகுப்பாய்வை இயக்கவும்.",
-        "k6FeatureTitle": "கே6 சுமை சோதனை",
-        "k6FeatureDescription": "செயல்திறன் தடைகளை கண்டறிய போக்குவரத்தை உருவகப்படுத்தவும்.",
-        "k6HowItWorks": "Leverage the full power of Grafana k6 to understand how your system behaves under load. Configure virtual users (VUs), duration, and custom ramping stages.",
-        "k6HowItWorks2": "Live results are streamed to a pre-configured Grafana dashboard, giving you real-time insights into request rates, response times, and errors.",
-        "lighthouseFeatureTitle": "Lighthouse தணிக்கைகள்",
-        "lighthouseFeatureDescription": "செயல்திறன், அணுகல் மற்றும் பலவற்றிற்காக தணிக்கை செய்யவும்.",
-        "lighthouseHowItWorks": "Run Google Lighthouse audits directly from the UI. Get scores for Performance, Accessibility, Best Practices, and SEO.",
-        "lighthouseHowItWorks2": "The application provides a high-level summary, and you can access the full, interactive HTML report for a deep-dive analysis and actionable recommendations.",
-        "seoFeatureTitle": "AI-இயங்கும் SEO பகுப்பாய்வு",
-        "seoFeatureDescription": "AI பரிந்துரைகளுடன் ஆழ்ந்த பகுப்பாய்வு.",
-        "seoHowItWorks": "Get a deep, AI-powered analysis of the most critical on-page SEO elements to ensure your pages are optimized for search engines.",
-        "seoHowItWorks2": "This includes checks for title tags, meta descriptions, H1s, canonicals, and Open Graph tags, complete with AI-generated suggestions for improvement.",
-        "stackTitle": "தொழில்நுட்ப அடுக்கு",
-        "stackDescription": "கே6 கமாண்டர் நவீன, தொழில்-தரமான தொழில்நுட்பங்களுடன் உருவாக்கப்பட்டுள்ளது.",
-        "involvedTitle": "பங்கேற்கவும்",
-        "involvedDescription": "இது ஒரு திறந்த மூல திட்டம். பங்களிப்புகள், சிக்கல்கள் மற்றும் அம்ச கோரிக்கைகள் வரவேற்கப்படுகின்றன!",
-        "githubButton": "GitHub இல் காண்க"
-    },
-    "tour": {
-        "steps": {
-            "welcome": "கே6 கமாண்டருக்கு வரவேற்கிறோம்! இது உங்கள் முக்கிய டாஷ்போர்டு.",
-            "history": "உங்கள் கடந்தகால சோதனை ஓட்டங்களை இங்கே காணலாம் மற்றும் நிர்வகிக்கலாம்.",
-            "about": "பயன்பாடு எவ்வாறு செயல்படுகிறது என்பதைப் பற்றி இங்கே மேலும் அறிக.",
-            "github": "மூலக் குறியீட்டைக் காண்க அல்லது இங்கே GitHub இல் சிக்கல்களைப் புகாரளிக்கவும்.",
-            "urlInput": "நீங்கள் சோதிக்க விரும்பும் URL ஐ இங்கே உள்ளிடவும். சமீபத்திய URLகளிலிருந்து நீங்கள் தேர்ந்தெடுக்கலாம்.",
-            "testSuites": "நீங்கள் இயக்க விரும்பும் சோதனை தொகுப்புகளைத் தேர்வுசெய்க: சுமை சோதனை, Lighthouse தணிக்கை அல்லது AI SEO பகுப்பாய்வு.",
-            "requestConfig": "உங்கள் HTTP கோரிக்கையின் விவரங்களை இங்கே உள்ளமைக்கவும், முறை, தலைப்புகள் மற்றும் உடல் போன்றவை.",
-            "loadProfile": "முன் வரையறுக்கப்பட்ட சுமை சுயவிவரத்தைத் தேர்வுசெய்யவும் அல்லது உங்கள் சொந்த தனிப்பயன் காட்சியை உருவாக்கவும்.",
-            "runTest": "நீங்கள் தயாராக இருக்கும்போது, உங்கள் சோதனைகளைத் தொடங்க இங்கே கிளிக் செய்யவும்!"
-        }
-    },
-    "form": {
-        "title": "புதிய சோதனை ஓட்டம்",
-        "description": "உங்கள் அடுத்த சோதனை ஓட்டத்திற்கான அளவுருக்களை உள்ளமைக்கவும்.",
-        "urlLabel": "இலக்கு URL",
-        "urlDescription": "நீங்கள் சோதிக்க விரும்பும் பக்கம் அல்லது இறுதிப் புள்ளியின் முழு URL.",
-        "urlPlaceholder": "https://example.com",
-        "toggleRecentUrlsLabel": "சமீபத்திய URLகளை மாற்று",
-        "searchUrlPlaceholder": "சமீபத்திய URLகளைத் தேடு...",
-        "noRecentUrls": "சமீபத்திய URLகள் எதுவும் இல்லை.",
-        "recentUrlsHeading": "சமீபத்திய URLகள்",
-        "removeRecentUrlLabel": "சமீபத்தியவற்றிலிருந்து '{{url}}' ஐ அகற்று",
-        "clearRecentUrlsButton": "சமீபத்திய URLகளை அழி",
-        "testSuitesTitle": "சோதனை தொகுப்புகள்",
-        "testSuitesDescription": "செயல்படுத்த ஒன்று அல்லது அதற்கு மேற்பட்ட சோதனை தொகுப்புகளைத் தேர்ந்தெடுக்கவும்.",
-        "k6SwitchLabel": "கே6 சுமை சோதனை",
-        "k6SwitchDescription": "சுமையின் கீழ் செயல்திறனை அளவிடவும்.",
-        "lighthouseSwitchLabel": "Lighthouse தணிக்கை",
-        "lighthouseSwitchDescription": "தரம், செயல்திறன் மற்றும் SEO ஐ சரிபார்க்கவும்.",
-        "seoSwitchLabel": "AI SEO பகுப்பாய்வு",
-        "seoSwitchDescription": "ஒரு ஆழமான பக்க SEO பகுப்பாய்வை செய்யவும்.",
-        "requestConfigTitle": "கோரிக்கை கட்டமைப்பு",
-        "requestConfigDescription": "சுமை சோதனைக்கான HTTP கோரிக்கையைத் தனிப்பயனாக்கவும்.",
-        "methodLabel": "முறை",
-        "methodPlaceholder": "ஒரு முறையைத் தேர்ந்தெடுக்கவும்",
-        "headersLabel": "தலைப்புகள்",
-        "headerNamePlaceholder": "தலைப்பு பெயர்",
-        "headerValuePlaceholder": "தலைப்பு மதிப்பு",
-        "removeHeaderLabel": "தலைப்பு {{index}} ஐ அகற்று",
-        "addHeaderButton": "தலைப்பைச் சேர்",
-        "requestBodyLabel": "கோரிக்கை உடல்",
-        "loadProfileTitle": "சுமை சுயவிவரம்",
-        "loadProfileDescription": "சோதனையின் போது உருவாக்கப்படும் சுமையின் அளவை வரையறுக்கவும்.",
-        "loadTestPresetsLabel": "சுமை சோதனை முன்னமைவுகள்",
-        "customProfileTitle": "தனிப்பயன் சுமை சுயவிவரம்",
-        "customProfileDescription": "VUகள், காலம் அல்லது நிலைகளுக்கான உங்கள் சொந்த கட்டமைப்பை வரையறுக்கவும்.",
-        "vusLabel": "மெய்நிகர் பயனர்கள் (VUகள்)",
-        "vusPlaceholder": "எ.கா., 100",
-        "durationLabel": "காலம்",
-        "durationPlaceholder": "எ.கா., 5m30s",
-        "stagesLabel": "நிலைகள்",
-        "stagesDescription": "காலப்போக்கில் VUகளை அதிகரிக்கும்/குறைக்கும் சிக்கலான சுமை காட்சிகளுக்கு.",
-        "stageDurationLabel": "நிலை காலம்",
-        "stageDurationPlaceholder": "எ.கா., 1m",
-        "stageTargetVusLabel": "இலக்கு VUகள்",
-        "stageTargetVusPlaceholder": "எ.கா., 50",
-        "removeStageLabel": "நிலை {{index}} ஐ அகற்று",
-        "addStageButton": "நிலையைச் சேர்",
-        "runTestButton": "சோதனையை(களை) இயக்கு",
-        "runningTestButton": "இயங்குகிறது...",
-        "error": {
-            "atLeastOne": "குறைந்தது ஒரு சோதனை தொகுப்பு தேர்ந்தெடுக்கப்பட வேண்டும்."
-        },
-        "toast": {
-            "historyClearedTitle": "வரலாறு அழிக்கப்பட்டது",
-            "historyClearedDescription": "உங்கள் உள்ளூர் சோதனை வரலாறு அழிக்கப்பட்டது.",
-            "testStartedTitle": "சோதனை தொடங்கியது!",
-            "testStartedDescription": "உங்கள் சோதனைகள் இப்போது இயங்குகின்றன. கீழே உள்ள முன்னேற்றத்தைக் கண்காணிக்கவும்."
-        },
-        "clearHistoryDialog": {
-            "title": "இருக்கும் வரலாற்றை அழிக்கவா?",
-            "description": "உங்களிடம் இருக்கும் சோதனை வரலாறு உள்ளது. இந்த புதிய சோதனையை இயக்கும் முன் அதை அழிக்க விரும்புகிறீர்களா?",
-            "keepButton": "இல்லை, வரலாற்றை வைத்திரு",
-            "clearButton": "ஆம், அழித்து இயக்கு"
-        }
-    },
-    "running": {
-        "title": "சோதனைகள் இயங்குகின்றன...",
-        "description": "தேர்ந்தெடுக்கப்பட்ட தொகுப்புகள் முடியும் வரை காத்திருக்கவும். இதற்கு சில நிமிடங்கள் ஆகலாம்.",
-        "finalizingTitle": "முடிவுகளை இறுதி செய்கிறது...",
-        "grafanaLink": "Grafana இல் நேரடி டாஷ்போர்டைக் காண்க"
-    },
-    "summary": {
-        "title": "சோதனை சுருக்கம்",
-        "description": "உங்கள் சோதனை ஓட்டத்திற்கான முடிவுகள்",
-        "saveToHistoryButton": "வரலாற்றில் சேமி",
-        "rerunButton": "மீண்டும் இயக்கு",
-        "newTestButton": "புதிய சோதனையை உருவாக்கு",
-        "k6Tab": "சுமை சோதனை",
-        "lighthouseTab": "Lighthouse",
-        "seoTab": "SEO",
-        "configSummaryTitle": "சோதனை கட்டமைப்பு",
-        "viewFullDetails": "முழு கட்டமைப்பு விவரங்களைக் காண்க"
-    },
-    "history": {
-        "title": "சோதனை வரலாறு",
-        "description": "உங்கள் கடந்தகால சோதனை ஓட்டங்களை உலவவும் மற்றும் நிர்வகிக்கவும்.",
-        "lastSaved": "கடைசியாக சேமிக்கப்பட்டது",
-        "importButton": "இறக்குமதி செய்",
-        "exportButton": "ஏற்றுமதி செய்",
-        "searchPlaceholder": "URL அல்லது ID மூலம் தேடு...",
-        "clearSearchLabel": "தேடலை அழி",
-        "clearAllButton": "அனைத்து வரலாற்றையும் அழி",
-        "noHistoryMessage": "வரலாறு எதுவும் இல்லை.",
-        "noHistoryDescription": "உங்கள் வரலாற்றைத் தொடங்க ஒரு புதிய சோதனையை இயக்கவும்.",
-        "noResultsFound": "'{{query}}' க்கான முடிவுகள் எதுவும் இல்லை.",
-        "clearSearch": "தேடலை அழி",
-        "clearAllDialog": {
-            "title": "உறுதியாகவா?",
-            "description": "இந்த செயலை செயல்தவிர்க்க முடியாது. இது உங்கள் அனைத்து சோதனை வரலாற்று தரவு மற்றும் சமீபத்திய URLகளை நிரந்தரமாக நீக்கும்.",
-            "cancel": "ரத்துசெய்",
-            "confirm": "நீக்கு"
-        },
-        "deleteDialog": {
-            "title": "இந்த உள்ளீட்டை நீக்கவா?",
-            "description": "இந்த செயலை செயல்தவிர்க்க முடியாது. இது இந்த சோதனை ஓட்டத்தை உங்கள் வரலாற்றிலிருந்து நிரந்தரமாக நீக்கும்.",
-            "cancel": "ரத்துசெய்",
-            "confirm": "நீக்கு"
-        },
-        "table": {
-            "url": "URL",
-            "date": "தேதி",
-            "testsRun": "இயக்கப்பட்ட சோதனைகள்",
-            "actions": "செயல்கள்"
-        },
-        "actions": {
-            "view": "{{url}} க்கான சுருக்கத்தைக் காண்க",
-            "rerun": "{{url}} க்கான சோதனையை மீண்டும் இயக்கு",
-            "delete": "{{url}} க்கான வரலாற்று உருப்படியை நீக்கு"
-        },
-        "toast": {
-            "exportSuccessTitle": "வரலாறு ஏற்றுமதி செய்யப்பட்டது",
-            "exportSuccessDescription": "உங்கள் சோதனை வரலாறு ஒரு JSON கோப்பாக பதிவிறக்கம் செய்யப்பட்டுள்ளது.",
-            "exportFailTitle": "ஏற்றுமதி தோல்வியடைந்தது",
-            "exportFailDescription": "வரலாற்றை ஏற்றுமதி செய்ய முடியவில்லை.",
-            "importSuccessTitle": "வரலாறு இறக்குமதி செய்யப்பட்டது",
-            "importSuccessDescription": "சோதனை வரலாறு வெற்றிகரமாக ஏற்றப்பட்டது.",
-            "importFailTitle": "இறக்குமதி தோல்வியடைந்தது",
-            "importFailDescription": "தேர்ந்தெடுக்கப்பட்ட கோப்பைப் படிக்க முடியவில்லை.",
-            "importInvalidFormat": "தவறான கோப்பு வடிவம்.",
-            "deleteSuccessTitle": "உள்ளீடு நீக்கப்பட்டது",
-            "deleteSuccessDescription": "சோதனை ஓட்டம் உங்கள் வரலாற்றிலிருந்து அகற்றப்பட்டது.",
-            "clearSuccessTitle": "வரலாறு அழிக்கப்பட்டது",
-            "clearSuccessDescription": "உங்கள் முழு சோதனை வரலாறும் அகற்றப்பட்டது."
-        }
-    },
-    "presets": {
-        "baseline": "அடிப்படை",
-        "spike": "ஸ்பைக்",
-        "stress": "மன அழுத்தம்",
-        "soak": "ஊறவைத்தல்",
-        "custom": "தனிப்பயன்"
-    },
-    "home": {
-        "lastSaved": "உள்ளூர் வரலாறு கடைசியாக சேமிக்கப்பட்டது: {{distance}}"
+  "header": {
+    "title": "கே6 கமாண்டர்",
+    "historyLink": "வரலாறு",
+    "aboutLink": "பற்றி",
+    "startTourButton": "சுற்றுப்பயணத்தை தொடங்கு",
+    "bugReport": "பிழையை புகாரளி",
+    "featureRequest": "அம்சத்தை கோரு"
+  },
+  "footer": {
+    "copyright": "© {{year}} K6 Commander. அனைத்து உரிமைகளும் பாதுகாக்கப்பட்டவை.",
+    "termsLink": "விதிமுறைகள்",
+    "privacyLink": "தனியுரிமை",
+    "securityLink": "பாதுகாப்பு"
+  },
+  "about": {
+    "title": "கே6 கமாண்டர் பற்றி",
+    "description": "k6, Lighthouse மற்றும் AI பகுப்பாய்வின் ஆற்றலை ஒரே மெல்லிய UI இல் இணைக்கும் ஒரு இலகுரக, உள்ளூர்-முதல், அங்கீகரிக்கப்பட்ட சுமை-சோதனை தளம்.",
+    "philosophyTitle": "எங்கள் தத்துவம்",
+    "localFirstTitle": "உள்ளூர்-முதல்",
+    "localFirstDescription": "உங்கள் அனைத்து சோதனை கட்டமைப்புகளும் வரலாறும் உங்கள் உலாவியில் சேமிக்கப்படுகின்றன. கிளவுட் கணக்குகள் தேவையில்லை.",
+    "unifiedToolingTitle": "ஒருங்கிணைந்த கருவிகள்",
+    "unifiedToolingDescription": "ஒரே இடைமுகத்திலிருந்து சுமை சோதனைகள், Lighthouse தணிக்கைகள் மற்றும் SEO பகுப்பாய்வை இயக்கவும்.",
+    "k6FeatureTitle": "கே6 சுமை சோதனை",
+    "k6FeatureDescription": "செயல்திறன் தடைகளை கண்டறிய போக்குவரத்தை உருவகப்படுத்தவும்.",
+    "k6HowItWorks": "Leverage the full power of Grafana k6 to understand how your system behaves under load. Configure virtual users (VUs), duration, and custom ramping stages.",
+    "k6HowItWorks2": "Live results are streamed to a pre-configured Grafana dashboard, giving you real-time insights into request rates, response times, and errors.",
+    "lighthouseFeatureTitle": "Lighthouse தணிக்கைகள்",
+    "lighthouseFeatureDescription": "செயல்திறன், அணுகல் மற்றும் பலவற்றிற்காக தணிக்கை செய்யவும்.",
+    "lighthouseHowItWorks": "Run Google Lighthouse audits directly from the UI. Get scores for Performance, Accessibility, Best Practices, and SEO.",
+    "lighthouseHowItWorks2": "The application provides a high-level summary, and you can access the full, interactive HTML report for a deep-dive analysis and actionable recommendations.",
+    "seoFeatureTitle": "AI-இயங்கும் SEO பகுப்பாய்வு",
+    "seoFeatureDescription": "AI பரிந்துரைகளுடன் ஆழ்ந்த பகுப்பாய்வு.",
+    "seoHowItWorks": "Get a deep, AI-powered analysis of the most critical on-page SEO elements to ensure your pages are optimized for search engines.",
+    "seoHowItWorks2": "This includes checks for title tags, meta descriptions, H1s, canonicals, and Open Graph tags, complete with AI-generated suggestions for improvement.",
+    "stackTitle": "தொழில்நுட்ப அடுக்கு",
+    "stackDescription": "கே6 கமாண்டர் நவீன, தொழில்-தரமான தொழில்நுட்பங்களுடன் உருவாக்கப்பட்டுள்ளது.",
+    "involvedTitle": "பங்கேற்கவும்",
+    "involvedDescription": "இது ஒரு திறந்த மூல திட்டம். பங்களிப்புகள், சிக்கல்கள் மற்றும் அம்ச கோரிக்கைகள் வரவேற்கப்படுகின்றன!",
+    "githubButton": "GitHub இல் காண்க"
+  },
+  "tour": {
+    "steps": {
+      "welcome": "கே6 கமாண்டருக்கு வரவேற்கிறோம்! இது உங்கள் முக்கிய டாஷ்போர்டு.",
+      "history": "உங்கள் கடந்தகால சோதனை ஓட்டங்களை இங்கே காணலாம் மற்றும் நிர்வகிக்கலாம்.",
+      "about": "பயன்பாடு எவ்வாறு செயல்படுகிறது என்பதைப் பற்றி இங்கே மேலும் அறிக.",
+      "github": "மூலக் குறியீட்டைக் காண்க அல்லது இங்கே GitHub இல் சிக்கல்களைப் புகாரளிக்கவும்.",
+      "urlInput": "நீங்கள் சோதிக்க விரும்பும் URL ஐ இங்கே உள்ளிடவும். சமீபத்திய URLகளிலிருந்து நீங்கள் தேர்ந்தெடுக்கலாம்.",
+      "testSuites": "நீங்கள் இயக்க விரும்பும் சோதனை தொகுப்புகளைத் தேர்வுசெய்க: சுமை சோதனை, Lighthouse தணிக்கை அல்லது AI SEO பகுப்பாய்வு.",
+      "requestConfig": "உங்கள் HTTP கோரிக்கையின் விவரங்களை இங்கே உள்ளமைக்கவும், முறை, தலைப்புகள் மற்றும் உடல் போன்றவை.",
+      "loadProfile": "முன் வரையறுக்கப்பட்ட சுமை சுயவிவரத்தைத் தேர்வுசெய்யவும் அல்லது உங்கள் சொந்த தனிப்பயன் காட்சியை உருவாக்கவும்.",
+      "runTest": "நீங்கள் தயாராக இருக்கும்போது, உங்கள் சோதனைகளைத் தொடங்க இங்கே கிளிக் செய்யவும்!"
     }
+  },
+  "form": {
+    "title": "புதிய சோதனை ஓட்டம்",
+    "description": "உங்கள் அடுத்த சோதனை ஓட்டத்திற்கான அளவுருக்களை உள்ளமைக்கவும்.",
+    "urlLabel": "இலக்கு URL",
+    "urlDescription": "நீங்கள் சோதிக்க விரும்பும் பக்கம் அல்லது இறுதிப் புள்ளியின் முழு URL.",
+    "urlPlaceholder": "https://example.com",
+    "toggleRecentUrlsLabel": "சமீபத்திய URLகளை மாற்று",
+    "searchUrlPlaceholder": "சமீபத்திய URLகளைத் தேடு...",
+    "noRecentUrls": "சமீபத்திய URLகள் எதுவும் இல்லை.",
+    "recentUrlsHeading": "சமீபத்திய URLகள்",
+    "removeRecentUrlLabel": "சமீபத்தியவற்றிலிருந்து '{{url}}' ஐ அகற்று",
+    "clearRecentUrlsButton": "சமீபத்திய URLகளை அழி",
+    "testSuitesTitle": "சோதனை தொகுப்புகள்",
+    "testSuitesDescription": "செயல்படுத்த ஒன்று அல்லது அதற்கு மேற்பட்ட சோதனை தொகுப்புகளைத் தேர்ந்தெடுக்கவும்.",
+    "k6SwitchLabel": "கே6 சுமை சோதனை",
+    "k6SwitchDescription": "சுமையின் கீழ் செயல்திறனை அளவிடவும்.",
+    "lighthouseSwitchLabel": "Lighthouse தணிக்கை",
+    "lighthouseSwitchDescription": "தரம், செயல்திறன் மற்றும் SEO ஐ சரிபார்க்கவும்.",
+    "seoSwitchLabel": "AI SEO பகுப்பாய்வு",
+    "seoSwitchDescription": "ஒரு ஆழமான பக்க SEO பகுப்பாய்வை செய்யவும்.",
+    "requestConfigTitle": "கோரிக்கை கட்டமைப்பு",
+    "requestConfigDescription": "சுமை சோதனைக்கான HTTP கோரிக்கையைத் தனிப்பயனாக்கவும்.",
+    "methodLabel": "முறை",
+    "methodPlaceholder": "ஒரு முறையைத் தேர்ந்தெடுக்கவும்",
+    "headersLabel": "தலைப்புகள்",
+    "headerNamePlaceholder": "தலைப்பு பெயர்",
+    "headerValuePlaceholder": "தலைப்பு மதிப்பு",
+    "removeHeaderLabel": "தலைப்பு {{index}} ஐ அகற்று",
+    "addHeaderButton": "தலைப்பைச் சேர்",
+    "requestBodyLabel": "கோரிக்கை உடல்",
+    "loadProfileTitle": "சுமை சுயவிவரம்",
+    "loadProfileDescription": "சோதனையின் போது உருவாக்கப்படும் சுமையின் அளவை வரையறுக்கவும்.",
+    "loadTestPresetsLabel": "சுமை சோதனை முன்னமைவுகள்",
+    "customProfileTitle": "தனிப்பயன் சுமை சுயவிவரம்",
+    "customProfileDescription": "VUகள், காலம் அல்லது நிலைகளுக்கான உங்கள் சொந்த கட்டமைப்பை வரையறுக்கவும்.",
+    "vusLabel": "மெய்நிகர் பயனர்கள் (VUகள்)",
+    "vusPlaceholder": "எ.கா., 100",
+    "durationLabel": "காலம்",
+    "durationPlaceholder": "எ.கா., 5m30s",
+    "stagesLabel": "நிலைகள்",
+    "stagesDescription": "காலப்போக்கில் VUகளை அதிகரிக்கும்/குறைக்கும் சிக்கலான சுமை காட்சிகளுக்கு.",
+    "stageDurationLabel": "நிலை காலம்",
+    "stageDurationPlaceholder": "எ.கா., 1m",
+    "stageTargetVusLabel": "இலக்கு VUகள்",
+    "stageTargetVusPlaceholder": "எ.கா., 50",
+    "removeStageLabel": "நிலை {{index}} ஐ அகற்று",
+    "addStageButton": "நிலையைச் சேர்",
+    "runTestButton": "சோதனையை(களை) இயக்கு",
+    "runningTestButton": "இயங்குகிறது...",
+    "error": {
+      "atLeastOne": "குறைந்தது ஒரு சோதனை தொகுப்பு தேர்ந்தெடுக்கப்பட வேண்டும்."
+    },
+    "toast": {
+      "historyClearedTitle": "வரலாறு அழிக்கப்பட்டது",
+      "historyClearedDescription": "உங்கள் உள்ளூர் சோதனை வரலாறு அழிக்கப்பட்டது.",
+      "testStartedTitle": "சோதனை தொடங்கியது!",
+      "testStartedDescription": "உங்கள் சோதனைகள் இப்போது இயங்குகின்றன. கீழே உள்ள முன்னேற்றத்தைக் கண்காணிக்கவும்."
+    },
+    "clearHistoryDialog": {
+      "title": "இருக்கும் வரலாற்றை அழிக்கவா?",
+      "description": "உங்களிடம் இருக்கும் சோதனை வரலாறு உள்ளது. இந்த புதிய சோதனையை இயக்கும் முன் அதை அழிக்க விரும்புகிறீர்களா?",
+      "keepButton": "இல்லை, வரலாற்றை வைத்திரு",
+      "clearButton": "ஆம், அழித்து இயக்கு"
+    }
+  },
+  "running": {
+    "title": "சோதனைகள் இயங்குகின்றன...",
+    "description": "தேர்ந்தெடுக்கப்பட்ட தொகுப்புகள் முடியும் வரை காத்திருக்கவும். இதற்கு சில நிமிடங்கள் ஆகலாம்.",
+    "finalizingTitle": "முடிவுகளை இறுதி செய்கிறது...",
+    "grafanaLink": "Grafana இல் நேரடி டாஷ்போர்டைக் காண்க"
+  },
+  "summary": {
+    "title": "சோதனை சுருக்கம்",
+    "description": "உங்கள் சோதனை ஓட்டத்திற்கான முடிவுகள்",
+    "saveToHistoryButton": "வரலாற்றில் சேமி",
+    "rerunButton": "மீண்டும் இயக்கு",
+    "newTestButton": "புதிய சோதனையை உருவாக்கு",
+    "k6Tab": "சுமை சோதனை",
+    "lighthouseTab": "Lighthouse",
+    "seoTab": "SEO",
+    "configSummaryTitle": "சோதனை கட்டமைப்பு",
+    "viewFullDetails": "முழு கட்டமைப்பு விவரங்களைக் காண்க"
+  },
+  "history": {
+    "title": "சோதனை வரலாறு",
+    "description": "உங்கள் கடந்தகால சோதனை ஓட்டங்களை உலவவும் மற்றும் நிர்வகிக்கவும்.",
+    "lastSaved": "கடைசியாக சேமிக்கப்பட்டது",
+    "importButton": "இறக்குமதி செய்",
+    "exportButton": "ஏற்றுமதி செய்",
+    "searchPlaceholder": "URL அல்லது ID மூலம் தேடு...",
+    "clearSearchLabel": "தேடலை அழி",
+    "clearAllButton": "அனைத்து வரலாற்றையும் அழி",
+    "noHistoryMessage": "வரலாறு எதுவும் இல்லை.",
+    "noHistoryDescription": "உங்கள் வரலாற்றைத் தொடங்க ஒரு புதிய சோதனையை இயக்கவும்.",
+    "noResultsFound": "'{{query}}' க்கான முடிவுகள் எதுவும் இல்லை.",
+    "clearSearch": "தேடலை அழி",
+    "clearAllDialog": {
+      "title": "உறுதியாகவா?",
+      "description": "இந்த செயலை செயல்தவிர்க்க முடியாது. இது உங்கள் அனைத்து சோதனை வரலாற்று தரவு மற்றும் சமீபத்திய URLகளை நிரந்தரமாக நீக்கும்.",
+      "cancel": "ரத்துசெய்",
+      "confirm": "நீக்கு"
+    },
+    "deleteDialog": {
+      "title": "இந்த உள்ளீட்டை நீக்கவா?",
+      "description": "இந்த செயலை செயல்தவிர்க்க முடியாது. இது இந்த சோதனை ஓட்டத்தை உங்கள் வரலாற்றிலிருந்து நிரந்தரமாக நீக்கும்.",
+      "cancel": "ரத்துசெய்",
+      "confirm": "நீக்கு"
+    },
+    "table": {
+      "url": "URL",
+      "date": "தேதி",
+      "testsRun": "இயக்கப்பட்ட சோதனைகள்",
+      "actions": "செயல்கள்"
+    },
+    "actions": {
+      "view": "{{url}} க்கான சுருக்கத்தைக் காண்க",
+      "rerun": "{{url}} க்கான சோதனையை மீண்டும் இயக்கு",
+      "delete": "{{url}} க்கான வரலாற்று உருப்படியை நீக்கு"
+    },
+    "toast": {
+      "exportSuccessTitle": "வரலாறு ஏற்றுமதி செய்யப்பட்டது",
+      "exportSuccessDescription": "உங்கள் சோதனை வரலாறு ஒரு JSON கோப்பாக பதிவிறக்கம் செய்யப்பட்டுள்ளது.",
+      "exportFailTitle": "ஏற்றுமதி தோல்வியடைந்தது",
+      "exportFailDescription": "வரலாற்றை ஏற்றுமதி செய்ய முடியவில்லை.",
+      "importSuccessTitle": "வரலாறு இறக்குமதி செய்யப்பட்டது",
+      "importSuccessDescription": "சோதனை வரலாறு வெற்றிகரமாக ஏற்றப்பட்டது.",
+      "importFailTitle": "இறக்குமதி தோல்வியடைந்தது",
+      "importFailDescription": "தேர்ந்தெடுக்கப்பட்ட கோப்பைப் படிக்க முடியவில்லை.",
+      "importInvalidFormat": "தவறான கோப்பு வடிவம்.",
+      "deleteSuccessTitle": "உள்ளீடு நீக்கப்பட்டது",
+      "deleteSuccessDescription": "சோதனை ஓட்டம் உங்கள் வரலாற்றிலிருந்து அகற்றப்பட்டது.",
+      "clearSuccessTitle": "வரலாறு அழிக்கப்பட்டது",
+      "clearSuccessDescription": "உங்கள் முழு சோதனை வரலாறும் அகற்றப்பட்டது."
+    }
+  },
+  "presets": {
+    "baseline": "அடிப்படை",
+    "spike": "ஸ்பைக்",
+    "stress": "மன அழுத்தம்",
+    "soak": "ஊறவைத்தல்",
+    "custom": "தனிப்பயன்"
+  },
+  "home": {
+    "lastSaved": "உள்ளூர் வரலாறு கடைசியாக சேமிக்கப்பட்டது: {{distance}}"
+  }
 }
-
-    

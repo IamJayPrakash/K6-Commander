@@ -1,203 +1,200 @@
-
 {
-    "header": {
-        "title": "K6 Commander",
-        "historyLink": "История",
-        "aboutLink": "О программе",
-        "startTourButton": "Начать тур",
-        "bugReport": "Сообщить об ошибке",
-        "featureRequest": "Запросить функцию"
-    },
-    "footer": {
-        "copyright": "© {{year}} K6 Commander. Все права защищены.",
-        "termsLink": "Условия",
-        "privacyLink": "Конфиденциальность",
-        "securityLink": "Безопасность"
-    },
-    "about": {
-        "title": "О K6 Commander",
-        "description": "Легкая, локальная, авторизованная платформа для нагрузочного тестирования, которая сочетает в себе мощь k6, Lighthouse и анализа с помощью ИИ в одном элегантном пользовательском интерфейсе.",
-        "philosophyTitle": "Наша философия",
-        "localFirstTitle": "Локальный подход",
-        "localFirstDescription": "Все ваши тестовые конфигурации и история хранятся в вашем браузере. Облачные учетные записи не требуются.",
-        "unifiedToolingTitle": "Единый инструментарий",
-        "unifiedToolingDescription": "Запускайте нагрузочные тесты, аудиты Lighthouse и SEO-анализ из единого интерфейса.",
-        "k6FeatureTitle": "Нагрузочное тестирование k6",
-        "k6FeatureDescription": "Имитируйте трафик, чтобы найти узкие места в производительности.",
-        "k6HowItWorks": "Leverage the full power of Grafana k6 to understand how your system behaves under load. Configure virtual users (VUs), duration, and custom ramping stages.",
-        "k6HowItWorks2": "Live results are streamed to a pre-configured Grafana dashboard, giving you real-time insights into request rates, response times, and errors.",
-        "lighthouseFeatureTitle": "Аудиты Lighthouse",
-        "lighthouseFeatureDescription": "Аудит производительности, доступности и многого другого.",
-        "lighthouseHowItWorks": "Run Google Lighthouse audits directly from the UI. Get scores for Performance, Accessibility, Best Practices, and SEO.",
-        "lighthouseHowItWorks2": "The application provides a high-level summary, and you can access the full, interactive HTML report for a deep-dive analysis and actionable recommendations.",
-        "seoFeatureTitle": "SEO-анализ на базе ИИ",
-        "seoFeatureDescription": "Глубокий анализ с рекомендациями от ИИ.",
-        "seoHowItWorks": "Get a deep, AI-powered analysis of the most critical on-page SEO elements to ensure your pages are optimized for search engines.",
-        "seoHowItWorks2": "This includes checks for title tags, meta descriptions, H1s, canonicals, and Open Graph tags, complete with AI-generated suggestions for improvement.",
-        "stackTitle": "Технологический стек",
-        "stackDescription": "K6 Commander создан с использованием современных, стандартных для отрасли технологий.",
-        "involvedTitle": "Примите участие",
-        "involvedDescription": "Это проект с открытым исходным кодом. Приветствуются вклады, проблемы и запросы на новые функции!",
-        "githubButton": "Посмотреть на GitHub"
-    },
-    "tour": {
-        "steps": {
-            "welcome": "Добро пожаловать в K6 Commander! Это ваша основная панель управления.",
-            "history": "Здесь вы можете просматривать и управлять своими прошлыми запусками тестов.",
-            "about": "Узнайте больше о том, как работает приложение, здесь.",
-            "github": "Просмотрите исходный код или сообщите о проблемах на GitHub здесь.",
-            "urlInput": "Введите URL-адрес, который вы хотите протестировать, здесь. Вы можете выбрать из последних URL-адресов.",
-            "testSuites": "Выберите, какие наборы тестов вы хотите запустить: нагрузочный тест, аудит Lighthouse или SEO-анализ с помощью ИИ.",
-            "requestConfig": "Настройте детали вашего HTTP-запроса здесь, такие как метод, заголовки и тело.",
-            "loadProfile": "Выберите предопределенный профиль нагрузки или создайте свой собственный пользовательский сценарий.",
-            "runTest": "Когда вы будете готовы, нажмите здесь, чтобы начать тесты!"
-        }
-    },
-    "form": {
-        "title": "Новый запуск теста",
-        "description": "Настройте параметры для следующего запуска теста.",
-        "urlLabel": "Целевой URL",
-        "urlDescription": "Полный URL-адрес страницы или конечной точки, которую вы хотите протестировать.",
-        "urlPlaceholder": "https://example.com",
-        "toggleRecentUrlsLabel": "Переключить последние URL",
-        "searchUrlPlaceholder": "Поиск по последним URL...",
-        "noRecentUrls": "Последние URL не найдены.",
-        "recentUrlsHeading": "Последние URL",
-        "removeRecentUrlLabel": "Удалить '{{url}}' из последних",
-        "clearRecentUrlsButton": "Очистить последние URL",
-        "testSuitesTitle": "Наборы тестов",
-        "testSuitesDescription": "Выберите один или несколько наборов тестов для выполнения.",
-        "k6SwitchLabel": "Нагрузочный тест k6",
-        "k6SwitchDescription": "Измерьте производительность под нагрузкой.",
-        "lighthouseSwitchLabel": "Аудит Lighthouse",
-        "lighthouseSwitchDescription": "Проверьте качество, производительность и SEO.",
-        "seoSwitchLabel": "SEO-анализ с ИИ",
-        "seoSwitchDescription": "Выполните глубокий SEO-анализ на странице.",
-        "requestConfigTitle": "Конфигурация запроса",
-        "requestConfigDescription": "Настройте HTTP-запрос для нагрузочного теста.",
-        "methodLabel": "Метод",
-        "methodPlaceholder": "Выберите метод",
-        "headersLabel": "Заголовки",
-        "headerNamePlaceholder": "Имя заголовка",
-        "headerValuePlaceholder": "Значение заголовка",
-        "removeHeaderLabel": "Удалить заголовок {{index}}",
-        "addHeaderButton": "Добавить заголовок",
-        "requestBodyLabel": "Тело запроса",
-        "loadProfileTitle": "Профиль нагрузки",
-        "loadProfileDescription": "Определите объем нагрузки, который будет генерироваться во время теста.",
-        "loadTestPresetsLabel": "Предустановки нагрузочного теста",
-        "customProfileTitle": "Пользовательский профиль нагрузки",
-        "customProfileDescription": "Определите свою собственную конфигурацию для VU, продолжительности или этапов.",
-        "vusLabel": "Виртуальные пользователи (VU)",
-        "vusPlaceholder": "например, 100",
-        "durationLabel": "Продолжительность",
-        "durationPlaceholder": "например, 5m30s",
-        "stagesLabel": "Этапы",
-        "stagesDescription": "Для сложных сценариев нагрузки с увеличением/уменьшением VU с течением времени.",
-        "stageDurationLabel": "Продолжительность этапа",
-        "stageDurationPlaceholder": "например, 1m",
-        "stageTargetVusLabel": "Целевые VU",
-        "stageTargetVusPlaceholder": "например, 50",
-        "removeStageLabel": "Удалить этап {{index}}",
-        "addStageButton": "Добавить этап",
-        "runTestButton": "Запустить тест(ы)",
-        "runningTestButton": "Выполнение...",
-        "error": {
-            "atLeastOne": "Необходимо выбрать хотя бы один набор тестов."
-        },
-        "toast": {
-            "historyClearedTitle": "История очищена",
-            "historyClearedDescription": "Ваша локальная история тестов была очищена.",
-            "testStartedTitle": "Тест запущен!",
-            "testStartedDescription": "Ваши тесты сейчас выполняются. Следите за прогрессом ниже."
-        },
-        "clearHistoryDialog": {
-            "title": "Очистить существующую историю?",
-            "description": "У вас есть существующая история тестов. Хотите ли вы очистить ее перед запуском этого нового теста?",
-            "keepButton": "Нет, сохранить историю",
-            "clearButton": "Да, очистить и запустить"
-        }
-    },
-    "running": {
-        "title": "Выполнение тестов...",
-        "description": "Пожалуйста, подождите, пока выбранные наборы тестов завершатся. Это может занять несколько минут.",
-        "finalizingTitle": "Завершение результатов...",
-        "grafanaLink": "Просмотр живой панели на Grafana"
-    },
-    "summary": {
-        "title": "Сводка по тесту",
-        "description": "Результаты вашего запуска теста на",
-        "saveToHistoryButton": "Сохранить в историю",
-        "rerunButton": "Перезапустить",
-        "newTestButton": "Создать новый тест",
-        "k6Tab": "Нагрузочный тест",
-        "lighthouseTab": "Lighthouse",
-        "seoTab": "SEO",
-        "configSummaryTitle": "Конфигурация теста",
-        "viewFullDetails": "Просмотр полной конфигурации"
-    },
-    "history": {
-        "title": "История тестов",
-        "description": "Просматривайте и управляйте своими прошлыми запусками тестов.",
-        "lastSaved": "Последнее сохранение",
-        "importButton": "Импорт",
-        "exportButton": "Экспорт",
-        "searchPlaceholder": "Поиск по URL или ID...",
-        "clearSearchLabel": "Очистить поиск",
-        "clearAllButton": "Очистить всю историю",
-        "noHistoryMessage": "История не найдена.",
-        "noHistoryDescription": "Запустите новый тест, чтобы начать свою историю.",
-        "noResultsFound": "Результаты для '{{query}}' не найдены.",
-        "clearSearch": "Очистить поиск",
-        "clearAllDialog": {
-            "title": "Вы уверены?",
-            "description": "Это действие необратимо. Это навсегда удалит все данные вашей истории тестов и последние URL-адреса.",
-            "cancel": "Отмена",
-            "confirm": "Удалить"
-        },
-        "deleteDialog": {
-            "title": "Удалить эту запись?",
-            "description": "Это действие необратимо. Это навсегда удалит этот запуск теста из вашей истории.",
-            "cancel": "Отмена",
-            "confirm": "Удалить"
-        },
-        "table": {
-            "url": "URL",
-            "date": "Дата",
-            "testsRun": "Запущенные тесты",
-            "actions": "Действия"
-        },
-        "actions": {
-            "view": "Просмотр сводки для {{url}}",
-            "rerun": "Перезапустить тест для {{url}}",
-            "delete": "Удалить элемент истории для {{url}}"
-        },
-        "toast": {
-            "exportSuccessTitle": "История экспортирована",
-            "exportSuccessDescription": "Ваша история тестов была загружена в виде файла JSON.",
-            "exportFailTitle": "Ошибка экспорта",
-            "exportFailDescription": "Не удалось экспортировать историю.",
-            "importSuccessTitle": "История импортирована",
-            "importSuccessDescription": "История тестов была успешно загружена.",
-            "importFailTitle": "Ошибка импорта",
-            "importFailDescription": "Не удалось прочитать выбранный файл.",
-            "importInvalidFormat": "Неверный формат файла.",
-            "deleteSuccessTitle": "Запись удалена",
-            "deleteSuccessDescription": "Запуск теста был удален из вашей истории.",
-            "clearSuccessTitle": "История очищена",
-            "clearSuccessDescription": "Вся ваша история тестов была удалена."
-        }
-    },
-    "presets": {
-        "baseline": "Базовый",
-        "spike": "Пиковый",
-        "stress": "Стрессовый",
-        "soak": "Пропиточный",
-        "custom": "Пользовательский"
-    },
-    "home": {
-        "lastSaved": "Локальная история сохранена: {{distance}}"
+  "header": {
+    "title": "K6 Commander",
+    "historyLink": "История",
+    "aboutLink": "О программе",
+    "startTourButton": "Начать тур",
+    "bugReport": "Сообщить об ошибке",
+    "featureRequest": "Запросить функцию"
+  },
+  "footer": {
+    "copyright": "© {{year}} K6 Commander. Все права защищены.",
+    "termsLink": "Условия",
+    "privacyLink": "Конфиденциальность",
+    "securityLink": "Безопасность"
+  },
+  "about": {
+    "title": "О K6 Commander",
+    "description": "Легкая, локальная, авторизованная платформа для нагрузочного тестирования, которая сочетает в себе мощь k6, Lighthouse и анализа с помощью ИИ в одном элегантном пользовательском интерфейсе.",
+    "philosophyTitle": "Наша философия",
+    "localFirstTitle": "Локальный подход",
+    "localFirstDescription": "Все ваши тестовые конфигурации и история хранятся в вашем браузере. Облачные учетные записи не требуются.",
+    "unifiedToolingTitle": "Единый инструментарий",
+    "unifiedToolingDescription": "Запускайте нагрузочные тесты, аудиты Lighthouse и SEO-анализ из единого интерфейса.",
+    "k6FeatureTitle": "Нагрузочное тестирование k6",
+    "k6FeatureDescription": "Имитируйте трафик, чтобы найти узкие места в производительности.",
+    "k6HowItWorks": "Leverage the full power of Grafana k6 to understand how your system behaves under load. Configure virtual users (VUs), duration, and custom ramping stages.",
+    "k6HowItWorks2": "Live results are streamed to a pre-configured Grafana dashboard, giving you real-time insights into request rates, response times, and errors.",
+    "lighthouseFeatureTitle": "Аудиты Lighthouse",
+    "lighthouseFeatureDescription": "Аудит производительности, доступности и многого другого.",
+    "lighthouseHowItWorks": "Run Google Lighthouse audits directly from the UI. Get scores for Performance, Accessibility, Best Practices, and SEO.",
+    "lighthouseHowItWorks2": "The application provides a high-level summary, and you can access the full, interactive HTML report for a deep-dive analysis and actionable recommendations.",
+    "seoFeatureTitle": "SEO-анализ на базе ИИ",
+    "seoFeatureDescription": "Глубокий анализ с рекомендациями от ИИ.",
+    "seoHowItWorks": "Get a deep, AI-powered analysis of the most critical on-page SEO elements to ensure your pages are optimized for search engines.",
+    "seoHowItWorks2": "This includes checks for title tags, meta descriptions, H1s, canonicals, and Open Graph tags, complete with AI-generated suggestions for improvement.",
+    "stackTitle": "Технологический стек",
+    "stackDescription": "K6 Commander создан с использованием современных, стандартных для отрасли технологий.",
+    "involvedTitle": "Примите участие",
+    "involvedDescription": "Это проект с открытым исходным кодом. Приветствуются вклады, проблемы и запросы на новые функции!",
+    "githubButton": "Посмотреть на GitHub"
+  },
+  "tour": {
+    "steps": {
+      "welcome": "Добро пожаловать в K6 Commander! Это ваша основная панель управления.",
+      "history": "Здесь вы можете просматривать и управлять своими прошлыми запусками тестов.",
+      "about": "Узнайте больше о том, как работает приложение, здесь.",
+      "github": "Просмотрите исходный код или сообщите о проблемах на GitHub здесь.",
+      "urlInput": "Введите URL-адрес, который вы хотите протестировать, здесь. Вы можете выбрать из последних URL-адресов.",
+      "testSuites": "Выберите, какие наборы тестов вы хотите запустить: нагрузочный тест, аудит Lighthouse или SEO-анализ с помощью ИИ.",
+      "requestConfig": "Настройте детали вашего HTTP-запроса здесь, такие как метод, заголовки и тело.",
+      "loadProfile": "Выберите предопределенный профиль нагрузки или создайте свой собственный пользовательский сценарий.",
+      "runTest": "Когда вы будете готовы, нажмите здесь, чтобы начать тесты!"
     }
+  },
+  "form": {
+    "title": "Новый запуск теста",
+    "description": "Настройте параметры для следующего запуска теста.",
+    "urlLabel": "Целевой URL",
+    "urlDescription": "Полный URL-адрес страницы или конечной точки, которую вы хотите протестировать.",
+    "urlPlaceholder": "https://example.com",
+    "toggleRecentUrlsLabel": "Переключить последние URL",
+    "searchUrlPlaceholder": "Поиск по последним URL...",
+    "noRecentUrls": "Последние URL не найдены.",
+    "recentUrlsHeading": "Последние URL",
+    "removeRecentUrlLabel": "Удалить '{{url}}' из последних",
+    "clearRecentUrlsButton": "Очистить последние URL",
+    "testSuitesTitle": "Наборы тестов",
+    "testSuitesDescription": "Выберите один или несколько наборов тестов для выполнения.",
+    "k6SwitchLabel": "Нагрузочный тест k6",
+    "k6SwitchDescription": "Измерьте производительность под нагрузкой.",
+    "lighthouseSwitchLabel": "Аудит Lighthouse",
+    "lighthouseSwitchDescription": "Проверьте качество, производительность и SEO.",
+    "seoSwitchLabel": "SEO-анализ с ИИ",
+    "seoSwitchDescription": "Выполните глубокий SEO-анализ на странице.",
+    "requestConfigTitle": "Конфигурация запроса",
+    "requestConfigDescription": "Настройте HTTP-запрос для нагрузочного теста.",
+    "methodLabel": "Метод",
+    "methodPlaceholder": "Выберите метод",
+    "headersLabel": "Заголовки",
+    "headerNamePlaceholder": "Имя заголовка",
+    "headerValuePlaceholder": "Значение заголовка",
+    "removeHeaderLabel": "Удалить заголовок {{index}}",
+    "addHeaderButton": "Добавить заголовок",
+    "requestBodyLabel": "Тело запроса",
+    "loadProfileTitle": "Профиль нагрузки",
+    "loadProfileDescription": "Определите объем нагрузки, который будет генерироваться во время теста.",
+    "loadTestPresetsLabel": "Предустановки нагрузочного теста",
+    "customProfileTitle": "Пользовательский профиль нагрузки",
+    "customProfileDescription": "Определите свою собственную конфигурацию для VU, продолжительности или этапов.",
+    "vusLabel": "Виртуальные пользователи (VU)",
+    "vusPlaceholder": "например, 100",
+    "durationLabel": "Продолжительность",
+    "durationPlaceholder": "например, 5m30s",
+    "stagesLabel": "Этапы",
+    "stagesDescription": "Для сложных сценариев нагрузки с увеличением/уменьшением VU с течением времени.",
+    "stageDurationLabel": "Продолжительность этапа",
+    "stageDurationPlaceholder": "например, 1m",
+    "stageTargetVusLabel": "Целевые VU",
+    "stageTargetVusPlaceholder": "например, 50",
+    "removeStageLabel": "Удалить этап {{index}}",
+    "addStageButton": "Добавить этап",
+    "runTestButton": "Запустить тест(ы)",
+    "runningTestButton": "Выполнение...",
+    "error": {
+      "atLeastOne": "Необходимо выбрать хотя бы один набор тестов."
+    },
+    "toast": {
+      "historyClearedTitle": "История очищена",
+      "historyClearedDescription": "Ваша локальная история тестов была очищена.",
+      "testStartedTitle": "Тест запущен!",
+      "testStartedDescription": "Ваши тесты сейчас выполняются. Следите за прогрессом ниже."
+    },
+    "clearHistoryDialog": {
+      "title": "Очистить существующую историю?",
+      "description": "У вас есть существующая история тестов. Хотите ли вы очистить ее перед запуском этого нового теста?",
+      "keepButton": "Нет, сохранить историю",
+      "clearButton": "Да, очистить и запустить"
+    }
+  },
+  "running": {
+    "title": "Выполнение тестов...",
+    "description": "Пожалуйста, подождите, пока выбранные наборы тестов завершатся. Это может занять несколько минут.",
+    "finalizingTitle": "Завершение результатов...",
+    "grafanaLink": "Просмотр живой панели на Grafana"
+  },
+  "summary": {
+    "title": "Сводка по тесту",
+    "description": "Результаты вашего запуска теста на",
+    "saveToHistoryButton": "Сохранить в историю",
+    "rerunButton": "Перезапустить",
+    "newTestButton": "Создать новый тест",
+    "k6Tab": "Нагрузочный тест",
+    "lighthouseTab": "Lighthouse",
+    "seoTab": "SEO",
+    "configSummaryTitle": "Конфигурация теста",
+    "viewFullDetails": "Просмотр полной конфигурации"
+  },
+  "history": {
+    "title": "История тестов",
+    "description": "Просматривайте и управляйте своими прошлыми запусками тестов.",
+    "lastSaved": "Последнее сохранение",
+    "importButton": "Импорт",
+    "exportButton": "Экспорт",
+    "searchPlaceholder": "Поиск по URL или ID...",
+    "clearSearchLabel": "Очистить поиск",
+    "clearAllButton": "Очистить всю историю",
+    "noHistoryMessage": "История не найдена.",
+    "noHistoryDescription": "Запустите новый тест, чтобы начать свою историю.",
+    "noResultsFound": "Результаты для '{{query}}' не найдены.",
+    "clearSearch": "Очистить поиск",
+    "clearAllDialog": {
+      "title": "Вы уверены?",
+      "description": "Это действие необратимо. Это навсегда удалит все данные вашей истории тестов и последние URL-адреса.",
+      "cancel": "Отмена",
+      "confirm": "Удалить"
+    },
+    "deleteDialog": {
+      "title": "Удалить эту запись?",
+      "description": "Это действие необратимо. Это навсегда удалит этот запуск теста из вашей истории.",
+      "cancel": "Отмена",
+      "confirm": "Удалить"
+    },
+    "table": {
+      "url": "URL",
+      "date": "Дата",
+      "testsRun": "Запущенные тесты",
+      "actions": "Действия"
+    },
+    "actions": {
+      "view": "Просмотр сводки для {{url}}",
+      "rerun": "Перезапустить тест для {{url}}",
+      "delete": "Удалить элемент истории для {{url}}"
+    },
+    "toast": {
+      "exportSuccessTitle": "История экспортирована",
+      "exportSuccessDescription": "Ваша история тестов была загружена в виде файла JSON.",
+      "exportFailTitle": "Ошибка экспорта",
+      "exportFailDescription": "Не удалось экспортировать историю.",
+      "importSuccessTitle": "История импортирована",
+      "importSuccessDescription": "История тестов была успешно загружена.",
+      "importFailTitle": "Ошибка импорта",
+      "importFailDescription": "Не удалось прочитать выбранный файл.",
+      "importInvalidFormat": "Неверный формат файла.",
+      "deleteSuccessTitle": "Запись удалена",
+      "deleteSuccessDescription": "Запуск теста был удален из вашей истории.",
+      "clearSuccessTitle": "История очищена",
+      "clearSuccessDescription": "Вся ваша история тестов была удалена."
+    }
+  },
+  "presets": {
+    "baseline": "Базовый",
+    "spike": "Пиковый",
+    "stress": "Стрессовый",
+    "soak": "Пропиточный",
+    "custom": "Пользовательский"
+  },
+  "home": {
+    "lastSaved": "Локальная история сохранена: {{distance}}"
+  }
 }
-
-    

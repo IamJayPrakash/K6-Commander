@@ -1,4 +1,3 @@
-
 'use client';
 
 import { useEffect, useState } from 'react';
@@ -38,19 +37,20 @@ export default function ConsentModal() {
         <AlertDialogHeader>
           <AlertDialogTitle>Responsible Usage Policy</AlertDialogTitle>
           <AlertDialogDescription>
-            Welcome to K6 Commander. This tool is designed for performance
-            testing applications that you own or have explicit, written
-            permission to test.
-            <br /><br />
-            Unauthorized load testing of third-party systems is prohibited and
-            can be considered a denial-of-service (DoS) attack, which may have
-            legal consequences.
-            <br /><br />
-            By clicking "I Agree," you acknowledge that you will only use this
-            service responsibly and in accordance with our{' '}
+            Welcome to K6 Commander. This tool is designed for performance testing applications that
+            you own or have explicit, written permission to test.
+            <br />
+            <br />
+            Unauthorized load testing of third-party systems is prohibited and can be considered a
+            denial-of-service (DoS) attack, which may have legal consequences.
+            <br />
+            <br />
+            By clicking "I Agree," you acknowledge that you will only use this service responsibly
+            and in accordance with our{' '}
             <Link href="/terms" className="underline text-primary">
               Terms of Service
-            </Link>.
+            </Link>
+            .
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>

@@ -1,4 +1,3 @@
-
 import { NextResponse, type NextRequest } from 'next/server';
 import { spawn } from 'child_process';
 import fs from 'fs/promises';
@@ -22,14 +21,14 @@ export async function POST(req: NextRequest) {
     const reportPath = path.join(resultsDir, `lighthouse-${testId}`);
 
     const lighthouseArgs = [
-        'lighthouse',
-        url,
-        '--output=json',
-        '--output=html',
-        `--output-path=${reportPath}`,
-        '--only-categories=performance,accessibility,best-practices,seo',
-        '--chrome-flags=--headless --no-sandbox --disable-dev-shm-usage',
-        '--quiet',
+      'lighthouse',
+      url,
+      '--output=json',
+      '--output=html',
+      `--output-path=${reportPath}`,
+      '--only-categories=performance,accessibility,best-practices,seo',
+      '--chrome-flags=--headless --no-sandbox --disable-dev-shm-usage',
+      '--quiet',
     ];
 
     console.log('Spawning Lighthouse process with command:', `npx ${lighthouseArgs.join(' ')}`);
@@ -66,14 +65,16 @@ export async function POST(req: NextRequest) {
     });
 
     await lighthousePromise;
-    
+
     const jsonReportContent = await fs.readFile(`${reportPath}.report.json`, 'utf-8');
 
     return NextResponse.json(JSON.parse(jsonReportContent));
-
   } catch (error) {
     console.error('Error in /api/run-lighthouse:', error);
     const errorMessage = error instanceof Error ? error.message : 'An unknown error occurred';
-    return NextResponse.json({ error: 'Failed to run Lighthouse audit', details: errorMessage }, { status: 500 });
+    return NextResponse.json(
+      { error: 'Failed to run Lighthouse audit', details: errorMessage },
+      { status: 500 }
+    );
   }
 }

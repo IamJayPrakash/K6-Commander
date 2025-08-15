@@ -1,1 +1,324 @@
-{"__inputs":[{"name":"DS_INFLUXDB_K6","label":"InfluxDB_k6","description":"","type":"datasource","pluginId":"influxdb","pluginName":"InfluxDB"}],"__requires":[{"type":"grafana","id":"grafana","name":"Grafana","version":"7.4.0"},{"type":"datasource","id":"influxdb","name":"InfluxDB","version":"1.0.0"},{"type":"panel","id":"stat","name":"Stat","version":""},{"type":"panel","id":"timeseries","name":"Time series","version":""}],"annotations":{"list":[{"builtIn":1,"datasource":"-- Grafana --","enable":true,"hide":true,"iconColor":"rgba(0, 211, 255, 1)","name":"Annotations & Alerts","type":"dashboard"}]},"editable":true,"gnetId":2587,"graphTooltip":0,"id":1,"links":[],"panels":[{"collapsed":false,"gridPos":{"h":2,"w":24,"x":0,"y":0},"id":11,"panels":[],"title":"Test Information","type":"row"},{"gridPos":{"h":4,"w":18,"x":0,"y":2},"id":10,"lines":true,"maxDataPoints":100,"options":{"content":"This dashboard is a slightly modified version of the one available on [Grafana.com](https://grafana.com/grafana/dashboards/2587).\n\nIt is set up to be easily used with the k6 docker-compose setup, and has a **testid** variable added that can be used to filter by a specific test run. The **testid** needs to be passed as a tag from your k6 script: `k6 run --tag testid=your-unique-id script.js`\n\nFor more information on k6, see [k6.io](https://k6.io).","mode":"markdown"},"pluginVersion":"7.4.0","title":"Info","type":"text"},{"gridPos":{"h":4,"w":6,"x":18,"y":2},"id":12,"options":{"colorMode":"value","graphMode":"area","justifyMode":"auto","orientation":"auto","reduceOptions":{"calcs":["lastNotNull"],"fields":"","values":false},"text":{},"textMode":"auto"},"pluginVersion":"7.4.0","targets":[{"groupBy":[{"params":["$__interval"],"type":"time"},{"params":["null"],"type":"fill"}],"measurement":"vus","orderByTime":"ASC","policy":"default","query":"SELECT last(\"value\") FROM \"vus\" WHERE $timeFilter GROUP BY time($__interval) fill(null)","rawQuery":true,"refId":"A","resultFormat":"time_series","select":[[{"params":["value"],"type":"field"},{"params":[],"type":"last"}]],"tags":[]}],"title":"Virtual Users","type":"stat"},{"collapsed":false,"gridPos":{"h":2,"w":24,"x":0,"y":6},"id":2,"panels":[],"title":"Requests","type":"row"},{"gridPos":{"h":6,"w":18,"x":0,"y":8},"id":1,"targets":[{"alias":"$tag_group - $tag_method","groupBy":[{"params":["group"],"type":"tag"},{"params":["method"],"type":"tag"}],"measurement":"http_reqs","orderByTime":"ASC","policy":"default","refId":"A","resultFormat":"time_series","select":[[{"params":["value"],"type":"field"}]],"tags":[{"key":"testid","operator":"=","value":"$testid"}]}],"title":"Requests per second (RPS)","type":"timeseries"},{"gridPos":{"h":6,"w":6,"x":18,"y":8},"id":3,"options":{"colorMode":"value","graphMode":"area","justifyMode":"auto","orientation":"auto","reduceOptions":{"calcs":["mean"],"fields":"","values":false},"text":{},"textMode":"auto"},"pluginVersion":"7.4.0","targets":[{"groupBy":[],"measurement":"http_reqs","orderByTime":"ASC","policy":"default","query":"SELECT count(\"value\") FROM \"http_reqs\" WHERE $timeFilter","rawQuery":true,"refId":"A","resultFormat":"table","select":[[{"params":["value"],"type":"field"},{"params":[],"type":"count"}]],"tags":[{"key":"testid","operator":"=","value":"$testid"}]}],"title":"Total Requests","type":"stat"},{"collapsed":false,"gridPos":{"h":2,"w":24,"x":0,"y":14},"id":5,"panels":[],"title":"Durations","type":"row"},{"gridPos":{"h":6,"w":18,"x":0,"y":16},"id":4,"targets":[{"alias":"$tag_group - $tag_method","groupBy":[{"params":["group"],"type":"tag"},{"params":["method"],"type":"tag"}],"measurement":"http_req_duration","orderByTime":"ASC","policy":"default","refId":"A","resultFormat":"time_series","select":[[{"params":["value"],"type":"field"}]],"tags":[{"key":"testid","operator":"=","value":"$testid"}]}],"title":"Request duration","type":"timeseries"},{"gridPos":{"h":6,"w":6,"x":18,"y":16},"id":6,"options":{"colorMode":"value","graphMode":"none","justifyMode":"auto","orientation":"auto","reduceOptions":{"calcs":["mean"],"fields":"","values":false},"text":{},"textMode":"auto"},"pluginVersion":"7.4.0","targets":[{"groupBy":[],"measurement":"http_req_duration","orderByTime":"ASC","policy":"default","query":"SELECT mean(\"value\") FROM \"http_req_duration\" WHERE $timeFilter","rawQuery":true,"refId":"A","resultFormat":"table","select":[[{"params":["value"],"type":"field"},{"params":[],"type":"mean"}]],"tags":[{"key":"testid","operator":"=","value":"$testid"}]}],"title":"Avg. duration","type":"stat"},{"collapsed":false,"gridPos":{"h":2,"w":24,"x":0,"y":22},"id":8,"panels":[],"title":"Errors","type":"row"},{"gridPos":{"h":6,"w":18,"x":0,"y":24},"id":7,"targets":[{"alias":"$tag_group - $tag_method","groupBy":[{"params":["group"],"type":"tag"},{"params":["method"],"type":"tag"}],"measurement":"http_req_failed","orderByTime":"ASC","policy":"default","refId":"A","resultFormat":"time_series","select":[[{"params":["value"],"type":"field"}]],"tags":[{"key":"testid","operator":"=","value":"$testid"}]}],"title":"Errors per second","type":"timeseries"},{"gridPos":{"h":6,"w":6,"x":18,"y":24},"id":9,"options":{"colorMode":"value","graphMode":"none","justifyMode":"auto","orientation":"auto","reduceOptions":{"calcs":["mean"],"fields":"","values":false},"text":{},"textMode":"auto"},"pluginVersion":"7.4.0","targets":[{"groupBy":[],"measurement":"http_req_failed","orderByTime":"ASC","policy":"default","query":"SELECT count(\"value\") FROM \"http_req_failed\" WHERE $timeFilter AND value = 1","rawQuery":true,"refId":"A","resultFormat":"table","select":[[{"params":["value"],"type":"field"},{"params":[],"type":"count"}]],"tags":[{"key":"testid","operator":"=","value":"$testid"}]}],"title":"Total errors","type":"stat"}],"refresh":false,"schemaVersion":27,"style":"dark","tags":["k6"],"templating":{"list":[{"allValue":null,"current":{"selected":true,"text":"All","value":["$__all"]},"datasource":"${DS_INFLUXDB_K6}","definition":"show tag values from \"http_reqs\" with key = \"testid\"","hide":0,"includeAll":true,"label":"Test ID","multi":false,"name":"testid","options":[],"query":"show tag values from \"http_reqs\" with key = \"testid\"","refresh":1,"regex":"","skipUrlSync":false,"sort":0,"type":"query"}]},"time":{"from":"now-5m","to":"now"},"timepicker":{},"timezone":"","title":"k6 Load Testing Results","uid":"k6","version":2}
+{
+  "__inputs": [
+    {
+      "name": "DS_INFLUXDB_K6",
+      "label": "InfluxDB_k6",
+      "description": "",
+      "type": "datasource",
+      "pluginId": "influxdb",
+      "pluginName": "InfluxDB"
+    }
+  ],
+  "__requires": [
+    { "type": "grafana", "id": "grafana", "name": "Grafana", "version": "7.4.0" },
+    { "type": "datasource", "id": "influxdb", "name": "InfluxDB", "version": "1.0.0" },
+    { "type": "panel", "id": "stat", "name": "Stat", "version": "" },
+    { "type": "panel", "id": "timeseries", "name": "Time series", "version": "" }
+  ],
+  "annotations": {
+    "list": [
+      {
+        "builtIn": 1,
+        "datasource": "-- Grafana --",
+        "enable": true,
+        "hide": true,
+        "iconColor": "rgba(0, 211, 255, 1)",
+        "name": "Annotations & Alerts",
+        "type": "dashboard"
+      }
+    ]
+  },
+  "editable": true,
+  "gnetId": 2587,
+  "graphTooltip": 0,
+  "id": 1,
+  "links": [],
+  "panels": [
+    {
+      "collapsed": false,
+      "gridPos": { "h": 2, "w": 24, "x": 0, "y": 0 },
+      "id": 11,
+      "panels": [],
+      "title": "Test Information",
+      "type": "row"
+    },
+    {
+      "gridPos": { "h": 4, "w": 18, "x": 0, "y": 2 },
+      "id": 10,
+      "lines": true,
+      "maxDataPoints": 100,
+      "options": {
+        "content": "This dashboard is a slightly modified version of the one available on [Grafana.com](https://grafana.com/grafana/dashboards/2587).\n\nIt is set up to be easily used with the k6 docker-compose setup, and has a **testid** variable added that can be used to filter by a specific test run. The **testid** needs to be passed as a tag from your k6 script: `k6 run --tag testid=your-unique-id script.js`\n\nFor more information on k6, see [k6.io](https://k6.io).",
+        "mode": "markdown"
+      },
+      "pluginVersion": "7.4.0",
+      "title": "Info",
+      "type": "text"
+    },
+    {
+      "gridPos": { "h": 4, "w": 6, "x": 18, "y": 2 },
+      "id": 12,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "area",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": { "calcs": ["lastNotNull"], "fields": "", "values": false },
+        "text": {},
+        "textMode": "auto"
+      },
+      "pluginVersion": "7.4.0",
+      "targets": [
+        {
+          "groupBy": [
+            { "params": ["$__interval"], "type": "time" },
+            { "params": ["null"], "type": "fill" }
+          ],
+          "measurement": "vus",
+          "orderByTime": "ASC",
+          "policy": "default",
+          "query": "SELECT last(\"value\") FROM \"vus\" WHERE $timeFilter GROUP BY time($__interval) fill(null)",
+          "rawQuery": true,
+          "refId": "A",
+          "resultFormat": "time_series",
+          "select": [
+            [
+              { "params": ["value"], "type": "field" },
+              { "params": [], "type": "last" }
+            ]
+          ],
+          "tags": []
+        }
+      ],
+      "title": "Virtual Users",
+      "type": "stat"
+    },
+    {
+      "collapsed": false,
+      "gridPos": { "h": 2, "w": 24, "x": 0, "y": 6 },
+      "id": 2,
+      "panels": [],
+      "title": "Requests",
+      "type": "row"
+    },
+    {
+      "gridPos": { "h": 6, "w": 18, "x": 0, "y": 8 },
+      "id": 1,
+      "targets": [
+        {
+          "alias": "$tag_group - $tag_method",
+          "groupBy": [
+            { "params": ["group"], "type": "tag" },
+            { "params": ["method"], "type": "tag" }
+          ],
+          "measurement": "http_reqs",
+          "orderByTime": "ASC",
+          "policy": "default",
+          "refId": "A",
+          "resultFormat": "time_series",
+          "select": [[{ "params": ["value"], "type": "field" }]],
+          "tags": [{ "key": "testid", "operator": "=", "value": "$testid" }]
+        }
+      ],
+      "title": "Requests per second (RPS)",
+      "type": "timeseries"
+    },
+    {
+      "gridPos": { "h": 6, "w": 6, "x": 18, "y": 8 },
+      "id": 3,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "area",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": { "calcs": ["mean"], "fields": "", "values": false },
+        "text": {},
+        "textMode": "auto"
+      },
+      "pluginVersion": "7.4.0",
+      "targets": [
+        {
+          "groupBy": [],
+          "measurement": "http_reqs",
+          "orderByTime": "ASC",
+          "policy": "default",
+          "query": "SELECT count(\"value\") FROM \"http_reqs\" WHERE $timeFilter",
+          "rawQuery": true,
+          "refId": "A",
+          "resultFormat": "table",
+          "select": [
+            [
+              { "params": ["value"], "type": "field" },
+              { "params": [], "type": "count" }
+            ]
+          ],
+          "tags": [{ "key": "testid", "operator": "=", "value": "$testid" }]
+        }
+      ],
+      "title": "Total Requests",
+      "type": "stat"
+    },
+    {
+      "collapsed": false,
+      "gridPos": { "h": 2, "w": 24, "x": 0, "y": 14 },
+      "id": 5,
+      "panels": [],
+      "title": "Durations",
+      "type": "row"
+    },
+    {
+      "gridPos": { "h": 6, "w": 18, "x": 0, "y": 16 },
+      "id": 4,
+      "targets": [
+        {
+          "alias": "$tag_group - $tag_method",
+          "groupBy": [
+            { "params": ["group"], "type": "tag" },
+            { "params": ["method"], "type": "tag" }
+          ],
+          "measurement": "http_req_duration",
+          "orderByTime": "ASC",
+          "policy": "default",
+          "refId": "A",
+          "resultFormat": "time_series",
+          "select": [[{ "params": ["value"], "type": "field" }]],
+          "tags": [{ "key": "testid", "operator": "=", "value": "$testid" }]
+        }
+      ],
+      "title": "Request duration",
+      "type": "timeseries"
+    },
+    {
+      "gridPos": { "h": 6, "w": 6, "x": 18, "y": 16 },
+      "id": 6,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": { "calcs": ["mean"], "fields": "", "values": false },
+        "text": {},
+        "textMode": "auto"
+      },
+      "pluginVersion": "7.4.0",
+      "targets": [
+        {
+          "groupBy": [],
+          "measurement": "http_req_duration",
+          "orderByTime": "ASC",
+          "policy": "default",
+          "query": "SELECT mean(\"value\") FROM \"http_req_duration\" WHERE $timeFilter",
+          "rawQuery": true,
+          "refId": "A",
+          "resultFormat": "table",
+          "select": [
+            [
+              { "params": ["value"], "type": "field" },
+              { "params": [], "type": "mean" }
+            ]
+          ],
+          "tags": [{ "key": "testid", "operator": "=", "value": "$testid" }]
+        }
+      ],
+      "title": "Avg. duration",
+      "type": "stat"
+    },
+    {
+      "collapsed": false,
+      "gridPos": { "h": 2, "w": 24, "x": 0, "y": 22 },
+      "id": 8,
+      "panels": [],
+      "title": "Errors",
+      "type": "row"
+    },
+    {
+      "gridPos": { "h": 6, "w": 18, "x": 0, "y": 24 },
+      "id": 7,
+      "targets": [
+        {
+          "alias": "$tag_group - $tag_method",
+          "groupBy": [
+            { "params": ["group"], "type": "tag" },
+            { "params": ["method"], "type": "tag" }
+          ],
+          "measurement": "http_req_failed",
+          "orderByTime": "ASC",
+          "policy": "default",
+          "refId": "A",
+          "resultFormat": "time_series",
+          "select": [[{ "params": ["value"], "type": "field" }]],
+          "tags": [{ "key": "testid", "operator": "=", "value": "$testid" }]
+        }
+      ],
+      "title": "Errors per second",
+      "type": "timeseries"
+    },
+    {
+      "gridPos": { "h": 6, "w": 6, "x": 18, "y": 24 },
+      "id": 9,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": { "calcs": ["mean"], "fields": "", "values": false },
+        "text": {},
+        "textMode": "auto"
+      },
+      "pluginVersion": "7.4.0",
+      "targets": [
+        {
+          "groupBy": [],
+          "measurement": "http_req_failed",
+          "orderByTime": "ASC",
+          "policy": "default",
+          "query": "SELECT count(\"value\") FROM \"http_req_failed\" WHERE $timeFilter AND value = 1",
+          "rawQuery": true,
+          "refId": "A",
+          "resultFormat": "table",
+          "select": [
+            [
+              { "params": ["value"], "type": "field" },
+              { "params": [], "type": "count" }
+            ]
+          ],
+          "tags": [{ "key": "testid", "operator": "=", "value": "$testid" }]
+        }
+      ],
+      "title": "Total errors",
+      "type": "stat"
+    }
+  ],
+  "refresh": false,
+  "schemaVersion": 27,
+  "style": "dark",
+  "tags": ["k6"],
+  "templating": {
+    "list": [
+      {
+        "allValue": null,
+        "current": { "selected": true, "text": "All", "value": ["$__all"] },
+        "datasource": "${DS_INFLUXDB_K6}",
+        "definition": "show tag values from \"http_reqs\" with key = \"testid\"",
+        "hide": 0,
+        "includeAll": true,
+        "label": "Test ID",
+        "multi": false,
+        "name": "testid",
+        "options": [],
+        "query": "show tag values from \"http_reqs\" with key = \"testid\"",
+        "refresh": 1,
+        "regex": "",
+        "skipUrlSync": false,
+        "sort": 0,
+        "type": "query"
+      }
+    ]
+  },
+  "time": { "from": "now-5m", "to": "now" },
+  "timepicker": {},
+  "timezone": "",
+  "title": "k6 Load Testing Results",
+  "uid": "k6",
+  "version": 2
+}

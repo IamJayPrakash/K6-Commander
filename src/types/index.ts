@@ -1,4 +1,3 @@
-
 export type TestPreset = 'baseline' | 'spike' | 'stress' | 'soak';
 
 export interface TestConfiguration {
@@ -61,21 +60,21 @@ export interface K6Summary {
 }
 
 export interface LighthouseCategory {
-    id: string;
-    title: string;
-    score: number;
+  id: string;
+  title: string;
+  score: number;
 }
 
 export interface LighthouseSummary {
-    requestedUrl: string;
-    finalUrl: string;
-    fetchTime: string;
-    categories: {
-        'performance': LighthouseCategory,
-        'accessibility': LighthouseCategory,
-        'best-practices': LighthouseCategory,
-        'seo': LighthouseCategory
-    }
+  requestedUrl: string;
+  finalUrl: string;
+  fetchTime: string;
+  categories: {
+    performance: LighthouseCategory;
+    accessibility: LighthouseCategory;
+    'best-practices': LighthouseCategory;
+    seo: LighthouseCategory;
+  };
 }
 
 export interface SeoAnalysisItem {

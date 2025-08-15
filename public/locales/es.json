@@ -1,203 +1,200 @@
-
 {
-    "header": {
-        "title": "K6 Commander",
-        "historyLink": "Historial",
-        "aboutLink": "Acerca de",
-        "startTourButton": "Iniciar Tour",
-        "bugReport": "Reportar un Error",
-        "featureRequest": "Solicitar una Característica"
-    },
-    "footer": {
-        "copyright": "© {{year}} K6 Commander. Todos los derechos reservados.",
-        "termsLink": "Términos",
-        "privacyLink": "Privacidad",
-        "securityLink": "Seguridad"
-    },
-    "about": {
-        "title": "Acerca de K6 Commander",
-        "description": "Una plataforma de pruebas de carga ligera, local y autorizada que combina el poder de k6, Lighthouse y el análisis de IA en una única y elegante interfaz de usuario.",
-        "philosophyTitle": "Nuestra Filosofía",
-        "localFirstTitle": "Primero Local",
-        "localFirstDescription": "Todas sus configuraciones de prueba e historial se almacenan en su navegador. No se necesitan cuentas en la nube.",
-        "unifiedToolingTitle": "Herramientas Unificadas",
-        "unifiedToolingDescription": "Ejecute pruebas de carga, auditorías de Lighthouse y análisis de SEO desde una única interfaz.",
-        "k6FeatureTitle": "Pruebas de Carga k6",
-        "k6FeatureDescription": "Simule tráfico para encontrar cuellos de botella de rendimiento.",
-        "k6HowItWorks": "Leverage the full power of Grafana k6 to understand how your system behaves under load. Configure virtual users (VUs), duration, and custom ramping stages.",
-        "k6HowItWorks2": "Live results are streamed to a pre-configured Grafana dashboard, giving you real-time insights into request rates, response times, and errors.",
-        "lighthouseFeatureTitle": "Auditorías de Lighthouse",
-        "lighthouseFeatureDescription": "Audite el rendimiento, la accesibilidad y más.",
-        "lighthouseHowItWorks": "Run Google Lighthouse audits directly from the UI. Get scores for Performance, Accessibility, Best Practices, and SEO.",
-        "lighthouseHowItWorks2": "The application provides a high-level summary, and you can access the full, interactive HTML report for a deep-dive analysis and actionable recommendations.",
-        "seoFeatureTitle": "Análisis de SEO con IA",
-        "seoFeatureDescription": "Análisis profundo con recomendaciones de IA.",
-        "seoHowItWorks": "Get a deep, AI-powered analysis of the most critical on-page SEO elements to ensure your pages are optimized for search engines.",
-        "seoHowItWorks2": "This includes checks for title tags, meta descriptions, H1s, canonicals, and Open Graph tags, complete with AI-generated suggestions for improvement.",
-        "stackTitle": "Pila de Tecnología",
-        "stackDescription": "K6 Commander está construido con tecnologías modernas y estándar de la industria.",
-        "involvedTitle": "Participe",
-        "involvedDescription": "Este es un proyecto de código abierto. ¡Las contribuciones, los problemas y las solicitudes de características son bienvenidos!",
-        "githubButton": "Ver en GitHub"
-    },
-    "tour": {
-        "steps": {
-            "welcome": "¡Bienvenido a K6 Commander! Este es su panel principal.",
-            "history": "Puede ver y administrar sus ejecuciones de prueba pasadas aquí.",
-            "about": "Aprenda más sobre cómo funciona la aplicación aquí.",
-            "github": "Vea el código fuente o informe problemas en GitHub aquí.",
-            "urlInput": "Ingrese la URL que desea probar aquí. Puede seleccionar de URLs recientes.",
-            "testSuites": "Elija qué suites de prueba desea ejecutar: Prueba de Carga, Auditoría de Lighthouse o Análisis de SEO con IA.",
-            "requestConfig": "Configure los detalles de su solicitud HTTP aquí, como el método, los encabezados y el cuerpo.",
-            "loadProfile": "Elija un perfil de carga predefinido o cree su propio escenario personalizado.",
-            "runTest": "Cuando esté listo, ¡haga clic aquí para iniciar sus pruebas!"
-        }
-    },
-    "form": {
-        "title": "Nueva Ejecución de Prueba",
-        "description": "Configure los parámetros para su próxima ejecución de prueba.",
-        "urlLabel": "URL de Destino",
-        "urlDescription": "La URL completa de la página o punto final que desea probar.",
-        "urlPlaceholder": "https://example.com",
-        "toggleRecentUrlsLabel": "Alternar URLs recientes",
-        "searchUrlPlaceholder": "Buscar URLs recientes...",
-        "noRecentUrls": "No se encontraron URLs recientes.",
-        "recentUrlsHeading": "URLs Recientes",
-        "removeRecentUrlLabel": "Eliminar '{{url}}' de recientes",
-        "clearRecentUrlsButton": "Limpiar URLs Recientes",
-        "testSuitesTitle": "Suites de Prueba",
-        "testSuitesDescription": "Seleccione una o más suites de prueba para ejecutar.",
-        "k6SwitchLabel": "Prueba de Carga k6",
-        "k6SwitchDescription": "Mida el rendimiento bajo carga.",
-        "lighthouseSwitchLabel": "Auditoría de Lighthouse",
-        "lighthouseSwitchDescription": "Verifique la calidad, el rendimiento y el SEO.",
-        "seoSwitchLabel": "Análisis de SEO con IA",
-        "seoSwitchDescription": "Realice un análisis de SEO en la página en profundidad.",
-        "requestConfigTitle": "Configuración de la Solicitud",
-        "requestConfigDescription": "Personalice la solicitud HTTP para la prueba de carga.",
-        "methodLabel": "Método",
-        "methodPlaceholder": "Seleccione un método",
-        "headersLabel": "Encabezados",
-        "headerNamePlaceholder": "Nombre del Encabezado",
-        "headerValuePlaceholder": "Valor del Encabezado",
-        "removeHeaderLabel": "Eliminar encabezado {{index}}",
-        "addHeaderButton": "Agregar Encabezado",
-        "requestBodyLabel": "Cuerpo de la Solicitud",
-        "loadProfileTitle": "Perfil de Carga",
-        "loadProfileDescription": "Defina la cantidad de carga a generar durante la prueba.",
-        "loadTestPresetsLabel": "Perfiles de Carga Predefinidos",
-        "customProfileTitle": "Perfil de Carga Personalizado",
-        "customProfileDescription": "Defina su propia configuración para VUs, duración o etapas.",
-        "vusLabel": "Usuarios Virtuales (VUs)",
-        "vusPlaceholder": "ej., 100",
-        "durationLabel": "Duración",
-        "durationPlaceholder": "ej., 5m30s",
-        "stagesLabel": "Etapas",
-        "stagesDescription": "Para escenarios de carga complejos con VUs que aumentan/disminuyen con el tiempo.",
-        "stageDurationLabel": "Duración de la Etapa",
-        "stageDurationPlaceholder": "ej., 1m",
-        "stageTargetVusLabel": "VUs de Destino",
-        "stageTargetVusPlaceholder": "ej., 50",
-        "removeStageLabel": "Eliminar etapa {{index}}",
-        "addStageButton": "Agregar Etapa",
-        "runTestButton": "Ejecutar Prueba(s)",
-        "runningTestButton": "Ejecutando...",
-        "error": {
-            "atLeastOne": "Se debe seleccionar al menos una suite de prueba."
-        },
-        "toast": {
-            "historyClearedTitle": "Historial Limpiado",
-            "historyClearedDescription": "Su historial de pruebas local ha sido limpiado.",
-            "testStartedTitle": "¡Prueba Iniciada!",
-            "testStartedDescription": "Sus pruebas se están ejecutando ahora. Monitoree el progreso a continuación."
-        },
-        "clearHistoryDialog": {
-            "title": "¿Limpiar Historial Existente?",
-            "description": "Tiene un historial de pruebas existente. ¿Le gustaría limpiarlo antes de ejecutar esta nueva prueba?",
-            "keepButton": "No, Mantener Historial",
-            "clearButton": "Sí, Limpiar y Ejecutar"
-        }
-    },
-    "running": {
-        "title": "Ejecutando Pruebas...",
-        "description": "Por favor espere mientras se completan las suites seleccionadas. Esto puede tardar unos minutos.",
-        "finalizingTitle": "Finalizando Resultados...",
-        "grafanaLink": "Ver Panel en Vivo en Grafana"
-    },
-    "summary": {
-        "title": "Resumen de la Prueba",
-        "description": "Los resultados de su ejecución de prueba en",
-        "saveToHistoryButton": "Guardar en el Historial",
-        "rerunButton": "Reejecutar",
-        "newTestButton": "Crear Nueva Prueba",
-        "k6Tab": "Prueba de Carga",
-        "lighthouseTab": "Lighthouse",
-        "seoTab": "SEO",
-        "configSummaryTitle": "Configuración de la Prueba",
-        "viewFullDetails": "Ver Detalles Completos de la Configuración"
-    },
-    "history": {
-        "title": "Historial de Pruebas",
-        "description": "Navegue y administre sus ejecuciones de prueba pasadas.",
-        "lastSaved": "Último guardado",
-        "importButton": "Importar",
-        "exportButton": "Exportar",
-        "searchPlaceholder": "Buscar por URL o ID...",
-        "clearSearchLabel": "Limpiar búsqueda",
-        "clearAllButton": "Limpiar Todo el Historial",
-        "noHistoryMessage": "No se encontró historial.",
-        "noHistoryDescription": "Ejecute una nueva prueba para comenzar su historial.",
-        "noResultsFound": "No se encontraron resultados para '{{query}}'.",
-        "clearSearch": "Limpiar búsqueda",
-        "clearAllDialog": {
-            "title": "¿Está seguro?",
-            "description": "Esta acción no se puede deshacer. Esto eliminará permanentemente todos los datos de su historial de pruebas y las URLs recientes.",
-            "cancel": "Cancelar",
-            "confirm": "Eliminar"
-        },
-        "deleteDialog": {
-            "title": "¿Eliminar esta entrada?",
-            "description": "Esta acción no se puede deshacer. Esto eliminará permanentemente esta ejecución de prueba de su historial.",
-            "cancel": "Cancelar",
-            "confirm": "Eliminar"
-        },
-        "table": {
-            "url": "URL",
-            "date": "Fecha",
-            "testsRun": "Pruebas Ejecutadas",
-            "actions": "Acciones"
-        },
-        "actions": {
-            "view": "Ver resumen para {{url}}",
-            "rerun": "Reejecutar prueba para {{url}}",
-            "delete": "Eliminar elemento del historial para {{url}}"
-        },
-        "toast": {
-            "exportSuccessTitle": "Historial Exportado",
-            "exportSuccessDescription": "Su historial de pruebas se ha descargado como un archivo JSON.",
-            "exportFailTitle": "Error al Exportar",
-            "exportFailDescription": "No se pudo exportar el historial.",
-            "importSuccessTitle": "Historial Importado",
-            "importSuccessDescription": "El historial de pruebas se cargó correctamente.",
-            "importFailTitle": "Error al Importar",
-            "importFailDescription": "No se pudo leer el archivo seleccionado.",
-            "importInvalidFormat": "Formato de archivo inválido.",
-            "deleteSuccessTitle": "Entrada Eliminada",
-            "deleteSuccessDescription": "La ejecución de la prueba ha sido eliminada de su historial.",
-            "clearSuccessTitle": "Historial Limpiado",
-            "clearSuccessDescription": "Todo su historial de pruebas ha sido eliminado."
-        }
-    },
-    "presets": {
-        "baseline": "Línea de Base",
-        "spike": "Pico",
-        "stress": "Estrés",
-        "soak": "Remojo",
-        "custom": "Personalizado"
-    },
-    "home": {
-        "lastSaved": "Historial local guardado por última vez: {{distance}}"
+  "header": {
+    "title": "K6 Commander",
+    "historyLink": "Historial",
+    "aboutLink": "Acerca de",
+    "startTourButton": "Iniciar Tour",
+    "bugReport": "Reportar un Error",
+    "featureRequest": "Solicitar una Característica"
+  },
+  "footer": {
+    "copyright": "© {{year}} K6 Commander. Todos los derechos reservados.",
+    "termsLink": "Términos",
+    "privacyLink": "Privacidad",
+    "securityLink": "Seguridad"
+  },
+  "about": {
+    "title": "Acerca de K6 Commander",
+    "description": "Una plataforma de pruebas de carga ligera, local y autorizada que combina el poder de k6, Lighthouse y el análisis de IA en una única y elegante interfaz de usuario.",
+    "philosophyTitle": "Nuestra Filosofía",
+    "localFirstTitle": "Primero Local",
+    "localFirstDescription": "Todas sus configuraciones de prueba e historial se almacenan en su navegador. No se necesitan cuentas en la nube.",
+    "unifiedToolingTitle": "Herramientas Unificadas",
+    "unifiedToolingDescription": "Ejecute pruebas de carga, auditorías de Lighthouse y análisis de SEO desde una única interfaz.",
+    "k6FeatureTitle": "Pruebas de Carga k6",
+    "k6FeatureDescription": "Simule tráfico para encontrar cuellos de botella de rendimiento.",
+    "k6HowItWorks": "Leverage the full power of Grafana k6 to understand how your system behaves under load. Configure virtual users (VUs), duration, and custom ramping stages.",
+    "k6HowItWorks2": "Live results are streamed to a pre-configured Grafana dashboard, giving you real-time insights into request rates, response times, and errors.",
+    "lighthouseFeatureTitle": "Auditorías de Lighthouse",
+    "lighthouseFeatureDescription": "Audite el rendimiento, la accesibilidad y más.",
+    "lighthouseHowItWorks": "Run Google Lighthouse audits directly from the UI. Get scores for Performance, Accessibility, Best Practices, and SEO.",
+    "lighthouseHowItWorks2": "The application provides a high-level summary, and you can access the full, interactive HTML report for a deep-dive analysis and actionable recommendations.",
+    "seoFeatureTitle": "Análisis de SEO con IA",
+    "seoFeatureDescription": "Análisis profundo con recomendaciones de IA.",
+    "seoHowItWorks": "Get a deep, AI-powered analysis of the most critical on-page SEO elements to ensure your pages are optimized for search engines.",
+    "seoHowItWorks2": "This includes checks for title tags, meta descriptions, H1s, canonicals, and Open Graph tags, complete with AI-generated suggestions for improvement.",
+    "stackTitle": "Pila de Tecnología",
+    "stackDescription": "K6 Commander está construido con tecnologías modernas y estándar de la industria.",
+    "involvedTitle": "Participe",
+    "involvedDescription": "Este es un proyecto de código abierto. ¡Las contribuciones, los problemas y las solicitudes de características son bienvenidos!",
+    "githubButton": "Ver en GitHub"
+  },
+  "tour": {
+    "steps": {
+      "welcome": "¡Bienvenido a K6 Commander! Este es su panel principal.",
+      "history": "Puede ver y administrar sus ejecuciones de prueba pasadas aquí.",
+      "about": "Aprenda más sobre cómo funciona la aplicación aquí.",
+      "github": "Vea el código fuente o informe problemas en GitHub aquí.",
+      "urlInput": "Ingrese la URL que desea probar aquí. Puede seleccionar de URLs recientes.",
+      "testSuites": "Elija qué suites de prueba desea ejecutar: Prueba de Carga, Auditoría de Lighthouse o Análisis de SEO con IA.",
+      "requestConfig": "Configure los detalles de su solicitud HTTP aquí, como el método, los encabezados y el cuerpo.",
+      "loadProfile": "Elija un perfil de carga predefinido o cree su propio escenario personalizado.",
+      "runTest": "Cuando esté listo, ¡haga clic aquí para iniciar sus pruebas!"
     }
+  },
+  "form": {
+    "title": "Nueva Ejecución de Prueba",
+    "description": "Configure los parámetros para su próxima ejecución de prueba.",
+    "urlLabel": "URL de Destino",
+    "urlDescription": "La URL completa de la página o punto final que desea probar.",
+    "urlPlaceholder": "https://example.com",
+    "toggleRecentUrlsLabel": "Alternar URLs recientes",
+    "searchUrlPlaceholder": "Buscar URLs recientes...",
+    "noRecentUrls": "No se encontraron URLs recientes.",
+    "recentUrlsHeading": "URLs Recientes",
+    "removeRecentUrlLabel": "Eliminar '{{url}}' de recientes",
+    "clearRecentUrlsButton": "Limpiar URLs Recientes",
+    "testSuitesTitle": "Suites de Prueba",
+    "testSuitesDescription": "Seleccione una o más suites de prueba para ejecutar.",
+    "k6SwitchLabel": "Prueba de Carga k6",
+    "k6SwitchDescription": "Mida el rendimiento bajo carga.",
+    "lighthouseSwitchLabel": "Auditoría de Lighthouse",
+    "lighthouseSwitchDescription": "Verifique la calidad, el rendimiento y el SEO.",
+    "seoSwitchLabel": "Análisis de SEO con IA",
+    "seoSwitchDescription": "Realice un análisis de SEO en la página en profundidad.",
+    "requestConfigTitle": "Configuración de la Solicitud",
+    "requestConfigDescription": "Personalice la solicitud HTTP para la prueba de carga.",
+    "methodLabel": "Método",
+    "methodPlaceholder": "Seleccione un método",
+    "headersLabel": "Encabezados",
+    "headerNamePlaceholder": "Nombre del Encabezado",
+    "headerValuePlaceholder": "Valor del Encabezado",
+    "removeHeaderLabel": "Eliminar encabezado {{index}}",
+    "addHeaderButton": "Agregar Encabezado",
+    "requestBodyLabel": "Cuerpo de la Solicitud",
+    "loadProfileTitle": "Perfil de Carga",
+    "loadProfileDescription": "Defina la cantidad de carga a generar durante la prueba.",
+    "loadTestPresetsLabel": "Perfiles de Carga Predefinidos",
+    "customProfileTitle": "Perfil de Carga Personalizado",
+    "customProfileDescription": "Defina su propia configuración para VUs, duración o etapas.",
+    "vusLabel": "Usuarios Virtuales (VUs)",
+    "vusPlaceholder": "ej., 100",
+    "durationLabel": "Duración",
+    "durationPlaceholder": "ej., 5m30s",
+    "stagesLabel": "Etapas",
+    "stagesDescription": "Para escenarios de carga complejos con VUs que aumentan/disminuyen con el tiempo.",
+    "stageDurationLabel": "Duración de la Etapa",
+    "stageDurationPlaceholder": "ej., 1m",
+    "stageTargetVusLabel": "VUs de Destino",
+    "stageTargetVusPlaceholder": "ej., 50",
+    "removeStageLabel": "Eliminar etapa {{index}}",
+    "addStageButton": "Agregar Etapa",
+    "runTestButton": "Ejecutar Prueba(s)",
+    "runningTestButton": "Ejecutando...",
+    "error": {
+      "atLeastOne": "Se debe seleccionar al menos una suite de prueba."
+    },
+    "toast": {
+      "historyClearedTitle": "Historial Limpiado",
+      "historyClearedDescription": "Su historial de pruebas local ha sido limpiado.",
+      "testStartedTitle": "¡Prueba Iniciada!",
+      "testStartedDescription": "Sus pruebas se están ejecutando ahora. Monitoree el progreso a continuación."
+    },
+    "clearHistoryDialog": {
+      "title": "¿Limpiar Historial Existente?",
+      "description": "Tiene un historial de pruebas existente. ¿Le gustaría limpiarlo antes de ejecutar esta nueva prueba?",
+      "keepButton": "No, Mantener Historial",
+      "clearButton": "Sí, Limpiar y Ejecutar"
+    }
+  },
+  "running": {
+    "title": "Ejecutando Pruebas...",
+    "description": "Por favor espere mientras se completan las suites seleccionadas. Esto puede tardar unos minutos.",
+    "finalizingTitle": "Finalizando Resultados...",
+    "grafanaLink": "Ver Panel en Vivo en Grafana"
+  },
+  "summary": {
+    "title": "Resumen de la Prueba",
+    "description": "Los resultados de su ejecución de prueba en",
+    "saveToHistoryButton": "Guardar en el Historial",
+    "rerunButton": "Reejecutar",
+    "newTestButton": "Crear Nueva Prueba",
+    "k6Tab": "Prueba de Carga",
+    "lighthouseTab": "Lighthouse",
+    "seoTab": "SEO",
+    "configSummaryTitle": "Configuración de la Prueba",
+    "viewFullDetails": "Ver Detalles Completos de la Configuración"
+  },
+  "history": {
+    "title": "Historial de Pruebas",
+    "description": "Navegue y administre sus ejecuciones de prueba pasadas.",
+    "lastSaved": "Último guardado",
+    "importButton": "Importar",
+    "exportButton": "Exportar",
+    "searchPlaceholder": "Buscar por URL o ID...",
+    "clearSearchLabel": "Limpiar búsqueda",
+    "clearAllButton": "Limpiar Todo el Historial",
+    "noHistoryMessage": "No se encontró historial.",
+    "noHistoryDescription": "Ejecute una nueva prueba para comenzar su historial.",
+    "noResultsFound": "No se encontraron resultados para '{{query}}'.",
+    "clearSearch": "Limpiar búsqueda",
+    "clearAllDialog": {
+      "title": "¿Está seguro?",
+      "description": "Esta acción no se puede deshacer. Esto eliminará permanentemente todos los datos de su historial de pruebas y las URLs recientes.",
+      "cancel": "Cancelar",
+      "confirm": "Eliminar"
+    },
+    "deleteDialog": {
+      "title": "¿Eliminar esta entrada?",
+      "description": "Esta acción no se puede deshacer. Esto eliminará permanentemente esta ejecución de prueba de su historial.",
+      "cancel": "Cancelar",
+      "confirm": "Eliminar"
+    },
+    "table": {
+      "url": "URL",
+      "date": "Fecha",
+      "testsRun": "Pruebas Ejecutadas",
+      "actions": "Acciones"
+    },
+    "actions": {
+      "view": "Ver resumen para {{url}}",
+      "rerun": "Reejecutar prueba para {{url}}",
+      "delete": "Eliminar elemento del historial para {{url}}"
+    },
+    "toast": {
+      "exportSuccessTitle": "Historial Exportado",
+      "exportSuccessDescription": "Su historial de pruebas se ha descargado como un archivo JSON.",
+      "exportFailTitle": "Error al Exportar",
+      "exportFailDescription": "No se pudo exportar el historial.",
+      "importSuccessTitle": "Historial Importado",
+      "importSuccessDescription": "El historial de pruebas se cargó correctamente.",
+      "importFailTitle": "Error al Importar",
+      "importFailDescription": "No se pudo leer el archivo seleccionado.",
+      "importInvalidFormat": "Formato de archivo inválido.",
+      "deleteSuccessTitle": "Entrada Eliminada",
+      "deleteSuccessDescription": "La ejecución de la prueba ha sido eliminada de su historial.",
+      "clearSuccessTitle": "Historial Limpiado",
+      "clearSuccessDescription": "Todo su historial de pruebas ha sido eliminado."
+    }
+  },
+  "presets": {
+    "baseline": "Línea de Base",
+    "spike": "Pico",
+    "stress": "Estrés",
+    "soak": "Remojo",
+    "custom": "Personalizado"
+  },
+  "home": {
+    "lastSaved": "Historial local guardado por última vez: {{distance}}"
+  }
 }
-
-    
