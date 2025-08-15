@@ -67,10 +67,9 @@ type TestFormValues = z.infer<typeof formSchema>;
 interface TestFormProps {
   initialValues: Partial<TestConfiguration>;
   onRunTest: (testId: string, config: TestConfiguration) => void;
-  onCreateNew: () => void;
 }
 
-export default function TestForm({ initialValues, onRunTest, onCreateNew }: TestFormProps) {
+export default function TestForm({ initialValues, onRunTest }: TestFormProps) {
   const { toast } = useToast();
 
   const defaultValues = useMemo(() => {
@@ -84,9 +83,9 @@ export default function TestForm({ initialValues, onRunTest, onCreateNew }: Test
       runLoadTest: initialValues.runLoadTest !== false,
       runLighthouse: initialValues.runLighthouse || false,
       runSeo: initialValues.runSeo || false,
-      stages: initialValues.stages || TEST_PRESETS[initialValues.testPreset || 'baseline'].stages,
-      vus: initialValues.vus || TEST_PRESETS[initialValues.testPreset || 'baseline'].vus,
-      duration: initialValues.duration || TEST_PRESETS[initialValues.testPreset || 'baseline'].duration,
+      stages: initialValues.stages || TEST_PRESETS[initialValues.testPreset as keyof typeof TEST_PRESETS]?.stages || [],
+      vus: initialValues.vus || TEST_PRESETS[initialValues.testPreset as keyof typeof TEST_PRESETS]?.vus || 1,
+      duration: initialValues.duration || TEST_PRESETS[initialValues.testPreset as keyof typeof TEST_PRESETS]?.duration || '1m',
     };
   }, [initialValues]);
 

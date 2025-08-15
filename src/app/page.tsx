@@ -133,7 +133,6 @@ export default function Home() {
             key={JSON.stringify(initialValues)}
             initialValues={initialValues}
             onRunTest={handleRunTest}
-            onCreateNew={handleCreateNewTest}
           />
         );
     }
