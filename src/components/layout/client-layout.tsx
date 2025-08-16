@@ -15,38 +15,54 @@ import { TooltipProvider } from '../ui/tooltip';
 interface ClientLayoutProps {
   children: React.ReactNode;
   initialLang: string;
-  initialResources: any;
 }
 
-// This function initializes the i18n instance. It's called only once.
-const initializeI18n = (lang: string, resources: any) => {
-  if (!i18n.isInitialized) {
-    i18n.init({
-      lng: lang,
-      resources: {
-        [lang]: {
-          translation: resources,
-        },
-      },
-      fallbackLng: 'en',
-      interpolation: {
-        escapeValue: false, // React already safes from xss
-      },
-      react: {
-        useSuspense: false, // This is important to avoid issues with server-side rendering
-      },
-    });
-  }
-  return i18n;
-};
+export function ClientLayout({ children, initialLang }: ClientLayoutProps) {
+  const [isInitialized, setIsInitialized] = useState(false);
 
-export function ClientLayout({ children, initialLang, initialResources }: ClientLayoutProps) {
-  // Initialize i18n synchronously with the resources from the server.
-  // The useState initializer ensures this runs only once on the client.
-  const [i18nInstance, setI18nInstance] = useState(() =>
-    initializeI18n(initialLang, initialResources)
-  );
-  const [isInitialized, setIsInitialized] = useState(i18n.isInitialized);
+  useEffect(() => {
+    const initializeI18n = async (lang: string) => {
+      try {
+        const resources = await import(`@/../public/locales/${lang}.json`);
+        await i18n.init({
+          lng: lang,
+          resources: {
+            [lang]: {
+              translation: resources.default,
+            },
+          },
+          fallbackLng: 'en',
+          interpolation: {
+            escapeValue: false, // React already safes from xss
+          },
+          react: {
+            useSuspense: false,
+          },
+        });
+        setIsInitialized(true);
+      } catch (error) {
+        console.error('Failed to initialize i18n, falling back to English.', error);
+        // Fallback to English if the desired language fails to load
+        const resources = await import(`@/../public/locales/en.json`);
+        await i18n.init({
+          lng: 'en',
+          resources: {
+            en: {
+              translation: resources.default,
+            },
+          },
+          fallbackLng: 'en',
+        });
+        setIsInitialized(true);
+      }
+    };
+
+    if (!i18n.isInitialized) {
+      initializeI18n(initialLang);
+    } else {
+      setIsInitialized(true);
+    }
+  }, [initialLang]);
 
   useEffect(() => {
     const onLanguageChanged = async (lng: string) => {
@@ -56,17 +72,14 @@ export function ClientLayout({ children, initialLang, initialResources }: Client
           // Dynamically import the new locale file
           const newResources = await import(`@/../public/locales/${lng}.json`);
           i18n.addResourceBundle(lng, 'translation', newResources.default);
+          i18n.changeLanguage(lng); // Change language after loading
         } catch (error) {
           console.error(`Failed to load locale ${lng}`, error);
         }
       }
-      // We don't need to call changeLanguage again here, this is just for loading new resources
     };
 
     i18n.on('languageChanged', onLanguageChanged);
-    // Set initial state
-    setIsInitialized(i18n.isInitialized);
-
     return () => {
       i18n.off('languageChanged', onLanguageChanged);
     };
@@ -77,7 +90,7 @@ export function ClientLayout({ children, initialLang, initialResources }: Client
   }
 
   return (
-    <I18nextProvider i18n={i18nInstance}>
+    <I18nextProvider i18n={i18n}>
       <Providers>
         <TooltipProvider>
           <div className="relative flex flex-col min-h-screen bg-background">

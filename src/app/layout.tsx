@@ -6,8 +6,6 @@ import { cn } from '@/lib/utils';
 import { ClientLayout } from '@/components/layout/client-layout';
 import i18n from '@/lib/i18n';
 import { cookies } from 'next/headers';
-import fs from 'node:fs/promises';
-import path from 'node:path';
 
 export const metadata: Metadata = {
   metadataBase: new URL('https://k6commander.netlify.app'),
@@ -70,22 +68,6 @@ const inter = Inter({
   variable: '--font-sans',
 });
 
-// This function fetches translations from the local file system.
-async function getTranslations(locale: string) {
-  const defaultLocale = 'en';
-  const localePath = path.resolve(process.cwd(), `public/locales/${locale}.json`);
-  try {
-    const data = await fs.readFile(localePath, 'utf-8');
-    return JSON.parse(data);
-  } catch (error) {
-    // If the specific locale file doesn't exist, fall back to English.
-    console.warn(`Could not load locale ${locale}, falling back to '${defaultLocale}'`);
-    const fallbackPath = path.resolve(process.cwd(), `public/locales/${defaultLocale}.json`);
-    const data = await fs.readFile(fallbackPath, 'utf-8');
-    return JSON.parse(data);
-  }
-}
-
 export default async function RootLayout({
   children,
 }: Readonly<{
@@ -95,15 +77,10 @@ export default async function RootLayout({
   const cookieStore = cookies();
   let lang = cookieStore.get('i18next')?.value || i18n.language || 'en';
 
-  // Pre-load the translations on the server.
-  const initialResources = await getTranslations(lang);
-
   return (
     <html lang={lang} className="dark" suppressHydrationWarning>
       <body className={cn('min-h-screen bg-background font-sans antialiased', inter.variable)}>
-        <ClientLayout initialLang={lang} initialResources={initialResources}>
-          {children}
-        </ClientLayout>
+        <ClientLayout initialLang={lang}>{children}</ClientLayout>
       </body>
     </html>
   );
