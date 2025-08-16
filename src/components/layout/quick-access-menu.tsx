@@ -43,7 +43,6 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import { cn } from '@/lib/utils';
 
 const navItems = [
   { href: '/', icon: Home, labelKey: 'quickAccess.home' },
@@ -76,23 +75,35 @@ export default function QuickAccessMenu({
       <Draggable nodeRef={nodeRef} bounds="parent">
         <div
           ref={nodeRef}
-          className="fixed bottom-6 right-6 z-[9999] cursor-grab active:cursor-grabbing"
+          className="fixed bottom-1/2 translate-y-1/2 right-0 z-[9999] cursor-grab active:cursor-grabbing w-16 h-28 group"
           data-testid="quick-access-button-container"
         >
           <TooltipProvider>
             <Tooltip>
               <TooltipTrigger asChild>
-                <div className="relative group">
-                  <div className="absolute -inset-1.5 bg-gradient-to-r from-primary to-accent rounded-full blur opacity-75 group-hover:opacity-100 transition duration-1000 group-hover:duration-200 animate-tilt"></div>
-                  <Button
-                    size="icon"
-                    onClick={() => setOpen(true)}
-                    className="relative w-16 h-16 rounded-full bg-background/80 backdrop-blur-md border border-primary/50 text-primary hover:border-primary transition-all duration-300 group-hover:scale-110 active:scale-95"
-                    aria-label={t('quickAccess.title')}
+                <button
+                  onClick={() => setOpen(true)}
+                  className="relative w-full h-full text-primary-foreground/80 hover:text-primary-foreground focus:outline-none transition-all duration-300 transform active:scale-90"
+                  aria-label={t('quickAccess.title')}
+                >
+                  <div className="absolute inset-0.5 animate-ripple-1 rounded-full group-hover:bg-primary/20"></div>
+                  <div className="absolute inset-0.5 animate-ripple-2 rounded-full group-hover:bg-primary/20"></div>
+                  <div className="absolute inset-0.5 animate-ripple-3 rounded-full group-hover:bg-primary/20"></div>
+                  <svg
+                    viewBox="0 0 50 100"
+                    className="absolute inset-0 w-full h-full"
+                    width="50"
+                    height="100"
                   >
-                    <Compass className="w-8 h-8 transition-transform duration-500 group-hover:rotate-12" />
-                  </Button>
-                </div>
+                    <path
+                      d="M50 100C50 100 0 100 0 100 0 100 0 85 0 75 0 50 25 50 25 50 50 50 50 25 50 0 50 0 50 100 50 100Z"
+                      className="fill-primary/80 backdrop-blur-md transition-colors duration-300 group-hover:fill-primary"
+                    />
+                  </svg>
+                  <div className="relative w-full h-full flex items-center justify-start pl-3">
+                    <Compass className="w-7 h-7 transition-transform duration-500 group-hover:rotate-12" />
+                  </div>
+                </button>
               </TooltipTrigger>
               <TooltipContent side="left">
                 <p>{t('quickAccess.title')}</p>
@@ -116,7 +127,6 @@ export default function QuickAccessMenu({
           </DialogHeader>
 
           <div className="py-4 space-y-4">
-            {/* Navigation */}
             <div className="grid grid-cols-2 gap-3">
               {navItems.map((item) => (
                 <Tooltip key={item.href}>
@@ -142,7 +152,6 @@ export default function QuickAccessMenu({
 
             <Separator />
 
-            {/* Actions */}
             <div className="grid grid-cols-2 gap-3">
               <Tooltip>
                 <TooltipTrigger asChild>
@@ -203,7 +212,6 @@ export default function QuickAccessMenu({
 
             <Separator />
 
-            {/* External Links */}
             <div className="flex justify-center gap-4">
               {externalLinks.map((item) => (
                 <Tooltip key={item.href}>
