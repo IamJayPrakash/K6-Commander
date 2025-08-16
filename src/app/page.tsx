@@ -4,10 +4,8 @@ import { useState, useEffect } from 'react';
 import TestForm from '@/components/test/test-form';
 import TestRunning from '@/components/test/test-running';
 import TestSummary from '@/components/test/test-summary';
-import type { TestConfiguration, HistoryItem, SeoAnalysis } from '@/types';
+import type { TestConfiguration, HistoryItem } from '@/types';
 import { useLocalStorage } from '@/hooks/use-local-storage';
-import Joyride, { STATUS } from 'react-joyride';
-import { TOUR_STEPS } from '@/lib/constants';
 import ConsentModal from '@/components/layout/consent-modal';
 import { useToast } from '@/hooks/use-toast';
 import type { TestResults } from '@/types/index';
@@ -28,15 +26,9 @@ export default function Home() {
   const [lastSaved, setLastSaved] = useLocalStorage<string | null>('k6-history-last-saved', null);
   const [initialValues, setInitialValues] = useState<Partial<TestConfiguration> | null>(null);
   const [formKey, setFormKey] = useState(Date.now());
-  const [isTourRunning, setIsTourRunning] = useState(false);
   const { toast } = useToast();
   const [isMounted, setIsMounted] = useState(false);
   const { t } = useTranslation();
-
-  const tourSteps = TOUR_STEPS.map((step) => ({
-    ...step,
-    content: t(step.content),
-  }));
 
   useEffect(() => {
     setIsMounted(true);
@@ -137,26 +129,6 @@ export default function Home() {
     setView('form');
   };
 
-  useEffect(() => {
-    // Expose startTour to the window object so the header can call it
-    (window as any).startTour = () => {
-      setView('form');
-      // A small delay to ensure the form view is rendered
-      setTimeout(() => setIsTourRunning(true), 100);
-    };
-
-    return () => {
-      delete (window as any).startTour;
-    };
-  }, []);
-
-  const handleJoyrideCallback = (data: any) => {
-    const { status } = data;
-    if ([STATUS.FINISHED, STATUS.SKIPPED].includes(status)) {
-      setIsTourRunning(false);
-    }
-  };
-
   const renderView = () => {
     switch (view) {
       case 'running':
@@ -193,28 +165,12 @@ export default function Home() {
 
   return (
     <>
-      {isMounted && (
-        <Joyride
-          steps={tourSteps}
-          run={isTourRunning}
-          continuous
-          showProgress
-          showSkipButton
-          callback={handleJoyrideCallback}
-          styles={{
-            options: {
-              arrowColor: 'hsl(var(--card))',
-              backgroundColor: 'hsl(var(--card))',
-              primaryColor: 'hsl(var(--primary))',
-              textColor: 'hsl(var(--card-foreground))',
-              zIndex: 1000,
-            },
-          }}
-        />
-      )}
       <ConsentModal />
       {view === 'form' && lastSaved && (
-        <Card className="mb-6 bg-blue-900/10 border-blue-500/20 hover:border-blue-500/50 transition-colors">
+        <Card
+          className="mb-6 bg-blue-900/10 border-blue-500/20 hover:border-blue-500/50 transition-colors"
+          data-testid="last-saved-card"
+        >
           <Link href="/history">
             <CardDescription className="text-center p-2 text-xs text-blue-300 flex items-center justify-center gap-2 cursor-pointer">
               <Clock className="h-3 w-3" />

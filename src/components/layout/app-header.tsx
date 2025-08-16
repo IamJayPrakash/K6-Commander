@@ -5,7 +5,6 @@ import {
   History,
   Info,
   Github,
-  PlayCircle,
   MessageSquarePlus,
   Bug,
   Menu,
@@ -43,12 +42,6 @@ const languages = [
 export function AppHeader() {
   const { setTheme } = useTheme();
   const { t, i18n } = useTranslation();
-
-  const startTour = () => {
-    if (typeof window !== 'undefined' && (window as any).startTour) {
-      (window as any).startTour();
-    }
-  };
 
   const changeLanguage = (lng: string) => {
     i18n.changeLanguage(lng);
@@ -90,18 +83,14 @@ export function AppHeader() {
         </div>
 
         <div className="flex flex-1 items-center justify-end gap-2">
-          <Button variant="outline" size="sm" onClick={startTour} data-testid="start-tour-button">
-            <PlayCircle className="h-4 w-4 mr-2" />
-            {t('header.startTourButton')}
-          </Button>
-
           <a
             href={APP_CONFIG.githubUrl}
             target="_blank"
             rel="noopener noreferrer"
             data-testid="github-link"
+            aria-label="View on GitHub"
           >
-            <Button variant="ghost" size="icon" aria-label="View on GitHub">
+            <Button variant="ghost" size="icon">
               <Github className="h-5 w-5" />
             </Button>
           </a>

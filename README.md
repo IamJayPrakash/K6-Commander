@@ -44,7 +44,7 @@ cd k6-commander
 
 ### 2. Set Up Environment Variables
 
-Create a `.env` file by copying the example file:
+Create a `.env` file by copying the example file. The app will function without it, but the AI-powered SEO analysis requires an API key.
 
 ```bash
 cp .env.example .env
@@ -85,15 +85,23 @@ Once the services are up, you can access:
 
 ## 🚢 Deployment
 
-K6 Commander is designed to be a self-hosted application. The recommended deployment method is using Docker on a virtual private server (e.g., AWS EC2, DigitalOcean Droplet, Google Cloud VM).
+### ⚠️ Important Note on Platform Compatibility
 
-### Server Requirements
+K6 Commander's architecture relies on running Docker containers and spawning system processes (`npx`) directly from its backend. This architecture is **not compatible with serverless deployment platforms** like **Vercel** or **Netlify**. These platforms have limitations that prevent the execution of Docker containers and arbitrary shell commands, which are essential for the k6 and Lighthouse functionalities.
+
+**Attempting to deploy this application on Vercel or Netlify will result in failure.** You must use a hosting environment that provides full control over the operating system and allows Docker to run, such as a traditional VM or a dedicated server.
+
+### Recommended Deployment
+
+The recommended deployment method is using Docker on a virtual private server (e.g., AWS EC2, DigitalOcean Droplet, Google Cloud VM).
+
+#### Server Requirements
 
 - A server with Docker and Docker Compose installed.
 - At least 2GB of RAM is recommended.
 - A firewall configured to allow traffic on the ports you intend to expose (e.g., port 80/443 for the web app).
 
-### Steps for Deployment
+#### Steps for Deployment
 
 1. **Clone the repository** onto your server.
 2. **Configure environment variables**: Create a `.env` file with your `GEMINI_API_KEY`.
@@ -106,11 +114,6 @@ K6 Commander is designed to be a self-hosted application. The recommended deploy
    - Configure your reverse proxy to forward requests to the K6 Commander app running on `http://localhost:3000`.
    - Configure another subdomain (e.g., `grafana.your-domain.com`) to point to the Grafana instance on `http://localhost:3003`.
 
-### ⚠️ Important Note on Platform Compatibility
-
-K6 Commander's architecture relies on running Docker containers and spawning system processes (`npx`) directly from its backend. This architecture is **not compatible with serverless deployment platforms** like **Vercel** or **Netlify**. These platforms have limitations that prevent the execution of Docker containers and arbitrary shell commands, which are essential for the k6 and Lighthouse functionalities.
-
-**Attempting to deploy this application on Vercel or Netlify will result in failure.** You must use a hosting environment that provides full control over the operating system and allows Docker to run, such as a traditional VM or a dedicated server.
 
 ## 📁 Project Structure
 
