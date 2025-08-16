@@ -12,7 +12,6 @@ import {
   DialogTitle,
 } from '@/components/ui/dialog';
 import {
-  Rocket,
   Home,
   Beaker,
   History,
@@ -68,12 +67,12 @@ export default function QuickAccessMenu() {
         nodeRef={nodeRef}
         onStart={() => setIsDragging(true)}
         onStop={handleStopDrag}
-        bounds="parent"
+        bounds="body"
         defaultPosition={{ x: 20, y: 200 }}
       >
         <div
           ref={nodeRef}
-          className="fixed z-50 cursor-grab active:cursor-grabbing"
+          className="fixed z-[9999] cursor-grab active:cursor-grabbing"
           data-testid="quick-access-button-container"
         >
           <Button
