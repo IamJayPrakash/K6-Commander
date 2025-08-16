@@ -4,8 +4,10 @@ import React from 'react';
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Loader } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { Loader, Clipboard, Check } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
+import { useToast } from '@/hooks/use-toast';
 
 interface ResponsePanelProps {
   response: any;
@@ -14,6 +16,8 @@ interface ResponsePanelProps {
 
 export default function ResponsePanel({ response, isLoading }: ResponsePanelProps) {
   const { t } = useTranslation();
+  const { toast } = useToast();
+  const [isCopied, setIsCopied] = React.useState(false);
 
   const getStatusColor = (status: number | string) => {
     if (typeof status !== 'number') return 'bg-gray-500';
@@ -33,6 +37,20 @@ export default function ResponsePanel({ response, isLoading }: ResponsePanelProp
       }
     }
     return String(response.body);
+  };
+
+  const handleCopy = () => {
+    const bodyToCopy = renderBody();
+    navigator.clipboard.writeText(bodyToCopy).then(
+      () => {
+        setIsCopied(true);
+        toast({ title: 'Response copied to clipboard!' });
+        setTimeout(() => setIsCopied(false), 2000);
+      },
+      (err) => {
+        toast({ variant: 'destructive', title: 'Failed to copy response', description: err.message });
+      }
+    );
   };
 
   if (isLoading) {
@@ -72,7 +90,17 @@ export default function ResponsePanel({ response, isLoading }: ResponsePanelProp
             <TabsTrigger value="body">{t('apiTester.bodyTab')}</TabsTrigger>
             <TabsTrigger value="headers">{t('apiTester.headersTab')}</TabsTrigger>
           </TabsList>
-          <TabsContent value="body" className="flex-grow mt-2">
+          <TabsContent value="body" className="flex-grow mt-2 relative">
+             <Button
+                variant="ghost"
+                size="icon"
+                className="absolute top-2 right-2 h-7 w-7"
+                onClick={handleCopy}
+                disabled={!response?.body}
+              >
+                {isCopied ? <Check className="h-4 w-4 text-green-500" /> : <Clipboard className="h-4 w-4" />}
+                <span className="sr-only">Copy response body</span>
+              </Button>
             <pre className="text-xs bg-muted p-4 rounded-md h-full overflow-auto">
               <code>{renderBody()}</code>
             </pre>
