@@ -1,3 +1,4 @@
+
 'use client';
 
 import {
@@ -12,11 +13,12 @@ import {
   Beaker,
   Maximize,
   Minimize,
+  Sun,
+  Moon,
 } from 'lucide-react';
 import React, { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { useTheme } from 'next-themes';
-import { Sun, Moon } from 'lucide-react';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -49,32 +51,16 @@ const languages = [
   { code: 'ta', name: 'தமிழ் (Tamil)' },
 ];
 
-export function AppHeader() {
-  const { setTheme } = useTheme();
+export function AppHeader({
+  onThemeToggle,
+  onFullscreenToggle,
+  isFullscreen,
+}: {
+  onThemeToggle: (theme: string) => void;
+  onFullscreenToggle: () => void;
+  isFullscreen: boolean;
+}) {
   const { t, i18n } = useTranslation();
-  const [isFullscreen, setIsFullscreen] = useState(false);
-
-  useEffect(() => {
-    const handleFullscreenChange = () => {
-      setIsFullscreen(!!document.fullscreenElement);
-    };
-
-    document.addEventListener('fullscreenchange', handleFullscreenChange);
-
-    return () => {
-      document.removeEventListener('fullscreenchange', handleFullscreenChange);
-    };
-  }, []);
-
-  const toggleFullscreen = () => {
-    if (!document.fullscreenElement) {
-      document.documentElement.requestFullscreen();
-    } else {
-      if (document.exitFullscreen) {
-        document.exitFullscreen();
-      }
-    }
-  };
 
   const changeLanguage = (lng: string) => {
     i18n.changeLanguage(lng);
@@ -148,7 +134,7 @@ export function AppHeader() {
               <Button
                 variant="ghost"
                 size="icon"
-                onClick={toggleFullscreen}
+                onClick={onFullscreenToggle}
                 data-testid="fullscreen-toggle-button"
                 aria-label={
                   isFullscreen
@@ -222,16 +208,19 @@ export function AppHeader() {
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end" data-testid="theme-switcher-content">
                   <DropdownMenuItem
-                    onClick={() => setTheme('light')}
+                    onClick={() => onThemeToggle('light')}
                     data-testid="theme-switcher-light"
                   >
                     Light
                   </DropdownMenuItem>
-                  <DropdownMenuItem onClick={() => setTheme('dark')} data-testid="theme-switcher-dark">
+                  <DropdownMenuItem
+                    onClick={() => onThemeToggle('dark')}
+                    data-testid="theme-switcher-dark"
+                  >
                     Dark
                   </DropdownMenuItem>
                   <DropdownMenuItem
-                    onClick={() => setTheme('system')}
+                    onClick={() => onThemeToggle('system')}
                     data-testid="theme-switcher-system"
                   >
                     System

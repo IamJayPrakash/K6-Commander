@@ -1,5 +1,4 @@
 
-
 'use client';
 
 import { useEffect, useState } from 'react';
@@ -14,6 +13,7 @@ import { usePathname } from 'next/navigation';
 import { Preloader } from './preloader';
 import { TooltipProvider } from '../ui/tooltip';
 import QuickAccessMenu from './quick-access-menu';
+import { useTheme } from 'next-themes';
 
 async function fetchTranslations(locale: string) {
   let res = await fetch(`/locales/${locale}.json`);
@@ -35,6 +35,34 @@ async function fetchTranslations(locale: string) {
 export function ClientLayout({ children }: { children: React.ReactNode }) {
   const [isI18nInitialized, setIsI18nInitialized] = useState(false);
   const pathname = usePathname();
+  const { setTheme } = useTheme();
+  const [isFullscreen, setIsFullscreen] = useState(false);
+
+  useEffect(() => {
+    const handleFullscreenChange = () => {
+      setIsFullscreen(!!document.fullscreenElement);
+    };
+
+    document.addEventListener('fullscreenchange', handleFullscreenChange);
+
+    return () => {
+      document.removeEventListener('fullscreenchange', handleFullscreenChange);
+    };
+  }, []);
+
+  const handleToggleFullscreen = () => {
+    if (!document.fullscreenElement) {
+      document.documentElement.requestFullscreen();
+    } else {
+      if (document.exitFullscreen) {
+        document.exitFullscreen();
+      }
+    }
+  };
+
+  const handleSetTheme = (theme: string) => {
+    setTheme(theme);
+  };
 
   useEffect(() => {
     const initI18n = async () => {
@@ -90,14 +118,22 @@ export function ClientLayout({ children }: { children: React.ReactNode }) {
         <TooltipProvider>
           <ProgressBar />
           <div className="relative flex min-h-screen flex-col bg-background">
-            <AppHeader />
+            <AppHeader
+              onThemeToggle={handleSetTheme}
+              onFullscreenToggle={handleToggleFullscreen}
+              isFullscreen={isFullscreen}
+            />
             <main className="flex-1 container max-w-screen-2xl py-8 flex flex-col">
               {children}
             </main>
             <AppFooter />
           </div>
           <Toaster />
-          <QuickAccessMenu />
+          <QuickAccessMenu
+            onThemeToggle={handleSetTheme}
+            onFullscreenToggle={handleToggleFullscreen}
+            isFullscreen={isFullscreen}
+          />
         </TooltipProvider>
       </Providers>
     </I18nextProvider>
