@@ -71,66 +71,56 @@ export default function QuickAccessMenu({
 
   return (
     <>
-      <Draggable nodeRef={nodeRef} axis="x" bounds="parent" defaultPosition={{ x: 0, y: 0 }}>
-        <div
-          ref={nodeRef}
-          className="absolute top-full w-[120px] h-[55px] cursor-grab active:cursor-grabbing z-[9999]"
-          role="button"
-          aria-label={t('quickAccess.title')}
-          onClick={handleHandleClick}
-          data-testid="quick-access-menu-button"
-        >
-          <div
-            className={cn(
-              'w-full h-full group transition-all duration-300 active:scale-90',
-              'hover:[&>svg]:scale-110 hover:[&>svg]:-translate-y-1'
-            )}
-          >
-            <svg
-              viewBox="0 0 120 55"
-              className="w-full h-full absolute top-0 left-0 transition-all duration-300 animate-tilt"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
+      <Tooltip>
+        <TooltipTrigger asChild>
+          <Draggable nodeRef={nodeRef} axis="x" bounds="parent" defaultPosition={{ x: 0, y: 0 }}>
+            <div
+              ref={nodeRef}
+              className="absolute top-full w-24 h-12 cursor-grab active:cursor-grabbing z-[9999]"
+              role="button"
+              aria-label={t('quickAccess.title')}
+              onClick={handleHandleClick}
+              data-testid="quick-access-menu-button"
             >
-              <defs>
-                <filter id="glow">
-                  <feGaussianBlur stdDeviation="3.5" result="coloredBlur" />
-                  <feMerge>
-                    <feMergeNode in="coloredBlur" />
-                    <feMergeNode in="SourceGraphic" />
-                  </feMerge>
-                </filter>
-              </defs>
-              <path
-                d="M0 0 H120 V20 Q110 25 100 20 T80 20 T60 20 T40 20 T20 20 Q10 25 0 20 V0 Z"
-                className="fill-background/80 backdrop-blur-sm stroke-border/60"
-                strokeWidth="1.5"
-              />
-              <path
-                d="M30 40 Q40 55 60 55 T90 40"
-                stroke="hsl(var(--primary))"
-                strokeWidth="2"
-                fill="none"
-                className="opacity-0 group-hover:opacity-100 transition-opacity duration-300"
-                filter="url(#glow)"
-              />
-              <path
-                d="M40 35 Q50 50 60 50 T80 35"
-                stroke="hsl(var(--accent))"
-                strokeWidth="1.5"
-                fill="none"
-                className="opacity-0 group-hover:opacity-80 transition-opacity duration-300"
-                style={{ animationDelay: '0.2s' }}
-                filter="url(#glow)"
-              />
-            </svg>
-
-            <div className="absolute top-0 left-1/2 -translate-x-1/2 w-8 h-8 rounded-full bg-primary/20 flex items-center justify-center border-2 border-primary/50 group-hover:bg-primary/30 transition-colors">
-              <div className="w-5 h-5 rounded-full bg-primary animate-pulse-glow" />
+              <div
+                className={cn(
+                  'w-full h-full group transition-all duration-300 active:scale-90',
+                  'hover:[&>svg]:scale-105'
+                )}
+              >
+                <svg
+                  viewBox="0 0 100 50"
+                  className="w-full h-full absolute top-0 left-0 transition-all duration-300 group-hover:drop-shadow-[0_0_8px_hsl(var(--primary-foreground))] "
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M50 45 L25 30 V0 H75 V30 L50 45Z"
+                    className="fill-background/80 backdrop-blur-sm stroke-border/60 group-hover:stroke-primary transition-all"
+                    strokeWidth="1"
+                  />
+                  <circle
+                    cx="50"
+                    cy="18"
+                    r="8"
+                    className="fill-primary/20 stroke-primary/50 group-hover:fill-primary/30 transition-colors"
+                    strokeWidth="1.5"
+                  />
+                  <circle
+                    cx="50"
+                    cy="18"
+                    r="4"
+                    className="fill-primary animate-pulse-glow transition-all"
+                  />
+                </svg>
+              </div>
             </div>
-          </div>
-        </div>
-      </Draggable>
+          </Draggable>
+        </TooltipTrigger>
+        <TooltipContent>
+          <p>{t('quickAccess.title')}</p>
+        </TooltipContent>
+      </Tooltip>
 
       <Dialog open={open} onOpenChange={setOpen}>
         <DialogContent
@@ -139,22 +129,7 @@ export default function QuickAccessMenu({
         >
           <DialogHeader className="space-y-2 text-center">
             <div className="inline-block mx-auto p-3 bg-primary/10 rounded-full border border-primary/20">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="32"
-                height="32"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                className="text-primary"
-              >
-                <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z" />
-                <path d="m3.27 6.96 8.73 5.05 8.73-5.05" />
-                <path d="M12 22.08V12" />
-              </svg>
+              <Rocket className="w-8 h-8 text-primary" />
             </div>
             <DialogTitle className="text-2xl font-bold">{t('quickAccess.title')}</DialogTitle>
             <DialogDescription>{t('quickAccess.description')}</DialogDescription>
@@ -168,7 +143,7 @@ export default function QuickAccessMenu({
                     <Link href={item.href} onClick={() => setOpen(false)}>
                       <div
                         className="group flex flex-col items-center justify-center gap-2 p-4 rounded-lg bg-muted/50 hover:bg-accent/10 border border-transparent hover:border-accent/50 transition-all duration-300 h-full"
-                        data-testid={`quick-access-link-${item.href.replace('/', '')}`}
+                        data-testid={`quick-access-link-${item.href.replace('/', '') || 'new-test'}`}
                       >
                         <item.icon className="w-7 h-7 text-muted-foreground group-hover:text-accent transition-colors duration-300" />
                         <span className="text-sm font-medium text-foreground group-hover:text-accent-foreground transition-colors duration-300 text-center">
