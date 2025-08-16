@@ -80,6 +80,10 @@ export default {
           from: { width: '0' },
           to: { width: '100%' },
         },
+        blink: {
+          '0%, 100%': { backgroundColor: 'hsl(var(--primary))' },
+          '50%': { backgroundColor: 'transparent' },
+        },
         glow: {
           '0%, 100%': {
             boxShadow:
@@ -98,7 +102,8 @@ export default {
       animation: {
         'accordion-down': 'accordion-down 0.2s ease-out',
         'accordion-up': 'accordion-up 0.2s ease-out',
-        typewriter: 'typewriter 2s steps(44) 1s 1 normal both',
+        typewriter: 'typewriter 2s steps(44) forwards',
+        blink: 'blink 1s steps(2, start) infinite',
         glow: 'glow 4s ease-in-out infinite',
         'grid-scroll': 'grid-scroll 30s linear infinite',
       },
