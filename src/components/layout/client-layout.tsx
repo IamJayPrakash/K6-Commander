@@ -128,13 +128,13 @@ export function ClientLayout({ children }: { children: React.ReactNode }) {
                 {children}
               </main>
               <AppFooter />
+              <QuickAccessMenu
+                onThemeToggle={handleSetTheme}
+                onFullscreenToggle={handleToggleFullscreen}
+                isFullscreen={isFullscreen}
+              />
             </div>
             <Toaster />
-            <QuickAccessMenu
-              onThemeToggle={handleSetTheme}
-              onFullscreenToggle={handleToggleFullscreen}
-              isFullscreen={isFullscreen}
-            />
           </div>
         </TooltipProvider>
       </Providers>
