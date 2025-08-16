@@ -10,7 +10,10 @@ import {
   Menu,
   Languages,
   Beaker,
+  Maximize,
+  Minimize,
 } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { useTheme } from 'next-themes';
 import { Sun, Moon } from 'lucide-react';
@@ -28,6 +31,7 @@ import { ScrollArea } from '../ui/scroll-area';
 import {
   Tooltip,
   TooltipContent,
+  TooltipProvider,
   TooltipTrigger,
 } from '@/components/ui/tooltip';
 
@@ -48,6 +52,29 @@ const languages = [
 export function AppHeader() {
   const { setTheme } = useTheme();
   const { t, i18n } = useTranslation();
+  const [isFullscreen, setIsFullscreen] = useState(false);
+
+  useEffect(() => {
+    const handleFullscreenChange = () => {
+      setIsFullscreen(!!document.fullscreenElement);
+    };
+
+    document.addEventListener('fullscreenchange', handleFullscreenChange);
+
+    return () => {
+      document.removeEventListener('fullscreenchange', handleFullscreenChange);
+    };
+  }, []);
+
+  const toggleFullscreen = () => {
+    if (!document.fullscreenElement) {
+      document.documentElement.requestFullscreen();
+    } else {
+      if (document.exitFullscreen) {
+        document.exitFullscreen();
+      }
+    }
+  };
 
   const changeLanguage = (lng: string) => {
     i18n.changeLanguage(lng);
@@ -115,6 +142,36 @@ export function AppHeader() {
               <p>{t('header.githubLabel')}</p>
             </TooltipContent>
           </Tooltip>
+
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Button
+                variant="ghost"
+                size="icon"
+                onClick={toggleFullscreen}
+                data-testid="fullscreen-toggle-button"
+                aria-label={
+                  isFullscreen
+                    ? t('header.exitFullscreenLabel')
+                    : t('header.enterFullscreenLabel')
+                }
+              >
+                {isFullscreen ? (
+                  <Minimize className="h-5 w-5" />
+                ) : (
+                  <Maximize className="h-5 w-5" />
+                )}
+              </Button>
+            </TooltipTrigger>
+            <TooltipContent>
+              <p>
+                {isFullscreen
+                  ? t('header.exitFullscreenLabel')
+                  : t('header.enterFullscreenLabel')}
+              </p>
+            </TooltipContent>
+          </Tooltip>
+
           <Tooltip>
             <TooltipTrigger asChild>
               <DropdownMenu>
