@@ -36,31 +36,38 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from '@/components/ui/tooltip';
+import QuickAccessMenu from './quick-access-menu';
 
-const languages = [
-  { code: 'en', name: 'English' },
-  { code: 'es', name: 'Español' },
-  { code: 'zh', name: '中文 (Chinese)' },
-  { code: 'hi', name: 'हिन्दी (Hindi)' },
-  { code: 'fr', name: 'Français' },
-  { code: 'de', name: 'Deutsch' },
-  { code: 'ja', name: '日本語 (Japanese)' },
-  { code: 'ru', name: 'Русский (Russian)' },
-  { code: 'ko', name: '한국어 (Korean)' },
-  { code: 'pa', name: 'ਪੰਜਾਬੀ (Punjabi)' },
-  { code: 'ta', name: 'தமிழ் (Tamil)' },
-];
-
-export function AppHeader({
-  onThemeToggle,
-  onFullscreenToggle,
-  isFullscreen,
-}: {
-  onThemeToggle: (theme: string) => void;
-  onFullscreenToggle: () => void;
-  isFullscreen: boolean;
-}) {
+export function AppHeader() {
   const { t, i18n } = useTranslation();
+  const { setTheme } = useTheme();
+  const [isFullscreen, setIsFullscreen] = useState(false);
+
+  useEffect(() => {
+    const handleFullscreenChange = () => {
+      setIsFullscreen(!!document.fullscreenElement);
+    };
+
+    document.addEventListener('fullscreenchange', handleFullscreenChange);
+
+    return () => {
+      document.removeEventListener('fullscreenchange', handleFullscreenChange);
+    };
+  }, []);
+
+  const handleToggleFullscreen = () => {
+    if (!document.fullscreenElement) {
+      document.documentElement.requestFullscreen();
+    } else {
+      if (document.exitFullscreen) {
+        document.exitFullscreen();
+      }
+    }
+  };
+
+  const handleSetTheme = (theme: string) => {
+    setTheme(theme);
+  };
 
   const changeLanguage = (lng: string) => {
     i18n.changeLanguage(lng);
@@ -134,7 +141,7 @@ export function AppHeader({
               <Button
                 variant="ghost"
                 size="icon"
-                onClick={onFullscreenToggle}
+                onClick={handleToggleFullscreen}
                 data-testid="fullscreen-toggle-button"
                 aria-label={
                   isFullscreen
@@ -208,19 +215,19 @@ export function AppHeader({
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end" data-testid="theme-switcher-content">
                   <DropdownMenuItem
-                    onClick={() => onThemeToggle('light')}
+                    onClick={() => handleSetTheme('light')}
                     data-testid="theme-switcher-light"
                   >
                     Light
                   </DropdownMenuItem>
                   <DropdownMenuItem
-                    onClick={() => onThemeToggle('dark')}
+                    onClick={() => handleSetTheme('dark')}
                     data-testid="theme-switcher-dark"
                   >
                     Dark
                   </DropdownMenuItem>
                   <DropdownMenuItem
-                    onClick={() => onThemeToggle('system')}
+                    onClick={() => handleSetTheme('system')}
                     data-testid="theme-switcher-system"
                   >
                     System
@@ -283,6 +290,25 @@ export function AppHeader({
           </DropdownMenu>
         </div>
       </div>
+      <QuickAccessMenu
+        onThemeToggle={handleSetTheme}
+        onFullscreenToggle={handleToggleFullscreen}
+        isFullscreen={isFullscreen}
+      />
     </header>
   );
 }
+
+const languages = [
+  { code: 'en', name: 'English' },
+  { code: 'es', name: 'Español' },
+  { code: 'zh', name: '中文 (Chinese)' },
+  { code: 'hi', name: 'हिन्दी (Hindi)' },
+  { code: 'fr', name: 'Français' },
+  { code: 'de', name: 'Deutsch' },
+  { code: 'ja', name: '日本語 (Japanese)' },
+  { code: 'ru', name: 'Русский (Russian)' },
+  { code: 'ko', name: '한국어 (Korean)' },
+  { code: 'pa', name: 'ਪੰਜਾਬੀ (Punjabi)' },
+  { code: 'ta', name: 'தமிழ் (Tamil)' },
+];

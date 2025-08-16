@@ -12,8 +12,6 @@ import { ProgressBar } from './progress-bar';
 import { usePathname } from 'next/navigation';
 import { Preloader } from './preloader';
 import { TooltipProvider } from '../ui/tooltip';
-import QuickAccessMenu from './quick-access-menu';
-import { useTheme } from 'next-themes';
 
 async function fetchTranslations(locale: string) {
   let res = await fetch(`/locales/${locale}.json`);
@@ -35,34 +33,6 @@ async function fetchTranslations(locale: string) {
 export function ClientLayout({ children }: { children: React.ReactNode }) {
   const [isI18nInitialized, setIsI18nInitialized] = useState(false);
   const pathname = usePathname();
-  const { setTheme } = useTheme();
-  const [isFullscreen, setIsFullscreen] = useState(false);
-
-  useEffect(() => {
-    const handleFullscreenChange = () => {
-      setIsFullscreen(!!document.fullscreenElement);
-    };
-
-    document.addEventListener('fullscreenchange', handleFullscreenChange);
-
-    return () => {
-      document.removeEventListener('fullscreenchange', handleFullscreenChange);
-    };
-  }, []);
-
-  const handleToggleFullscreen = () => {
-    if (!document.fullscreenElement) {
-      document.documentElement.requestFullscreen();
-    } else {
-      if (document.exitFullscreen) {
-        document.exitFullscreen();
-      }
-    }
-  };
-
-  const handleSetTheme = (theme: string) => {
-    setTheme(theme);
-  };
 
   useEffect(() => {
     const initI18n = async () => {
@@ -116,22 +86,13 @@ export function ClientLayout({ children }: { children: React.ReactNode }) {
     <I18nextProvider i18n={i18n}>
       <Providers>
         <TooltipProvider>
-          <div className="relative min-h-screen bg-background">
+          <div className="relative flex flex-col min-h-screen bg-background">
             <ProgressBar />
-            <AppHeader
-              onThemeToggle={handleSetTheme}
-              onFullscreenToggle={handleToggleFullscreen}
-              isFullscreen={isFullscreen}
-            />
+            <AppHeader />
             <main className="flex-1 container max-w-screen-2xl py-8 flex flex-col">
               {children}
             </main>
             <AppFooter />
-            <QuickAccessMenu
-              onThemeToggle={handleSetTheme}
-              onFullscreenToggle={handleToggleFullscreen}
-              isFullscreen={isFullscreen}
-            />
           </div>
           <Toaster />
         </TooltipProvider>

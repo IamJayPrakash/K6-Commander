@@ -1,8 +1,7 @@
 
 'use client';
 
-import React, { useState, useRef, useEffect } from 'react';
-import { Button } from '@/components/ui/button';
+import React, { useState, useRef } from 'react';
 import {
   Dialog,
   DialogContent,
@@ -13,16 +12,13 @@ import {
 import {
   Tooltip,
   TooltipContent,
-  TooltipProvider,
   TooltipTrigger,
 } from '@/components/ui/tooltip';
 import {
-  Home,
   Beaker,
   History,
   Info,
   Github,
-  Compass,
   Sun,
   Moon,
   Maximize,
@@ -44,6 +40,8 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
+import { Button } from '../ui/button';
+import { cn } from '@/lib/utils';
 
 const navItems = [
   { href: '/', icon: TestTube, labelKey: 'quickAccess.newTest' },
@@ -70,15 +68,14 @@ export default function QuickAccessMenu({
   const [open, setOpen] = useState(false);
   const { t } = useTranslation();
   const nodeRef = useRef(null);
-  const [position, setPosition] = useState({ x: window.innerWidth - 80, y: window.innerHeight - 140 });
   const [isDragging, setIsDragging] = useState(false);
 
   const handleDragStart = () => {
     setIsDragging(true);
   };
   const handleDragStop = (e: DraggableEvent, data: DraggableData) => {
+    // A slight delay to differentiate a click from a drag
     setTimeout(() => setIsDragging(false), 50);
-    setPosition({ x: data.x, y: data.y });
   };
 
   const handleClick = () => {
@@ -86,43 +83,73 @@ export default function QuickAccessMenu({
       setOpen(true);
     }
   };
-  
-  // Adjust position on window resize
-  useEffect(() => {
-    const handleResize = () => {
-        setPosition(pos => ({
-            x: Math.min(pos.x, window.innerWidth - 80),
-            y: Math.min(pos.y, window.innerHeight - 80)
-        }));
-    };
-    window.addEventListener('resize', handleResize);
-    return () => window.removeEventListener('resize', handleResize);
-  }, []);
-
 
   return (
     <>
       <Draggable
         nodeRef={nodeRef}
+        axis="x"
+        bounds="parent"
         handle=".handle"
-        position={position}
         onStart={handleDragStart}
         onStop={handleDragStop}
-        bounds="parent"
       >
         <div
           ref={nodeRef}
-          className="handle fixed z-[9999] cursor-grab active:cursor-grabbing w-[80px] h-[80px] group transition-transform active:scale-90"
-          onClick={handleClick}
+          className="handle absolute top-full left-1/2 -translate-x-1/2 w-[120px] h-[55px] cursor-grab active:cursor-grabbing z-[9999]"
           role="button"
           aria-label={t('quickAccess.title')}
+          onClick={handleClick}
           data-testid="quick-access-menu-button"
         >
-          <div className="absolute inset-0.5 animate-ripple-1 rounded-full group-hover:bg-primary/20"></div>
-          <div className="absolute inset-0.5 animate-ripple-2 rounded-full group-hover:bg-primary/20"></div>
-          <div className="absolute inset-0.5 animate-ripple-3 rounded-full group-hover:bg-primary/20"></div>
-          <div className="w-full h-full bg-primary rounded-full flex items-center justify-center text-primary-foreground/80 hover:text-primary-foreground">
-             <Compass className="w-8 h-8 transition-transform duration-500 group-hover:rotate-12" />
+          <div
+            className={cn(
+              'w-full h-full group transition-all duration-300 active:scale-90',
+              'hover:[&>svg]:scale-110 hover:[&>svg]:-translate-y-1'
+            )}
+          >
+            <svg
+              viewBox="0 0 120 55"
+              className="w-full h-full absolute top-0 left-0 transition-all duration-300"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <defs>
+                <filter id="glow">
+                  <feGaussianBlur stdDeviation="3.5" result="coloredBlur" />
+                  <feMerge>
+                    <feMergeNode in="coloredBlur" />
+                    <feMergeNode in="SourceGraphic" />
+                  </feMerge>
+                </filter>
+              </defs>
+              <path
+                d="M0 0 H120 V20 Q110 25 100 20 T80 20 T60 20 T40 20 T20 20 Q10 25 0 20 V0 Z"
+                className="fill-background/80 backdrop-blur-sm stroke-border/60"
+                strokeWidth="1.5"
+              />
+              <path
+                d="M30 40 Q40 55 60 55 T90 40"
+                stroke="hsl(var(--primary))"
+                strokeWidth="2"
+                fill="none"
+                className="opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+                filter="url(#glow)"
+              />
+              <path
+                d="M40 35 Q50 50 60 50 T80 35"
+                stroke="hsl(var(--accent))"
+                strokeWidth="1.5"
+                fill="none"
+                className="opacity-0 group-hover:opacity-80 transition-opacity duration-300"
+                style={{ animationDelay: '0.2s' }}
+                filter="url(#glow)"
+              />
+            </svg>
+
+            <div className="absolute top-0 left-1/2 -translate-x-1/2 w-8 h-8 rounded-full bg-primary/20 flex items-center justify-center border-2 border-primary/50 group-hover:bg-primary/30 transition-colors">
+              <div className="w-5 h-5 rounded-full bg-primary animate-pulse-glow" />
+            </div>
           </div>
         </div>
       </Draggable>
@@ -134,7 +161,22 @@ export default function QuickAccessMenu({
         >
           <DialogHeader className="space-y-2 text-center">
             <div className="inline-block mx-auto p-3 bg-primary/10 rounded-full border border-primary/20">
-              <Compass className="text-primary w-8 h-8" />
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="32"
+                height="32"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                className="text-primary"
+              >
+                <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z" />
+                <path d="m3.27 6.96 8.73 5.05 8.73-5.05" />
+                <path d="M12 22.08V12" />
+              </svg>
             </div>
             <DialogTitle className="text-2xl font-bold">{t('quickAccess.title')}</DialogTitle>
             <DialogDescription>{t('quickAccess.description')}</DialogDescription>
