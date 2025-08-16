@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef } from 'react';
 import Draggable from 'react-draggable';
 import { Button } from '@/components/ui/button';
 import {
@@ -46,76 +46,33 @@ const externalLinks = [
 export default function QuickAccessMenu() {
   const [open, setOpen] = useState(false);
   const [isDragging, setIsDragging] = useState(false);
-  const [position, setPosition] = useState({ x: 20, y: 200 });
-  const [edgeAttached, setEdgeAttached] = useState('left');
-  const [isVisible, setIsVisible] = useState(true);
   const { t } = useTranslation();
   const nodeRef = useRef(null);
 
-  const handleDrag = (e: any, data: any) => {
-    setPosition({ x: data.x, y: data.y });
-    const windowWidth = window.innerWidth;
-    if (data.x + 35 < windowWidth / 2) {
-      setEdgeAttached('left');
-    } else {
-      setEdgeAttached('right');
-    }
-  };
-
-  const handleStopDrag = (e: any, data: any) => {
-    const windowWidth = window.innerWidth;
-    const windowHeight = window.innerHeight;
-    let finalX;
-    if (data.x < windowWidth / 2) {
-      finalX = -25;
-    } else {
-      finalX = windowWidth - 45;
-    }
-    const finalY = Math.max(20, Math.min(windowHeight - 70, data.y));
-    setPosition({ x: finalX, y: finalY });
-    setTimeout(() => setIsDragging(false), 100);
-  };
-
+  // This function is a click handler. It only opens the modal if we are NOT dragging.
   const handleClick = () => {
     if (!isDragging) {
       setOpen(true);
     }
   };
 
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      if (!isDragging && !open) {
-        setIsVisible(false);
-      }
-    }, 3000);
-
-    return () => clearTimeout(timer);
-  }, [isDragging, open, position]);
-
   return (
     <>
       <Draggable
         nodeRef={nodeRef}
-        onStart={() => {
-          setIsDragging(true);
-          setIsVisible(true);
-        }}
-        onDrag={handleDrag}
-        onStop={handleStopDrag}
-        position={position}
+        onStart={() => setIsDragging(true)}
+        // We reset the dragging flag after a short delay on stop.
+        onStop={() => setTimeout(() => setIsDragging(false), 100)}
         bounds="body"
+        defaultPosition={{ x: 20, y: 200 }}
       >
         <div
           ref={nodeRef}
-          className={`fixed z-[9999] cursor-grab active:cursor-grabbing transition-transform duration-500 ease-out ${
-            isVisible
-              ? 'translate-x-0'
-              : edgeAttached === 'left'
-                ? '-translate-x-10'
-                : 'translate-x-10'
-          }`}
-          onMouseEnter={() => setIsVisible(true)}
+          className="fixed z-[9999] cursor-grab active:cursor-grabbing"
           data-testid="quick-access-button-container"
+          onClick={handleClick} // Use the combined click handler
+          onMouseEnter={(e) => (e.currentTarget.style.transform = 'scale(1.1)')}
+          onMouseLeave={(e) => (e.currentTarget.style.transform = 'scale(1)')}
         >
           <div className="relative group">
             <div
@@ -129,7 +86,6 @@ export default function QuickAccessMenu() {
               <Button
                 size="icon"
                 className="absolute inset-0 w-full h-full rounded-full bg-transparent hover:bg-white/10 border-0 shadow-none transition-all duration-300"
-                onClick={handleClick}
                 aria-label={t('quickAccess.title')}
               >
                 <Compass
