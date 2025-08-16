@@ -1,7 +1,7 @@
 
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import Draggable from 'react-draggable';
 import { Button } from '@/components/ui/button';
 import {
@@ -47,8 +47,8 @@ const externalLinks = [
 export default function QuickAccessMenu() {
   const [open, setOpen] = useState(false);
   const [isDragging, setIsDragging] = useState(false);
-
   const { t } = useTranslation();
+  const nodeRef = useRef(null);
 
   const handleStopDrag = () => {
     setTimeout(() => {
@@ -65,12 +65,14 @@ export default function QuickAccessMenu() {
   return (
     <>
       <Draggable
+        nodeRef={nodeRef}
         onStart={() => setIsDragging(true)}
         onStop={handleStopDrag}
         bounds="parent"
         defaultPosition={{ x: 20, y: 200 }}
       >
         <div
+          ref={nodeRef}
           className="fixed z-50 cursor-grab active:cursor-grabbing"
           data-testid="quick-access-button-container"
         >
