@@ -184,7 +184,7 @@ export default function ApiTesterPage() {
   ) : (
     <ResizablePanelGroup
       direction="horizontal"
-      className="w-full rounded-lg border h-[calc(100vh-10rem)]"
+      className="w-full rounded-lg border flex-1"
     >
       <ResizablePanel defaultSize={25} minSize={20}>
         <ApiTestHistory

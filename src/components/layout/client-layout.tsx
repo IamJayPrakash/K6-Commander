@@ -88,7 +88,7 @@ export function ClientLayout({ children }: { children: React.ReactNode }) {
         <ProgressBar />
         <div className="relative flex min-h-screen flex-col bg-background">
           <AppHeader />
-          <main className="flex-1 container max-w-screen-2xl py-8">{children}</main>
+          <main className="flex-1 container max-w-screen-2xl py-8 flex flex-col">{children}</main>
           <AppFooter />
         </div>
         <Toaster />
