@@ -124,7 +124,7 @@ export default function TestRunning({ initialTestId, config, onTestComplete }: T
             const response = await fetch('/api/run-seo', {
               method: 'POST',
               headers: { 'Content-Type': 'application/json' },
-              body: JSON.stringify({ url: config.url }),
+              body: JSON.stringify({ url: config.url, testId: serverGeneratedTestId }),
             });
             if (!response.ok) throw new Error('SEO analysis failed');
             const analysis = await response.json();

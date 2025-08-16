@@ -2,7 +2,14 @@
 
 K6 Commander is a lightweight, local-first, authorized load-testing platform. It allows you to configure, run, and analyze load tests, Lighthouse audits, and basic SEO checks directly from a sleek web UI, leveraging the power of k6, InfluxDB, and Grafana.
 
-**Disclaimer:** This tool is intended for performance testing **your own applications** where you have explicit permission to do so. Unauthorized testing of third-party websites is illegal and unethical. The creators of this software are not responsible for its misuse.
+---
+### ⚠️ Important Deployment Notice
+**This application's architecture is NOT compatible with serverless deployment platforms like Vercel or Netlify.**
+
+K6 Commander relies on running Docker containers (`k6`) and spawning system processes (`npx lighthouse`) directly from its backend. These operations are restricted on serverless platforms.
+
+**Attempting to deploy this application on Vercel or Netlify will result in the load testing and Lighthouse features failing.** You must use a hosting environment that provides full control over the operating system and allows Docker to run, such as a traditional Virtual Machine (e.g., AWS EC2, DigitalOcean Droplet, Google Cloud VM) or a dedicated server.
+---
 
 ![alt text](image.png)
 
@@ -32,7 +39,7 @@ K6 Commander is a lightweight, local-first, authorized load-testing platform. It
 ### Prerequisites
 
 - [Docker](https://www.docker.com/get-started) and [Docker Compose](https://docs.docker.com/compose/install/)
-- Node.js (for package management if you wish to modify the code)
+- Node.js (v18 or higher)
 - A web browser (Chrome, Firefox, etc.)
 
 ### 1. Clone the Repository
@@ -52,7 +59,13 @@ cp .env.example .env
 
 Open the `.env` file and add your `GEMINI_API_KEY` to enable the AI-powered SEO analysis feature.
 
-### 3. Build and Run with Docker Compose
+### 3. Install Dependencies
+
+```bash
+npm install
+```
+
+### 4. Build and Run with Docker Compose
 
 From the root directory of the project, run:
 
@@ -72,7 +85,7 @@ Once the services are up, you can access:
 - **Grafana Dashboard**: [http://localhost:3003](http://localhost:3003)
   - Login with default credentials: `admin` / `admin`. You will be prompted to change the password on first login.
 
-### 4. Running Your First Test
+### 5. Running Your First Test
 
 1.  Navigate to [http://localhost:3000](http://localhost:3000).
 2.  Accept the terms of service.
@@ -83,25 +96,18 @@ Once the services are up, you can access:
 7.  Monitor the "Test Running" view. For load tests, a link to the live Grafana dashboard will be available.
 8.  Once the test is complete, a summary report will be displayed.
 
+
 ## 🚢 Deployment
 
-### ⚠️ Important Note on Platform Compatibility
+Please see the important deployment notice at the top of this README. The recommended deployment method is using Docker on a virtual private server.
 
-K6 Commander's architecture relies on running Docker containers and spawning system processes (`npx`) directly from its backend. This architecture is **not compatible with serverless deployment platforms** like **Vercel** or **Netlify**. These platforms have limitations that prevent the execution of Docker containers and arbitrary shell commands, which are essential for the k6 and Lighthouse functionalities.
-
-**Attempting to deploy this application on Vercel or Netlify will result in failure.** You must use a hosting environment that provides full control over the operating system and allows Docker to run, such as a traditional VM or a dedicated server.
-
-### Recommended Deployment
-
-The recommended deployment method is using Docker on a virtual private server (e.g., AWS EC2, DigitalOcean Droplet, Google Cloud VM).
-
-#### Server Requirements
+### Server Requirements
 
 - A server with Docker and Docker Compose installed.
 - At least 2GB of RAM is recommended.
 - A firewall configured to allow traffic on the ports you intend to expose (e.g., port 80/443 for the web app).
 
-#### Steps for Deployment
+### Steps for Deployment
 
 1. **Clone the repository** onto your server.
 2. **Configure environment variables**: Create a `.env` file with your `GEMINI_API_KEY`.
