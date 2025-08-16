@@ -11,14 +11,18 @@ import {
   DialogDescription,
 } from '@/components/ui/dialog';
 import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from '@/components/ui/tooltip';
+import {
   Home,
   Beaker,
   History,
   Info,
   Github,
   Compass,
-  Zap,
-  Rocket,
   Sun,
   Moon,
   Maximize,
@@ -26,6 +30,7 @@ import {
   Shield,
   FileText,
   Lock,
+  Rocket,
 } from 'lucide-react';
 import Link from 'next/link';
 import { useTranslation } from 'react-i18next';
@@ -38,6 +43,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
+import { cn } from '@/lib/utils';
 
 const navItems = [
   { href: '/', icon: Home, labelKey: 'quickAccess.home' },
@@ -73,23 +79,32 @@ export default function QuickAccessMenu({
           className="fixed bottom-6 right-6 z-[9999] cursor-grab active:cursor-grabbing"
           data-testid="quick-access-button-container"
         >
-          <div className="relative group">
-            <div className="absolute -inset-1.5 bg-gradient-to-r from-primary to-accent rounded-full blur opacity-75 group-hover:opacity-100 transition duration-1000 group-hover:duration-200 animate-tilt"></div>
-            <Button
-              size="icon"
-              onClick={() => setOpen(true)}
-              className="relative w-16 h-16 rounded-full bg-background/80 backdrop-blur-md border border-primary/50 text-primary shadow-lg hover:shadow-primary/25 hover:border-primary transition-all duration-300 group-hover:scale-110"
-              aria-label={t('quickAccess.title')}
-            >
-              <Compass className="w-8 h-8 transition-transform duration-500 group-hover:rotate-12" />
-            </Button>
-          </div>
+          <TooltipProvider>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <div className="relative group">
+                  <div className="absolute -inset-1.5 bg-gradient-to-r from-primary to-accent rounded-full blur opacity-75 group-hover:opacity-100 transition duration-1000 group-hover:duration-200 animate-tilt"></div>
+                  <Button
+                    size="icon"
+                    onClick={() => setOpen(true)}
+                    className="relative w-16 h-16 rounded-full bg-background/80 backdrop-blur-md border border-primary/50 text-primary hover:border-primary transition-all duration-300 group-hover:scale-110 active:scale-95"
+                    aria-label={t('quickAccess.title')}
+                  >
+                    <Compass className="w-8 h-8 transition-transform duration-500 group-hover:rotate-12" />
+                  </Button>
+                </div>
+              </TooltipTrigger>
+              <TooltipContent side="left">
+                <p>{t('quickAccess.title')}</p>
+              </TooltipContent>
+            </Tooltip>
+          </TooltipProvider>
         </div>
       </Draggable>
 
       <Dialog open={open} onOpenChange={setOpen}>
         <DialogContent
-          className="max-w-md bg-background/90 backdrop-blur-xl border-border/50 shadow-2xl"
+          className="max-w-md bg-background/90 backdrop-blur-xl border-border/50"
           data-testid="quick-access-dialog"
         >
           <DialogHeader className="space-y-2 text-center">
@@ -104,17 +119,24 @@ export default function QuickAccessMenu({
             {/* Navigation */}
             <div className="grid grid-cols-2 gap-3">
               {navItems.map((item) => (
-                <Link href={item.href} key={item.href} onClick={() => setOpen(false)}>
-                  <div
-                    className="group flex flex-col items-center justify-center gap-2 p-4 rounded-lg bg-muted/50 hover:bg-accent/10 border border-transparent hover:border-accent/50 transition-all duration-300"
-                    data-testid={`quick-access-link-${item.href}`}
-                  >
-                    <item.icon className="w-7 h-7 text-muted-foreground group-hover:text-accent transition-colors duration-300" />
-                    <span className="text-sm font-medium text-foreground group-hover:text-accent-foreground transition-colors duration-300 text-center">
-                      {t(item.labelKey)}
-                    </span>
-                  </div>
-                </Link>
+                <Tooltip key={item.href}>
+                  <TooltipTrigger asChild>
+                    <Link href={item.href} onClick={() => setOpen(false)}>
+                      <div
+                        className="group flex flex-col items-center justify-center gap-2 p-4 rounded-lg bg-muted/50 hover:bg-accent/10 border border-transparent hover:border-accent/50 transition-all duration-300 h-full"
+                        data-testid={`quick-access-link-${item.href}`}
+                      >
+                        <item.icon className="w-7 h-7 text-muted-foreground group-hover:text-accent transition-colors duration-300" />
+                        <span className="text-sm font-medium text-foreground group-hover:text-accent-foreground transition-colors duration-300 text-center">
+                          {t(item.labelKey)}
+                        </span>
+                      </div>
+                    </Link>
+                  </TooltipTrigger>
+                  <TooltipContent>
+                    <p>{t(item.labelKey)}</p>
+                  </TooltipContent>
+                </Tooltip>
               ))}
             </div>
 
@@ -122,38 +144,61 @@ export default function QuickAccessMenu({
 
             {/* Actions */}
             <div className="grid grid-cols-2 gap-3">
-              <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                  <Button variant="outline" className="h-auto py-2 flex flex-col gap-2">
-                    <Sun className="h-6 w-6" />
-                    <span>{t('quickAccess.themeAction')}</span>
-                  </Button>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent>
-                  <DropdownMenuItem onClick={() => onThemeToggle('light')}>Light</DropdownMenuItem>
-                  <DropdownMenuItem onClick={() => onThemeToggle('dark')}>Dark</DropdownMenuItem>
-                  <DropdownMenuItem onClick={() => onThemeToggle('system')}>
-                    System
-                  </DropdownMenuItem>
-                </DropdownMenuContent>
-              </DropdownMenu>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                      <Button
+                        variant="outline"
+                        className="h-auto py-2 flex flex-col gap-2 hover:bg-accent/10"
+                      >
+                        <Sun className="h-6 w-6" />
+                        <span>{t('quickAccess.themeAction')}</span>
+                      </Button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent>
+                      <DropdownMenuItem onClick={() => onThemeToggle('light')}>
+                        Light
+                      </DropdownMenuItem>
+                      <DropdownMenuItem onClick={() => onThemeToggle('dark')}>Dark</DropdownMenuItem>
+                      <DropdownMenuItem onClick={() => onThemeToggle('system')}>
+                        System
+                      </DropdownMenuItem>
+                    </DropdownMenuContent>
+                  </DropdownMenu>
+                </TooltipTrigger>
+                <TooltipContent>
+                  <p>{t('quickAccess.themeTooltip')}</p>
+                </TooltipContent>
+              </Tooltip>
 
-              <Button
-                variant="outline"
-                className="h-auto py-2 flex flex-col gap-2"
-                onClick={onFullscreenToggle}
-              >
-                {isFullscreen ? (
-                  <Minimize className="h-6 w-6" />
-                ) : (
-                  <Maximize className="h-6 w-6" />
-                )}
-                <span>
-                  {isFullscreen
-                    ? t('header.exitFullscreenLabel')
-                    : t('header.enterFullscreenLabel')}
-                </span>
-              </Button>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <Button
+                    variant="outline"
+                    className="h-auto py-2 flex flex-col gap-2 hover:bg-accent/10"
+                    onClick={onFullscreenToggle}
+                  >
+                    {isFullscreen ? (
+                      <Minimize className="h-6 w-6" />
+                    ) : (
+                      <Maximize className="h-6 w-6" />
+                    )}
+                    <span>
+                      {isFullscreen
+                        ? t('header.exitFullscreenLabel')
+                        : t('header.enterFullscreenLabel')}
+                    </span>
+                  </Button>
+                </TooltipTrigger>
+                <TooltipContent>
+                  <p>
+                    {isFullscreen
+                      ? t('header.exitFullscreenLabel')
+                      : t('header.enterFullscreenLabel')}
+                  </p>
+                </TooltipContent>
+              </Tooltip>
             </div>
 
             <Separator />
@@ -161,19 +206,37 @@ export default function QuickAccessMenu({
             {/* External Links */}
             <div className="flex justify-center gap-4">
               {externalLinks.map((item) => (
-                <Link href={item.href} key={item.href} onClick={() => setOpen(false)}>
-                  <Button variant="ghost" size="sm" className="flex flex-col gap-1 h-auto p-2">
-                    <item.icon className="w-5 h-5 text-muted-foreground" />
-                    <span className="text-xs">{t(item.labelKey)}</span>
-                  </Button>
-                </Link>
+                <Tooltip key={item.href}>
+                  <TooltipTrigger asChild>
+                    <Link href={item.href} onClick={() => setOpen(false)}>
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        className="flex flex-col gap-1 h-auto p-2"
+                      >
+                        <item.icon className="w-5 h-5 text-muted-foreground" />
+                        <span className="text-xs">{t(item.labelKey)}</span>
+                      </Button>
+                    </Link>
+                  </TooltipTrigger>
+                  <TooltipContent>
+                    <p>{t(item.labelKey)}</p>
+                  </TooltipContent>
+                </Tooltip>
               ))}
-              <a href={APP_CONFIG.githubUrl} target="_blank" rel="noopener noreferrer">
-                <Button variant="ghost" size="sm" className="flex flex-col gap-1 h-auto p-2">
-                  <Github className="w-5 h-5 text-muted-foreground" />
-                  <span className="text-xs">GitHub</span>
-                </Button>
-              </a>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <a href={APP_CONFIG.githubUrl} target="_blank" rel="noopener noreferrer">
+                    <Button variant="ghost" size="sm" className="flex flex-col gap-1 h-auto p-2">
+                      <Github className="w-5 h-5 text-muted-foreground" />
+                      <span className="text-xs">GitHub</span>
+                    </Button>
+                  </a>
+                </TooltipTrigger>
+                <TooltipContent>
+                  <p>{t('header.githubLabel')}</p>
+                </TooltipContent>
+              </Tooltip>
             </div>
           </div>
           <div className="flex items-center justify-center gap-2 pt-4 border-t border-border/30">
