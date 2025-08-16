@@ -28,6 +28,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { useTranslation } from 'react-i18next';
 import CurlImportDialog from './curl-import-dialog';
 import { useToast } from '@/hooks/use-toast';
+import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
 
 const paramSchema = z.object({
   key: z.string(),
@@ -86,16 +87,23 @@ const KeyValueTable = ({
               <Input placeholder="Value" {...field} data-testid={`${name}-value-${index}`} />
             )}
           />
-          <Button
-            type="button"
-            variant="ghost"
-            size="icon"
-            onClick={() => onRemove(index)}
-            title={`Remove ${name === 'queryParams' ? 'Parameter' : 'Header'}`}
-            data-testid={`remove-${name}-${index}`}
-          >
-            <Trash2 className="h-4 w-4" />
-          </Button>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Button
+                type="button"
+                variant="ghost"
+                size="icon"
+                onClick={() => onRemove(index)}
+                aria-label={`Remove ${name === 'queryParams' ? 'Parameter' : 'Header'}`}
+                data-testid={`remove-${name}-${index}`}
+              >
+                <Trash2 className="h-4 w-4" />
+              </Button>
+            </TooltipTrigger>
+            <TooltipContent>
+              <p>Remove {name === 'queryParams' ? 'Parameter' : 'Header'}</p>
+            </TooltipContent>
+          </Tooltip>
         </div>
       ))}
       <Button
@@ -199,7 +207,7 @@ export default function RequestPanel({ onSend, isLoading, initialValues }: Reque
         });
         return;
       }
-      
+
       const url = new URL(values.url);
       values.queryParams.forEach((param) => {
         if (param.key) {
@@ -357,16 +365,23 @@ export default function RequestPanel({ onSend, isLoading, initialValues }: Reque
                     <FormItem className="flex-grow flex flex-col">
                       <div className="flex items-center justify-between">
                         <FormLabel>{t('apiTester.jsonBodyLabel')}</FormLabel>
-                        <Button
-                          type="button"
-                          variant="ghost"
-                          size="sm"
-                          onClick={handleBeautifyJson}
-                          data-testid="beautify-json-button"
-                        >
-                          <Sparkles className="mr-2 h-4 w-4" />
-                          {t('apiTester.beautifyJsonButton')}
-                        </Button>
+                        <Tooltip>
+                          <TooltipTrigger asChild>
+                            <Button
+                              type="button"
+                              variant="ghost"
+                              size="sm"
+                              onClick={handleBeautifyJson}
+                              data-testid="beautify-json-button"
+                            >
+                              <Sparkles className="mr-2 h-4 w-4" />
+                              {t('apiTester.beautifyJsonButton')}
+                            </Button>
+                          </TooltipTrigger>
+                          <TooltipContent>
+                            <p>{t('apiTester.beautifyJsonTooltip')}</p>
+                          </TooltipContent>
+                        </Tooltip>
                       </div>
                       <FormControl>
                         <Textarea

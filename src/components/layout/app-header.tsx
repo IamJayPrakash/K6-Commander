@@ -27,6 +27,11 @@ import { APP_CONFIG } from '@/lib/constants';
 import { useTranslation } from 'react-i18next';
 import { ScrollArea } from '../ui/scroll-area';
 import { usePathname } from 'next/navigation';
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from '@/components/ui/tooltip';
 
 const languages = [
   { code: 'en', name: 'English' },
@@ -101,87 +106,113 @@ export function AppHeader() {
 
         <div className="flex flex-1 items-center justify-end gap-2">
           {pathname === '/' && (
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={handleStartTour}
-              className="hidden sm:flex"
-              data-testid="start-tour-button"
-            >
-              <PlayCircle className="h-4 w-4 mr-2" />
-              {t('header.startTour')}
-            </Button>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={handleStartTour}
+                  className="hidden sm:flex"
+                  data-testid="start-tour-button"
+                >
+                  <PlayCircle className="h-4 w-4 mr-2" />
+                  {t('header.startTour')}
+                </Button>
+              </TooltipTrigger>
+              <TooltipContent>
+                <p>{t('header.startTourTooltip')}</p>
+              </TooltipContent>
+            </Tooltip>
           )}
-
-          <a
-            href={APP_CONFIG.githubUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            data-testid="github-link"
-            aria-label="View on GitHub"
-          >
-            <Button variant="ghost" size="icon">
-              <Github className="h-5 w-5" />
-            </Button>
-          </a>
-
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button
-                variant="ghost"
-                size="icon"
-                aria-label={t('header.changeLanguageLabel')}
-                data-testid="language-switcher-trigger"
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <a
+                href={APP_CONFIG.githubUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                data-testid="github-link"
+                aria-label={t('header.githubLabel')}
               >
-                <Languages className="h-5 w-5" />
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end" data-testid="language-switcher-content">
-              <ScrollArea className="h-72 w-48 rounded-md">
-                {languages.map((lang) => (
-                  <DropdownMenuItem
-                    key={lang.code}
-                    onClick={() => changeLanguage(lang.code)}
-                    data-testid={`language-switcher-item-${lang.code}`}
+                <Button variant="ghost" size="icon">
+                  <Github className="h-5 w-5" />
+                </Button>
+              </a>
+            </TooltipTrigger>
+            <TooltipContent>
+              <p>{t('header.githubLabel')}</p>
+            </TooltipContent>
+          </Tooltip>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    aria-label={t('header.changeLanguageLabel')}
+                    data-testid="language-switcher-trigger"
                   >
-                    {lang.name}
-                  </DropdownMenuItem>
-                ))}
-              </ScrollArea>
-            </DropdownMenuContent>
-          </DropdownMenu>
+                    <Languages className="h-5 w-5" />
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end" data-testid="language-switcher-content">
+                  <ScrollArea className="h-72 w-48 rounded-md">
+                    {languages.map((lang) => (
+                      <DropdownMenuItem
+                        key={lang.code}
+                        onClick={() => changeLanguage(lang.code)}
+                        data-testid={`language-switcher-item-${lang.code}`}
+                      >
+                        {lang.name}
+                      </DropdownMenuItem>
+                    ))}
+                  </ScrollArea>
+                </DropdownMenuContent>
+              </DropdownMenu>
+            </TooltipTrigger>
+            <TooltipContent>
+              <p>{t('header.changeLanguageLabel')}</p>
+            </TooltipContent>
+          </Tooltip>
 
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button
-                variant="ghost"
-                size="icon"
-                data-testid="theme-switcher-trigger"
-                aria-label={t('header.toggleThemeLabel')}
-              >
-                <Sun className="h-[1.2rem] w-[1.2rem] rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0" />
-                <Moon className="absolute h-[1.2rem] w-[1.2rem] rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100" />
-                <span className="sr-only">{t('header.toggleThemeLabel')}</span>
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end" data-testid="theme-switcher-content">
-              <DropdownMenuItem
-                onClick={() => setTheme('light')}
-                data-testid="theme-switcher-light"
-              >
-                Light
-              </DropdownMenuItem>
-              <DropdownMenuItem onClick={() => setTheme('dark')} data-testid="theme-switcher-dark">
-                Dark
-              </DropdownMenuItem>
-              <DropdownMenuItem
-                onClick={() => setTheme('system')}
-                data-testid="theme-switcher-system"
-              >
-                System
-              </DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    data-testid="theme-switcher-trigger"
+                    aria-label={t('header.toggleThemeLabel')}
+                  >
+                    <Sun className="h-[1.2rem] w-[1.2rem] rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0" />
+                    <Moon className="absolute h-[1.2rem] w-[1.2rem] rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100" />
+                    <span className="sr-only">{t('header.toggleThemeLabel')}</span>
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end" data-testid="theme-switcher-content">
+                  <DropdownMenuItem
+                    onClick={() => setTheme('light')}
+                    data-testid="theme-switcher-light"
+                  >
+                    Light
+                  </DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => setTheme('dark')} data-testid="theme-switcher-dark">
+                    Dark
+                  </DropdownMenuItem>
+                  <DropdownMenuItem
+                    onClick={() => setTheme('system')}
+                    data-testid="theme-switcher-system"
+                  >
+                    System
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+            </TooltipTrigger>
+            <TooltipContent>
+              <p>{t('header.toggleThemeLabel')}</p>
+            </TooltipContent>
+          </Tooltip>
 
           {/* Mobile Menu */}
           <DropdownMenu>
@@ -191,10 +222,10 @@ export function AppHeader() {
                 size="icon"
                 className="md:hidden"
                 data-testid="mobile-menu-trigger"
-                aria-label="Open menu"
+                aria-label={t('header.mobileMenuLabel')}
               >
                 <Menu className="h-5 w-5" />
-                <span className="sr-only">Open menu</span>
+                <span className="sr-only">{t('header.mobileMenuLabel')}</span>
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end" data-testid="mobile-menu-content">

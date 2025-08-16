@@ -50,7 +50,7 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { useTranslation } from 'react-i18next';
-
+import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
 
 interface ApiTestHistoryProps {
   collections: ApiTestCollection[];
@@ -80,17 +80,23 @@ const NewCollectionDialog = ({
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
-      <DialogTrigger asChild>
-        <Button
-          variant="ghost"
-          size="icon"
-          title={t('apiTester.newCollectionTitle')}
-          data-testid="new-collection-button"
-          aria-label={t('apiTester.newCollectionTitle')}
-        >
-          <Plus className="h-4 w-4" />
-        </Button>
-      </DialogTrigger>
+      <Tooltip>
+        <TooltipTrigger asChild>
+          <DialogTrigger asChild>
+            <Button
+              variant="ghost"
+              size="icon"
+              data-testid="new-collection-button"
+              aria-label={t('apiTester.newCollectionTitle')}
+            >
+              <Plus className="h-4 w-4" />
+            </Button>
+          </DialogTrigger>
+        </TooltipTrigger>
+        <TooltipContent>
+          <p>{t('apiTester.newCollectionTitle')}</p>
+        </TooltipContent>
+      </Tooltip>
       <DialogContent data-testid="new-collection-dialog">
         <DialogHeader>
           <DialogTitle>{t('apiTester.newCollectionTitle')}</DialogTitle>
@@ -175,7 +181,11 @@ export default function ApiTestHistory({
       <CardHeader className="p-2 border-b">
         <div className="flex items-center gap-1">
           <Select value={activeCollectionId} onValueChange={setActiveCollectionId}>
-            <SelectTrigger className="flex-1" data-testid="collection-select-trigger" aria-label="Select API Collection">
+            <SelectTrigger
+              className="flex-1"
+              data-testid="collection-select-trigger"
+              aria-label="Select API Collection"
+            >
               <SelectValue placeholder={t('apiTester.selectCollectionPlaceholder')} />
             </SelectTrigger>
             <SelectContent>
@@ -187,53 +197,64 @@ export default function ApiTestHistory({
             </SelectContent>
           </Select>
           <NewCollectionDialog onAddCollection={handleAddCollection} />
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button
-                variant="ghost"
-                size="icon"
-                data-testid="collection-actions-menu-trigger"
-                aria-label="Collection actions"
-              >
-                <MoreVertical className="h-4 w-4" />
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent>
-              <AlertDialog>
-                <AlertDialogTrigger asChild>
-                  <DropdownMenuItem
-                    onSelect={(e) => e.preventDefault()}
-                    disabled={activeCollectionId === 'default'}
-                    className="text-destructive focus:text-destructive"
-                    data-testid="delete-collection-menu-item"
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    data-testid="collection-actions-menu-trigger"
+                    aria-label={t('apiTester.collectionActionsTooltip')}
                   >
-                    <Trash2 className="mr-2 h-4 w-4" />
-                    {t('apiTester.deleteCollectionButton')}
-                  </DropdownMenuItem>
-                </AlertDialogTrigger>
-                <AlertDialogContent data-testid="delete-collection-dialog">
-                  <AlertDialogHeader>
-                    <AlertDialogTitle>{t('apiTester.deleteCollectionDialog.title')}</AlertDialogTitle>
-                    <AlertDialogDescription>
-                      {t('apiTester.deleteCollectionDialog.description', { name: activeCollection?.name })}
-                    </AlertDialogDescription>
-                  </AlertDialogHeader>
-                  <AlertDialogFooter>
-                    <AlertDialogCancel data-testid="delete-collection-cancel-button">
-                      {t('apiTester.cancelButton')}
-                    </AlertDialogCancel>
-                    <AlertDialogAction
-                      onClick={() => handleDeleteCollection(activeCollectionId)}
-                      className="bg-destructive hover:bg-destructive/90"
-                      data-testid="delete-collection-confirm-button"
-                    >
-                      {t('apiTester.deleteButton')}
-                    </AlertDialogAction>
-                  </AlertDialogFooter>
-                </AlertDialogContent>
-              </AlertDialog>
-            </DropdownMenuContent>
-          </DropdownMenu>
+                    <MoreVertical className="h-4 w-4" />
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent>
+                  <AlertDialog>
+                    <AlertDialogTrigger asChild>
+                      <DropdownMenuItem
+                        onSelect={(e) => e.preventDefault()}
+                        disabled={activeCollectionId === 'default'}
+                        className="text-destructive focus:text-destructive"
+                        data-testid="delete-collection-menu-item"
+                      >
+                        <Trash2 className="mr-2 h-4 w-4" />
+                        {t('apiTester.deleteCollectionButton')}
+                      </DropdownMenuItem>
+                    </AlertDialogTrigger>
+                    <AlertDialogContent data-testid="delete-collection-dialog">
+                      <AlertDialogHeader>
+                        <AlertDialogTitle>
+                          {t('apiTester.deleteCollectionDialog.title')}
+                        </AlertDialogTitle>
+                        <AlertDialogDescription>
+                          {t('apiTester.deleteCollectionDialog.description', {
+                            name: activeCollection?.name,
+                          })}
+                        </AlertDialogDescription>
+                      </AlertDialogHeader>
+                      <AlertDialogFooter>
+                        <AlertDialogCancel data-testid="delete-collection-cancel-button">
+                          {t('apiTester.cancelButton')}
+                        </AlertDialogCancel>
+                        <AlertDialogAction
+                          onClick={() => handleDeleteCollection(activeCollectionId)}
+                          className="bg-destructive hover:bg-destructive/90"
+                          data-testid="delete-collection-confirm-button"
+                        >
+                          {t('apiTester.deleteButton')}
+                        </AlertDialogAction>
+                      </AlertDialogFooter>
+                    </AlertDialogContent>
+                  </AlertDialog>
+                </DropdownMenuContent>
+              </DropdownMenu>
+            </TooltipTrigger>
+            <TooltipContent>
+              <p>{t('apiTester.collectionActionsTooltip')}</p>
+            </TooltipContent>
+          </Tooltip>
         </div>
       </CardHeader>
       <CardContent className="p-0 flex-grow">
@@ -251,7 +272,9 @@ export default function ApiTestHistory({
                   data-testid={`api-history-item-${item.id}`}
                   aria-current={selectedRequestId === item.id ? 'true' : 'false'}
                   tabIndex={0}
-                  onKeyDown={(e) => (e.key === 'Enter' || e.key === ' ') && handleSelectRequest(item)}
+                  onKeyDown={(e) =>
+                    (e.key === 'Enter' || e.key === ' ') && handleSelectRequest(item)
+                  }
                 >
                   <div className="flex-1 overflow-hidden">
                     <div
@@ -273,42 +296,49 @@ export default function ApiTestHistory({
                       {formatDistanceToNow(new Date(item.createdAt), { addSuffix: true })}
                     </p>
                   </div>
-
-                  <AlertDialog>
-                    <AlertDialogTrigger asChild>
-                      <Button
-                        variant="ghost"
-                        size="icon"
-                        className="h-6 w-6 opacity-0 group-hover:opacity-100 focus-within:opacity-100 hover:text-destructive"
-                        onClick={(e) => e.stopPropagation()}
-                        title={t('apiTester.deleteRequestTitle')}
-                        data-testid={`delete-request-trigger-${item.id}`}
-                        aria-label={`Delete request: ${item.name}`}
-                      >
-                        <Trash2 className="h-4 w-4" />
-                      </Button>
-                    </AlertDialogTrigger>
-                    <AlertDialogContent data-testid={`delete-request-dialog-${item.id}`}>
-                      <AlertDialogHeader>
-                        <AlertDialogTitle>{t('apiTester.deleteRequestDialog.title')}</AlertDialogTitle>
-                        <AlertDialogDescription>
-                         {t('apiTester.deleteRequestDialog.description')}
-                        </AlertDialogDescription>
-                      </AlertDialogHeader>
-                      <AlertDialogFooter>
-                        <AlertDialogCancel data-testid="delete-request-cancel-button">
-                          {t('apiTester.cancelButton')}
-                        </AlertDialogCancel>
-                        <AlertDialogAction
-                          onClick={(e) => handleDeleteRequest(e, activeCollection.id, item.id)}
-                          className="bg-destructive hover:bg-destructive/90"
-                          data-testid="delete-request-confirm-button"
-                        >
-                         {t('apiTester.deleteButton')}
-                        </AlertDialogAction>
-                      </AlertDialogFooter>
-                    </AlertDialogContent>
-                  </AlertDialog>
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <AlertDialog>
+                        <AlertDialogTrigger asChild>
+                          <Button
+                            variant="ghost"
+                            size="icon"
+                            className="h-6 w-6 opacity-0 group-hover:opacity-100 focus-within:opacity-100 hover:text-destructive"
+                            onClick={(e) => e.stopPropagation()}
+                            data-testid={`delete-request-trigger-${item.id}`}
+                            aria-label={t('apiTester.deleteRequestTitle', { name: item.name })}
+                          >
+                            <Trash2 className="h-4 w-4" />
+                          </Button>
+                        </AlertDialogTrigger>
+                        <AlertDialogContent data-testid={`delete-request-dialog-${item.id}`}>
+                          <AlertDialogHeader>
+                            <AlertDialogTitle>
+                              {t('apiTester.deleteRequestDialog.title')}
+                            </AlertDialogTitle>
+                            <AlertDialogDescription>
+                              {t('apiTester.deleteRequestDialog.description')}
+                            </AlertDialogDescription>
+                          </AlertDialogHeader>
+                          <AlertDialogFooter>
+                            <AlertDialogCancel data-testid="delete-request-cancel-button">
+                              {t('apiTester.cancelButton')}
+                            </AlertDialogCancel>
+                            <AlertDialogAction
+                              onClick={(e) => handleDeleteRequest(e, activeCollection.id, item.id)}
+                              className="bg-destructive hover:bg-destructive/90"
+                              data-testid="delete-request-confirm-button"
+                            >
+                              {t('apiTester.deleteButton')}
+                            </AlertDialogAction>
+                          </AlertDialogFooter>
+                        </AlertDialogContent>
+                      </AlertDialog>
+                    </TooltipTrigger>
+                    <TooltipContent>
+                      <p>{t('apiTester.deleteRequestTitle', { name: item.name })}</p>
+                    </TooltipContent>
+                  </Tooltip>
                 </li>
               ))}
             </ul>

@@ -71,6 +71,7 @@ import {
 import type { HistoryItem } from '@/types/index';
 import { useTranslation } from 'react-i18next';
 import { Gauge } from 'lucide-react';
+import { Tooltip, TooltipContent, TooltipTrigger } from '../ui/tooltip';
 
 const stageSchema = z.object({
   duration: z.string().min(1, 'Duration is required'),
@@ -280,17 +281,24 @@ export default function TestForm({ initialValues, onRunTest, setHistory }: TestF
                                   {...field}
                                 />
                               </FormControl>
-                              <Button
-                                type="button"
-                                variant="ghost"
-                                role="combobox"
-                                aria-expanded={popoverOpen}
-                                aria-label={t('form.toggleRecentUrlsLabel')}
-                                className="absolute right-1 top-1/2 -translate-y-1/2 h-8 w-8 p-0"
-                                data-testid="url-popover-trigger"
-                              >
-                                <ChevronsUpDown className="h-4 w-4 shrink-0 opacity-50" />
-                              </Button>
+                              <Tooltip>
+                                <TooltipTrigger asChild>
+                                  <Button
+                                    type="button"
+                                    variant="ghost"
+                                    role="combobox"
+                                    aria-expanded={popoverOpen}
+                                    aria-label={t('form.toggleRecentUrlsLabel')}
+                                    className="absolute right-1 top-1/2 -translate-y-1/2 h-8 w-8 p-0"
+                                    data-testid="url-popover-trigger"
+                                  >
+                                    <ChevronsUpDown className="h-4 w-4 shrink-0 opacity-50" />
+                                  </Button>
+                                </TooltipTrigger>
+                                <TooltipContent>
+                                  <p>{t('form.toggleRecentUrlsLabel')}</p>
+                                </TooltipContent>
+                              </Tooltip>
                             </div>
                           </PopoverTrigger>
                           <PopoverContent className="w-[--radix-popover-trigger-width] p-0">
@@ -321,19 +329,30 @@ export default function TestForm({ initialValues, onRunTest, setHistory }: TestF
                                           )}
                                         />
                                         <span className="truncate flex-1">{url}</span>
-                                        <Button
-                                          variant="ghost"
-                                          size="icon"
-                                          className="h-6 w-6 opacity-0 group-hover:opacity-100"
-                                          onClick={(e) => {
-                                            e.stopPropagation();
-                                            removeRecentUrl(url);
-                                          }}
-                                          data-testid={`remove-recent-url-${url}`}
-                                          aria-label={t('form.removeRecentUrlLabel', { url })}
-                                        >
-                                          <X className="h-4 w-4" />
-                                        </Button>
+                                        <Tooltip>
+                                          <TooltipTrigger asChild>
+                                            <Button
+                                              variant="ghost"
+                                              size="icon"
+                                              className="h-6 w-6 opacity-0 group-hover:opacity-100"
+                                              onClick={(e) => {
+                                                e.stopPropagation();
+                                                removeRecentUrl(url);
+                                              }}
+                                              data-testid={`remove-recent-url-${url}`}
+                                              aria-label={t('form.removeRecentUrlLabel', {
+                                                url,
+                                              })}
+                                            >
+                                              <X className="h-4 w-4" />
+                                            </Button>
+                                          </TooltipTrigger>
+                                          <TooltipContent>
+                                            <p>
+                                              {t('form.removeRecentUrlLabel', { url: '' })}
+                                            </p>
+                                          </TooltipContent>
+                                        </Tooltip>
                                       </CommandItem>
                                     ))}
                                   </ScrollArea>
@@ -555,17 +574,24 @@ export default function TestForm({ initialValues, onRunTest, setHistory }: TestF
                                 </FormItem>
                               )}
                             />
-                            <Button
-                              type="button"
-                              variant="destructive"
-                              size="icon"
-                              onClick={() => removeHeader(index)}
-                              disabled={!isLoadTestEnabled}
-                              aria-label={t('form.removeHeaderLabel', { index: index + 1 })}
-                              data-testid={`remove-header-${index}`}
-                            >
-                              <Trash2 className="h-4 w-4" />
-                            </Button>
+                            <Tooltip>
+                              <TooltipTrigger asChild>
+                                <Button
+                                  type="button"
+                                  variant="destructive"
+                                  size="icon"
+                                  onClick={() => removeHeader(index)}
+                                  disabled={!isLoadTestEnabled}
+                                  aria-label={t('form.removeHeaderLabel', { index: index + 1 })}
+                                  data-testid={`remove-header-${index}`}
+                                >
+                                  <Trash2 className="h-4 w-4" />
+                                </Button>
+                              </TooltipTrigger>
+                              <TooltipContent>
+                                <p>{t('form.removeHeaderTooltip')}</p>
+                              </TooltipContent>
+                            </Tooltip>
                           </div>
                         ))}
                         <Button
@@ -804,16 +830,25 @@ export default function TestForm({ initialValues, onRunTest, setHistory }: TestF
                                     </FormItem>
                                   )}
                                 />
-                                <Button
-                                  type="button"
-                                  variant="destructive"
-                                  size="icon"
-                                  onClick={() => removeStage(index)}
-                                  aria-label={t('form.removeStageLabel', { index: index + 1 })}
-                                  data-testid={`remove-stage-${index}`}
-                                >
-                                  <Trash2 className="h-4 w-4" />
-                                </Button>
+                                <Tooltip>
+                                  <TooltipTrigger asChild>
+                                    <Button
+                                      type="button"
+                                      variant="destructive"
+                                      size="icon"
+                                      onClick={() => removeStage(index)}
+                                      aria-label={t('form.removeStageLabel', {
+                                        index: index + 1,
+                                      })}
+                                      data-testid={`remove-stage-${index}`}
+                                    >
+                                      <Trash2 className="h-4 w-4" />
+                                    </Button>
+                                  </TooltipTrigger>
+                                  <TooltipContent>
+                                    <p>{t('form.removeStageTooltip')}</p>
+                                  </TooltipContent>
+                                </Tooltip>
                               </div>
                             ))}
                             <Button

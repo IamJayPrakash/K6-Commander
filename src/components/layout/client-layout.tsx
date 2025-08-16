@@ -11,6 +11,7 @@ import { Providers } from '@/app/providers';
 import { ProgressBar } from './progress-bar';
 import { usePathname } from 'next/navigation';
 import { Preloader } from './preloader';
+import { TooltipProvider } from '../ui/tooltip';
 
 async function fetchTranslations(locale: string) {
   let res = await fetch(`/locales/${locale}.json`);
@@ -85,13 +86,17 @@ export function ClientLayout({ children }: { children: React.ReactNode }) {
   return (
     <I18nextProvider i18n={i18n}>
       <Providers>
-        <ProgressBar />
-        <div className="relative flex min-h-screen flex-col bg-background">
-          <AppHeader />
-          <main className="flex-1 container max-w-screen-2xl py-8 flex flex-col">{children}</main>
-          <AppFooter />
-        </div>
-        <Toaster />
+        <TooltipProvider>
+          <ProgressBar />
+          <div className="relative flex min-h-screen flex-col bg-background">
+            <AppHeader />
+            <main className="flex-1 container max-w-screen-2xl py-8 flex flex-col">
+              {children}
+            </main>
+            <AppFooter />
+          </div>
+          <Toaster />
+        </TooltipProvider>
       </Providers>
     </I18nextProvider>
   );

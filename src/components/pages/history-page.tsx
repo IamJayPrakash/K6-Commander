@@ -46,6 +46,7 @@ import { Badge } from '../ui/badge';
 import { Input } from '../ui/input';
 import { useTranslation } from 'react-i18next';
 import { useLocalStorage } from '@/hooks/use-local-storage';
+import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
 
 interface HistoryPageProps {
   history: HistoryItem[];
@@ -240,16 +241,23 @@ export default function HistoryPageComponent({
                 data-testid="history-search-input"
               />
               {searchQuery && (
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  className="absolute right-1 top-1/2 -translate-y-1/2 h-7 w-7"
-                  onClick={() => setSearchQuery('')}
-                  aria-label={t('history.clearSearchLabel')}
-                  data-testid="clear-search-button"
-                >
-                  <X className="h-4 w-4" />
-                </Button>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      className="absolute right-1 top-1/2 -translate-y-1/2 h-7 w-7"
+                      onClick={() => setSearchQuery('')}
+                      aria-label={t('history.clearSearchLabel')}
+                      data-testid="clear-search-button"
+                    >
+                      <X className="h-4 w-4" />
+                    </Button>
+                  </TooltipTrigger>
+                  <TooltipContent>
+                    <p>{t('history.clearSearchLabel')}</p>
+                  </TooltipContent>
+                </Tooltip>
               )}
             </div>
             <AlertDialog>
@@ -335,59 +343,86 @@ export default function HistoryPageComponent({
                       </TableCell>
                       <TableCell className="text-right">
                         <div className="flex items-center justify-end gap-1">
-                          <Button
-                            variant="ghost"
-                            size="icon"
-                            onClick={() => onLoad(item)}
-                            aria-label={t('history.actions.view', { url: item.config.url })}
-                            data-testid={`view-history-item-${item.id}`}
-                          >
-                            <Eye className="h-4 w-4" />
-                          </Button>
-                          <Button
-                            variant="ghost"
-                            size="icon"
-                            onClick={() => onRerun(item.config)}
-                            aria-label={t('history.actions.rerun', { url: item.config.url })}
-                            data-testid={`rerun-history-item-${item.id}`}
-                          >
-                            <Play className="h-4 w-4" />
-                          </Button>
-                          <AlertDialog>
-                            <AlertDialogTrigger asChild>
+                          <Tooltip>
+                            <TooltipTrigger asChild>
                               <Button
                                 variant="ghost"
                                 size="icon"
-                                className="hover:text-destructive"
-                                aria-label={t('history.actions.delete', { url: item.config.url })}
-                                data-testid={`delete-history-item-trigger-${item.id}`}
+                                onClick={() => onLoad(item)}
+                                aria-label={t('history.actions.view', { url: item.config.url })}
+                                data-testid={`view-history-item-${item.id}`}
                               >
-                                <Trash2 className="h-4 w-4" />
+                                <Eye className="h-4 w-4" />
                               </Button>
-                            </AlertDialogTrigger>
-                            <AlertDialogContent data-testid={`delete-history-item-dialog-${item.id}`}>
-                              <AlertDialogHeader>
-                                <AlertDialogTitle>
-                                  {t('history.deleteDialog.title')}
-                                </AlertDialogTitle>
-                                <AlertDialogDescription>
-                                  {t('history.deleteDialog.description')}
-                                </AlertDialogDescription>
-                              </AlertDialogHeader>
-                              <AlertDialogFooter>
-                                <AlertDialogCancel data-testid={`delete-history-item-cancel-${item.id}`}>
-                                  {t('history.deleteDialog.cancel')}
-                                </AlertDialogCancel>
-                                <AlertDialogAction
-                                  onClick={() => handleDelete(item.id)}
-                                  className="bg-destructive hover:bg-destructive/90"
-                                  data-testid={`delete-history-item-confirm-${item.id}`}
+                            </TooltipTrigger>
+                            <TooltipContent>
+                              <p>{t('history.actions.view', { url: '' })}</p>
+                            </TooltipContent>
+                          </Tooltip>
+                          <Tooltip>
+                            <TooltipTrigger asChild>
+                              <Button
+                                variant="ghost"
+                                size="icon"
+                                onClick={() => onRerun(item.config)}
+                                aria-label={t('history.actions.rerun', { url: item.config.url })}
+                                data-testid={`rerun-history-item-${item.id}`}
+                              >
+                                <Play className="h-4 w-4" />
+                              </Button>
+                            </TooltipTrigger>
+                            <TooltipContent>
+                              <p>{t('history.actions.rerun', { url: '' })}</p>
+                            </TooltipContent>
+                          </Tooltip>
+                          <Tooltip>
+                            <TooltipTrigger asChild>
+                              <AlertDialog>
+                                <AlertDialogTrigger asChild>
+                                  <Button
+                                    variant="ghost"
+                                    size="icon"
+                                    className="hover:text-destructive"
+                                    aria-label={t('history.actions.delete', {
+                                      url: item.config.url,
+                                    })}
+                                    data-testid={`delete-history-item-trigger-${item.id}`}
+                                  >
+                                    <Trash2 className="h-4 w-4" />
+                                  </Button>
+                                </AlertDialogTrigger>
+                                <AlertDialogContent
+                                  data-testid={`delete-history-item-dialog-${item.id}`}
                                 >
-                                  {t('history.deleteDialog.confirm')}
-                                </AlertDialogAction>
-                              </AlertDialogFooter>
-                            </AlertDialogContent>
-                          </AlertDialog>
+                                  <AlertDialogHeader>
+                                    <AlertDialogTitle>
+                                      {t('history.deleteDialog.title')}
+                                    </AlertDialogTitle>
+                                    <AlertDialogDescription>
+                                      {t('history.deleteDialog.description')}
+                                    </AlertDialogDescription>
+                                  </AlertDialogHeader>
+                                  <AlertDialogFooter>
+                                    <AlertDialogCancel
+                                      data-testid={`delete-history-item-cancel-${item.id}`}
+                                    >
+                                      {t('history.deleteDialog.cancel')}
+                                    </AlertDialogCancel>
+                                    <AlertDialogAction
+                                      onClick={() => handleDelete(item.id)}
+                                      className="bg-destructive hover:bg-destructive/90"
+                                      data-testid={`delete-history-item-confirm-${item.id}`}
+                                    >
+                                      {t('history.deleteDialog.confirm')}
+                                    </AlertDialogAction>
+                                  </AlertDialogFooter>
+                                </AlertDialogContent>
+                              </AlertDialog>
+                            </TooltipTrigger>
+                            <TooltipContent>
+                              <p>{t('history.actions.delete', { url: '' })}</p>
+                            </TooltipContent>
+                          </Tooltip>
                         </div>
                       </TableCell>
                     </TableRow>
