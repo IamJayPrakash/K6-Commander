@@ -89,6 +89,18 @@ export default {
           '20%, 80%': { opacity: '1', transform: 'translateY(0)' },
           '90%, 100%': { opacity: '0', transform: 'translateY(-10px)' },
         },
+        'rocket-launch': {
+          '0%': { transform: 'translateY(0)', opacity: '1' },
+          '100%': { transform: 'translateY(-120vh)', opacity: '0' },
+        },
+        'smoke-puff-1': {
+          '0%': { transform: 'scale(0.5) translateX(-20px)', opacity: '0.7' },
+          '100%': { transform: 'scale(3) translateX(-40px)', opacity: '0' },
+        },
+        'smoke-puff-2': {
+          '0%': { transform: 'scale(0.5) translateX(20px)', opacity: '0.5' },
+          '100%': { transform: 'scale(3) translateX(40px)', opacity: '0' },
+        },
       },
       animation: {
         'accordion-down': 'accordion-down 0.2s ease-out',
@@ -96,6 +108,9 @@ export default {
         progress: 'progress 3s ease-out forwards',
         'pulse-slow': 'pulse-slow 4s cubic-bezier(0.4, 0, 0.6, 1) infinite',
         'status-text': 'status-text-fade 3s linear forwards',
+        'rocket-launch': 'rocket-launch 1.5s 1.5s ease-in forwards',
+        'smoke-puff-1': 'smoke-puff-1 1s 1.5s ease-out forwards',
+        'smoke-puff-2': 'smoke-puff-2 1.2s 1.5s ease-out forwards',
       },
     },
   },
