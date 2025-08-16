@@ -1,4 +1,3 @@
-
 'use client';
 
 import { Rocket } from 'lucide-react';
@@ -8,7 +7,7 @@ import { useTranslation } from 'react-i18next';
 export function AppFooter() {
   const { t } = useTranslation();
   return (
-    <footer className="border-t border-border/40 py-6 md:py-8">
+    <footer className="border-t border-border/40 py-6 md:py-8" data-testid="app-footer">
       <div className="container max-w-screen-2xl">
         <div className="flex flex-col md:flex-row items-center justify-between gap-4">
           <div className="flex items-center gap-2">
@@ -21,18 +20,21 @@ export function AppFooter() {
             <Link
               href="/terms"
               className="transition-colors hover:text-foreground/80 text-foreground/60"
+              data-testid="footer-terms-link"
             >
               {t('footer.termsLink')}
             </Link>
             <Link
               href="/privacy"
               className="transition-colors hover:text-foreground/80 text-foreground/60"
+              data-testid="footer-privacy-link"
             >
               {t('footer.privacyLink')}
             </Link>
             <Link
               href="/security"
               className="transition-colors hover:text-foreground/80 text-foreground/60"
+              data-testid="footer-security-link"
             >
               {t('footer.securityLink')}
             </Link>

@@ -75,13 +75,16 @@ const KeyValueTable = ({
               <Input
                 placeholder={name === 'queryParams' ? 'Query Param' : 'Header Name'}
                 {...field}
+                data-testid={`${name}-key-${index}`}
               />
             )}
           />
           <FormField
             control={form.control}
             name={`${name}.${index}.value`}
-            render={({ field }) => <Input placeholder="Value" {...field} />}
+            render={({ field }) => (
+              <Input placeholder="Value" {...field} data-testid={`${name}-value-${index}`} />
+            )}
           />
           <Button
             type="button"
@@ -89,6 +92,7 @@ const KeyValueTable = ({
             size="icon"
             onClick={() => onRemove(index)}
             title={`Remove ${name === 'queryParams' ? 'Parameter' : 'Header'}`}
+            data-testid={`remove-${name}-${index}`}
           >
             <Trash2 className="h-4 w-4" />
           </Button>
@@ -99,6 +103,7 @@ const KeyValueTable = ({
         variant="outline"
         size="sm"
         onClick={() => onAppend({ key: '', value: '' })}
+        data-testid={`add-${name}-button`}
       >
         <Plus className="mr-2 h-4 w-4" /> {t('apiTester.addButton')}
       </Button>
@@ -231,7 +236,7 @@ export default function RequestPanel({ onSend, isLoading, initialValues }: Reque
   };
 
   return (
-    <Card className="h-full border-0 shadow-none">
+    <Card className="h-full border-0 shadow-none" data-testid="request-panel-card">
       <CardContent className="p-2 h-full flex flex-col">
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSend)} className="space-y-4 flex flex-col flex-grow">
@@ -244,13 +249,17 @@ export default function RequestPanel({ onSend, isLoading, initialValues }: Reque
                     <FormItem>
                       <Select onValueChange={field.onChange} value={field.value}>
                         <FormControl>
-                          <SelectTrigger className="w-32">
+                          <SelectTrigger className="w-32" data-testid="api-method-select-trigger">
                             <SelectValue placeholder="Method" />
                           </SelectTrigger>
                         </FormControl>
                         <SelectContent>
                           {['GET', 'POST', 'PUT', 'PATCH', 'DELETE'].map((method) => (
-                            <SelectItem key={method} value={method}>
+                            <SelectItem
+                              key={method}
+                              value={method}
+                              data-testid={`api-method-select-item-${method}`}
+                            >
                               {method}
                             </SelectItem>
                           ))}
@@ -265,7 +274,11 @@ export default function RequestPanel({ onSend, isLoading, initialValues }: Reque
                   render={({ field }) => (
                     <FormItem className="flex-1">
                       <FormControl>
-                        <Input placeholder="https://api.example.com/data" {...field} />
+                        <Input
+                          placeholder="https://api.example.com/data"
+                          {...field}
+                          data-testid="api-url-input"
+                        />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -274,10 +287,20 @@ export default function RequestPanel({ onSend, isLoading, initialValues }: Reque
               </div>
               <div className="flex gap-2">
                 <CurlImportDialog onImport={handleImport} />
-                <Button type="button" variant="outline" onClick={handleCopyToCurl}>
+                <Button
+                  type="button"
+                  variant="outline"
+                  onClick={handleCopyToCurl}
+                  data-testid="copy-as-curl-button"
+                >
                   <Copy className="mr-2 h-4 w-4" /> {t('apiTester.copyAsCurlButton')}
                 </Button>
-                <Button type="submit" disabled={isLoading} className="w-28">
+                <Button
+                  type="submit"
+                  disabled={isLoading}
+                  className="w-28"
+                  data-testid="send-request-button"
+                >
                   {isLoading ? (
                     <Loader className="animate-spin h-5 w-5" />
                   ) : (
@@ -289,12 +312,18 @@ export default function RequestPanel({ onSend, isLoading, initialValues }: Reque
               </div>
             </div>
             <Tabs defaultValue="params" className="w-full flex-grow flex flex-col">
-              <TabsList>
-                <TabsTrigger value="params">{t('apiTester.paramsTab')}</TabsTrigger>
-                <TabsTrigger value="headers">{t('apiTester.headersTab')}</TabsTrigger>
-                <TabsTrigger value="body">{t('apiTester.bodyTab')}</TabsTrigger>
+              <TabsList data-testid="request-panel-tabs">
+                <TabsTrigger value="params" data-testid="request-params-tab-trigger">
+                  {t('apiTester.paramsTab')}
+                </TabsTrigger>
+                <TabsTrigger value="headers" data-testid="request-headers-tab-trigger">
+                  {t('apiTester.headersTab')}
+                </TabsTrigger>
+                <TabsTrigger value="body" data-testid="request-body-tab-trigger">
+                  {t('apiTester.bodyTab')}
+                </TabsTrigger>
               </TabsList>
-              <TabsContent value="params" className="p-2">
+              <TabsContent value="params" className="p-2" data-testid="request-params-tab-content">
                 <KeyValueTable
                   fields={queryParamFields}
                   onAppend={appendQueryParam}
@@ -303,7 +332,11 @@ export default function RequestPanel({ onSend, isLoading, initialValues }: Reque
                   form={form}
                 />
               </TabsContent>
-              <TabsContent value="headers" className="p-2">
+              <TabsContent
+                value="headers"
+                className="p-2"
+                data-testid="request-headers-tab-content"
+              >
                 <KeyValueTable
                   fields={headerFields}
                   onAppend={appendHeader}
@@ -312,7 +345,11 @@ export default function RequestPanel({ onSend, isLoading, initialValues }: Reque
                   form={form}
                 />
               </TabsContent>
-              <TabsContent value="body" className="p-2 flex-grow flex flex-col">
+              <TabsContent
+                value="body"
+                className="p-2 flex-grow flex flex-col"
+                data-testid="request-body-tab-content"
+              >
                 <FormField
                   control={form.control}
                   name="body"
@@ -325,6 +362,7 @@ export default function RequestPanel({ onSend, isLoading, initialValues }: Reque
                           variant="ghost"
                           size="sm"
                           onClick={handleBeautifyJson}
+                          data-testid="beautify-json-button"
                         >
                           <Sparkles className="mr-2 h-4 w-4" />
                           {t('apiTester.beautifyJsonButton')}
@@ -335,6 +373,7 @@ export default function RequestPanel({ onSend, isLoading, initialValues }: Reque
                           placeholder='{ "key": "value" }'
                           className="font-mono flex-grow"
                           {...field}
+                          data-testid="request-body-textarea"
                         />
                       </FormControl>
                       <FormMessage />

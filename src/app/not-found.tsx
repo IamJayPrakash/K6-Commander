@@ -6,8 +6,14 @@ import { Home, SatelliteDish } from 'lucide-react';
 
 export default function NotFound() {
   return (
-    <div className="flex-1 flex items-center justify-center text-center px-4 font-mono">
-      <div className="max-w-xl p-8 rounded-lg shadow-2xl bg-card/50 backdrop-blur-sm border border-border/20">
+    <div
+      className="flex-1 flex items-center justify-center text-center px-4 font-mono"
+      data-testid="not-found-page"
+    >
+      <div
+        className="max-w-xl p-8 rounded-lg shadow-2xl bg-card/50 backdrop-blur-sm border border-border/20"
+        data-testid="not-found-card"
+      >
         <div className="relative mb-8 flex flex-col items-center justify-center">
           <SatelliteDish className="w-24 h-24 text-destructive/70 mb-6 animate-pulse" />
           <h1 className="text-9xl font-bold text-primary tracking-tighter relative">
@@ -22,7 +28,7 @@ export default function NotFound() {
           decommissioned, moved to a different sector, or never existed in this timeline.
         </p>
 
-        <Button asChild size="lg">
+        <Button asChild size="lg" data-testid="return-home-button">
           <Link href="/">
             <Home className="mr-2 h-4 w-4" />
             Return to Command Center

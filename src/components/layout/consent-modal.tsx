@@ -33,7 +33,7 @@ export default function ConsentModal() {
 
   return (
     <AlertDialog open={!consentGiven}>
-      <AlertDialogContent>
+      <AlertDialogContent data-testid="consent-dialog">
         <AlertDialogHeader>
           <AlertDialogTitle>Responsible Usage Policy</AlertDialogTitle>
           <AlertDialogDescription>
@@ -47,14 +47,16 @@ export default function ConsentModal() {
             <br />
             By clicking "I Agree," you acknowledge that you will only use this service responsibly
             and in accordance with our{' '}
-            <Link href="/terms" className="underline text-primary">
+            <Link href="/terms" className="underline text-primary" data-testid="consent-terms-link">
               Terms of Service
             </Link>
             .
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
-          <AlertDialogAction onClick={handleAgree}>I Agree</AlertDialogAction>
+          <AlertDialogAction onClick={handleAgree} data-testid="consent-agree-button">
+            I Agree
+          </AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>
     </AlertDialog>

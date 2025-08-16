@@ -23,8 +23,8 @@ export default function AboutPage() {
   const { t } = useTranslation();
 
   return (
-    <div className="space-y-8">
-      <Card className="bg-card/50 backdrop-blur-sm text-center">
+    <div className="space-y-8" data-testid="about-page">
+      <Card className="bg-card/50 backdrop-blur-sm text-center" data-testid="about-hero-card">
         <CardHeader>
           <div className="mx-auto bg-primary/10 rounded-full p-4 w-fit border-2 border-dashed border-primary/20">
             <Rocket className="h-12 w-12 text-primary" />
@@ -36,7 +36,7 @@ export default function AboutPage() {
         </CardHeader>
       </Card>
 
-      <Card className="bg-card/50 backdrop-blur-sm">
+      <Card className="bg-card/50 backdrop-blur-sm" data-testid="philosophy-card">
         <CardHeader>
           <CardTitle className="flex items-center gap-2 text-2xl">
             <Zap className="text-primary" />
@@ -44,14 +44,20 @@ export default function AboutPage() {
           </CardTitle>
         </CardHeader>
         <CardContent className="grid md:grid-cols-2 gap-6 text-base text-foreground/80">
-          <div className="flex items-start gap-4 p-4 rounded-lg bg-background/50">
+          <div
+            className="flex items-start gap-4 p-4 rounded-lg bg-background/50"
+            data-testid="local-first-philosophy"
+          >
             <Database size={24} className="text-accent flex-shrink-0 mt-1" />
             <div>
               <h3 className="font-semibold text-lg">{t('about.localFirstTitle')}</h3>
               <p className="text-sm text-muted-foreground">{t('about.localFirstDescription')}</p>
             </div>
           </div>
-          <div className="flex items-start gap-4 p-4 rounded-lg bg-background/50">
+          <div
+            className="flex items-start gap-4 p-4 rounded-lg bg-background/50"
+            data-testid="unified-tooling-philosophy"
+          >
             <Layers size={24} className="text-accent flex-shrink-0 mt-1" />
             <div>
               <h3 className="font-semibold text-lg">{t('about.unifiedToolingTitle')}</h3>
@@ -64,7 +70,7 @@ export default function AboutPage() {
       </Card>
 
       <div className="grid lg:grid-cols-1 gap-6">
-        <Card className="bg-card/50 backdrop-blur-sm">
+        <Card className="bg-card/50 backdrop-blur-sm" data-testid="k6-feature-card">
           <CardHeader>
             <BarChart2 size={32} className="text-accent mb-2" />
             <CardTitle>{t('about.k6FeatureTitle')}</CardTitle>
@@ -75,7 +81,7 @@ export default function AboutPage() {
             <p dangerouslySetInnerHTML={{ __html: t('about.k6HowItWorks2') }} />
           </CardContent>
         </Card>
-        <Card className="bg-card/50 backdrop-blur-sm">
+        <Card className="bg-card/50 backdrop-blur-sm" data-testid="lighthouse-feature-card">
           <CardHeader>
             <Shield size={32} className="text-accent mb-2" />
             <CardTitle>{t('about.lighthouseFeatureTitle')}</CardTitle>
@@ -86,7 +92,7 @@ export default function AboutPage() {
             <p dangerouslySetInnerHTML={{ __html: t('about.lighthouseHowItWorks2') }} />
           </CardContent>
         </Card>
-        <Card className="bg-card/50 backdrop-blur-sm">
+        <Card className="bg-card/50 backdrop-blur-sm" data-testid="seo-feature-card">
           <CardHeader>
             <BrainCircuit size={32} className="text-accent mb-2" />
             <CardTitle>{t('about.seoFeatureTitle')}</CardTitle>
@@ -99,7 +105,7 @@ export default function AboutPage() {
         </Card>
       </div>
 
-      <Card className="bg-card/50 backdrop-blur-sm">
+      <Card className="bg-card/50 backdrop-blur-sm" data-testid="tech-stack-card">
         <CardHeader>
           <CardTitle className="flex items-center gap-2 text-2xl">
             <Code className="text-primary" />
@@ -113,6 +119,7 @@ export default function AboutPage() {
               <li
                 key={tech.name}
                 className="flex items-start gap-3 p-3 bg-background/50 rounded-lg"
+                data-testid={`tech-stack-item-${tech.name.toLowerCase()}`}
               >
                 <div>
                   <strong className="font-semibold text-base text-foreground">{tech.value}</strong>
@@ -124,7 +131,7 @@ export default function AboutPage() {
         </CardContent>
       </Card>
 
-      <Card className="bg-card/50 backdrop-blur-sm">
+      <Card className="bg-card/50 backdrop-blur-sm" data-testid="get-involved-card">
         <CardHeader>
           <CardTitle className="flex items-center gap-2 text-2xl">
             <Share2 className="text-primary" />
@@ -134,7 +141,7 @@ export default function AboutPage() {
         <CardContent className="text-base text-foreground/80 space-y-4">
           <p>{t('about.involvedDescription')}</p>
           <Link href={APP_CONFIG.githubUrl} target="_blank">
-            <Button variant="outline">
+            <Button variant="outline" data-testid="get-involved-github-button">
               <Github size={16} className="mr-2" />
               {t('about.githubButton')}
             </Button>

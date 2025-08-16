@@ -116,11 +116,11 @@ export default function CurlImportDialog({
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button variant="outline">
+        <Button variant="outline" data-testid="import-curl-button">
           <Download className="mr-2 h-4 w-4" /> {t('apiTester.importCurlButton')}
         </Button>
       </DialogTrigger>
-      <DialogContent className="sm:max-w-[625px]">
+      <DialogContent className="sm:max-w-[625px]" data-testid="import-curl-dialog">
         <DialogHeader>
           <DialogTitle>{t('apiTester.importCurlDialog.title')}</DialogTitle>
           <DialogDescription>{t('apiTester.importCurlDialog.description')}</DialogDescription>
@@ -131,10 +131,11 @@ export default function CurlImportDialog({
             className="h-48 font-mono"
             value={curl}
             onChange={(e) => setCurl(e.target.value)}
+            data-testid="import-curl-textarea"
           />
         </div>
         <DialogFooter>
-          <Button type="button" onClick={handleImport}>
+          <Button type="button" onClick={handleImport} data-testid="import-curl-submit-button">
             {t('apiTester.importCurlDialog.importButton')}
           </Button>
         </DialogFooter>

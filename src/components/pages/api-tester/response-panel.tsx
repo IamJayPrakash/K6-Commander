@@ -55,7 +55,10 @@ export default function ResponsePanel({ response, isLoading }: ResponsePanelProp
 
   if (isLoading) {
     return (
-      <div className="flex flex-col h-full items-center justify-center text-muted-foreground">
+      <div
+        className="flex flex-col h-full items-center justify-center text-muted-foreground"
+        data-testid="response-loading"
+      >
         <Loader className="animate-spin h-8 w-8 mb-2" />
         <p>{t('apiTester.loadingResponse')}</p>
       </div>
@@ -64,7 +67,10 @@ export default function ResponsePanel({ response, isLoading }: ResponsePanelProp
 
   if (!response) {
     return (
-      <div className="flex flex-col h-full items-center justify-center text-muted-foreground">
+      <div
+        className="flex flex-col h-full items-center justify-center text-muted-foreground"
+        data-testid="no-response-message"
+      >
         <p className="text-lg">{t('apiTester.noResponseYet')}</p>
         <p>{t('apiTester.noResponseYetDesc')}</p>
       </div>
@@ -72,40 +78,60 @@ export default function ResponsePanel({ response, isLoading }: ResponsePanelProp
   }
 
   return (
-    <Card className="h-full border-0 shadow-none">
+    <Card className="h-full border-0 shadow-none" data-testid="response-panel-card">
       <CardContent className="p-2 h-full flex flex-col">
-        <div className="flex items-center gap-4 mb-2 p-2">
-          <Badge className={`${getStatusColor(response.status)} hover:${getStatusColor(response.status)}`}>
+        <div className="flex items-center gap-4 mb-2 p-2" data-testid="response-status-badges">
+          <Badge
+            className={`${getStatusColor(response.status)} hover:${getStatusColor(response.status)}`}
+            data-testid="response-status-badge"
+          >
             {t('apiTester.status')}: {response.status} {response.statusText}
           </Badge>
-          <Badge variant="outline">
+          <Badge variant="outline" data-testid="response-time-badge">
             {t('apiTester.time')}: {response.duration}ms
           </Badge>
-          <Badge variant="outline">
+          <Badge variant="outline" data-testid="response-size-badge">
             {t('apiTester.size')}: {response.size} B
           </Badge>
         </div>
         <Tabs defaultValue="body" className="w-full flex-grow flex flex-col">
-          <TabsList>
-            <TabsTrigger value="body">{t('apiTester.bodyTab')}</TabsTrigger>
-            <TabsTrigger value="headers">{t('apiTester.headersTab')}</TabsTrigger>
+          <TabsList data-testid="response-panel-tabs">
+            <TabsTrigger value="body" data-testid="response-body-tab-trigger">
+              {t('apiTester.bodyTab')}
+            </TabsTrigger>
+            <TabsTrigger value="headers" data-testid="response-headers-tab-trigger">
+              {t('apiTester.headersTab')}
+            </TabsTrigger>
           </TabsList>
-          <TabsContent value="body" className="flex-grow mt-2 relative">
-             <Button
-                variant="ghost"
-                size="icon"
-                className="absolute top-2 right-2 h-7 w-7"
-                onClick={handleCopy}
-                disabled={!response?.body}
-              >
-                {isCopied ? <Check className="h-4 w-4 text-green-500" /> : <Clipboard className="h-4 w-4" />}
-                <span className="sr-only">Copy response body</span>
-              </Button>
+          <TabsContent
+            value="body"
+            className="flex-grow mt-2 relative"
+            data-testid="response-body-tab-content"
+          >
+            <Button
+              variant="ghost"
+              size="icon"
+              className="absolute top-2 right-2 h-7 w-7"
+              onClick={handleCopy}
+              disabled={!response?.body}
+              data-testid="copy-response-body-button"
+            >
+              {isCopied ? (
+                <Check className="h-4 w-4 text-green-500" />
+              ) : (
+                <Clipboard className="h-4 w-4" />
+              )}
+              <span className="sr-only">Copy response body</span>
+            </Button>
             <pre className="text-xs bg-muted p-4 rounded-md h-full overflow-auto">
               <code>{renderBody()}</code>
             </pre>
           </TabsContent>
-          <TabsContent value="headers" className="p-2">
+          <TabsContent
+            value="headers"
+            className="p-2"
+            data-testid="response-headers-tab-content"
+          >
             <pre className="text-xs bg-muted p-4 rounded-md h-full overflow-auto">
               <code>{JSON.stringify(response.headers, null, 2)}</code>
             </pre>

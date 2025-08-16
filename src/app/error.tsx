@@ -42,8 +42,14 @@ export default function GlobalError({
   };
 
   return (
-    <main className="flex-1 flex items-center justify-center p-4 font-mono">
-      <Card className="max-w-2xl w-full bg-card/50 backdrop-blur-sm border border-destructive/50 shadow-2xl shadow-destructive/10">
+    <main
+      className="flex-1 flex items-center justify-center p-4 font-mono"
+      data-testid="global-error-page"
+    >
+      <Card
+        className="max-w-2xl w-full bg-card/50 backdrop-blur-sm border border-destructive/50 shadow-2xl shadow-destructive/10"
+        data-testid="error-card"
+      >
         <CardHeader className="text-center">
           <div className="mx-auto bg-destructive/10 rounded-full p-4 w-fit border-2 border-dashed border-destructive/20 animate-pulse">
             <ServerCrash className="h-12 w-12 text-destructive" />
@@ -62,18 +68,24 @@ export default function GlobalError({
           </p>
 
           {error?.stack && (
-            <Accordion type="single" collapsible className="w-full mb-6">
+            <Accordion type="single" collapsible className="w-full mb-6" data-testid="error-details-accordion">
               <AccordionItem value="error-details">
-                <AccordionTrigger className="text-base">
+                <AccordionTrigger data-testid="error-details-trigger">
                   <div className="flex items-center gap-2">
                     <Code className="h-4 w-4" />
                     <span>Error Stack Trace</span>
                   </div>
                 </AccordionTrigger>
-                <AccordionContent>
+                <AccordionContent data-testid="error-details-content">
                   <div className="bg-muted/50 p-4 rounded-md text-left">
                     <div className="flex justify-end mb-2">
-                      <Button variant="ghost" size="sm" className="h-7" onClick={handleCopy}>
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        className="h-7"
+                        onClick={handleCopy}
+                        data-testid="copy-error-button"
+                      >
                         {isCopied ? (
                           <>
                             <Check className="mr-2 h-4 w-4 text-green-500" />
@@ -99,7 +111,7 @@ export default function GlobalError({
             </Accordion>
           )}
 
-          <Button onClick={() => reset()} size="lg">
+          <Button onClick={() => reset()} size="lg" data-testid="recover-button">
             <RotateCw className="mr-2 h-4 w-4" />
             Attempt Recovery
           </Button>

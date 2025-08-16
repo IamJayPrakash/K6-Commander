@@ -144,22 +144,27 @@ export default function ApiTesterPage() {
   }
 
   return isMobile ? (
-    <Tabs value={mobileTab} onValueChange={setMobileTab} className="w-full">
+    <Tabs
+      value={mobileTab}
+      onValueChange={setMobileTab}
+      className="w-full"
+      data-testid="api-tester-mobile-tabs"
+    >
       <TabsList className="grid w-full grid-cols-3">
-        <TabsTrigger value="history">
+        <TabsTrigger value="history" data-testid="api-tester-history-tab-trigger">
           <History className="mr-2 h-4 w-4" />
           {t('apiTester.historyTab')}
         </TabsTrigger>
-        <TabsTrigger value="request">
+        <TabsTrigger value="request" data-testid="api-tester-request-tab-trigger">
           <TestTubeDiagonal className="mr-2 h-4 w-4" />
           {t('apiTester.requestTab')}
         </TabsTrigger>
-        <TabsTrigger value="response">
+        <TabsTrigger value="response" data-testid="api-tester-response-tab-trigger">
           <ArrowLeftRight className="mr-2 h-4 w-4" />
           {t('apiTester.responseTab')}
         </TabsTrigger>
       </TabsList>
-      <TabsContent value="history" className="mt-4">
+      <TabsContent value="history" className="mt-4" data-testid="api-tester-history-tab-content">
         <ApiTestHistory
           collections={collections}
           setCollections={setCollections}
@@ -169,7 +174,7 @@ export default function ApiTesterPage() {
           selectedRequestId={currentRequest?.id}
         />
       </TabsContent>
-      <TabsContent value="request" className="mt-4">
+      <TabsContent value="request" className="mt-4" data-testid="api-tester-request-tab-content">
         <RequestPanel
           key={currentRequest?.id || 'new'}
           onSend={handleSendRequest}
@@ -177,7 +182,7 @@ export default function ApiTesterPage() {
           initialValues={currentRequest?.request}
         />
       </TabsContent>
-      <TabsContent value="response" className="mt-4">
+      <TabsContent value="response" className="mt-4" data-testid="api-tester-response-tab-content">
         <ResponsePanel response={response} isLoading={isLoading} />
       </TabsContent>
     </Tabs>
@@ -185,8 +190,9 @@ export default function ApiTesterPage() {
     <ResizablePanelGroup
       direction="horizontal"
       className="w-full rounded-lg border flex-1"
+      data-testid="api-tester-desktop-layout"
     >
-      <ResizablePanel defaultSize={25} minSize={20}>
+      <ResizablePanel defaultSize={25} minSize={20} data-testid="api-tester-history-panel">
         <ApiTestHistory
           collections={collections}
           setCollections={setCollections}
@@ -196,10 +202,10 @@ export default function ApiTesterPage() {
           selectedRequestId={currentRequest?.id}
         />
       </ResizablePanel>
-      <ResizableHandle withHandle />
-      <ResizablePanel defaultSize={75}>
+      <ResizableHandle withHandle data-testid="api-tester-resize-handle-1" />
+      <ResizablePanel defaultSize={75} data-testid="api-tester-main-panel">
         <ResizablePanelGroup direction="vertical">
-          <ResizablePanel defaultSize={50} minSize={30}>
+          <ResizablePanel defaultSize={50} minSize={30} data-testid="api-tester-request-panel">
             <RequestPanel
               key={currentRequest?.id || 'new'}
               onSend={handleSendRequest}
@@ -207,8 +213,8 @@ export default function ApiTesterPage() {
               initialValues={currentRequest?.request}
             />
           </ResizablePanel>
-          <ResizableHandle withHandle />
-          <ResizablePanel defaultSize={50} minSize={20}>
+          <ResizableHandle withHandle data-testid="api-tester-resize-handle-2" />
+          <ResizablePanel defaultSize={50} minSize={20} data-testid="api-tester-response-panel">
             <ResponsePanel response={response} isLoading={isLoading} />
           </ResizablePanel>
         </ResizablePanelGroup>
