@@ -2,7 +2,6 @@
 
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import {
-  Info,
   Rocket,
   Database,
   Shield,
@@ -13,6 +12,7 @@ import {
   Layers,
   Share2,
   BrainCircuit,
+  Beaker,
 } from 'lucide-react';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
@@ -69,7 +69,7 @@ export default function AboutPage() {
         </CardContent>
       </Card>
 
-      <div className="grid lg:grid-cols-1 gap-6">
+      <div className="grid lg:grid-cols-2 gap-6">
         <Card className="bg-card/50 backdrop-blur-sm" data-testid="k6-feature-card">
           <CardHeader>
             <BarChart2 size={32} className="text-accent mb-2" />
@@ -101,6 +101,17 @@ export default function AboutPage() {
           <CardContent className="text-sm text-muted-foreground space-y-4">
             <p dangerouslySetInnerHTML={{ __html: t('about.seoHowItWorks') }} />
             <p dangerouslySetInnerHTML={{ __html: t('about.seoHowItWorks2') }} />
+          </CardContent>
+        </Card>
+        <Card className="bg-card/50 backdrop-blur-sm" data-testid="api-tester-feature-card">
+          <CardHeader>
+            <Beaker size={32} className="text-accent mb-2" />
+            <CardTitle>{t('about.apiTesterFeatureTitle')}</CardTitle>
+            <CardDescription>{t('about.apiTesterFeatureDescription')}</CardDescription>
+          </CardHeader>
+          <CardContent className="text-sm text-muted-foreground space-y-4">
+            <p dangerouslySetInnerHTML={{ __html: t('about.apiTesterHowItWorks') }} />
+            <p dangerouslySetInnerHTML={{ __html: t('about.apiTesterHowItWorks2') }} />
           </CardContent>
         </Card>
       </div>

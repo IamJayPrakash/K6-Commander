@@ -59,7 +59,7 @@ export const TECH_STACK = [
   {
     name: 'Frontend',
     value: 'Next.js & React',
-    description: 'For a fast, server-rendered user interface.',
+    description: 'For a fast, server-rendered user interface using the App Router.',
   },
   {
     name: 'Styling',
@@ -73,7 +73,7 @@ export const TECH_STACK = [
   },
   {
     name: 'AI Integration',
-    value: 'Genkit',
+    value: 'Genkit & Google AI',
     description: 'Powers the AI-driven SEO analysis and recommendations.',
   },
   {
@@ -98,7 +98,7 @@ export const TECH_STACK = [
   },
   {
     name: 'Orchestration',
-    value: 'Docker',
+    value: 'Docker Compose',
     description: 'To containerize and run all services in an isolated environment.',
   },
 ];

@@ -1,6 +1,6 @@
 # K6 Commander
 
-K6 Commander is a lightweight, local-first, authorized load-testing platform. It allows you to configure, run, and analyze load tests, Lighthouse audits, and basic SEO checks directly from a sleek web UI, leveraging the power of k6, InfluxDB, and Grafana.
+K6 Commander is a lightweight, local-first, authorized load-testing and API development platform. It allows you to configure, run, and analyze load tests, Lighthouse audits, and SEO checks, as well as test APIs with a full-featured client—all from a sleek, responsive web UI.
 
 ---
 ### ⚠️ Important Deployment Notice
@@ -11,11 +11,12 @@ K6 Commander relies on running Docker containers (`k6`) and spawning system proc
 **Attempting to deploy this application on Vercel or Netlify will result in the load testing and Lighthouse features failing.** You must use a hosting environment that provides full control over the operating system and allows Docker to run, such as a traditional Virtual Machine (e.g., AWS EC2, DigitalOcean Droplet, Google Cloud VM) or a dedicated server.
 ---
 
-![alt text](image.png)
+![K6 Commander Dashboard Screenshot](https://placehold.co/1200x630.png)
 
 ## ✨ Features
 
 - **Multi-Modal Testing**: Run k6 load tests, Google Lighthouse audits, and basic on-page SEO checks from a single interface.
+- **Advanced API Tester**: A full-featured API client to make requests, view responses, and manage a history of API calls, complete with cURL import/export.
 - **Web-Based Configuration**: Easily configure load tests (URL, method, headers, body, VUs, stages) through an intuitive UI.
 - **Test Presets**: Get started quickly with presets for Baseline, Spike, Stress, and Soak tests.
 - **Live Monitoring**: View real-time test metrics in a pre-configured Grafana dashboard.
@@ -23,6 +24,7 @@ K6 Commander relies on running Docker containers (`k6`) and spawning system proc
 - **Local History**: All test configurations and results are stored in your browser's LocalStorage. No cloud database needed.
 - **Import/Export**: Easily back up and share your test history as a JSON file.
 - **Self-Hosted & Containerized**: Runs entirely on your local machine with Docker Compose for consistency and scalability.
+- **Accessible & Responsive**: Designed to be fully accessible (WCAG compliant) and usable on any device.
 
 ## 🛠️ Stack
 
@@ -30,6 +32,7 @@ K6 Commander relies on running Docker containers (`k6`) and spawning system proc
 - **Backend API:** Next.js Route Handlers
 - **Test Runner:** [k6](https://k6.io/) (via Docker)
 - **Audit Engine:** [Google Lighthouse](https://developers.google.com/web/tools/lighthouse) (via `npx`)
+- **AI Analysis**: [Google AI & Genkit](https://firebase.google.com/docs/genkit) for SEO analysis
 - **Metrics Database:** InfluxDB 1.8
 - **Dashboards:** Grafana
 - **Orchestration:** Docker Compose
@@ -51,13 +54,16 @@ cd k6-commander
 
 ### 2. Set Up Environment Variables
 
-Create a `.env` file by copying the example file. The app will function without it, but the AI-powered SEO analysis requires an API key.
+Create a `.env` file. The app will function without it, but the AI-powered SEO analysis requires a Gemini API key.
 
 ```bash
-cp .env.example .env
+touch .env
 ```
 
-Open the `.env` file and add your `GEMINI_API_KEY` to enable the AI-powered SEO analysis feature.
+Open the `.env` file and add your `GEMINI_API_KEY`:
+```
+GEMINI_API_KEY="YOUR_API_KEY_HERE"
+```
 
 ### 3. Install Dependencies
 
@@ -109,16 +115,16 @@ Please see the important deployment notice at the top of this README. The recomm
 
 ### Steps for Deployment
 
-1. **Clone the repository** onto your server.
-2. **Configure environment variables**: Create a `.env` file with your `GEMINI_API_KEY`.
-3. **Build and run the application**:
-   ```bash
-   docker-compose up --build -d
-   ```
-   The `-d` flag runs the containers in detached mode.
-4. **Set up a reverse proxy (Recommended)**: To serve the application over standard HTTP/S ports and handle SSL, you should use a reverse proxy like Nginx or Caddy.
-   - Configure your reverse proxy to forward requests to the K6 Commander app running on `http://localhost:3000`.
-   - Configure another subdomain (e.g., `grafana.your-domain.com`) to point to the Grafana instance on `http://localhost:3003`.
+1.  **Clone the repository** onto your server.
+2.  **Configure environment variables**: Create a `.env` file with your `GEMINI_API_KEY`.
+3.  **Build and run the application**:
+    ```bash
+    docker-compose up --build -d
+    ```
+    The `-d` flag runs the containers in detached mode.
+4.  **Set up a reverse proxy (Recommended)**: To serve the application over standard HTTP/S ports and handle SSL, you should use a reverse proxy like Nginx or Caddy.
+    - Configure your reverse proxy to forward requests to the K6 Commander app running on `http://localhost:3000`.
+    - Configure another subdomain (e.g., `grafana.your-domain.com`) to point to the Grafana instance on `http://localhost:3003`.
 
 
 ## 📁 Project Structure
@@ -133,36 +139,38 @@ Please see the important deployment notice at the top of this README. The recomm
 │   └── provisioning/   # Datasource and dashboard configurations
 ├── k6/               # k6 test scripts
 │   └── script.js     # The main k6 script, configurable via environment variables
-├── public/           # Static assets for Next.js
+├── public/           # Static assets for Next.js (includes locales)
 ├── results/          # (Git-ignored) Directory where test outputs are saved
 ├── src/
 │   ├── app/            # Next.js App Router
 │   │   ├── (pages)/    # Main application pages (form, history, etc.)
 │   │   ├── api/        # API route handlers for running tests
+│   │   ├── api-tester/ # API Tester page
 │   │   └── layout.tsx  # Root layout
 │   ├── components/     # React components
-│   │   ├── layout/     # Header, Footer, etc.
+│   │   ├── layout/     # Header, Footer, Preloader, etc.
 │   │   ├── pages/      # Components specific to a single page
+│   │   │   └── api-tester/ # Components for the API Tester
 │   │   ├── test/       # Components for the test lifecycle (form, running, summary)
 │   │   └── ui/         # Reusable shadcn/ui components
 │   ├── hooks/          # Custom React hooks
-│   ├── lib/            # Utility functions and constants
+│   ├── lib/            # Utility functions, constants, and i18n config
+│   ├── ai/             # Genkit AI flows and configuration
 │   └── types/          # TypeScript type definitions
 ├── tests/
 │   └── e2e/
 │       └── app.spec.ts # Example Playwright E2E test
-├── .env.example      # Example environment variables
-├── .gitignore        # Files and directories to ignore in version control
+├── .env              # Local environment variables (Git-ignored)
 ├── docker-compose.yml  # Orchestrates all services (app, grafana, influxdb)
 ├── Dockerfile          # Defines the Next.js application container
 ├── next.config.ts      # Next.js configuration
 ├── package.json        # Project dependencies and scripts
-└── playwright.config.ts# Configuration for Playwright
+└── ...               # Other config files
 ```
 
 ## ⚙️ Configuration
 
-The primary configuration is handled within `docker-compose.yml` and the Next.js application itself. You must create a `.env` file for the `GEMINI_API_KEY`.
+The primary configuration is handled within `docker-compose.yml` and the Next.js application itself. You must create a `.env` file for the `GEMINI_API_KEY` to enable AI features.
 
 ### k6 Script Environment Variables
 

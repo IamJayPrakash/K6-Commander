@@ -18,12 +18,12 @@ We use GitHub to host code, to track issues and feature requests, as well as acc
 
 All code changes happen through Pull Requests. We actively welcome your pull requests:
 
-1. Fork the repo and create your branch from `main`.
-2. If you've added code that should be tested, add tests.
-3. If you've changed APIs, update the documentation.
-4. Ensure the test suite passes.
-5. Make sure your code lints and is formatted correctly by running the scripts below.
-6. Issue that pull request!
+1.  Fork the repo and create your branch from `main`.
+2.  If you've added code that should be tested, add tests.
+3.  If you've changed APIs, update the documentation.
+4.  Ensure the test suite passes (`npm run test:e2e`).
+5.  Make sure your code lints and is formatted correctly.
+6.  Issue that pull request!
 
 ## Any contributions you make will be under the MIT Software License
 
@@ -33,7 +33,7 @@ In short, when you submit code changes, your submissions are understood to be un
 
 We use GitHub issues to track public bugs. Report a bug by [opening a new issue](https://github.com/your-username/k6-commander/issues/new/choose); it's that easy!
 
-## Write bug reports with detail, background, and sample code
+### Write bug reports with detail, background, and sample code
 
 **Great Bug Reports** tend to have:
 
@@ -45,7 +45,7 @@ We use GitHub issues to track public bugs. Report a bug by [opening a new issue]
 - What actually happens
 - Notes (possibly including why you think this might be happening, or stuff you tried that didn't work)
 
-People _love_ thorough bug reports. I'm not even kidding.
+People _love_ thorough bug reports. We're not even kidding.
 
 ## Use a Consistent Coding Style
 
