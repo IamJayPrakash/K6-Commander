@@ -1,3 +1,4 @@
+
 import { NextResponse, type NextRequest } from 'next/server';
 import { spawn } from 'child_process';
 import fs from 'fs/promises';
@@ -16,7 +17,8 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: 'URL and Test ID are required' }, { status: 400 });
     }
 
-    const resultsDir = path.resolve('./results');
+    // Use /tmp for writable directory in serverless environments
+    const resultsDir = path.resolve('/tmp/results');
     await fs.mkdir(resultsDir, { recursive: true });
     const reportPath = path.join(resultsDir, `lighthouse-${testId}`);
 

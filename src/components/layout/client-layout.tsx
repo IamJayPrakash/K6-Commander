@@ -1,3 +1,4 @@
+
 'use client';
 
 import { useEffect, useState } from 'react';
@@ -12,16 +13,20 @@ import { usePathname } from 'next/navigation';
 import { Preloader } from './preloader';
 
 async function fetchTranslations(locale: string) {
-  const response = await fetch(`/locales/${locale}.json`);
-  if (!response.ok) {
-    // Try fetching the fallback language if the desired one fails
-    const fallbackResponse = await fetch(`/locales/en.json`);
-    if (!fallbackResponse.ok) {
-      throw new Error(`Failed to load locale: ${locale} and fallback 'en'`);
+  let res = await fetch(`/locales/${locale}.json`);
+  if (!res.ok) {
+    // Try base language (e.g., 'en' from 'en-US')
+    const baseLocale = locale.split('-')[0];
+    res = await fetch(`/locales/${baseLocale}.json`);
+    if (!res.ok) {
+      // Fallback to English if base language also fails
+      res = await fetch(`/locales/en.json`);
+      if (!res.ok) {
+        throw new Error(`Failed to load locale: ${locale} and fallback 'en'`);
+      }
     }
-    return fallbackResponse.json();
   }
-  return response.json();
+  return res.json();
 }
 
 export function ClientLayout({ children }: { children: React.ReactNode }) {
@@ -29,49 +34,47 @@ export function ClientLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
 
   useEffect(() => {
-    const initializeI18n = async () => {
-      const detectedLng = i18n.language || 'en';
-      if (!i18n.hasResourceBundle(detectedLng, 'translation')) {
-        const resources = await fetchTranslations(detectedLng);
-        i18n.addResourceBundle(detectedLng, 'translation', resources);
+    const initI18n = async () => {
+      const lng = i18n.language || 'en';
+      if (!i18n.hasResourceBundle(lng, 'translation')) {
+        const resources = await fetchTranslations(lng);
+        i18n.addResourceBundle(lng, 'translation', resources, true, true);
       }
-      // isInitialized is a property, not a function
       if (!i18n.isInitialized) {
         await i18n.init();
       }
       setIsI18nInitialized(true);
     };
 
-    initializeI18n();
+    initI18n();
 
-    const languageChanged = async (lng: string) => {
+    const onLanguageChanged = async (lng: string) => {
       if (!i18n.hasResourceBundle(lng, 'translation')) {
         const resources = await fetchTranslations(lng);
-        i18n.addResourceBundle(lng, 'translation', resources);
-        i18n.changeLanguage(lng); // Change language after loading resources
+        i18n.addResourceBundle(lng, 'translation', resources, true, true);
       }
+      // The changeLanguage call is what actually triggers the re-render
+      i18n.changeLanguage(lng);
     };
 
-    i18n.on('languageChanged', languageChanged);
+    i18n.on('languageChanged', onLanguageChanged);
 
     return () => {
-      i18n.off('languageChanged', languageChanged);
+      i18n.off('languageChanged', onLanguageChanged);
     };
   }, []);
 
   useEffect(() => {
     if (isI18nInitialized) {
-      let pageTitle = 'K6 Commander'; // Default title
       const pageKey = pathname.substring(1) || 'home';
-      const potentialTitle = i18n.t(`pageTitles.${pageKey}`, {
-        defaultValue: '',
-      });
+      const pageTitleKey = `pageTitles.${pageKey}`;
+      const title = i18n.t(pageTitleKey, { defaultValue: 'K6 Commander' });
 
-      if (potentialTitle) {
-        pageTitle = `${potentialTitle} | K6 Commander`;
+      if (title && title !== pageTitleKey) {
+        document.title = `${title} | K6 Commander`;
+      } else {
+        document.title = 'K6 Commander';
       }
-
-      document.title = pageTitle;
     }
   }, [pathname, isI18nInitialized, i18n.language]);
 

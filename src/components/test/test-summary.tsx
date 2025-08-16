@@ -1,3 +1,4 @@
+
 'use client';
 
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -10,7 +11,7 @@ import {
   Plus,
   Settings,
   ShieldCheck,
-  Search as SearchIcon,
+  BrainCircuit,
 } from 'lucide-react';
 import type { TestConfiguration, TestResults } from '@/types';
 import {
@@ -62,8 +63,7 @@ export default function TestSummary({
             {t('summary.title')}
           </CardTitle>
           <CardDescription>
-            {t('summary.description')}{' '}
-            <span className="font-semibold text-primary">{config.url}</span>
+            {t('summary.description', { url: config.url })}
           </CardDescription>
         </CardHeader>
         <CardContent>
@@ -105,25 +105,29 @@ export default function TestSummary({
                 disabled={!results.seo}
                 data-testid="seo-results-tab-trigger"
               >
-                <SearchIcon className="mr-2 h-4 w-4" />
+                <BrainCircuit className="mr-2 h-4 w-4" />
                 {t('summary.seoTab')}
               </TabsTrigger>
             </TabsList>
             <TabsContent value="k6" data-testid="k6-results-tab-content">
-              {results.k6 ? <K6SummaryReport summary={results.k6} /> : <p>No load test data.</p>}
+              {results.k6 ? (
+                <K6SummaryReport summary={results.k6} />
+              ) : (
+                <p>{t('summary.noK6Data')}</p>
+              )}
             </TabsContent>
             <TabsContent value="lighthouse" data-testid="lighthouse-results-tab-content">
               {results.lighthouse ? (
                 <LighthouseSummaryReport summary={results.lighthouse} testId={testId} />
               ) : (
-                <p>No Lighthouse audit data.</p>
+                <p>{t('summary.noLighthouseData')}</p>
               )}
             </TabsContent>
             <TabsContent value="seo" data-testid="seo-results-tab-content">
               {results.seo ? (
                 <SeoSummaryReport analysis={results.seo} />
               ) : (
-                <p>No SEO analysis data.</p>
+                <p>{t('summary.noSeoData')}</p>
               )}
             </TabsContent>
           </Tabs>
@@ -140,18 +144,18 @@ export default function TestSummary({
               <Table>
                 <TableBody>
                   <TableRow>
-                    <TableHead className="w-1/3">URL</TableHead>
+                    <TableHead className="w-1/3">{t('summary.table.url')}</TableHead>
                     <TableCell className="truncate max-w-[200px]">
                       <span title={config.url}>{config.url}</span>
                     </TableCell>
                   </TableRow>
                   <TableRow>
-                    <TableHead>Method</TableHead>
+                    <TableHead>{t('summary.table.method')}</TableHead>
                     <TableCell>{config.method}</TableCell>
                   </TableRow>
                   <TableRow>
-                    <TableHead>Preset</TableHead>
-                    <TableCell className="capitalize">{config.testPreset}</TableCell>
+                    <TableHead>{t('summary.table.preset')}</TableHead>
+                    <TableCell className="capitalize">{t(`presets.${config.testPreset}`)}</TableCell>
                   </TableRow>
                   {config.testPreset === 'custom' && (
                     <>
@@ -180,7 +184,7 @@ export default function TestSummary({
                     <Table>
                       <TableBody>
                         <TableRow>
-                          <TableHead className="w-1/3">Stages</TableHead>
+                          <TableHead className="w-1/3">{t('summary.table.stages')}</TableHead>
                           <TableCell>
                             <pre className="text-xs bg-muted p-2 rounded-md max-w-full overflow-auto">
                               {JSON.stringify(config.stages, null, 2)}
@@ -188,7 +192,7 @@ export default function TestSummary({
                           </TableCell>
                         </TableRow>
                         <TableRow>
-                          <TableHead>Headers</TableHead>
+                          <TableHead>{t('summary.table.headers')}</TableHead>
                           <TableCell>
                             <pre className="text-xs bg-muted p-2 rounded-md max-w-full overflow-auto">
                               {JSON.stringify(config.headers, null, 2)}
@@ -196,10 +200,10 @@ export default function TestSummary({
                           </TableCell>
                         </TableRow>
                         <TableRow>
-                          <TableHead>Body</TableHead>
+                          <TableHead>{t('summary.table.body')}</TableHead>
                           <TableCell>
                             <pre className="text-xs bg-muted p-2 rounded-md max-w-full overflow-auto">
-                              {config.body || 'N/A'}
+                              {config.body || t('summary.table.na')}
                             </pre>
                           </TableCell>
                         </TableRow>
