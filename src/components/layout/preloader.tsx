@@ -36,12 +36,18 @@ export function Preloader() {
         ></div>
 
         {/* Loading Text remains at the bottom */}
-        <div className="absolute bottom-1/4 z-20 flex flex-col items-center" data-testid="preloader-status-container">
+        <div
+          className="absolute bottom-1/4 z-20 flex flex-col items-center"
+          data-testid="preloader-status-container"
+        >
           <p className="text-lg text-muted-foreground">Initializing Test Environment</p>
           <div className="w-64 overflow-hidden rounded-full bg-primary/10 mt-4">
             <div className="h-2 animate-progress rounded-full bg-gradient-to-r from-primary/50 to-primary"></div>
           </div>
-          <p className="text-sm text-muted-foreground animate-status-text mt-2">
+          <p
+            className="text-sm text-muted-foreground animate-status-text mt-2"
+            data-testid="preloader-status-text"
+          >
             System check complete...
           </p>
         </div>
