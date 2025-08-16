@@ -41,6 +41,9 @@ export const metadata: Metadata = {
   icons: {
     icon: '/favicon.ico',
   },
+  verification: {
+    google: 'hRF32kvBOeN6Y3-sNwzJL6RPFn9Nbm9qZtVn144VEuk',
+  },
 };
 
 const inter = Inter({
