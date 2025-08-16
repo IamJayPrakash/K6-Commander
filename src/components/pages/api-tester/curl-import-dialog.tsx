@@ -15,11 +15,71 @@ import { Textarea } from '@/components/ui/textarea';
 import { useToast } from '@/hooks/use-toast';
 import { Download } from 'lucide-react';
 import type { ApiFormValues } from './request-panel';
-import { curlconverter } from 'curlconverter';
 
 interface CurlImportDialogProps {
   onImport: (values: Partial<ApiFormValues>) => void;
 }
+
+// A simplified cURL parser using regular expressions.
+// This is not exhaustive but covers common cases for API testing.
+function parseCurl(curl: string): Partial<ApiFormValues> {
+  const result: Partial<ApiFormValues> = {};
+
+  // Extract URL
+  const urlMatch = curl.match(/'([^']*)'/);
+  if (urlMatch) {
+    const fullUrl = urlMatch[1];
+    const urlObject = new URL(fullUrl);
+    result.url = `${urlObject.protocol}//${urlObject.host}${urlObject.pathname}`;
+
+    const queryParams: { key: string; value: string }[] = [];
+    urlObject.searchParams.forEach((value, key) => {
+      queryParams.push({ key, value });
+    });
+    if (queryParams.length > 0) {
+      result.queryParams = queryParams;
+    }
+  }
+
+  // Extract Method
+  const methodMatch = curl.match(/-X\s+'([^']*)'|--request\s+'([^']*)'/);
+  if (methodMatch) {
+    const method = (methodMatch[1] || methodMatch[2]).toUpperCase();
+    if (['GET', 'POST', 'PUT', 'PATCH', 'DELETE'].includes(method)) {
+      result.method = method as ApiFormValues['method'];
+    }
+  }
+
+  // Extract Headers
+  const headerMatches = curl.matchAll(/-H\s+'([^']*)'|--header\s+'([^']*)'/g);
+  const headers: { key: string; value: string }[] = [];
+  for (const match of headerMatches) {
+    const headerString = match[1] || match[2];
+    const [key, ...valueParts] = headerString.split(': ');
+    if (key && valueParts.length > 0) {
+      headers.push({ key, value: valueParts.join(': ') });
+    }
+  }
+  if (headers.length > 0) {
+    result.headers = headers;
+  }
+
+  // Extract Body
+  const bodyMatch = curl.match(/--data-raw\s+'([^']*)'|--data\s+'([^']*)'/);
+  if (bodyMatch) {
+    const body = bodyMatch[1] || bodyMatch[2];
+    try {
+      // Try to beautify if it's JSON
+      const parsed = JSON.parse(body);
+      result.body = JSON.stringify(parsed, null, 2);
+    } catch (e) {
+      result.body = body;
+    }
+  }
+
+  return result;
+}
+
 
 export default function CurlImportDialog({ onImport }: CurlImportDialogProps) {
   const [open, setOpen] = useState(false);
@@ -37,34 +97,11 @@ export default function CurlImportDialog({ onImport }: CurlImportDialogProps) {
     }
 
     try {
-      const jsonString = curlconverter(curl, 'json');
-      const result = JSON.parse(jsonString);
+      const importedValues = parseCurl(curl);
 
-      const { url, method, headers, data } = result;
-
-      const uppercaseMethod = (method?.toUpperCase() as ApiFormValues['method']) || 'GET';
-
-      const parsedHeaders = headers
-        ? Object.entries(headers).map(([key, value]) => ({ key, value: String(value) }))
-        : [];
-
-      const queryParams: { key: string; value: string }[] = [];
-      const urlObject = new URL(url);
-      for (const [key, value] of urlObject.searchParams.entries()) {
-        queryParams.push({ key, value });
+      if (!importedValues.url) {
+        throw new Error("Could not parse a valid URL from the cURL command.");
       }
-      urlObject.search = '';
-      const baseUrl = urlObject.toString();
-
-      const importedValues: Partial<ApiFormValues> = {
-        url: baseUrl,
-        method: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH'].includes(uppercaseMethod)
-          ? uppercaseMethod
-          : 'GET',
-        headers: parsedHeaders,
-        body: typeof data === 'object' ? JSON.stringify(data, null, 2) : String(data || ''),
-        queryParams: queryParams.length > 0 ? queryParams : [{ key: '', value: '' }],
-      };
 
       onImport(importedValues);
       toast({
@@ -78,7 +115,7 @@ export default function CurlImportDialog({ onImport }: CurlImportDialogProps) {
       toast({
         variant: 'destructive',
         title: 'Import Failed',
-        description: 'Could not parse the cURL command. Please check the format.',
+        description: error.message || 'Could not parse the cURL command. Please check the format.',
       });
     }
   };
@@ -114,3 +151,4 @@ export default function CurlImportDialog({ onImport }: CurlImportDialogProps) {
     </Dialog>
   );
 }
+
