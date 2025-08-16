@@ -179,7 +179,10 @@ export default function TestRunning({ initialTestId, config, onTestComplete }: T
           </>
         ) : (
           <>
-            <div className="relative mx-auto flex items-center justify-center">
+            <div
+              className="relative mx-auto flex items-center justify-center"
+              aria-label="Test in progress"
+            >
               <Loader className="h-12 w-12 text-primary animate-spin" />
             </div>
             <CardTitle>{allDone ? t('running.finalizingTitle') : t('running.title')}</CardTitle>
@@ -188,7 +191,11 @@ export default function TestRunning({ initialTestId, config, onTestComplete }: T
         )}
       </CardHeader>
       <CardContent className="flex flex-col items-center gap-6">
-        <div className="w-full space-y-2 text-left bg-muted/50 p-4 rounded-lg">
+        <div
+          className="w-full space-y-2 text-left bg-muted/50 p-4 rounded-lg"
+          aria-live="polite"
+          aria-atomic="true"
+        >
           <p className="text-sm font-medium text-center mb-2">Status:</p>
           <ul className="text-sm text-muted-foreground space-y-2">
             {config.runLoadTest && (

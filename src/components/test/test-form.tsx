@@ -260,14 +260,20 @@ export default function TestForm({ initialValues, onRunTest, setHistory }: TestF
                     name="url"
                     render={({ field }) => (
                       <FormItem className="flex flex-col">
-                        <FormLabel className="text-lg">{t('form.urlLabel')}</FormLabel>
+                        <FormLabel htmlFor="url-input" className="text-lg">
+                          {t('form.urlLabel')}
+                        </FormLabel>
                         <FormDescription>{t('form.urlDescription')}</FormDescription>
                         <Popover open={popoverOpen} onOpenChange={setPopoverOpen}>
                           <PopoverTrigger asChild>
                             <div className="relative">
-                              <Server className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
+                              <Server
+                                className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground"
+                                aria-hidden="true"
+                              />
                               <FormControl>
                                 <Input
+                                  id="url-input"
                                   data-testid="url-input"
                                   placeholder={t('form.urlPlaceholder')}
                                   className="pl-10 h-11 text-base"
@@ -279,9 +285,9 @@ export default function TestForm({ initialValues, onRunTest, setHistory }: TestF
                                 variant="ghost"
                                 role="combobox"
                                 aria-expanded={popoverOpen}
+                                aria-label={t('form.toggleRecentUrlsLabel')}
                                 className="absolute right-1 top-1/2 -translate-y-1/2 h-8 w-8 p-0"
                                 data-testid="url-popover-trigger"
-                                aria-label={t('form.toggleRecentUrlsLabel')}
                               >
                                 <ChevronsUpDown className="h-4 w-4 shrink-0 opacity-50" />
                               </Button>
@@ -293,7 +299,7 @@ export default function TestForm({ initialValues, onRunTest, setHistory }: TestF
                                 placeholder={t('form.searchUrlPlaceholder')}
                                 data-testid="url-search-input"
                               />
-                              <CommandList>
+                              <CommandList aria-label="Recent URLs">
                                 <CommandEmpty>{t('form.noRecentUrls')}</CommandEmpty>
                                 <CommandGroup heading={t('form.recentUrlsHeading')}>
                                   <ScrollArea className="h-48">
@@ -365,8 +371,8 @@ export default function TestForm({ initialValues, onRunTest, setHistory }: TestF
                           <FormItem className="flex flex-row items-center justify-between rounded-lg border p-4 shadow-sm bg-background/50">
                             <div className="space-y-0.5">
                               <FormLabel
-                                id="load-test-label"
-                                className="text-base flex items-center gap-2"
+                                htmlFor="runLoadTest"
+                                className="text-base flex items-center gap-2 cursor-pointer"
                               >
                                 <Gauge />
                                 {t('form.k6SwitchLabel')}
@@ -377,10 +383,10 @@ export default function TestForm({ initialValues, onRunTest, setHistory }: TestF
                             </div>
                             <FormControl>
                               <Switch
+                                id="runLoadTest"
                                 data-testid="load-test-switch"
                                 checked={field.value}
                                 onCheckedChange={field.onChange}
-                                aria-labelledby="load-test-label"
                                 aria-describedby="load-test-desc"
                               />
                             </FormControl>
@@ -394,8 +400,8 @@ export default function TestForm({ initialValues, onRunTest, setHistory }: TestF
                           <FormItem className="flex flex-row items-center justify-between rounded-lg border p-4 shadow-sm bg-background/50">
                             <div className="space-y-0.5">
                               <FormLabel
-                                id="lighthouse-label"
-                                className="text-base flex items-center gap-2"
+                                htmlFor="runLighthouse"
+                                className="text-base flex items-center gap-2 cursor-pointer"
                               >
                                 <ShieldCheck />
                                 {t('form.lighthouseSwitchLabel')}
@@ -406,10 +412,10 @@ export default function TestForm({ initialValues, onRunTest, setHistory }: TestF
                             </div>
                             <FormControl>
                               <Switch
+                                id="runLighthouse"
                                 data-testid="lighthouse-switch"
                                 checked={field.value}
                                 onCheckedChange={field.onChange}
-                                aria-labelledby="lighthouse-label"
                                 aria-describedby="lighthouse-desc"
                               />
                             </FormControl>
@@ -423,8 +429,8 @@ export default function TestForm({ initialValues, onRunTest, setHistory }: TestF
                           <FormItem className="flex flex-row items-center justify-between rounded-lg border p-4 shadow-sm bg-background/50">
                             <div className="space-y-0.5">
                               <FormLabel
-                                id="seo-label"
-                                className="text-base flex items-center gap-2"
+                                htmlFor="runSeo"
+                                className="text-base flex items-center gap-2 cursor-pointer"
                               >
                                 <BrainCircuit />
                                 {t('form.seoSwitchLabel')}
@@ -435,10 +441,10 @@ export default function TestForm({ initialValues, onRunTest, setHistory }: TestF
                             </div>
                             <FormControl>
                               <Switch
+                                id="runSeo"
                                 data-testid="seo-switch"
                                 checked={field.value}
                                 onCheckedChange={field.onChange}
-                                aria-labelledby="seo-label"
                                 aria-describedby="seo-desc"
                               />
                             </FormControl>
@@ -514,10 +520,13 @@ export default function TestForm({ initialValues, onRunTest, setHistory }: TestF
                               name={`headers.${index}.key`}
                               render={({ field }) => (
                                 <FormItem className="flex-1">
+                                  <FormLabel htmlFor={`header-key-${index}`} className="sr-only">
+                                    Header Key
+                                  </FormLabel>
                                   <FormControl>
                                     <Input
+                                      id={`header-key-${index}`}
                                       data-testid={`header-key-${index}`}
-                                      aria-label="Header Key"
                                       placeholder={t('form.headerNamePlaceholder')}
                                       {...field}
                                       disabled={!isLoadTestEnabled}
@@ -531,10 +540,13 @@ export default function TestForm({ initialValues, onRunTest, setHistory }: TestF
                               name={`headers.${index}.value`}
                               render={({ field }) => (
                                 <FormItem className="flex-1">
+                                  <FormLabel htmlFor={`header-value-${index}`} className="sr-only">
+                                    Header Value
+                                  </FormLabel>
                                   <FormControl>
                                     <Input
+                                      id={`header-value-${index}`}
                                       data-testid={`header-value-${index}`}
-                                      aria-label="Header Value"
                                       placeholder={t('form.headerValuePlaceholder')}
                                       {...field}
                                       disabled={!isLoadTestEnabled}
@@ -574,12 +586,13 @@ export default function TestForm({ initialValues, onRunTest, setHistory }: TestF
                         name="body"
                         render={({ field }) => (
                           <FormItem>
-                            <FormLabel className="flex items-center gap-2">
+                            <FormLabel className="flex items-center gap-2" htmlFor="body-textarea">
                               <FileJson />
                               <span>{t('form.requestBodyLabel')}</span>
                             </FormLabel>
                             <FormControl>
                               <Textarea
+                                id="body-textarea"
                                 data-testid="body-textarea"
                                 placeholder='{ "key": "value" }'
                                 className="font-mono"
@@ -620,8 +633,11 @@ export default function TestForm({ initialValues, onRunTest, setHistory }: TestF
                               }}
                               value={field.value}
                               className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-4"
-                              aria-label={t('form.loadTestPresetsLabel')}
+                              aria-labelledby="load-profile-title"
                             >
+                              <span id="load-profile-title" className="sr-only">
+                                {t('form.loadProfileTitle')}
+                              </span>
                               {Object.entries(TEST_PRESETS).map(([key]) => (
                                 <FormItem
                                   key={key}
@@ -657,7 +673,7 @@ export default function TestForm({ initialValues, onRunTest, setHistory }: TestF
                                   <Card
                                     className={`p-4 cursor-pointer hover:border-primary w-full ${field.value === 'custom' ? 'border-primary ring-2 ring-primary' : ''}`}
                                     data-testid="preset-card-custom"
-                                     onClick={() => {
+                                    onClick={() => {
                                       field.onChange('custom');
                                       handlePresetChange('custom');
                                     }}
@@ -739,11 +755,15 @@ export default function TestForm({ initialValues, onRunTest, setHistory }: TestF
                                   name={`stages.${index}.duration`}
                                   render={({ field }) => (
                                     <FormItem className="flex-1">
-                                      <FormLabel className="sr-only">
+                                      <FormLabel
+                                        htmlFor={`stage-duration-${index}`}
+                                        className="sr-only"
+                                      >
                                         {t('form.stageDurationLabel')}
                                       </FormLabel>
                                       <FormControl>
                                         <Input
+                                          id={`stage-duration-${index}`}
                                           placeholder={t('form.stageDurationPlaceholder')}
                                           {...field}
                                           data-testid={`stage-duration-${index}`}
@@ -753,17 +773,24 @@ export default function TestForm({ initialValues, onRunTest, setHistory }: TestF
                                     </FormItem>
                                   )}
                                 />
-                                <ChevronsRightLeft className="h-5 w-5 text-muted-foreground mb-2" />
+                                <ChevronsRightLeft
+                                  className="h-5 w-5 text-muted-foreground mb-2"
+                                  aria-hidden="true"
+                                />
                                 <FormField
                                   control={form.control}
                                   name={`stages.${index}.target`}
                                   render={({ field }) => (
                                     <FormItem className="flex-1">
-                                      <FormLabel className="sr-only">
+                                      <FormLabel
+                                        htmlFor={`stage-target-${index}`}
+                                        className="sr-only"
+                                      >
                                         {t('form.stageTargetVusLabel')}
                                       </FormLabel>
                                       <FormControl>
                                         <Input
+                                          id={`stage-target-${index}`}
                                           type="number"
                                           placeholder={t('form.stageTargetVusPlaceholder')}
                                           {...field}

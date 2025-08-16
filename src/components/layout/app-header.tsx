@@ -71,7 +71,7 @@ export function AppHeader() {
             <Rocket className="h-6 w-6 text-primary" />
             <span className="font-bold hidden sm:inline-block">{t('header.title')}</span>
           </Link>
-          <nav className="hidden md:flex items-center gap-6 text-sm">
+          <nav className="hidden md:flex items-center gap-6 text-sm" aria-label="Main navigation">
             <Link
               href="/api-tester"
               className="transition-colors hover:text-foreground/80 text-foreground/60 cursor-pointer"
@@ -127,14 +127,23 @@ export function AppHeader() {
 
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Button variant="ghost" size="icon" aria-label={t('header.changeLanguageLabel')}>
+              <Button
+                variant="ghost"
+                size="icon"
+                aria-label={t('header.changeLanguageLabel')}
+                data-testid="language-switcher-trigger"
+              >
                 <Languages className="h-5 w-5" />
               </Button>
             </DropdownMenuTrigger>
-            <DropdownMenuContent align="end">
+            <DropdownMenuContent align="end" data-testid="language-switcher-content">
               <ScrollArea className="h-72 w-48 rounded-md">
                 {languages.map((lang) => (
-                  <DropdownMenuItem key={lang.code} onClick={() => changeLanguage(lang.code)}>
+                  <DropdownMenuItem
+                    key={lang.code}
+                    onClick={() => changeLanguage(lang.code)}
+                    data-testid={`language-switcher-item-${lang.code}`}
+                  >
                     {lang.name}
                   </DropdownMenuItem>
                 ))}
@@ -156,9 +165,21 @@ export function AppHeader() {
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end" data-testid="theme-switcher-content">
-              <DropdownMenuItem onClick={() => setTheme('light')}>Light</DropdownMenuItem>
-              <DropdownMenuItem onClick={() => setTheme('dark')}>Dark</DropdownMenuItem>
-              <DropdownMenuItem onClick={() => setTheme('system')}>System</DropdownMenuItem>
+              <DropdownMenuItem
+                onClick={() => setTheme('light')}
+                data-testid="theme-switcher-light"
+              >
+                Light
+              </DropdownMenuItem>
+              <DropdownMenuItem onClick={() => setTheme('dark')} data-testid="theme-switcher-dark">
+                Dark
+              </DropdownMenuItem>
+              <DropdownMenuItem
+                onClick={() => setTheme('system')}
+                data-testid="theme-switcher-system"
+              >
+                System
+              </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
 
@@ -178,38 +199,38 @@ export function AppHeader() {
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end" data-testid="mobile-menu-content">
               <Link href="/api-tester">
-                <DropdownMenuItem>
+                <DropdownMenuItem data-testid="mobile-menu-api-tester">
                   <Beaker className="mr-2 h-4 w-4" />
                   {t('header.apiTesterLink')}
                 </DropdownMenuItem>
               </Link>
               <Link href="/history">
-                <DropdownMenuItem>
+                <DropdownMenuItem data-testid="mobile-menu-history">
                   <History className="mr-2 h-4 w-4" />
                   {t('header.historyLink')}
                 </DropdownMenuItem>
               </Link>
               <Link href="/about">
-                <DropdownMenuItem>
+                <DropdownMenuItem data-testid="mobile-menu-about">
                   <Info className="mr-2 h-4 w-4" />
                   {t('header.aboutLink')}
                 </DropdownMenuItem>
               </Link>
               {pathname === '/' && (
-                <DropdownMenuItem onClick={handleStartTour}>
+                <DropdownMenuItem onClick={handleStartTour} data-testid="mobile-menu-start-tour">
                   <PlayCircle className="mr-2 h-4 w-4" />
                   {t('header.startTour')}
                 </DropdownMenuItem>
               )}
               <DropdownMenuSeparator />
               <a href={APP_CONFIG.bugReportUrl} target="_blank" rel="noopener noreferrer">
-                <DropdownMenuItem>
+                <DropdownMenuItem data-testid="mobile-menu-bug-report">
                   <Bug className="mr-2 h-4 w-4" />
                   {t('header.bugReport')}
                 </DropdownMenuItem>
               </a>
               <a href={APP_CONFIG.featureRequestUrl} target="_blank" rel="noopener noreferrer">
-                <DropdownMenuItem>
+                <DropdownMenuItem data-testid="mobile-menu-feature-request">
                   <MessageSquarePlus className="mr-2 h-4 w-4" />
                   {t('header.featureRequest')}
                 </DropdownMenuItem>
