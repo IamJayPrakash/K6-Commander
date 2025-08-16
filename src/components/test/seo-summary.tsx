@@ -1,9 +1,13 @@
 'use client';
 
+import React from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { CheckCircle, XCircle, AlertCircle, Sparkles, BrainCircuit } from 'lucide-react';
+import { CheckCircle, XCircle, AlertCircle, Sparkles, BrainCircuit, Copy, Check } from 'lucide-react';
 import type { SeoAnalysis } from '@/types';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '../ui/accordion';
+import { Button } from '../ui/button';
+import { useToast } from '@/hooks/use-toast';
+import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
 
 interface SeoSummaryProps {
   analysis: SeoAnalysis;
@@ -54,6 +58,26 @@ const AnalysisItem = ({ item }: { item: SeoAnalysis['analysis'][0] }) => {
 };
 
 export default function SeoSummaryReport({ analysis }: SeoSummaryProps) {
+  const { toast } = useToast();
+  const [isCopied, setIsCopied] = React.useState(false);
+
+  const handleCopy = () => {
+    navigator.clipboard.writeText(analysis.rawHtml).then(
+      () => {
+        setIsCopied(true);
+        toast({ title: 'HTML copied to clipboard!' });
+        setTimeout(() => setIsCopied(false), 2000);
+      },
+      (err) => {
+        toast({
+          variant: 'destructive',
+          title: 'Copy failed',
+          description: 'Could not copy the HTML to your clipboard.',
+        });
+      }
+    );
+  };
+
   return (
     <Card>
       <CardHeader>
@@ -73,9 +97,37 @@ export default function SeoSummaryReport({ analysis }: SeoSummaryProps) {
 
         <Accordion type="single" collapsible className="w-full pt-4">
           <AccordionItem value="raw-html">
-            <AccordionTrigger>View Raw HTML Content</AccordionTrigger>
+            <AccordionTrigger>
+              <div className="flex justify-between items-center w-full">
+                <span>View Raw HTML Content</span>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      className="mr-4 h-7 w-7"
+                      onClick={(e) => {
+                        e.stopPropagation(); // prevent accordion from toggling
+                        handleCopy();
+                      }}
+                      data-testid="copy-raw-html-button"
+                      aria-label="Copy raw HTML"
+                    >
+                      {isCopied ? (
+                        <Check className="h-4 w-4 text-green-500" />
+                      ) : (
+                        <Copy className="h-4 w-4" />
+                      )}
+                    </Button>
+                  </TooltipTrigger>
+                  <TooltipContent>
+                    <p>Copy raw HTML</p>
+                  </TooltipContent>
+                </Tooltip>
+              </div>
+            </AccordionTrigger>
             <AccordionContent>
-              <pre className="text-xs bg-muted p-4 rounded-md max-h-96 overflow-auto">
+              <pre className="text-xs bg-muted p-4 rounded-md max-h-96 overflow-auto whitespace-pre-wrap">
                 <code>{analysis.rawHtml}</code>
               </pre>
             </AccordionContent>

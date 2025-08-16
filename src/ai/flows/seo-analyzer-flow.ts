@@ -10,6 +10,7 @@
 
 import { ai } from '@/ai/genkit';
 import { z } from 'zod';
+import { html as beautifyHtml } from 'js-beautify';
 
 const SeoAnalyzerInputSchema = z.object({
   url: z.string().url().describe('The URL of the page to analyze.'),
@@ -58,8 +59,14 @@ export async function analyzeSeo(input: SeoAnalyzerInput): Promise<SeoAnalyzerOu
   }
   const rawHtml = await response.text();
 
+  // Format the HTML before passing it to the flow
+  const formattedHtml = beautifyHtml(rawHtml, {
+    indent_size: 2,
+    space_in_empty_paren: true,
+  });
+
   // Pass the HTML to the Genkit flow.
-  return seoAnalyzerFlow({ url: input.url, htmlContent: rawHtml });
+  return seoAnalyzerFlow({ url: input.url, htmlContent: formattedHtml });
 }
 
 const prompt = ai.definePrompt({
