@@ -4,6 +4,10 @@ import './globals.css';
 import { Inter } from 'next/font/google';
 import { cn } from '@/lib/utils';
 import { ClientLayout } from '@/components/layout/client-layout';
+import i18n from '@/lib/i18n';
+import { cookies } from 'next/headers';
+import fs from 'node:fs/promises';
+import path from 'node:path';
 
 export const metadata: Metadata = {
   metadataBase: new URL('https://k6commander.netlify.app'),
@@ -66,16 +70,39 @@ const inter = Inter({
   variable: '--font-sans',
 });
 
-export default function RootLayout({
+// This function fetches translations from the local file system.
+async function getTranslations(locale: string) {
+  const localePath = path.resolve(process.cwd(), `public/locales/${locale}.json`);
+  try {
+    const data = await fs.readFile(localePath, 'utf-8');
+    return JSON.parse(data);
+  } catch (error) {
+    // If the specific locale file doesn't exist, fall back to English.
+    console.warn(`Could not load locale ${locale}, falling back to 'en'`);
+    const fallbackPath = path.resolve(process.cwd(), 'public/locales/en.json');
+    const data = await fs.readFile(fallbackPath, 'utf-8');
+    return JSON.parse(data);
+  }
+}
+
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  // Determine the language from cookies or use the default.
+  const cookieStore = cookies();
+  const lang = cookieStore.get('i18next')?.value || i18n.language;
+
+  // Pre-load the translations on the server.
+  const initialResources = await getTranslations(lang);
+
   return (
-    // The lang attribute will be managed by the client-layout component
-    <html lang="en" className="dark" suppressHydrationWarning>
+    <html lang={lang} className="dark" suppressHydrationWarning>
       <body className={cn('min-h-screen bg-background font-sans antialiased', inter.variable)}>
-        <ClientLayout>{children}</ClientLayout>
+        <ClientLayout initialLang={lang} initialResources={initialResources}>
+          {children}
+        </ClientLayout>
       </body>
     </html>
   );

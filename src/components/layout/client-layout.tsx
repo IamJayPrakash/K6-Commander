@@ -14,36 +14,48 @@ import { Preloader } from './preloader';
 import { TooltipProvider } from '../ui/tooltip';
 
 async function fetchTranslations(locale: string) {
-  let res = await fetch(`/locales/${locale}.json`);
-  if (!res.ok) {
-    // Try base language (e.g., 'en' from 'en-US')
-    const baseLocale = locale.split('-')[0];
-    res = await fetch(`/locales/${baseLocale}.json`);
+  try {
+    let res = await fetch(`/locales/${locale}.json`);
     if (!res.ok) {
-      // Fallback to English if base language also fails
-      res = await fetch(`/locales/en.json`);
+      const baseLocale = locale.split('-')[0];
+      res = await fetch(`/locales/${baseLocale}.json`);
       if (!res.ok) {
-        throw new Error(`Failed to load locale: ${locale} and fallback 'en'`);
+        res = await fetch(`/locales/en.json`);
       }
     }
+    return res.json();
+  } catch (error) {
+    console.error('Failed to fetch translations, loading fallback.', error);
+    const res = await fetch(`/locales/en.json`);
+    return res.json();
   }
-  return res.json();
 }
 
-export function ClientLayout({ children }: { children: React.ReactNode }) {
+interface ClientLayoutProps {
+  children: React.ReactNode;
+  initialLang: string;
+  initialResources: any;
+}
+
+export function ClientLayout({ children, initialLang, initialResources }: ClientLayoutProps) {
   const [isI18nInitialized, setIsI18nInitialized] = useState(false);
   const pathname = usePathname();
 
   useEffect(() => {
     const initI18n = async () => {
-      const lng = i18n.language || 'en';
-      if (!i18n.hasResourceBundle(lng, 'translation')) {
-        const resources = await fetchTranslations(lng);
-        i18n.addResourceBundle(lng, 'translation', resources, true, true);
-      }
-      if (!i18n.isInitialized) {
-        await i18n.init();
-      }
+      // Initialize with the resources passed from the server.
+      await i18n.init({
+        lng: initialLang,
+        resources: {
+          [initialLang]: {
+            translation: initialResources,
+          },
+        },
+        fallbackLng: 'en',
+        interpolation: {
+          escapeValue: false, // React already safes from xss
+        },
+      });
       setIsI18nInitialized(true);
     };
 
@@ -54,8 +66,7 @@ export function ClientLayout({ children }: { children: React.ReactNode }) {
         const resources = await fetchTranslations(lng);
         i18n.addResourceBundle(lng, 'translation', resources, true, true);
       }
-      // The changeLanguage call is what actually triggers the re-render
-      i18n.changeLanguage(lng);
+      i18n.changeLanguage(lng); // This will trigger re-renders
     };
 
     i18n.on('languageChanged', onLanguageChanged);
@@ -63,7 +74,7 @@ export function ClientLayout({ children }: { children: React.ReactNode }) {
     return () => {
       i18n.off('languageChanged', onLanguageChanged);
     };
-  }, []);
+  }, [initialLang, initialResources]);
 
   useEffect(() => {
     if (isI18nInitialized) {
@@ -75,6 +86,7 @@ export function ClientLayout({ children }: { children: React.ReactNode }) {
       } else {
         document.title = 'K6 Commander';
       }
+      document.documentElement.lang = i18n.language;
     }
   }, [pathname, isI18nInitialized, i18n.language]);
 
