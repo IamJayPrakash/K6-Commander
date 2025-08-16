@@ -252,6 +252,7 @@ export default function TestForm({ initialValues, onRunTest, setHistory }: TestF
   };
 
   const isLoadTestEnabled = form.watch('runLoadTest');
+  const isSubmitting = form.formState.isSubmitting;
 
   return (
     <>
@@ -877,14 +878,28 @@ export default function TestForm({ initialValues, onRunTest, setHistory }: TestF
                 <Button
                   type="submit"
                   size="lg"
-                  className="w-full md:w-auto"
-                  disabled={form.formState.isSubmitting}
+                  className={cn(
+                    'w-full md:w-auto relative overflow-hidden',
+                    isSubmitting && 'run-test-loading-button'
+                  )}
+                  disabled={isSubmitting}
                   data-testid="run-test-button"
                 >
-                  <Rocket className="mr-2 h-5 w-5" />
-                  {form.formState.isSubmitting
-                    ? t('form.runningTestButton')
-                    : t('form.runTestButton')}
+                  <Rocket
+                    className={cn(
+                      'absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 transition-opacity',
+                      isSubmitting ? 'opacity-100 animate-fly' : 'opacity-0'
+                    )}
+                  />
+                  <span
+                    className={cn(
+                      'transition-opacity flex items-center',
+                      isSubmitting ? 'opacity-0' : 'opacity-100'
+                    )}
+                  >
+                    <Rocket className="mr-2 h-5 w-5" />
+                    {t('form.runTestButton')}
+                  </span>
                 </Button>
               </div>
             </form>
