@@ -48,7 +48,7 @@ K6 Commander relies on running Docker containers (`k6`) and spawning system proc
 ### 1. Clone the Repository
 
 ```bash
-git clone https://github.com/your-username/k6-commander.git
+git clone https://github.com/IamJayPrakash/K6-Commander.git
 cd k6-commander
 ```
 
@@ -191,7 +191,7 @@ The core k6 test script (`k6/script.js`) is dynamically configured by the Next.j
 
 ## 🤝 Contributing
 
-Contributions, issues, and feature requests are welcome! Feel free to check the [issues page](https://github.com/your-username/k6-commander/issues).
+Contributions, issues, and feature requests are welcome! Feel free to check the [issues page](https://github.com/IamJayPrakash/K6-Commander/issues).
 
 Please read our [Contributing Guidelines](./CONTRIBUTING.md) and [Code of Conduct](./CODE_OF_CONDUCT.md).
 

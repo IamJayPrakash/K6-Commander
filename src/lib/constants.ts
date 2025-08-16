@@ -3,11 +3,11 @@ import type { TestConfiguration } from '@/types';
 type PresetConfig = Pick<TestConfiguration, 'stages' | 'vus' | 'duration'>;
 
 export const APP_CONFIG = {
-  githubUrl: 'https://github.com/your-username/k6-commander',
+  githubUrl: 'https://github.com/IamJayPrakash/K6-Commander',
   contactEmail: '[INSERT CONTACT METHOD]',
-  bugReportUrl: 'https://github.com/your-username/k6-commander/issues/new?template=bug_report.md',
+  bugReportUrl: 'https://github.com/IamJayPrakash/K6-Commander/issues/new?template=bug_report.md',
   featureRequestUrl:
-    'https://github.com/your-username/k6-commander/issues/new?template=feature_request.md',
+    'https://github.com/IamJayPrakash/K6-Commander/issues/new?template=feature_request.md',
 };
 
 export const TEST_PRESETS: Record<string, PresetConfig> = {

@@ -61,17 +61,9 @@ export function ClientLayout({ children, initialLang, initialResources }: Client
             </main>
             <AppFooter />
             <Toaster />
-            <QuickAccessMenu
-              onThemeToggle={() => {}}
-              onFullscreenToggle={() => {}}
-              isFullscreen={false}
-            />
           </div>
         </TooltipProvider>
       </Providers>
     </I18nextProvider>
   );
 }
-
-// Dummy QuickAccessMenu component to satisfy the compiler until the real one is moved
-const QuickAccessMenu = (props: any) => null;

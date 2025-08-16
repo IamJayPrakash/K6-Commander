@@ -12,7 +12,7 @@ import {
   Languages,
   Beaker,
 } from 'lucide-react';
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { useTranslation } from 'react-i18next';
 import {
   Tooltip,
@@ -82,6 +82,7 @@ export function AppHeader() {
             </Link>
           </nav>
         </div>
+        <QuickAccessMenu />
 
         <div className="flex flex-1 items-center justify-end gap-2">
           <Tooltip>
@@ -103,7 +104,22 @@ export function AppHeader() {
             </TooltipContent>
           </Tooltip>
 
-          <QuickAccessMenu />
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="ghost" size="icon" aria-label={t('header.toggleLanguageLabel')}>
+                <Languages className="h-5 w-5" />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end">
+              <ScrollArea className="h-48">
+                {languages.map((lang) => (
+                  <DropdownMenuItem key={lang.code} onClick={() => changeLanguage(lang.code)}>
+                    {lang.name}
+                  </DropdownMenuItem>
+                ))}
+              </ScrollArea>
+            </DropdownMenuContent>
+          </DropdownMenu>
 
           {/* Mobile Menu */}
           <DropdownMenu>
