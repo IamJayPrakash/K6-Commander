@@ -26,7 +26,7 @@ export const metadata: Metadata = {
   themeColor: '#7DF9FF',
   openGraph: {
     title: 'K6 Commander',
-    description: 'Local-first, authorized load-testing platform.',
+    description: 'Configure, run, and analyze load tests, Lighthouse audits, and SEO checks.',
     url: 'https://k6commander.netlify.app',
     siteName: 'K6 Commander',
     images: [

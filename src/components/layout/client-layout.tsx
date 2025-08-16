@@ -116,24 +116,26 @@ export function ClientLayout({ children }: { children: React.ReactNode }) {
     <I18nextProvider i18n={i18n}>
       <Providers>
         <TooltipProvider>
-          <ProgressBar />
-          <div className="relative flex min-h-screen flex-col bg-background">
-            <AppHeader
+          <div className="relative h-screen w-screen overflow-hidden">
+            <div className="relative flex min-h-screen flex-col bg-background">
+              <ProgressBar />
+              <AppHeader
+                onThemeToggle={handleSetTheme}
+                onFullscreenToggle={handleToggleFullscreen}
+                isFullscreen={isFullscreen}
+              />
+              <main className="flex-1 container max-w-screen-2xl py-8 flex flex-col">
+                {children}
+              </main>
+              <AppFooter />
+            </div>
+            <Toaster />
+            <QuickAccessMenu
               onThemeToggle={handleSetTheme}
               onFullscreenToggle={handleToggleFullscreen}
               isFullscreen={isFullscreen}
             />
-            <main className="flex-1 container max-w-screen-2xl py-8 flex flex-col">
-              {children}
-            </main>
-            <AppFooter />
           </div>
-          <Toaster />
-          <QuickAccessMenu
-            onThemeToggle={handleSetTheme}
-            onFullscreenToggle={handleToggleFullscreen}
-            isFullscreen={isFullscreen}
-          />
         </TooltipProvider>
       </Providers>
     </I18nextProvider>

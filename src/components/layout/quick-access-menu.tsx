@@ -1,7 +1,7 @@
 
 'use client';
 
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import {
   Dialog,
@@ -35,7 +35,7 @@ import {
 import Link from 'next/link';
 import { useTranslation } from 'react-i18next';
 import { APP_CONFIG } from '@/lib/constants';
-import Draggable from 'react-draggable';
+import Draggable, { type DraggableData, type DraggableEvent } from 'react-draggable';
 import { Separator } from '../ui/separator';
 import {
   DropdownMenu,
@@ -69,43 +69,95 @@ export default function QuickAccessMenu({
   const [open, setOpen] = useState(false);
   const { t } = useTranslation();
   const nodeRef = useRef(null);
+  const [position, setPosition] = useState({ x: window.innerWidth - 60, y: window.innerHeight / 2 - 56 });
+  const [isDragging, setIsDragging] = useState(false);
+
+  const handleDragStop = (e: DraggableEvent, data: DraggableData) => {
+    setIsDragging(false);
+    // Snap to the nearest vertical edge
+    if (data.x < window.innerWidth / 2) {
+      setPosition({ x: 0, y: data.y });
+    } else {
+      setPosition({ x: window.innerWidth - 60, y: data.y });
+    }
+  };
+
+  const handleDragStart = () => {
+    setIsDragging(true);
+  };
+
+  const handleClick = () => {
+    if (!isDragging) {
+      setOpen(true);
+    }
+  };
+
+  // Adjust position on window resize
+  useEffect(() => {
+    const handleResize = () => {
+      setPosition((pos) => {
+        // If it's on the right edge, keep it on the right edge
+        if (pos.x > window.innerWidth / 2) {
+          return { x: window.innerWidth - 60, y: pos.y };
+        }
+        return { x: 0, y: pos.y };
+      });
+    };
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
+  const attachedToLeft = position.x < window.innerWidth / 2;
 
   return (
     <>
-      <Draggable nodeRef={nodeRef} bounds="parent">
+      <Draggable
+        nodeRef={nodeRef}
+        handle=".handle"
+        position={position}
+        onStop={handleDragStop}
+        onStart={handleDragStart}
+        onDrag={(e, data) => setPosition({ x: data.x, y: data.y })}
+        bounds="parent" // This will be constrained by the new parent in client-layout
+      >
         <div
           ref={nodeRef}
-          className="fixed bottom-1/2 translate-y-1/2 right-0 z-[9999] cursor-grab active:cursor-grabbing w-16 h-28 group"
+          className="fixed z-[9999] cursor-grab active:cursor-grabbing w-[60px] h-[112px] group"
           data-testid="quick-access-button-container"
         >
           <TooltipProvider>
             <Tooltip>
               <TooltipTrigger asChild>
-                <button
-                  onClick={() => setOpen(true)}
-                  className="relative w-full h-full text-primary-foreground/80 hover:text-primary-foreground focus:outline-none transition-all duration-300 transform active:scale-90"
+                <div
+                  className="handle w-full h-full"
+                  onClick={handleClick}
+                  role="button"
                   aria-label={t('quickAccess.title')}
                 >
-                  <div className="absolute inset-0.5 animate-ripple-1 rounded-full group-hover:bg-primary/20"></div>
-                  <div className="absolute inset-0.5 animate-ripple-2 rounded-full group-hover:bg-primary/20"></div>
-                  <div className="absolute inset-0.5 animate-ripple-3 rounded-full group-hover:bg-primary/20"></div>
-                  <svg
-                    viewBox="0 0 50 100"
-                    className="absolute inset-0 w-full h-full"
-                    width="50"
-                    height="100"
-                  >
-                    <path
-                      d="M50 100C50 100 0 100 0 100 0 100 0 85 0 75 0 50 25 50 25 50 50 50 50 25 50 0 50 0 50 100 50 100Z"
-                      className="fill-primary/80 backdrop-blur-md transition-colors duration-300 group-hover:fill-primary"
-                    />
-                  </svg>
-                  <div className="relative w-full h-full flex items-center justify-start pl-3">
-                    <Compass className="w-7 h-7 transition-transform duration-500 group-hover:rotate-12" />
+                  <div className="relative w-full h-full text-primary-foreground/80 hover:text-primary-foreground focus:outline-none transition-all duration-300 transform active:scale-90">
+                    <div className="absolute inset-0.5 animate-ripple-1 rounded-full group-hover:bg-primary/20"></div>
+                    <div className="absolute inset-0.5 animate-ripple-2 rounded-full group-hover:bg-primary/20"></div>
+                    <div className="absolute inset-0.5 animate-ripple-3 rounded-full group-hover:bg-primary/20"></div>
+                    <svg
+                      viewBox="0 0 60 112"
+                      className="absolute inset-0 w-full h-full"
+                      style={{ transform: attachedToLeft ? 'scaleX(-1)' : 'scaleX(1)' }}
+                    >
+                      <path
+                        d="M60 112C60 112 0 112 0 112 0 112 0 97 0 87 0 56 30 56 30 56 60 56 60 25 60 0 60 0 60 112 60 112Z"
+                        className="fill-primary/80 backdrop-blur-md transition-colors duration-300 group-hover:fill-primary animate-tilt"
+                      />
+                    </svg>
+                    <div
+                      className="relative w-full h-full flex items-center justify-center"
+                      style={{ transform: attachedToLeft ? 'scaleX(-1)' : 'scaleX(1)' }}
+                    >
+                      <Compass className="w-7 h-7 transition-transform duration-500 group-hover:rotate-12" />
+                    </div>
                   </div>
-                </button>
+                </div>
               </TooltipTrigger>
-              <TooltipContent side="left">
+              <TooltipContent side={attachedToLeft ? 'right' : 'left'}>
                 <p>{t('quickAccess.title')}</p>
               </TooltipContent>
             </Tooltip>
