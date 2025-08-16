@@ -183,6 +183,18 @@ export default function RequestPanel({ onSend, isLoading, initialValues }: Reque
   const handleCopyToCurl = () => {
     try {
       const values = form.getValues();
+
+      // Validate URL before proceeding
+      const urlValidation = z.string().url().safeParse(values.url);
+      if (!urlValidation.success) {
+        toast({
+          variant: 'destructive',
+          title: t('apiTester.toast.curlCopyErrorTitle'),
+          description: t('apiTester.toast.curlCopyInvalidUrl'),
+        });
+        return;
+      }
+      
       const url = new URL(values.url);
       values.queryParams.forEach((param) => {
         if (param.key) {
@@ -206,14 +218,14 @@ export default function RequestPanel({ onSend, isLoading, initialValues }: Reque
 
       navigator.clipboard.writeText(curlCommand);
       toast({
-        title: t('apiTester.toast.curlCopiedTitle'),
-        description: t('apiTester.toast.curlCopiedDescription'),
+        title: t('apiTester.toast.apiCurlCopiedTitle'),
+        description: t('apiTester.toast.apiCurlCopiedDescription'),
       });
     } catch (error: any) {
       toast({
         variant: 'destructive',
         title: t('apiTester.toast.curlCopyErrorTitle'),
-        description: error.message || 'Could not generate cURL command.',
+        description: error.message || t('apiTester.toast.curlCopyErrorDescription'),
       });
     }
   };
