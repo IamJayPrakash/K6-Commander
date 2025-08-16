@@ -80,6 +80,17 @@ export default {
           '0%, 100%': { 'border-radius': '60% 40% 30% 70% / 60% 30% 70% 40%' },
           '50%': { 'border-radius': '30% 60% 70% 40% / 50% 60% 30% 60%' },
         },
+        tilt: {
+          '0%, 50%, 100%': {
+            transform: 'rotate(0deg)',
+          },
+          '25%': {
+            transform: 'rotate(0.5deg)',
+          },
+          '75%': {
+            transform: 'rotate(-0.5deg)',
+          },
+        },
         'gradient-shift': {
           '0%, 100%': {
             'background-position': '0% 50%',
@@ -133,6 +144,7 @@ export default {
         'accordion-down': 'accordion-down 0.2s ease-out',
         'accordion-up': 'accordion-up 0.2s ease-out',
         'wavy-border': 'wavy-border 4s ease-in-out infinite',
+        tilt: 'tilt 10s infinite linear',
         'gradient-shift': 'gradient-shift 3s ease-in-out infinite',
         'pulse-glow': 'pulse-glow 2s ease-in-out infinite',
         'float-particle-1': 'float-particle-1 3s ease-in-out infinite',

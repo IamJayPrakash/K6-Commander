@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { Button } from '@/components/ui/button';
 import {
   Dialog,
@@ -24,6 +24,7 @@ import {
 import Link from 'next/link';
 import { useTranslation } from 'react-i18next';
 import { APP_CONFIG } from '@/lib/constants';
+import Draggable from 'react-draggable';
 
 const menuItems = [
   { href: '/', icon: Home, labelKey: 'quickAccess.home' },
@@ -45,25 +46,29 @@ const externalLinks = [
 export default function QuickAccessMenu() {
   const [open, setOpen] = useState(false);
   const { t } = useTranslation();
+  const nodeRef = useRef(null);
 
   return (
     <>
-      <div
-        className="fixed bottom-6 right-6 z-[999]"
-        data-testid="quick-access-button-container"
-      >
-        <div className="relative group">
-          <div className="absolute -inset-1.5 bg-gradient-to-r from-blue-600 to-purple-600 rounded-full blur opacity-75 group-hover:opacity-100 transition duration-1000 group-hover:duration-200 animate-tilt"></div>
-          <Button
-            size="icon"
-            onClick={() => setOpen(true)}
-            className="relative w-16 h-16 rounded-full bg-slate-900 hover:bg-slate-800 text-white leading-none flex items-center justify-center transition-transform duration-300 group-hover:scale-110"
-            aria-label={t('quickAccess.title')}
-          >
-            <Compass className="w-8 h-8 transition-transform duration-500 group-hover:rotate-12" />
-          </Button>
+      <Draggable nodeRef={nodeRef} bounds="parent">
+        <div
+          ref={nodeRef}
+          className="fixed bottom-6 right-6 z-[9999] cursor-grab active:cursor-grabbing"
+          data-testid="quick-access-button-container"
+        >
+          <div className="relative group">
+            <div className="absolute -inset-1.5 bg-gradient-to-r from-blue-600 to-purple-600 rounded-full blur opacity-75 group-hover:opacity-100 transition duration-1000 group-hover:duration-200 animate-tilt"></div>
+            <Button
+              size="icon"
+              onClick={() => setOpen(true)}
+              className="relative w-16 h-16 rounded-full bg-slate-900 hover:bg-slate-800 text-white leading-none flex items-center justify-center transition-transform duration-300 group-hover:scale-110"
+              aria-label={t('quickAccess.title')}
+            >
+              <Compass className="w-8 h-8 transition-transform duration-500 group-hover:rotate-12" />
+            </Button>
+          </div>
         </div>
-      </div>
+      </Draggable>
 
       <Dialog open={open} onOpenChange={setOpen}>
         <DialogContent className="max-w-md bg-slate-900/95 backdrop-blur-xl border border-slate-700/50 shadow-2xl">
