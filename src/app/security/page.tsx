@@ -16,18 +16,18 @@ export default function SecurityPage() {
       <CardHeader>
         <CardTitle>Security Policy</CardTitle>
       </CardHeader>
-      <CardContent className="space-y-4 prose dark:prose-invert max-w-none">
+      <CardContent className="space-y-4 text-foreground/80 leading-relaxed">
         <p>Last updated: {lastUpdated}</p>
 
-        <h2>Our Security Philosophy</h2>
+        <h2 className="text-2xl font-semibold text-foreground pt-4">Our Security Philosophy</h2>
         <p>
           K6 Commander is designed with a "local-first" security model. Our primary security feature
           is that your sensitive data—including target URLs, API keys in headers, request bodies, and
           test results—never leaves your local environment unless you explicitly action it.
         </p>
 
-        <h2>Application Architecture</h2>
-        <ul>
+        <h2 className="text-2xl font-semibold text-foreground pt-4">Application Architecture</h2>
+        <ul className="list-disc pl-6 space-y-2">
           <li>
             <strong>Containerization:</strong> All components of the application (the Next.js app,
             InfluxDB, Grafana) run in isolated Docker containers on your local machine, orchestrated
@@ -50,15 +50,15 @@ export default function SecurityPage() {
           </li>
         </ul>
 
-        <h2>Responsible Usage</h2>
-        <p className="font-bold text-destructive">
+        <h2 className="text-2xl font-semibold text-foreground pt-4">Responsible Usage</h2>
+        <p className="font-bold text-destructive border-l-4 border-destructive pl-4 bg-destructive/10 py-2">
           The most significant security consideration is how you use this tool. You are responsible
           for ensuring you only test applications and services you own or have explicit, written
           permission to test. Unauthorized load testing can be considered a denial-of-service (DoS)
           attack and may have legal consequences.
         </p>
 
-        <h2>Reporting Vulnerabilities</h2>
+        <h2 className="text-2xl font-semibold text-foreground pt-4">Reporting Vulnerabilities</h2>
         <p>
           We take security seriously. If you believe you have found a security vulnerability in K6
           Commander, please report it to us responsibly by creating a GitHub issue. We will make

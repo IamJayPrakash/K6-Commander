@@ -17,16 +17,16 @@ export default function PrivacyPage() {
       <CardHeader>
         <CardTitle>Privacy Policy</CardTitle>
       </CardHeader>
-      <CardContent className="space-y-4 prose dark:prose-invert max-w-none">
+      <CardContent className="space-y-4 text-foreground/80 leading-relaxed">
         <p>Last updated: {lastUpdated}</p>
 
-        <h2>Our Commitment to Privacy</h2>
+        <h2 className="text-2xl font-semibold text-foreground pt-4">Our Commitment to Privacy</h2>
         <p>
           Your privacy is critically important to us. K6 Commander is designed from the ground up to
           be a "local-first" application.
         </p>
 
-        <h2>Data Collection and Storage</h2>
+        <h2 className="text-2xl font-semibold text-foreground pt-4">Data Collection and Storage</h2>
         <p>
           <strong>
             We do not collect, transmit, or store any of your personal data, test configurations, or
@@ -34,7 +34,7 @@ export default function PrivacyPage() {
           </strong>
         </p>
         <p>All data you input into the application, including:</p>
-        <ul>
+        <ul className="list-disc pl-6 space-y-2">
           <li>Target URLs</li>
           <li>Test configurations (headers, bodies, VUs, duration, etc.) for load tests.</li>
           <li>API request configurations in the API Tester.</li>
@@ -46,7 +46,7 @@ export default function PrivacyPage() {
           never leaves your computer unless you explicitly choose to export it.
         </p>
 
-        <h2>Third-Party Services</h2>
+        <h2 className="text-2xl font-semibold text-foreground pt-4">Third-Party Services</h2>
         <p>
           The application runs within a self-contained Docker environment on your machine. It
           communicates with InfluxDB and Grafana containers, also running locally. There is no
@@ -58,14 +58,14 @@ export default function PrivacyPage() {
           external service, and it only occurs when you explicitly run an SEO test.
         </p>
 
-        <h2>Import/Export Functionality</h2>
+        <h2 className="text-2xl font-semibold text-foreground pt-4">Import/Export Functionality</h2>
         <p>
           The application provides functionality to import and export your test history as a JSON
           file. This process is initiated entirely by you and managed by your browser. We do not
           have access to these files.
         </p>
 
-        <h2>Changes to this Policy</h2>
+        <h2 className="text-2xl font-semibold text-foreground pt-4">Changes to this Policy</h2>
         <p>
           Since we do not collect your data, we do not anticipate major changes to this policy.
           However, if the application's functionality changes in a way that impacts data handling,
