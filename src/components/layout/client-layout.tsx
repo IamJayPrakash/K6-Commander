@@ -1,6 +1,6 @@
 'use client';
 
-import { use, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import i18n from '@/lib/i18n';
 import { I18nextProvider } from 'react-i18next';
 import { AppHeader } from './app-header';
@@ -9,11 +9,17 @@ import { Toaster } from '../ui/toaster';
 import { Providers } from '@/app/providers';
 import { ProgressBar } from './progress-bar';
 import { usePathname } from 'next/navigation';
+import { Preloader } from './preloader';
 
 async function fetchTranslations(locale: string) {
   const response = await fetch(`/locales/${locale}.json`);
   if (!response.ok) {
-    throw new Error(`Failed to load locale: ${locale}`);
+    // Try fetching the fallback language if the desired one fails
+    const fallbackResponse = await fetch(`/locales/en.json`);
+    if (!fallbackResponse.ok) {
+      throw new Error(`Failed to load locale: ${locale} and fallback 'en'`);
+    }
+    return fallbackResponse.json();
   }
   return response.json();
 }
@@ -29,8 +35,9 @@ export function ClientLayout({ children }: { children: React.ReactNode }) {
         const resources = await fetchTranslations(detectedLng);
         i18n.addResourceBundle(detectedLng, 'translation', resources);
       }
+      // isInitialized is a property, not a function
       if (!i18n.isInitialized) {
-        await i18n.init(); // Ensure init is called
+        await i18n.init();
       }
       setIsI18nInitialized(true);
     };
@@ -41,8 +48,8 @@ export function ClientLayout({ children }: { children: React.ReactNode }) {
       if (!i18n.hasResourceBundle(lng, 'translation')) {
         const resources = await fetchTranslations(lng);
         i18n.addResourceBundle(lng, 'translation', resources);
+        i18n.changeLanguage(lng); // Change language after loading resources
       }
-      // Re-render will happen automatically by react-i18next
     };
 
     i18n.on('languageChanged', languageChanged);
@@ -66,14 +73,10 @@ export function ClientLayout({ children }: { children: React.ReactNode }) {
 
       document.title = pageTitle;
     }
-  }, [pathname, isI18nInitialized]);
+  }, [pathname, isI18nInitialized, i18n.language]);
 
   if (!isI18nInitialized) {
-    return (
-      <div className="flex h-screen items-center justify-center">
-        <p>Loading...</p>
-      </div>
-    );
+    return <Preloader />;
   }
 
   return (
