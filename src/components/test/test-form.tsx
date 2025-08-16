@@ -614,8 +614,11 @@ export default function TestForm({ initialValues, onRunTest, setHistory }: TestF
                         <FormItem className="space-y-3">
                           <FormControl>
                             <RadioGroup
-                              onValueChange={handlePresetChange}
-                              defaultValue={field.value}
+                              onValueChange={(value) => {
+                                field.onChange(value);
+                                handlePresetChange(value);
+                              }}
+                              value={field.value}
                               className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-4"
                               aria-label={t('form.loadTestPresetsLabel')}
                             >
@@ -628,6 +631,10 @@ export default function TestForm({ initialValues, onRunTest, setHistory }: TestF
                                     <Card
                                       className={`p-4 cursor-pointer hover:border-primary w-full ${field.value === key ? 'border-primary ring-2 ring-primary' : ''}`}
                                       data-testid={`preset-card-${key}`}
+                                      onClick={() => {
+                                        field.onChange(key);
+                                        handlePresetChange(key);
+                                      }}
                                     >
                                       <RadioGroupItem
                                         value={key}
@@ -650,6 +657,10 @@ export default function TestForm({ initialValues, onRunTest, setHistory }: TestF
                                   <Card
                                     className={`p-4 cursor-pointer hover:border-primary w-full ${field.value === 'custom' ? 'border-primary ring-2 ring-primary' : ''}`}
                                     data-testid="preset-card-custom"
+                                     onClick={() => {
+                                      field.onChange('custom');
+                                      handlePresetChange('custom');
+                                    }}
                                   >
                                     <RadioGroupItem
                                       value="custom"
