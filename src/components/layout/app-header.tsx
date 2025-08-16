@@ -13,6 +13,7 @@ import {
   Beaker,
   Sun,
   Moon,
+  Compass,
 } from 'lucide-react';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
@@ -63,6 +64,7 @@ export function AppHeader() {
       data-testid="app-header"
     >
       <div className="container flex h-16 max-w-screen-2xl items-center">
+        <QuickAccessMenu />
         <div className="mr-4 flex items-center">
           <Link
             href="/"
@@ -101,6 +103,17 @@ export function AppHeader() {
         </div>
 
         <div className="flex flex-1 items-center justify-end gap-2">
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Button variant="ghost" size="icon" aria-label={t('header.startTourLabel')}>
+                <Compass className="h-5 w-5" />
+              </Button>
+            </TooltipTrigger>
+            <TooltipContent>
+              <p>{t('header.startTourLabel')}</p>
+            </TooltipContent>
+          </Tooltip>
+
           <Tooltip>
             <TooltipTrigger asChild>
               <a
@@ -200,7 +213,7 @@ export function AppHeader() {
           </DropdownMenu>
         </div>
       </div>
-      <QuickAccessMenu />
     </header>
   );
 }
+

@@ -75,7 +75,6 @@ export default function QuickAccessMenu() {
   const nodeRef = useRef(null);
   const { setTheme } = useTheme();
   const [isFullscreen, setIsFullscreen] = useState(false);
-  const [isDragging, setIsDragging] = useState(false);
 
   useEffect(() => {
     const handleFullscreenChange = () => {
@@ -96,23 +95,15 @@ export default function QuickAccessMenu() {
   };
 
   const handleClick = () => {
-    if (!isDragging) {
-      setOpen(true);
-    }
+    setOpen(true);
   };
 
   return (
     <>
-      <Draggable
-        nodeRef={nodeRef}
-        axis="x"
-        bounds="parent"
-        onStart={() => setIsDragging(false)}
-        onDrag={() => setIsDragging(true)}
-      >
+      <Draggable nodeRef={nodeRef} axis="x" bounds="parent">
         <div
           ref={nodeRef}
-          className="fixed top-16 w-24 h-12 cursor-grab active:cursor-grabbing z-[9999] group"
+          className="fixed top-16 w-12 h-12 z-[9999] group cursor-grab active:cursor-grabbing ml-4"
           onClick={handleClick}
           role="button"
           aria-label={t('quickAccess.title')}
@@ -127,30 +118,31 @@ export default function QuickAccessMenu() {
                 )}
               >
                 <svg
-                  viewBox="0 0 100 45"
+                  viewBox="0 0 100 86.6"
                   className="w-full h-full absolute top-0 left-0 transition-all duration-300 group-hover:drop-shadow-[0_0_8px_hsl(var(--primary))] filter"
                   fill="none"
                   xmlns="http://www.w3.org/2000/svg"
                 >
                   <path
-                    d="M 50 45 L 25 30 V 0 H 75 V 30 L 50 45 Z"
+                    d="M 50,0 L 100,25 V 75 L 50,100 L 0,75 V 25 Z"
                     className="fill-background/80 backdrop-blur-sm stroke-border/60 group-hover:stroke-primary transition-all"
-                    strokeWidth="1"
+                    strokeWidth="2"
+                    transform="scale(1, 0.866) translate(0, 7.5)"
                   />
-                  <foreignObject x="25" y="0" width="50" height="30">
+                  <foreignObject x="25" y="15" width="50" height="50">
                     <div className="w-full h-full bg-honeycomb opacity-10"></div>
                   </foreignObject>
                   <circle
                     cx="50"
-                    cy="18"
-                    r="8"
+                    cy="43.3"
+                    r="12"
                     className="fill-primary/20 stroke-primary/50 group-hover:fill-primary/30 transition-colors"
                     strokeWidth="1.5"
                   />
                   <circle
                     cx="50"
-                    cy="18"
-                    r="4"
+                    cy="43.3"
+                    r="6"
                     className="fill-primary animate-pulse-glow transition-all"
                   />
                 </svg>
@@ -239,8 +231,8 @@ export default function QuickAccessMenu() {
                     onClick={handleToggleFullscreen}
                     aria-label={
                       isFullscreen
-                        ? t('header.exitFullscreenLabel')
-                        : t('header.enterFullscreenLabel')
+                        ? t('quickAccess.exitFullscreenLabel')
+                        : t('quickAccess.enterFullscreenLabel')
                     }
                   >
                     {isFullscreen ? (
@@ -250,16 +242,16 @@ export default function QuickAccessMenu() {
                     )}
                     <span className="text-xs">
                       {isFullscreen
-                        ? t('header.exitFullscreenLabel')
-                        : t('header.enterFullscreenLabel')}
+                        ? t('quickAccess.exitFullscreenLabel')
+                        : t('quickAccess.enterFullscreenLabel')}
                     </span>
                   </Button>
                 </TooltipTrigger>
                 <TooltipContent>
                   <p>
                     {isFullscreen
-                      ? t('header.exitFullscreenLabel')
-                      : t('header.enterFullscreenLabel')}
+                      ? t('quickAccess.exitFullscreenLabel')
+                      : t('quickAccess.enterFullscreenLabel')}
                   </p>
                 </TooltipContent>
               </Tooltip>
@@ -342,3 +334,4 @@ export default function QuickAccessMenu() {
     </>
   );
 }
+
