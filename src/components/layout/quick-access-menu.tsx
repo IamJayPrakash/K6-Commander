@@ -73,7 +73,6 @@ export default function QuickAccessMenu() {
   const [open, setOpen] = useState(false);
   const { t, i18n } = useTranslation();
   const nodeRef = useRef(null);
-  const [isDragging, setIsDragging] = useState(false);
   const { setTheme } = useTheme();
   const [isFullscreen, setIsFullscreen] = useState(false);
 
@@ -95,26 +94,18 @@ export default function QuickAccessMenu() {
     }
   };
 
-  const handleClick = () => {
-    if (!isDragging) {
-      setOpen(true);
-    }
-  };
-
   return (
     <>
       <Draggable
         nodeRef={nodeRef}
         axis="x"
         bounds="parent"
-        onStart={() => setIsDragging(true)}
-        onStop={() => setTimeout(() => setIsDragging(false), 0)}
         defaultPosition={{ x: 0, y: 0 }}
       >
         <div
           ref={nodeRef}
-          className="absolute top-[60px] w-24 h-12 cursor-grab active:cursor-grabbing z-[100]"
-          onClick={handleClick}
+          className="absolute top-full w-24 h-12 cursor-grab active:cursor-grabbing z-[100] group"
+          onClick={() => setOpen(true)}
           role="button"
           aria-label={t('quickAccess.title')}
           data-testid="quick-access-menu-button"
@@ -123,13 +114,13 @@ export default function QuickAccessMenu() {
             <TooltipTrigger asChild>
               <div
                 className={cn(
-                  'w-full h-full group transition-all duration-300 active:scale-90',
+                  'w-full h-full transition-all duration-300 active:scale-90 animate-tilt',
                   'hover:[&>svg]:scale-105'
                 )}
               >
                 <svg
                   viewBox="0 0 100 45"
-                  className="w-full h-full absolute top-0 left-0 transition-all duration-300 group-hover:drop-shadow-[0_0_8px_hsl(var(--primary))]"
+                  className="w-full h-full absolute top-0 left-0 transition-all duration-300 group-hover:drop-shadow-[0_0_8px_hsl(var(--primary))] filter"
                   fill="none"
                   xmlns="http://www.w3.org/2000/svg"
                 >
@@ -138,6 +129,9 @@ export default function QuickAccessMenu() {
                     className="fill-background/80 backdrop-blur-sm stroke-border/60 group-hover:stroke-primary transition-all"
                     strokeWidth="1"
                   />
+                  <foreignObject x="25" y="0" width="50" height="30">
+                    <div className="w-full h-full bg-honeycomb opacity-10"></div>
+                  </foreignObject>
                   <circle
                     cx="50"
                     cy="18"
