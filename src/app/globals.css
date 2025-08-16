@@ -48,15 +48,15 @@ body {
     --secondary-foreground: 210 40% 98%;
     --muted: 217.2 32.6% 17.5%;
     --muted-foreground: 215 20.2% 65.1%;
-    --accent: 283 82% 56%; /* Vivid Purple #BE34EB */
-    --accent-foreground: 210 40% 98%;
+    --accent: 210 95% 78%; /* Light Blue rgb(147, 197, 253) */
+    --accent-foreground: 222.2 47.4% 11.2%; /* Using primary-foreground for contrast */
     --destructive: 0 62.8% 30.6%;
     --destructive-foreground: 210 40% 98%;
     --border: 217.2 32.6% 25.5%;
     --input: 217.2 32.6% 25.5%;
     --ring: 182 100% 74%; /* Electric Blue */
     --chart-1: 182 100% 74%;
-    --chart-2: 283 82% 56%;
+    --chart-2: 210 95% 78%; /* Light Blue */
     --chart-3: 197 37% 24%;
     --chart-4: 43 74% 66%;
     --chart-5: 27 87% 67%;
@@ -133,4 +133,34 @@ body {
     hsl(var(--primary) / 0.1),
     hsl(var(--background)) 60%
   );
+}
+
+/* For the flying rocket button animation */
+.run-test-button::before {
+  content: '';
+  display: block;
+  position: absolute;
+  inset: -100% 0 0 0;
+  transform: translateY(-50%);
+  background:
+    linear-gradient(hsl(var(--primary-foreground)), hsl(var(--primary-foreground))) left
+      calc(50% - 1.5em) top 0% / 0.1em 0.3em,
+    linear-gradient(hsl(var(--primary-foreground)), hsl(var(--primary-foreground))) left
+      calc(50% - 0.45em) top 10% / 0.1em 0.3em,
+    linear-gradient(hsl(var(--primary-foreground)), hsl(var(--primary-foreground))) right
+      calc(50% - 2em) top 20% / 0.1em 0.3em,
+    linear-gradient(hsl(var(--primary-foreground)), hsl(var(--primary-foreground))) right
+      calc(50% - 1em) top 30% / 0.1em 0.3em,
+    linear-gradient(hsl(var(--primary-foreground)), hsl(var(--primary-foreground))) left
+      calc(50% - 1em) top 50% / 0.1em 0.3em,
+    linear-gradient(hsl(var(--primary-foreground)), hsl(var(--primary-foreground))) right
+      calc(50% - 1.7em) top 60% / 0.1em 0.3em,
+    linear-gradient(hsl(var(--primary-foreground)), hsl(var(--primary-foreground))) right
+      calc(50% - 0.55em) top 70% / 0.1em 0.3em,
+    linear-gradient(hsl(var(--primary-foreground)), hsl(var(--primary-foreground))) left
+      calc(50% - 0.7em) top 90% / 0.1em 0.3em,
+    linear-gradient(hsl(var(--primary-foreground)), hsl(var(--primary-foreground))) right
+      calc(50% - 1.3em) top 90% / 0.1em 0.3em;
+
+  background-repeat: no-repeat;
 }
