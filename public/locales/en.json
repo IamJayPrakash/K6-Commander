@@ -3,11 +3,12 @@
     "title": "K6 Commander",
     "historyLink": "History",
     "aboutLink": "About",
+    "apiTesterLink": "API Tester",
+    "startTour": "Start Tour",
     "bugReport": "Report a Bug",
     "featureRequest": "Request a Feature",
     "toggleThemeLabel": "Toggle theme",
-    "changeLanguageLabel": "Change language",
-    "startTour": "Start Tour"
+    "changeLanguageLabel": "Change language"
   },
   "footer": {
     "copyright": "© {{year}} K6 Commander. All rights reserved.",
@@ -15,58 +16,65 @@
     "privacyLink": "Privacy",
     "securityLink": "Security"
   },
-  "home": {
-    "lastSaved": "Local history last saved: {{distance}}"
-  },
   "pageTitles": {
     "home": "New Test",
+    "api-tester": "API Tester",
     "history": "Test History",
-    "about": "About"
+    "about": "About",
+    "terms": "Terms of Service",
+    "privacy": "Privacy Policy",
+    "security": "Security Policy"
+  },
+  "home": {
+    "lastSaved": "Last saved {{distance}}"
+  },
+  "tour": {
+    "step1": "Enter the full URL of the application or endpoint you want to test here.",
+    "step2": "Select which test suites you want to run. You can run one or multiple at the same time.",
+    "step3": "Choose a load test profile. 'Baseline' is great for a quick check, or choose 'Custom' for full control.",
+    "step4": "Click here to start the test! The results will appear in a new view."
   },
   "form": {
     "title": "New Test Run",
-    "description": "Configure the parameters for your next test run.",
+    "description": "Configure and launch a new test run against your application.",
     "urlLabel": "Target URL",
-    "urlDescription": "The full URL of the page you want to test or audit.",
-    "urlPlaceholder": "https://example.com",
+    "urlDescription": "The full URL of the page or API endpoint to test.",
+    "urlPlaceholder": "e.g., https://my-app.com/api/users",
     "toggleRecentUrlsLabel": "Toggle recent URLs",
     "searchUrlPlaceholder": "Search recent URLs...",
     "noRecentUrls": "No recent URLs found.",
     "recentUrlsHeading": "Recent URLs",
-    "removeRecentUrlLabel": "Remove {{url}} from recent URLs",
-    "clearRecentUrlsButton": "Clear Recent URLs",
+    "removeRecentUrlLabel": "Remove {{url}} from recents",
+    "clearRecentUrlsButton": "Clear recent URLs",
     "testSuitesTitle": "Test Suites",
-    "testSuitesDescription": "Select which test suites you want to run against the target URL.",
-    "k6SwitchLabel": "Load Test",
-    "k6SwitchDescription": "Simulate traffic with k6 to measure backend performance.",
+    "testSuitesDescription": "Select the test suites to include in this run.",
+    "k6SwitchLabel": "Load Test (k6)",
+    "k6SwitchDescription": "Simulate traffic to analyze performance and reliability.",
     "lighthouseSwitchLabel": "Lighthouse Audit",
-    "lighthouseSwitchDescription": "Run Google Lighthouse for performance, SEO, and accessibility.",
+    "lighthouseSwitchDescription": "Analyze Performance, SEO, and Accessibility scores.",
     "seoSwitchLabel": "AI SEO Analysis",
-    "seoSwitchDescription": "Perform a deep technical SEO analysis using AI.",
-    "error": {
-      "atLeastOne": "You must select at least one test suite to run."
-    },
+    "seoSwitchDescription": "Perform a deep analysis of on-page SEO factors.",
     "requestConfigTitle": "Request Configuration",
-    "requestConfigDescription": "Define the HTTP request details for the k6 load test.",
-    "methodLabel": "Method",
-    "methodPlaceholder": "Select HTTP method",
+    "requestConfigDescription": "Define the HTTP request for the load test.",
+    "methodLabel": "HTTP Method",
+    "methodPlaceholder": "Select a method",
     "headersLabel": "Headers",
-    "headerNamePlaceholder": "Header Name (e.g., Authorization)",
-    "headerValuePlaceholder": "Header Value (e.g., Bearer token)",
+    "headerNamePlaceholder": "Header Name",
+    "headerValuePlaceholder": "Header Value",
     "removeHeaderLabel": "Remove header {{index}}",
     "addHeaderButton": "Add Header",
     "requestBodyLabel": "Request Body (JSON)",
     "loadProfileTitle": "Load Profile",
     "loadProfileDescription": "Define the amount of load to generate during the test.",
-    "loadTestPresetsLabel": "Load Test Presets",
-    "customProfileTitle": "Custom Load Profile",
-    "customProfileDescription": "Define a fixed number of VUs and duration, or create a custom ramping profile.",
+    "loadTestPresetsLabel": "Load test presets",
+    "customProfileTitle": "Custom Profile Configuration",
+    "customProfileDescription": "Fine-tune the load test parameters. Define either VUs/duration OR a list of stages.",
     "vusLabel": "Virtual Users (VUs)",
     "vusPlaceholder": "e.g., 50",
-    "durationLabel": "Duration",
+    "durationLabel": "Test Duration",
     "durationPlaceholder": "e.g., 10m",
-    "stagesLabel": "Stages",
-    "stagesDescription": "Define ramping stages for more complex load patterns.",
+    "stagesLabel": "Ramping Stages",
+    "stagesDescription": "Define a sequence of load stages over time.",
     "stageDurationLabel": "Stage Duration",
     "stageDurationPlaceholder": "e.g., 2m",
     "stageTargetVusLabel": "Target VUs",
@@ -75,17 +83,20 @@
     "addStageButton": "Add Stage",
     "runTestButton": "Run Test(s)",
     "runningTestButton": "Running...",
+    "error": {
+      "atLeastOne": "At least one test suite must be selected."
+    },
     "toast": {
       "historyClearedTitle": "History Cleared",
-      "historyClearedDescription": "Previous test history and recent URLs have been cleared.",
+      "historyClearedDescription": "Your test history and recent URLs have been cleared.",
       "testStartedTitle": "Test Initiated",
-      "testStartedDescription": "Your test run has started. You will be notified upon completion."
+      "testStartedDescription": "Your test run has started. You will be taken to the results page shortly."
     },
     "clearHistoryDialog": {
-      "title": "Clear Previous History?",
-      "description": "To ensure accurate metrics, especially for soak tests, it's recommended to clear old data from InfluxDB before starting a new run. Do you want to clear all previous history and recent URLs?",
+      "title": "Clear Local History?",
+      "description": "To improve performance, it's recommended to clear your test history before starting a new run. Would you like to clear it?",
       "keepButton": "No, Keep History",
-      "clearButton": "Yes, Clear & Run"
+      "clearButton": "Yes, Clear and Run"
     }
   },
   "presets": {
@@ -96,9 +107,9 @@
     "custom": "Custom"
   },
   "running": {
-    "title": "Test Running...",
-    "description": "Please do not navigate away from this page. You can monitor the live Grafana dashboard for load test progress.",
+    "title": "Test is Running...",
     "finalizingTitle": "Finalizing Results...",
+    "description": "Please do not navigate away from this page. You can monitor the live load test on Grafana.",
     "grafanaLink": "View Live Grafana Dashboard"
   },
   "summary": {
@@ -110,9 +121,9 @@
     "k6Tab": "Load Test",
     "lighthouseTab": "Lighthouse",
     "seoTab": "SEO",
-    "noK6Data": "k6 load test was not run.",
+    "noK6Data": "No load test data available for this run.",
     "noLighthouseData": "No Lighthouse audit data.",
-    "noSeoData": "No SEO analysis data.",
+    "noSeoData": "No SEO analysis data available for this run.",
     "configSummaryTitle": "Test Configuration",
     "viewFullDetails": "View Full Configuration Details",
     "table": {
@@ -127,17 +138,29 @@
   },
   "history": {
     "title": "Test History",
-    "description": "Review, re-run, or export your past test results.",
-    "lastSaved": "Last saved",
+    "description": "Review, re-run, or export your previous test results.",
+    "lastSaved": "Last Saved",
     "importButton": "Import",
     "exportButton": "Export",
-    "searchPlaceholder": "Search by URL or Test ID...",
+    "searchPlaceholder": "Search by URL or ID...",
     "clearSearchLabel": "Clear search",
     "clearAllButton": "Clear All History",
-    "noHistoryMessage": "No history found.",
-    "noHistoryDescription": "Run a test to see its results here.",
+    "noHistoryMessage": "No Test History Found",
+    "noHistoryDescription": "Run a new test from the main page to get started.",
     "noResultsFound": "No results found for \"{{query}}\"",
-    "clearSearch": "Clear search query",
+    "clearSearch": "Clear search",
+    "clearAllDialog": {
+      "title": "Are you sure?",
+      "description": "This will permanently delete your entire test history and recent URLs. This action cannot be undone.",
+      "cancel": "Cancel",
+      "confirm": "Yes, Delete All"
+    },
+    "deleteDialog": {
+      "title": "Delete this test run?",
+      "description": "This action cannot be undone and will permanently remove this item from your history.",
+      "cancel": "Cancel",
+      "confirm": "Delete"
+    },
     "table": {
       "url": "URL",
       "date": "Date",
@@ -146,67 +169,65 @@
     },
     "actions": {
       "view": "View test for {{url}}",
-      "rerun": "Re-run test for {{url}}",
+      "rerun": "Rerun test for {{url}}",
       "delete": "Delete test for {{url}}"
     },
     "toast": {
       "exportSuccessTitle": "History Exported",
-      "exportSuccessDescription": "Your test history has been saved to a JSON file.",
+      "exportSuccessDescription": "Your test history has been saved as a JSON file.",
       "exportFailTitle": "Export Failed",
       "exportFailDescription": "Could not export history.",
       "importSuccessTitle": "History Imported",
-      "importSuccessDescription": "Test history has been successfully loaded.",
+      "importSuccessDescription": "Your test history has been successfully imported.",
       "importFailTitle": "Import Failed",
-      "importFailDescription": "An error occurred while importing the file.",
-      "importInvalidFormat": "Invalid file format.",
-      "deleteSuccessTitle": "History Item Deleted",
-      "deleteSuccessDescription": "The selected test run has been removed from your history.",
+      "importFailDescription": "Could not read the selected file.",
+      "importInvalidFormat": "The selected file is not a valid history export.",
+      "deleteSuccessTitle": "Test Deleted",
+      "deleteSuccessDescription": "The test run has been removed from your history.",
       "clearSuccessTitle": "History Cleared",
-      "clearSuccessDescription": "All test history and recent URLs have been deleted."
-    },
-    "clearAllDialog": {
-      "title": "Are you absolutely sure?",
-      "description": "This action cannot be undone. This will permanently delete your entire test history and list of recent URLs.",
-      "cancel": "Cancel",
-      "confirm": "Yes, Clear Everything"
-    },
-    "deleteDialog": {
-      "title": "Are you sure?",
-      "description": "This action will permanently delete this test run from your history.",
-      "cancel": "Cancel",
-      "confirm": "Yes, Delete"
+      "clearSuccessDescription": "Your test history has been successfully cleared."
     }
   },
   "about": {
-    "title": "About K6 Commander",
+    "title": "A Modern Testing Platform for Developers",
     "description": "K6 Commander is a lightweight, local-first, authorized load-testing platform. It allows you to configure, run, and analyze load tests, Lighthouse audits, and basic SEO checks directly from a sleek web UI.",
     "philosophyTitle": "Our Philosophy",
-    "localFirstTitle": "Local-First",
-    "localFirstDescription": "Your data is yours. All test configurations and results are stored in your browser's LocalStorage, never on our servers.",
+    "localFirstTitle": "Local-First & Private",
+    "localFirstDescription": "All your data stays on your machine. We never see your test configurations or results.",
     "unifiedToolingTitle": "Unified Tooling",
-    "unifiedToolingDescription": "We bring together the best open-source tools (k6, Lighthouse) into a single, cohesive interface to streamline your workflow.",
+    "unifiedToolingDescription": "Combine the power of k6, Lighthouse, and AI analysis in one cohesive interface.",
     "k6FeatureTitle": "k6 Load Testing",
-    "k6FeatureDescription": "Run powerful load tests with k6, configurable directly from the UI.",
-    "k6HowItWorks": "When you run a load test, the application spins up a temporary <code>k6</code> Docker container. The configuration from the UI is passed as environment variables to a generic k6 script.",
-    "k6HowItWorks2": "The k6 container sends its metrics to a local InfluxDB instance, which are then visualized in real-time in the embedded Grafana dashboard.",
+    "k6FeatureDescription": "Go beyond simple API calls and understand how your system performs under pressure.",
+    "k6HowItWorks": "When you run a load test, the application spins up a dedicated <code>k6</code> Docker container, configured with the exact parameters you set.",
+    "k6HowItWorks2": "Metrics are streamed in real-time to a local InfluxDB instance and visualized in a pre-configured Grafana dashboard, giving you instant insights.",
     "lighthouseFeatureTitle": "Lighthouse Audits",
-    "lighthouseFeatureDescription": "Get comprehensive site audits powered by Google Lighthouse.",
-    "lighthouseHowItWorks": "The Lighthouse audit runs as a separate Node.js process using the official <code>lighthouse</code> package. It audits the target URL and generates a full JSON and HTML report.",
-    "lighthouseHowItWorks2": "The scores are summarized in the UI, and a link is provided to view the full, interactive HTML report.",
+    "lighthouseFeatureDescription": "Get objective, actionable insights into your site's performance, accessibility, and SEO.",
+    "lighthouseHowItWorks": "The backend spawns a headless Chrome instance and runs a Lighthouse audit using the official <code>lighthouse</code> NPM package.",
+    "lighthouseHowItWorks2": "It then saves the full HTML report, which you can view directly, and parses the JSON output to display the score summary.",
     "seoFeatureTitle": "AI-Powered SEO Analysis",
-    "seoFeatureDescription": "Go beyond standard checks with AI-driven technical SEO analysis.",
-    "seoHowItWorks": "The app fetches the raw HTML of your URL and sends it to a secure Genkit AI flow. The AI agent is prompted to analyze key on-page SEO elements like title tags, meta descriptions, canonicals, and more.",
-    "seoHowItWorks2": "The AI not only identifies issues but also provides actionable recommendations for how to fix them, helping you optimize your site more effectively.",
-    "stackTitle": "Tech Stack",
+    "seoFeatureDescription": "Leverage Genkit and the Gemini model to perform a deep analysis of your on-page SEO.",
+    "seoHowItWorks": "The application fetches your URL's raw HTML and sends it to a Genkit flow running on the backend.",
+    "seoHowItWorks2": "The AI analyzes critical SEO elements like title tags, meta descriptions, and canonicals, providing actionable recommendations for any issues it finds.",
+    "stackTitle": "Technology Stack",
     "stackDescription": "K6 Commander is built with modern, powerful, and open-source technologies.",
     "involvedTitle": "Get Involved",
-    "involvedDescription": "This project is open-source and community-driven. We welcome contributions of all kinds, from bug reports to new features.",
+    "involvedDescription": "This is an open-source project. Contributions, bug reports, and feature requests are always welcome.",
     "githubButton": "View on GitHub"
   },
-  "tour": {
-    "step1": "First, enter the full URL of the website you want to test.",
-    "step2": "Next, choose which tests you want to run. You can run any combination of a k6 load test, a Lighthouse audit, or an AI-powered SEO analysis.",
-    "step3": "If running a load test, you can select a preset or define a custom load profile with virtual users, duration, and stages.",
-    "step4": "Once you're ready, click here to start the tests. You'll be taken to a new screen to monitor the progress."
+  "apiTester": {
+    "keyPlaceholder": "Key",
+    "valuePlaceholder": "Value",
+    "addButton": "Add",
+    "sendButton": "Send",
+    "paramsTab": "Params",
+    "headersTab": "Headers",
+    "bodyTab": "Body",
+    "jsonBodyLabel": "JSON Body",
+    "noResponseYet": "No Response Yet",
+    "noResponseYetDesc": "Send a request to see the response here.",
+    "loadingResponse": "Awaiting response...",
+    "status": "Status",
+    "time": "Time",
+    "size": "Size"
   }
 }

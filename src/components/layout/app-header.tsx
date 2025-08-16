@@ -10,6 +10,7 @@ import {
   Menu,
   Languages,
   PlayCircle,
+  Beaker,
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useTheme } from 'next-themes';
@@ -71,6 +72,14 @@ export function AppHeader() {
             <span className="font-bold hidden sm:inline-block">{t('header.title')}</span>
           </Link>
           <nav className="hidden md:flex items-center gap-6 text-sm">
+            <Link
+              href="/api-tester"
+              className="transition-colors hover:text-foreground/80 text-foreground/60 cursor-pointer"
+              data-testid="header-api-tester-link"
+            >
+              <Beaker className="inline-block h-4 w-4 mr-1" />
+              {t('header.apiTesterLink')}
+            </Link>
             <Link
               href="/history"
               className="transition-colors hover:text-foreground/80 text-foreground/60 cursor-pointer"
@@ -168,6 +177,12 @@ export function AppHeader() {
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end" data-testid="mobile-menu-content">
+              <Link href="/api-tester">
+                <DropdownMenuItem>
+                  <Beaker className="mr-2 h-4 w-4" />
+                  {t('header.apiTesterLink')}
+                </DropdownMenuItem>
+              </Link>
               <Link href="/history">
                 <DropdownMenuItem>
                   <History className="mr-2 h-4 w-4" />
