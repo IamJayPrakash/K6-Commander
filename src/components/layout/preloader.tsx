@@ -32,18 +32,8 @@ export function Preloader() {
   }, []);
 
   return (
-    <div className="flex h-screen items-center justify-center bg-slate-950 font-mono text-slate-100 overflow-hidden relative">
-      {/* Animated Grid Background */}
-      <div className="absolute inset-0 opacity-20">
-        <div className="absolute inset-0" style={{
-          backgroundImage: `
-            linear-gradient(rgba(59, 130, 246, 0.1) 1px, transparent 1px),
-            linear-gradient(90deg, rgba(59, 130, 246, 0.1) 1px, transparent 1px)
-          `,
-          backgroundSize: '50px 50px',
-          animation: 'gridMove 20s linear infinite'
-        }}></div>
-      </div>
+    <div className="flex h-screen items-center justify-center  font-mono text-slate-100 overflow-hidden relative">
+     
 
       {/* Floating Code Snippets */}
       <div className="absolute top-20 left-20 text-xs text-slate-400 opacity-30 animate-float-1">
@@ -62,7 +52,7 @@ export function Preloader() {
       {/* Main Content */}
       <div className="relative flex h-full w-full items-center justify-center overflow-hidden">
         {/* Radial Gradient Background */}
-        <div className="absolute inset-0 bg-gradient-radial from-blue-950/30 via-slate-950/50 to-slate-950"></div>
+        <div className="absolute inset-0"></div>
 
         {/* Rocket Launch Animation */}
         <div className="z-10 flex flex-col items-center gap-8 text-center">
@@ -82,8 +72,8 @@ export function Preloader() {
               <Rocket className="h-20 w-20 text-blue-400 animate-rocket-float" />
               
               {/* Thrust Effect */}
-              <div className="absolute -bottom-2 left-1/2 -translate-x-1/2 w-8 h-12 bg-gradient-to-t from-orange-500/80 via-yellow-500/60 to-transparent rounded-full animate-thrust blur-sm"></div>
-              <div className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-4 h-8 bg-gradient-to-t from-white/90 via-yellow-400/80 to-transparent rounded-full animate-thrust-core"></div>
+              <div className="absolute -bottom-2  -translate-x-1/2 w-8 h-12 bg-gradient-to-t from-orange-500/80 via-yellow-500/60 to-transparent rounded-full animate-thrust blur-sm"></div>
+              <div className="absolute -bottom-1  -translate-x-1/2 w-4 h-8 bg-gradient-to-t from-white/90 via-yellow-400/80 to-transparent rounded-full animate-thrust-core"></div>
             </div>
 
             {/* Orbiting Elements */}

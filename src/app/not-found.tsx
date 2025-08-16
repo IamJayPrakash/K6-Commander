@@ -70,29 +70,6 @@ export default function NotFound() {
 
   return (
     <div className="flex-1 flex items-center justify-center text-center px-4 font-mono relative overflow-hidden min-h-screen">
-      {/* Animated Background Grid */}
-      <div className="absolute inset-0 opacity-10">
-        <div
-          className="absolute inset-0"
-          style={{
-            backgroundImage: `
-            linear-gradient(rgba(59, 130, 246, 0.3) 1px, transparent 1px),
-            linear-gradient(90deg, rgba(59, 130, 246, 0.3) 1px, transparent 1px)
-          `,
-            backgroundSize: '40px 40px',
-            animation: 'gridDrift 15s linear infinite',
-          }}
-        ></div>
-      </div>
-
-      {/* Scanning Line Effect */}
-      <div
-        className="absolute inset-0 pointer-events-none z-10"
-        style={{
-          background: `linear-gradient(90deg, transparent ${scanningLine - 2}%, rgba(59, 130, 246, 0.1) ${scanningLine}%, transparent ${scanningLine + 2}%)`,
-          transition: 'none',
-        }}
-      ></div>
 
       {/* Floating Error Indicators */}
       <div className="absolute top-20 left-20 text-red-400 opacity-30 animate-float-error-1">
@@ -107,9 +84,9 @@ export default function NotFound() {
 
       {/* Main Content */}
       <div className="relative z-20 max-w-4xl mx-auto">
-        <div className="max-w-xl mx-auto p-8 rounded-xl bg-slate-900/80 backdrop-blur-xl border border-slate-700/50 shadow-2xl relative overflow-hidden">
+        <div className="max-w-xl mx-auto p-8 rounded-xl backdrop-blur-xl shadow-2xl relative overflow-hidden">
           {/* Card Glow Effect */}
-          <div className="absolute -inset-1 bg-gradient-to-r from-red-500/20 via-yellow-500/20 to-red-500/20 rounded-xl blur-xl animate-pulse-error"></div>
+          <div className="absolute -inset-1 from-red-500/20 via-yellow-500/20 to-red-500/20 rounded-xl blur-xl animate-pulse-error"></div>
 
           {/* Signal Animation Container */}
           <div className="relative mb-8 flex flex-col items-center justify-center">
