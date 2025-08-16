@@ -70,16 +70,25 @@ const KeyValueTable = ({
           <FormField
             control={form.control}
             name={`${name}.${index}.key`}
-            render={({ field }) => <Input placeholder={t('apiTester.keyPlaceholder')} {...field} />}
+            render={({ field }) => (
+              <Input
+                placeholder={name === 'queryParams' ? 'Query Param' : 'Header Name'}
+                {...field}
+              />
+            )}
           />
           <FormField
             control={form.control}
             name={`${name}.${index}.value`}
-            render={({ field }) => (
-              <Input placeholder={t('apiTester.valuePlaceholder')} {...field} />
-            )}
+            render={({ field }) => <Input placeholder="Value" {...field} />}
           />
-          <Button type="button" variant="ghost" size="icon" onClick={() => onRemove(index)}>
+          <Button
+            type="button"
+            variant="ghost"
+            size="icon"
+            onClick={() => onRemove(index)}
+            title={`Remove ${name === 'queryParams' ? 'Parameter' : 'Header'}`}
+          >
             <Trash2 className="h-4 w-4" />
           </Button>
         </div>
@@ -104,18 +113,23 @@ export default function RequestPanel({ onSend, isLoading, initialValues }: Reque
     defaultValues: initialValues || {
       url: 'https://jsonplaceholder.typicode.com/posts/1',
       method: 'GET',
-      queryParams: [{ key: '', value: '' }],
-      headers: [{ key: '', value: '' }],
+      queryParams: [],
+      headers: [],
       body: '',
     },
   });
 
   useEffect(() => {
-    if (initialValues) {
-      form.reset(initialValues);
-    }
+    form.reset(
+      initialValues || {
+        url: 'https://jsonplaceholder.typicode.com/posts/1',
+        method: 'GET',
+        queryParams: [],
+        headers: [],
+        body: '',
+      }
+    );
   }, [initialValues, form]);
-
 
   const {
     fields: queryParamFields,
@@ -136,14 +150,21 @@ export default function RequestPanel({ onSend, isLoading, initialValues }: Reque
   });
 
   const handleImport = (values: Partial<ApiFormValues>) => {
-    form.reset(values);
+    const currentValues = form.getValues();
+    form.reset({
+      ...currentValues,
+      ...values,
+      // Ensure arrays are not undefined
+      queryParams: values.queryParams || [],
+      headers: values.headers || [],
+    });
   };
-
+  
   return (
     <Card className="h-full border-0 shadow-none">
-      <CardContent className="p-2">
+      <CardContent className="p-2 h-full flex flex-col">
         <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSend)} className="space-y-4">
+          <form onSubmit={form.handleSubmit(onSend)} className="space-y-4 flex flex-col flex-grow">
             <div className="flex flex-wrap gap-2">
               <div className="flex flex-1 min-w-[200px] gap-2">
                 <FormField
@@ -151,7 +172,7 @@ export default function RequestPanel({ onSend, isLoading, initialValues }: Reque
                   name="method"
                   render={({ field }) => (
                     <FormItem>
-                      <Select onValueChange={field.onChange} defaultValue={field.value} value={field.value}>
+                      <Select onValueChange={field.onChange} value={field.value}>
                         <FormControl>
                           <SelectTrigger className="w-32">
                             <SelectValue placeholder="Method" />
@@ -194,7 +215,7 @@ export default function RequestPanel({ onSend, isLoading, initialValues }: Reque
                 </Button>
               </div>
             </div>
-            <Tabs defaultValue="params" className="w-full">
+            <Tabs defaultValue="params" className="w-full flex-grow flex flex-col">
               <TabsList>
                 <TabsTrigger value="params">{t('apiTester.paramsTab')}</TabsTrigger>
                 <TabsTrigger value="headers">{t('apiTester.headersTab')}</TabsTrigger>
@@ -218,17 +239,17 @@ export default function RequestPanel({ onSend, isLoading, initialValues }: Reque
                   form={form}
                 />
               </TabsContent>
-              <TabsContent value="body" className="p-2">
+              <TabsContent value="body" className="p-2 flex-grow flex flex-col">
                 <FormField
                   control={form.control}
                   name="body"
                   render={({ field }) => (
-                    <FormItem>
+                    <FormItem className="flex-grow flex flex-col">
                       <FormLabel>{t('apiTester.jsonBodyLabel')}</FormLabel>
                       <FormControl>
                         <Textarea
                           placeholder='{ "key": "value" }'
-                          className="font-mono h-48"
+                          className="font-mono flex-grow"
                           {...field}
                         />
                       </FormControl>

@@ -13,6 +13,10 @@ import ApiTestHistory from '@/components/pages/api-tester/api-test-history';
 import { useLocalStorage } from '@/hooks/use-local-storage';
 import { v4 as uuidv4 } from 'uuid';
 import type { ApiTestCollection, ApiTestItem } from '@/types/index';
+import { useIsMobile } from '@/hooks/use-mobile';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { History, TestTubeDiagonal, ArrowLeftRight } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 
 export default function ApiTesterPage() {
   const [response, setResponse] = React.useState(null);
@@ -27,9 +31,16 @@ export default function ApiTesterPage() {
     'default'
   );
 
+  const isMobile = useIsMobile();
+  const { t } = useTranslation();
+  const [mobileTab, setMobileTab] = React.useState('request');
+
   const handleSendRequest = async (config: ApiFormValues) => {
     setIsLoading(true);
     setResponse(null);
+    if (isMobile) {
+      setMobileTab('response');
+    }
 
     const startTime = Date.now();
     let responseData = {};
@@ -37,14 +48,14 @@ export default function ApiTesterPage() {
     try {
       const url = new URL(config.url);
       config.queryParams.forEach((param) => {
-        if (param.key && param.value) {
+        if (param.key) {
           url.searchParams.append(param.key, param.value);
         }
       });
 
       const headers = new Headers();
       config.headers.forEach((header) => {
-        if (header.key && header.value) {
+        if (header.key) {
           headers.append(header.key, header.value);
         }
       });
@@ -111,7 +122,9 @@ export default function ApiTesterPage() {
       setCollections((prevCollections) =>
         prevCollections.map((c) => {
           if (c.id === activeCollectionId) {
-            return { ...c, requests: [newHistoryItem, ...c.requests] };
+            // Add to the beginning of the array, but handle case where requests is undefined
+            const updatedRequests = c.requests ? [newHistoryItem, ...c.requests] : [newHistoryItem];
+            return { ...c, requests: updatedRequests };
           }
           return c;
         })
@@ -121,10 +134,58 @@ export default function ApiTesterPage() {
 
   const handleSelectRequest = (requestItem: ApiTestItem | null) => {
     setCurrentRequest(requestItem);
+    if (isMobile && requestItem) {
+      setMobileTab('request');
+    }
   };
 
-  return (
-    <ResizablePanelGroup direction="horizontal" className="w-full h-[calc(100vh-10rem)]">
+  if (isMobile === undefined) {
+    return null; // or a loading spinner
+  }
+
+  return isMobile ? (
+    <Tabs value={mobileTab} onValueChange={setMobileTab} className="w-full">
+      <TabsList className="grid w-full grid-cols-3">
+        <TabsTrigger value="history">
+          <History className="mr-2 h-4 w-4" />
+          {t('apiTester.historyTab')}
+        </TabsTrigger>
+        <TabsTrigger value="request">
+          <TestTubeDiagonal className="mr-2 h-4 w-4" />
+          {t('apiTester.requestTab')}
+        </TabsTrigger>
+        <TabsTrigger value="response">
+          <ArrowLeftRight className="mr-2 h-4 w-4" />
+          {t('apiTester.responseTab')}
+        </TabsTrigger>
+      </TabsList>
+      <TabsContent value="history" className="mt-4">
+        <ApiTestHistory
+          collections={collections}
+          setCollections={setCollections}
+          activeCollectionId={activeCollectionId}
+          setActiveCollectionId={setActiveCollectionId}
+          onSelectRequest={handleSelectRequest}
+          selectedRequestId={currentRequest?.id}
+        />
+      </TabsContent>
+      <TabsContent value="request" className="mt-4">
+        <RequestPanel
+          key={currentRequest?.id || 'new'}
+          onSend={handleSendRequest}
+          isLoading={isLoading}
+          initialValues={currentRequest?.request}
+        />
+      </TabsContent>
+      <TabsContent value="response" className="mt-4">
+        <ResponsePanel response={response} isLoading={isLoading} />
+      </TabsContent>
+    </Tabs>
+  ) : (
+    <ResizablePanelGroup
+      direction="horizontal"
+      className="w-full rounded-lg border h-[calc(100vh-10rem)]"
+    >
       <ResizablePanel defaultSize={25} minSize={20}>
         <ApiTestHistory
           collections={collections}
@@ -132,6 +193,7 @@ export default function ApiTesterPage() {
           activeCollectionId={activeCollectionId}
           setActiveCollectionId={setActiveCollectionId}
           onSelectRequest={handleSelectRequest}
+          selectedRequestId={currentRequest?.id}
         />
       </ResizablePanel>
       <ResizableHandle withHandle />
