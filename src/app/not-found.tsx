@@ -9,7 +9,7 @@ export default function NotFound() {
   const [glitchText, setGlitchText] = useState('404');
   const [scanningLine, setScanningLine] = useState(0);
   const [terminalText, setTerminalText] = useState('');
-  
+
   const glitchVariations = ['404', '40#', '4⚡4', '#04', '404', '4Ø4', '404'];
   const terminalMessages = [
     '$ k6 run test.js',
@@ -21,7 +21,7 @@ export default function NotFound() {
     'ls: cannot access: No such file',
     '$ ping target-server',
     'Request timeout for icmp_seq 1',
-    'Connection lost to remote host'
+    'Connection lost to remote host',
   ];
 
   useEffect(() => {
@@ -29,13 +29,13 @@ export default function NotFound() {
     const glitchInterval = setInterval(() => {
       const randomIndex = Math.floor(Math.random() * glitchVariations.length);
       setGlitchText(glitchVariations[randomIndex]);
-      
+
       setTimeout(() => setGlitchText('404'), 150);
     }, 3000 + Math.random() * 2000);
 
     // Scanning line effect
     const scanInterval = setInterval(() => {
-      setScanningLine(prev => (prev >= 100 ? 0 : prev + 2));
+      setScanningLine((prev) => (prev >= 100 ? 0 : prev + 2));
     }, 50);
 
     // Terminal text animation
@@ -45,10 +45,10 @@ export default function NotFound() {
       if (terminalIndex < terminalMessages.length) {
         const currentMessage = terminalMessages[terminalIndex];
         if (charIndex < currentMessage.length) {
-          setTerminalText(prev => prev + currentMessage[charIndex]);
+          setTerminalText((prev) => prev + currentMessage[charIndex]);
           charIndex++;
         } else {
-          setTerminalText(prev => prev + '\n');
+          setTerminalText((prev) => prev + '\n');
           terminalIndex++;
           charIndex = 0;
           if (terminalIndex >= terminalMessages.length) {
@@ -72,22 +72,25 @@ export default function NotFound() {
     <div className="flex-1 flex items-center justify-center text-center px-4 font-mono relative overflow-hidden min-h-screen">
       {/* Animated Background Grid */}
       <div className="absolute inset-0 opacity-10">
-        <div className="absolute inset-0" style={{
-          backgroundImage: `
+        <div
+          className="absolute inset-0"
+          style={{
+            backgroundImage: `
             linear-gradient(rgba(59, 130, 246, 0.3) 1px, transparent 1px),
             linear-gradient(90deg, rgba(59, 130, 246, 0.3) 1px, transparent 1px)
           `,
-          backgroundSize: '40px 40px',
-          animation: 'gridDrift 15s linear infinite'
-        }}></div>
+            backgroundSize: '40px 40px',
+            animation: 'gridDrift 15s linear infinite',
+          }}
+        ></div>
       </div>
 
       {/* Scanning Line Effect */}
-      <div 
+      <div
         className="absolute inset-0 pointer-events-none z-10"
         style={{
           background: `linear-gradient(90deg, transparent ${scanningLine - 2}%, rgba(59, 130, 246, 0.1) ${scanningLine}%, transparent ${scanningLine + 2}%)`,
-          transition: 'none'
+          transition: 'none',
         }}
       ></div>
 
@@ -107,7 +110,7 @@ export default function NotFound() {
         <div className="max-w-xl mx-auto p-8 rounded-xl bg-slate-900/80 backdrop-blur-xl border border-slate-700/50 shadow-2xl relative overflow-hidden">
           {/* Card Glow Effect */}
           <div className="absolute -inset-1 bg-gradient-to-r from-red-500/20 via-yellow-500/20 to-red-500/20 rounded-xl blur-xl animate-pulse-error"></div>
-          
+
           {/* Signal Animation Container */}
           <div className="relative mb-8 flex flex-col items-center justify-center">
             {/* Satellite Dish with Signal Rings */}
@@ -116,11 +119,11 @@ export default function NotFound() {
               <div className="absolute -inset-8 rounded-full border-2 border-red-500/20 animate-ping-slow"></div>
               <div className="absolute -inset-12 rounded-full border border-red-400/10 animate-ping-slower"></div>
               <div className="absolute -inset-6 rounded-full border-2 border-dashed border-yellow-500/30 animate-spin-slow"></div>
-              
+
               {/* Satellite Container */}
               <div className="relative p-4 rounded-full bg-slate-800 border-2 border-red-500/50">
                 <SatelliteDish className="w-16 h-16 text-red-400 animate-satellite-wobble" />
-                
+
                 {/* Disconnection Indicators */}
                 <div className="absolute -top-2 -right-2 w-4 h-4 bg-red-500 rounded-full animate-pulse"></div>
                 <div className="absolute -bottom-1 -left-1 w-2 h-2 bg-yellow-400 rounded-full animate-pulse" style={{ animationDelay: '0.5s' }}></div>
@@ -134,7 +137,7 @@ export default function NotFound() {
                 <span className="absolute -top-1 -left-1 text-red-400/30 z-0">404</span>
                 {/* <span className="absolute top-1 left-1 text-yellow-400/20 z-0 animate-glitch-reverse">404</span> */}
               </h1>
-              
+
               {/* Static/Noise Effect */}
               <div className="absolute inset-0 bg-gradient-to-r from-transparent via-red-500/10 to-transparent animate-static"></div>
             </div>
@@ -154,10 +157,10 @@ export default function NotFound() {
           <div className="space-y-4 mb-8">
             <p className="text-slate-400 leading-relaxed">
               The requested resource is outside of our operational parameters. It may have been
-              <span className="text-red-400 animate-pulse"> decommissioned</span>, moved to a different sector, or 
+              <span className="text-red-400 animate-pulse"> decommissioned</span>, moved to a different sector, or
               <span className="text-yellow-400"> never existed</span> in this timeline.
             </p>
-            
+
             {/* Error Codes */}
             <div className="bg-slate-800/50 rounded-lg p-3 border border-slate-700/50">
               <div className="flex items-center gap-2 mb-2">
@@ -189,9 +192,9 @@ export default function NotFound() {
           </div>
 
           {/* Action Button */}
-          <Button 
-            asChild 
-            size="lg" 
+          <Button
+            asChild
+            size="lg"
             className="relative bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-500 hover:to-purple-500 border-0 shadow-lg hover:shadow-blue-500/25 transition-all duration-300 group overflow-hidden"
             data-testid="return-home-button"
           >
@@ -209,53 +212,53 @@ export default function NotFound() {
           0% { transform: translate(0, 0); }
           100% { transform: translate(40px, 40px); }
         }
-        
+
         @keyframes float-error-1 {
           0%, 100% { transform: translateY(0px) rotate(0deg); opacity: 0.3; }
           50% { transform: translateY(-20px) rotate(10deg); opacity: 0.6; }
         }
-        
+
         @keyframes float-error-2 {
           0%, 100% { transform: translateY(0px) rotate(0deg); opacity: 0.3; }
           50% { transform: translateY(-15px) rotate(-5deg); opacity: 0.5; }
         }
-        
+
         @keyframes float-error-3 {
           0%, 100% { transform: translateY(0px) rotate(0deg); opacity: 0.3; }
           50% { transform: translateY(-25px) rotate(8deg); opacity: 0.7; }
         }
-        
+
         @keyframes pulse-error {
           0%, 100% { opacity: 0.3; }
           50% { opacity: 0.8; }
         }
-        
+
         @keyframes ping-slow {
           0% { transform: scale(1); opacity: 0.8; }
           100% { transform: scale(2); opacity: 0; }
         }
-        
+
         @keyframes ping-slower {
           0% { transform: scale(1); opacity: 0.5; }
           100% { transform: scale(2.5); opacity: 0; }
         }
-        
+
         @keyframes spin-slow {
           0% { transform: rotate(0deg); }
           100% { transform: rotate(360deg); }
         }
-        
+
         @keyframes satellite-wobble {
           0%, 100% { transform: rotate(0deg); }
           25% { transform: rotate(-5deg); }
           75% { transform: rotate(5deg); }
         }
-        
+
         @keyframes gradient-shift {
           0%, 100% { background-position: 0% 50%; }
           50% { background-position: 100% 50%; }
         }
-        
+
         @keyframes glitch-shadow {
           0%, 100% { transform: translate(0); opacity: 0.3; }
           20% { transform: translate(-2px, 2px); opacity: 0.8; }
@@ -263,29 +266,29 @@ export default function NotFound() {
           60% { transform: translate(-2px, -2px); opacity: 0.6; }
           80% { transform: translate(2px, 2px); opacity: 0.2; }
         }
-        
+
         @keyframes glitch-reverse {
           0%, 100% { transform: translate(0); opacity: 0.2; }
           25% { transform: translate(2px, -2px); opacity: 0.6; }
           50% { transform: translate(-2px, 2px); opacity: 0.3; }
           75% { transform: translate(2px, 2px); opacity: 0.5; }
         }
-        
+
         @keyframes static {
           0%, 100% { opacity: 0; }
           50% { opacity: 0.1; }
         }
-        
+
         @keyframes type-blink {
           0%, 50% { opacity: 1; }
           51%, 100% { opacity: 0.3; }
         }
-        
+
         @keyframes terminal-cursor {
           0%, 50% { opacity: 1; }
           51%, 100% { opacity: 0; }
         }
-        
+
         .animate-float-error-1 { animation: float-error-1 4s ease-in-out infinite; }
         .animate-float-error-2 { animation: float-error-2 5s ease-in-out infinite; }
         .animate-float-error-3 { animation: float-error-3 4.5s ease-in-out infinite; }
