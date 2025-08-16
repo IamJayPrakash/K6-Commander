@@ -23,10 +23,11 @@ import {
 } from '@/components/ui/select';
 import { Textarea } from '@/components/ui/textarea';
 import { Card, CardContent } from '@/components/ui/card';
-import { Download, Loader, Plus, Send, Trash2 } from 'lucide-react';
+import { Download, Loader, Plus, Send, Sparkles, Trash2 } from 'lucide-react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { useTranslation } from 'react-i18next';
 import CurlImportDialog from './curl-import-dialog';
+import { useToast } from '@/hooks/use-toast';
 
 const paramSchema = z.object({
   key: z.string(),
@@ -107,6 +108,7 @@ const KeyValueTable = ({
 
 export default function RequestPanel({ onSend, isLoading, initialValues }: RequestPanelProps) {
   const { t } = useTranslation();
+  const { toast } = useToast();
 
   const form = useForm<ApiFormValues>({
     resolver: zodResolver(formSchema),
@@ -159,7 +161,25 @@ export default function RequestPanel({ onSend, isLoading, initialValues }: Reque
       headers: values.headers || [],
     });
   };
-  
+
+  const handleBeautifyJson = () => {
+    const body = form.getValues('body');
+    if (!body) return;
+
+    try {
+      const parsed = JSON.parse(body);
+      const formatted = JSON.stringify(parsed, null, 2);
+      form.setValue('body', formatted, { shouldValidate: true });
+      toast({ title: t('apiTester.toast.jsonFormatted') });
+    } catch (error) {
+      toast({
+        variant: 'destructive',
+        title: t('apiTester.toast.jsonFormatErrorTitle'),
+        description: t('apiTester.toast.jsonFormatErrorDescription'),
+      });
+    }
+  };
+
   return (
     <Card className="h-full border-0 shadow-none">
       <CardContent className="p-2 h-full flex flex-col">
@@ -245,7 +265,18 @@ export default function RequestPanel({ onSend, isLoading, initialValues }: Reque
                   name="body"
                   render={({ field }) => (
                     <FormItem className="flex-grow flex flex-col">
-                      <FormLabel>{t('apiTester.jsonBodyLabel')}</FormLabel>
+                      <div className="flex items-center justify-between">
+                        <FormLabel>{t('apiTester.jsonBodyLabel')}</FormLabel>
+                        <Button
+                          type="button"
+                          variant="ghost"
+                          size="sm"
+                          onClick={handleBeautifyJson}
+                        >
+                          <Sparkles className="mr-2 h-4 w-4" />
+                          {t('apiTester.beautifyJsonButton')}
+                        </Button>
+                      </div>
                       <FormControl>
                         <Textarea
                           placeholder='{ "key": "value" }'
