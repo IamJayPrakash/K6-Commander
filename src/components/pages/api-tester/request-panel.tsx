@@ -28,7 +28,6 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { useTranslation } from 'react-i18next';
 import CurlImportDialog from './curl-import-dialog';
 import { useToast } from '@/hooks/use-toast';
-import { toCurl } from 'curlconverter';
 
 const paramSchema = z.object({
   key: z.string(),
@@ -185,41 +184,37 @@ export default function RequestPanel({ onSend, isLoading, initialValues }: Reque
     try {
       const values = form.getValues();
       const url = new URL(values.url);
-      values.queryParams.forEach(param => {
+      values.queryParams.forEach((param) => {
         if (param.key) {
           url.searchParams.append(param.key, param.value);
         }
       });
-      
-      const headers: Record<string, string> = {};
-      values.headers.forEach(h => {
+
+      let curlCommand = `curl "${url.toString()}" -X ${values.method}`;
+
+      values.headers.forEach((h) => {
         if (h.key) {
-          headers[h.key] = h.value;
+          curlCommand += ` \\\n  -H "${h.key}: ${h.value}"`;
         }
       });
 
-      const curlCommand = toCurl({
-        url: url.toString(),
-        method: values.method,
-        headers,
-        body: values.body,
-      });
+      if (values.body && ['POST', 'PUT', 'PATCH'].includes(values.method)) {
+        curlCommand += ` \\\n  --data-raw '${values.body.replace(/'/g, "'\\''")}'`;
+      }
 
       navigator.clipboard.writeText(curlCommand);
       toast({
         title: t('apiTester.toast.curlCopiedTitle'),
         description: t('apiTester.toast.curlCopiedDescription'),
       });
-
     } catch (error: any) {
-       toast({
+      toast({
         variant: 'destructive',
         title: t('apiTester.toast.curlCopyErrorTitle'),
         description: error.message || 'Could not generate cURL command.',
       });
     }
   };
-
 
   return (
     <Card className="h-full border-0 shadow-none">
@@ -265,7 +260,7 @@ export default function RequestPanel({ onSend, isLoading, initialValues }: Reque
               </div>
               <div className="flex gap-2">
                 <CurlImportDialog onImport={handleImport} />
-                 <Button type="button" variant="outline" onClick={handleCopyToCurl}>
+                <Button type="button" variant="outline" onClick={handleCopyToCurl}>
                   <Copy className="mr-2 h-4 w-4" /> {t('apiTester.copyAsCurlButton')}
                 </Button>
                 <Button type="submit" disabled={isLoading} className="w-28">
