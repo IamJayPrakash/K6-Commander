@@ -115,12 +115,12 @@ interface TestFormProps {
   setHistory: (value: HistoryItem[] | ((prev: HistoryItem[]) => HistoryItem[])) => void;
 }
 
-const presetIcons = {
-  baseline: Activity,
-  spike: Zap,
-  stress: Thermometer,
-  soak: Droplets,
-  custom: SlidersHorizontal,
+const presetIcons: Record<string, { icon: React.ElementType; color: string }> = {
+  baseline: { icon: Activity, color: 'text-blue-400' },
+  spike: { icon: Zap, color: 'text-yellow-400' },
+  stress: { icon: Thermometer, color: 'text-red-400' },
+  soak: { icon: Droplets, color: 'text-cyan-400' },
+  custom: { icon: SlidersHorizontal, color: 'text-gray-400' },
 };
 
 const newTestDefaultValues: TestFormValues = {
@@ -678,7 +678,7 @@ export default function TestForm({ initialValues, onRunTest, setHistory }: TestF
                               <span id="load-profile-title" className="sr-only">
                                 {t('form.loadProfileTitle')}
                               </span>
-                              {Object.entries(presetIcons).map(([key, Icon]) => (
+                              {Object.entries(presetIcons).map(([key, { icon: Icon, color }]) => (
                                 <FormItem
                                   key={key}
                                   className="flex items-center space-x-3 space-y-0"
@@ -705,7 +705,7 @@ export default function TestForm({ initialValues, onRunTest, setHistory }: TestF
                                         aria-labelledby={`${key}-label`}
                                         aria-describedby={`${key}-desc`}
                                       />
-                                      <Icon className="h-8 w-8 text-accent" />
+                                      <Icon className={cn('h-8 w-8', color)} />
                                       <FormLabel
                                         id={`${key}-label`}
                                         htmlFor={key}
