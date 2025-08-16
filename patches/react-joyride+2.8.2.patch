@@ -1,0 +1,71 @@
+diff --git a/node_modules/react-joyride/dist/index.mjs b/node_modules/react-joyride/dist/index.mjs
+index c8e92f2..5354929 100644
+--- a/node_modules/react-joyride/dist/index.mjs
++++ b/node_modules/react-joyride/dist/index.mjs
+@@ -1,5 +1,5 @@
+ import React, { useReducer, useEffect, useMemo, useCallback, useState, useRef, useLayoutEffect } from 'react';
+-import ReactDOM, { findDOMNode } from 'react-dom';
++import { createPortal } from 'react-dom';
+ import { Animate } from 'react-simple-animate';
+ import { Arrow, Button, Close, Container, Hole, Overlay, Wrapper } from './components/index.mjs';
+ import { getClientRect, getDocument, getWindow, isElement, isFixed, isFunction, isLegacy, isObject, isReactElement, isSsr, isString, log, hasKey } from './modules/helpers.mjs';
+@@ -107,7 +107,7 @@
+ var defaultState = {
+   action: "start",
+   controlled: false,
+-  index: 0,
++  index: 0,
+   lifecycle: "init",
+   size: 0,
+   status: "ready"
+ };
+@@ -291,7 +291,7 @@
+     return;
+   }
+   if (isLegacy()) {
+-    return ReactDOM.createPortal(children, portal);
++    return createPortal(children, portal);
+   }
+   if (portal.firstChild) {
+     portal.replaceChild(children, portal.firstChild);
+@@ -300,7 +300,7 @@
+   } else {
+     portal.appendChild(children);
+   }
+-};
++}
+ var Tooltip = function(props) {
+   var continuous = props.continuous, getTooltipRef = props.getTooltipRef, index = props.index, isLastStep = props.isLastStep, primaryColor = props.primaryColor, setTooltipRef = props.setTooltipRef, size = props.size, step = props.step, tooltipOptions = props.tooltipOptions;
+   var back = step.back, close = step.close, next = step.next, skip = step.skip;
+   var _a = useState(false), isMounted = _a[0], setIsMounted = _a[1];
+@@ -370,12 +370,12 @@
+     }
+     if (isLegacy()) {
+       if (node && isMounted) {
+-        ReactDOM.unstable_renderSubtreeIntoContainer(this, renderedTooltip, node, function() {
++        /* ReactDOM.unstable_renderSubtreeIntoContainer(this, renderedTooltip, node, function() {
+           if (isFunction(setTooltipRef)) {
+             setTooltipRef(node);
+           }
+-        });
+-      } else if (node && portal) {
++        }); */
++      } else if (node && portal.current) {
+         setTooltipRef(void 0);
+-        ReactDOM.unmountComponentAtNode(node);
++        // ReactDOM.unmountComponentAtNode(node);
+       }
+     }
+   }, [
+@@ -385,7 +385,7 @@
+     portal,
+     setTooltipRef
+   ]);
+-  if (isLegacy()) {
++  /* if (isLegacy()) {
+     return null;
+-  }
++  } */
+   return renderPortal(renderedTooltip, portal.current);
+ };
+ var Joyride = function(props) {
