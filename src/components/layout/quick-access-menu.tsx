@@ -9,11 +9,7 @@ import {
   DialogTitle,
   DialogDescription,
 } from '@/components/ui/dialog';
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipTrigger,
-} from '@/components/ui/tooltip';
+import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
 import {
   Beaker,
   History,
@@ -32,7 +28,7 @@ import {
 import Link from 'next/link';
 import { useTranslation } from 'react-i18next';
 import { APP_CONFIG } from '@/lib/constants';
-import Draggable, { type DraggableData, type DraggableEvent } from 'react-draggable';
+import Draggable from 'react-draggable';
 import { Separator } from '../ui/separator';
 import {
   DropdownMenu,
@@ -68,38 +64,16 @@ export default function QuickAccessMenu({
   const [open, setOpen] = useState(false);
   const { t } = useTranslation();
   const nodeRef = useRef(null);
-  const [isDragging, setIsDragging] = useState(false);
-
-  const handleDragStart = () => {
-    setIsDragging(true);
-  };
-  const handleDragStop = (e: DraggableEvent, data: DraggableData) => {
-    // A slight delay to differentiate a click from a drag
-    setTimeout(() => setIsDragging(false), 50);
-  };
-
-  const handleClick = () => {
-    if (!isDragging) {
-      setOpen(true);
-    }
-  };
 
   return (
     <>
-      <Draggable
-        nodeRef={nodeRef}
-        axis="x"
-        bounds="parent"
-        handle=".handle"
-        onStart={handleDragStart}
-        onStop={handleDragStop}
-      >
+      <Draggable nodeRef={nodeRef} axis="x" bounds="parent" handle=".handle">
         <div
           ref={nodeRef}
           className="handle absolute top-full left-1/2 -translate-x-1/2 w-[120px] h-[55px] cursor-grab active:cursor-grabbing z-[9999]"
           role="button"
           aria-label={t('quickAccess.title')}
-          onClick={handleClick}
+          onClick={() => setOpen(true)}
           data-testid="quick-access-menu-button"
         >
           <div
