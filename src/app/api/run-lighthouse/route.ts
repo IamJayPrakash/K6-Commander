@@ -35,7 +35,11 @@ export async function POST(req: NextRequest) {
 
     console.log('Spawning Lighthouse process with command:', `npx ${lighthouseArgs.join(' ')}`);
 
-    const lighthouseProcess = spawn('npx', lighthouseArgs);
+    // In serverless environments, the home directory might not be writable.
+    // We force npm/npx to use a writable temporary directory for its cache.
+    const env = { ...process.env, NPM_CONFIG_CACHE: '/tmp/npm-cache' };
+
+    const lighthouseProcess = spawn('npx', lighthouseArgs, { env });
 
     let stdout = '';
     let stderr = '';
@@ -61,7 +65,7 @@ export async function POST(req: NextRequest) {
         }
       });
       lighthouseProcess.on('error', (err) => {
-        console.error(`Failed to start Lighthouse container for test ${testId}:`, err);
+        console.error(`Failed to start Lighthouse process for test ${testId}:`, err);
         reject(err);
       });
     });
