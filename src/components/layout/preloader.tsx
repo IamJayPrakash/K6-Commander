@@ -13,13 +13,13 @@ const bootSequence = [
 
 export function Preloader() {
   return (
-    <div className="flex h-screen items-center justify-center bg-black font-mono text-green-400">
-      <div className="w-full max-w-md p-4">
-        <div className="flex items-center gap-4 mb-4 border-b border-green-700/50 pb-2">
-          <Rocket className="h-8 w-8 text-green-400" />
-          <h1 className="text-2xl font-bold">K6 Commander</h1>
+    <div className="flex h-screen items-center justify-center bg-background font-mono text-primary preloader-grid">
+      <div className="w-full max-w-lg p-8 rounded-lg bg-background/80 backdrop-blur-sm border border-primary/20 glow-shadow">
+        <div className="flex items-center gap-4 mb-6 border-b border-primary/20 pb-4">
+          <Rocket className="h-8 w-8 text-primary animate-pulse" />
+          <h1 className="text-3xl font-bold tracking-wider">K6 Commander</h1>
         </div>
-        <div className="text-sm">
+        <div className="text-sm space-y-1">
           {bootSequence.map((item, index) => (
             <p
               key={index}
@@ -27,18 +27,18 @@ export function Preloader() {
               style={{
                 animationDelay: `${item.delay}ms`,
                 animationTimingFunction: `steps(${item.text.length}, end)`,
-                animationDuration: `${item.text.length * 50}ms`,
+                animationDuration: `${item.text.length * 40}ms`,
                 width: '0',
               }}
             >
-              <span className="text-green-600/80 mr-2">&gt;</span>
-              {item.text}
+              <span className="text-primary/50 mr-2">&gt;</span>
+              <span className="text-foreground/80">{item.text}</span>
             </p>
           ))}
         </div>
-        <div className="mt-4 flex items-center gap-2">
+        <div className="mt-6 flex items-center gap-2 text-base text-foreground animate-pulse" style={{ animationDelay: '1200ms' }}>
           <span>Awaiting final handshake</span>
-          <div className="w-2.5 h-4 bg-green-400 animate-pulse" />
+          <span className="blinking-cursor" />
         </div>
       </div>
     </div>

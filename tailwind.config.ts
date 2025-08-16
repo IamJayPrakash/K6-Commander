@@ -80,11 +80,27 @@ export default {
           from: { width: '0' },
           to: { width: '100%' },
         },
+        glow: {
+          '0%, 100%': {
+            boxShadow:
+              '0 0 15px hsl(var(--primary) / 0.2), 0 0 30px hsl(var(--primary) / 0.1), 0 0 45px hsl(var(--primary) / 0.05)',
+          },
+          '50%': {
+            boxShadow:
+              '0 0 30px hsl(var(--primary) / 0.3), 0 0 60px hsl(var(--primary) / 0.2), 0 0 90px hsl(var(--primary) / 0.1)',
+          },
+        },
+        'grid-scroll': {
+          '0%': { transform: 'translateY(0)' },
+          '100%': { transform: 'translateY(-4rem)' },
+        },
       },
       animation: {
         'accordion-down': 'accordion-down 0.2s ease-out',
         'accordion-up': 'accordion-up 0.2s ease-out',
         typewriter: 'typewriter 2s steps(44) 1s 1 normal both',
+        glow: 'glow 4s ease-in-out infinite',
+        'grid-scroll': 'grid-scroll 30s linear infinite',
       },
     },
   },
