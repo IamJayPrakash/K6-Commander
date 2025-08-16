@@ -78,7 +78,7 @@ export default function QuickAccessMenu() {
         >
           <Button
             size="icon"
-            className="w-14 h-14 rounded-full shadow-lg"
+            className="w-14 h-14 rounded-full shadow-lg animate-wavy-border"
             onClick={handleClick}
             aria-label={t('quickAccess.title')}
           >
