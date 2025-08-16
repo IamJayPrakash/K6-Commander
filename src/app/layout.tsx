@@ -72,14 +72,15 @@ const inter = Inter({
 
 // This function fetches translations from the local file system.
 async function getTranslations(locale: string) {
+  const defaultLocale = 'en';
   const localePath = path.resolve(process.cwd(), `public/locales/${locale}.json`);
   try {
     const data = await fs.readFile(localePath, 'utf-8');
     return JSON.parse(data);
   } catch (error) {
     // If the specific locale file doesn't exist, fall back to English.
-    console.warn(`Could not load locale ${locale}, falling back to 'en'`);
-    const fallbackPath = path.resolve(process.cwd(), 'public/locales/en.json');
+    console.warn(`Could not load locale ${locale}, falling back to '${defaultLocale}'`);
+    const fallbackPath = path.resolve(process.cwd(), `public/locales/${defaultLocale}.json`);
     const data = await fs.readFile(fallbackPath, 'utf-8');
     return JSON.parse(data);
   }
@@ -92,7 +93,7 @@ export default async function RootLayout({
 }>) {
   // Determine the language from cookies or use the default.
   const cookieStore = cookies();
-  const lang = cookieStore.get('i18next')?.value || i18n.language;
+  let lang = cookieStore.get('i18next')?.value || i18n.language || 'en';
 
   // Pre-load the translations on the server.
   const initialResources = await getTranslations(lang);

@@ -1,7 +1,8 @@
 
 'use client';
 
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
+import { useTheme } from 'next-themes';
 import {
   Dialog,
   DialogContent,
@@ -24,6 +25,7 @@ import {
   Lock,
   Rocket,
   TestTube,
+  Languages,
 } from 'lucide-react';
 import Link from 'next/link';
 import { useTranslation } from 'react-i18next';
@@ -38,6 +40,7 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { Button } from '../ui/button';
 import { cn } from '@/lib/utils';
+import { ScrollArea } from '../ui/scroll-area';
 
 const navItems = [
   { href: '/', icon: TestTube, labelKey: 'quickAccess.newTest' },
@@ -52,36 +55,72 @@ const externalLinks = [
   { href: '/security', icon: Lock, labelKey: 'footer.securityLink' },
 ];
 
-export default function QuickAccessMenu({
-  onThemeToggle,
-  onFullscreenToggle,
-  isFullscreen,
-}: {
-  onThemeToggle: (theme: string) => void;
-  onFullscreenToggle: () => void;
-  isFullscreen: boolean;
-}) {
-  const [open, setOpen] = useState(false);
-  const { t } = useTranslation();
-  const nodeRef = useRef(null);
+const languages = [
+  { code: 'en', name: 'English' },
+  { code: 'es', name: 'Español' },
+  { code: 'zh', name: '中文 (Chinese)' },
+  { code: 'hi', name: 'हिन्दी (Hindi)' },
+  { code: 'fr', name: 'Français' },
+  { code: 'de', name: 'Deutsch' },
+  { code: 'ja', name: '日本語 (Japanese)' },
+  { code: 'ru', name: 'Русский (Russian)' },
+  { code: 'ko', name: '한국어 (Korean)' },
+  { code: 'pa', name: 'ਪੰਜਾਬੀ (Punjabi)' },
+  { code: 'ta', name: 'தமிழ் (Tamil)' },
+];
 
-  const handleHandleClick = () => {
-    setOpen(true);
+export default function QuickAccessMenu() {
+  const [open, setOpen] = useState(false);
+  const { t, i18n } = useTranslation();
+  const nodeRef = useRef(null);
+  const [isDragging, setIsDragging] = useState(false);
+  const { setTheme } = useTheme();
+  const [isFullscreen, setIsFullscreen] = useState(false);
+
+  useEffect(() => {
+    const handleFullscreenChange = () => {
+      setIsFullscreen(!!document.fullscreenElement);
+    };
+    document.addEventListener('fullscreenchange', handleFullscreenChange);
+    return () => document.removeEventListener('fullscreenchange', handleFullscreenChange);
+  }, []);
+
+  const handleToggleFullscreen = () => {
+    if (!document.fullscreenElement) {
+      document.documentElement.requestFullscreen();
+    } else {
+      if (document.exitFullscreen) {
+        document.exitFullscreen();
+      }
+    }
+  };
+
+  const handleClick = () => {
+    if (!isDragging) {
+      setOpen(true);
+    }
   };
 
   return (
     <>
-      <Tooltip>
-        <TooltipTrigger asChild>
-          <Draggable nodeRef={nodeRef} axis="x" bounds="parent" defaultPosition={{ x: 0, y: 0 }}>
-            <div
-              ref={nodeRef}
-              className="absolute top-full w-24 h-12 cursor-grab active:cursor-grabbing z-[9999]"
-              role="button"
-              aria-label={t('quickAccess.title')}
-              onClick={handleHandleClick}
-              data-testid="quick-access-menu-button"
-            >
+      <Draggable
+        nodeRef={nodeRef}
+        axis="x"
+        bounds="parent"
+        onStart={() => setIsDragging(true)}
+        onStop={() => setTimeout(() => setIsDragging(false), 0)}
+        defaultPosition={{ x: 0, y: 0 }}
+      >
+        <div
+          ref={nodeRef}
+          className="absolute top-[60px] w-24 h-12 cursor-grab active:cursor-grabbing z-[100]"
+          onClick={handleClick}
+          role="button"
+          aria-label={t('quickAccess.title')}
+          data-testid="quick-access-menu-button"
+        >
+          <Tooltip>
+            <TooltipTrigger asChild>
               <div
                 className={cn(
                   'w-full h-full group transition-all duration-300 active:scale-90',
@@ -89,13 +128,13 @@ export default function QuickAccessMenu({
                 )}
               >
                 <svg
-                  viewBox="0 0 100 50"
-                  className="w-full h-full absolute top-0 left-0 transition-all duration-300 group-hover:drop-shadow-[0_0_8px_hsl(var(--primary-foreground))] "
+                  viewBox="0 0 100 45"
+                  className="w-full h-full absolute top-0 left-0 transition-all duration-300 group-hover:drop-shadow-[0_0_8px_hsl(var(--primary))]"
                   fill="none"
                   xmlns="http://www.w3.org/2000/svg"
                 >
                   <path
-                    d="M50 45 L25 30 V0 H75 V30 L50 45Z"
+                    d="M 50 45 L 25 30 V 0 H 75 V 30 L 50 45 Z"
                     className="fill-background/80 backdrop-blur-sm stroke-border/60 group-hover:stroke-primary transition-all"
                     strokeWidth="1"
                   />
@@ -114,13 +153,13 @@ export default function QuickAccessMenu({
                   />
                 </svg>
               </div>
-            </div>
-          </Draggable>
-        </TooltipTrigger>
-        <TooltipContent>
-          <p>{t('quickAccess.title')}</p>
-        </TooltipContent>
-      </Tooltip>
+            </TooltipTrigger>
+            <TooltipContent>
+              <p>{t('quickAccess.menuTooltip')}</p>
+            </TooltipContent>
+          </Tooltip>
+        </div>
+      </Draggable>
 
       <Dialog open={open} onOpenChange={setOpen}>
         <DialogContent
@@ -161,25 +200,23 @@ export default function QuickAccessMenu({
 
             <Separator />
 
-            <div className="grid grid-cols-2 gap-3">
+            <div className="grid grid-cols-3 gap-3">
               <Tooltip>
                 <TooltipTrigger asChild>
                   <DropdownMenu>
                     <DropdownMenuTrigger asChild>
                       <Button
                         variant="outline"
-                        className="h-auto py-2 flex flex-col gap-2 hover:bg-accent/10"
+                        className="h-auto py-2 flex flex-col gap-2 hover:bg-accent/10 w-full"
                       >
                         <Sun className="h-6 w-6" />
-                        <span>{t('quickAccess.themeAction')}</span>
+                        <span className="text-xs">{t('quickAccess.themeAction')}</span>
                       </Button>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent>
-                      <DropdownMenuItem onClick={() => onThemeToggle('light')}>
-                        Light
-                      </DropdownMenuItem>
-                      <DropdownMenuItem onClick={() => onThemeToggle('dark')}>Dark</DropdownMenuItem>
-                      <DropdownMenuItem onClick={() => onThemeToggle('system')}>
+                      <DropdownMenuItem onClick={() => setTheme('light')}>Light</DropdownMenuItem>
+                      <DropdownMenuItem onClick={() => setTheme('dark')}>Dark</DropdownMenuItem>
+                      <DropdownMenuItem onClick={() => setTheme('system')}>
                         System
                       </DropdownMenuItem>
                     </DropdownMenuContent>
@@ -194,15 +231,15 @@ export default function QuickAccessMenu({
                 <TooltipTrigger asChild>
                   <Button
                     variant="outline"
-                    className="h-auto py-2 flex flex-col gap-2 hover:bg-accent/10"
-                    onClick={onFullscreenToggle}
+                    className="h-auto py-2 flex flex-col gap-2 hover:bg-accent/10 w-full"
+                    onClick={handleToggleFullscreen}
                   >
                     {isFullscreen ? (
                       <Minimize className="h-6 w-6" />
                     ) : (
                       <Maximize className="h-6 w-6" />
                     )}
-                    <span>
+                    <span className="text-xs">
                       {isFullscreen
                         ? t('header.exitFullscreenLabel')
                         : t('header.enterFullscreenLabel')}
@@ -215,6 +252,36 @@ export default function QuickAccessMenu({
                       ? t('header.exitFullscreenLabel')
                       : t('header.enterFullscreenLabel')}
                   </p>
+                </TooltipContent>
+              </Tooltip>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                      <Button
+                        variant="outline"
+                        className="h-auto py-2 flex flex-col gap-2 hover:bg-accent/10 w-full"
+                      >
+                        <Languages className="h-6 w-6" />
+                        <span className="text-xs">{t('quickAccess.languageAction')}</span>
+                      </Button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent>
+                      <ScrollArea className="h-48">
+                        {languages.map((lang) => (
+                          <DropdownMenuItem
+                            key={lang.code}
+                            onClick={() => i18n.changeLanguage(lang.code)}
+                          >
+                            {lang.name}
+                          </DropdownMenuItem>
+                        ))}
+                      </ScrollArea>
+                    </DropdownMenuContent>
+                  </DropdownMenu>
+                </TooltipTrigger>
+                <TooltipContent>
+                  <p>{t('quickAccess.languageTooltip')}</p>
                 </TooltipContent>
               </Tooltip>
             </div>
@@ -258,7 +325,7 @@ export default function QuickAccessMenu({
           </div>
           <div className="flex items-center justify-center gap-2 pt-4 border-t border-border/30">
             <Rocket className="w-4 h-4 text-primary" />
-            <span className="text-xs text-muted-foreground">K6 Commander</span>
+            <span className="text-xs text-muted-foreground">{t('header.title')}</span>
           </div>
         </DialogContent>
       </Dialog>

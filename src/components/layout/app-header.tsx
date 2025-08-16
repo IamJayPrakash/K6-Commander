@@ -11,25 +11,9 @@ import {
   Menu,
   Languages,
   Beaker,
-  Maximize,
-  Minimize,
-  Sun,
-  Moon,
 } from 'lucide-react';
 import React, { useState, useEffect } from 'react';
-import { Button } from '@/components/ui/button';
-import { useTheme } from 'next-themes';
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-  DropdownMenuSeparator,
-} from '@/components/ui/dropdown-menu';
-import Link from 'next/link';
-import { APP_CONFIG } from '@/lib/constants';
 import { useTranslation } from 'react-i18next';
-import { ScrollArea } from '../ui/scroll-area';
 import {
   Tooltip,
   TooltipContent,
@@ -37,37 +21,20 @@ import {
   TooltipTrigger,
 } from '@/components/ui/tooltip';
 import QuickAccessMenu from './quick-access-menu';
+import { ScrollArea } from '../ui/scroll-area';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+  DropdownMenuSeparator,
+} from '@/components/ui/dropdown-menu';
+import { Button } from '@/components/ui/button';
+import { APP_CONFIG } from '@/lib/constants';
+import Link from 'next/link';
 
 export function AppHeader() {
   const { t, i18n } = useTranslation();
-  const { setTheme } = useTheme();
-  const [isFullscreen, setIsFullscreen] = useState(false);
-
-  useEffect(() => {
-    const handleFullscreenChange = () => {
-      setIsFullscreen(!!document.fullscreenElement);
-    };
-
-    document.addEventListener('fullscreenchange', handleFullscreenChange);
-
-    return () => {
-      document.removeEventListener('fullscreenchange', handleFullscreenChange);
-    };
-  }, []);
-
-  const handleToggleFullscreen = () => {
-    if (!document.fullscreenElement) {
-      document.documentElement.requestFullscreen();
-    } else {
-      if (document.exitFullscreen) {
-        document.exitFullscreen();
-      }
-    }
-  };
-
-  const handleSetTheme = (theme: string) => {
-    setTheme(theme);
-  };
 
   const changeLanguage = (lng: string) => {
     i18n.changeLanguage(lng);
@@ -136,109 +103,7 @@ export function AppHeader() {
             </TooltipContent>
           </Tooltip>
 
-          <Tooltip>
-            <TooltipTrigger asChild>
-              <Button
-                variant="ghost"
-                size="icon"
-                onClick={handleToggleFullscreen}
-                data-testid="fullscreen-toggle-button"
-                aria-label={
-                  isFullscreen
-                    ? t('header.exitFullscreenLabel')
-                    : t('header.enterFullscreenLabel')
-                }
-              >
-                {isFullscreen ? (
-                  <Minimize className="h-5 w-5" />
-                ) : (
-                  <Maximize className="h-5 w-5" />
-                )}
-              </Button>
-            </TooltipTrigger>
-            <TooltipContent>
-              <p>
-                {isFullscreen
-                  ? t('header.exitFullscreenLabel')
-                  : t('header.enterFullscreenLabel')}
-              </p>
-            </TooltipContent>
-          </Tooltip>
-
-          <Tooltip>
-            <TooltipTrigger asChild>
-              <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                  <Button
-                    variant="ghost"
-                    size="icon"
-                    aria-label={t('header.changeLanguageLabel')}
-                    data-testid="language-switcher-trigger"
-                  >
-                    <Languages className="h-5 w-5" />
-                  </Button>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent align="end" data-testid="language-switcher-content">
-                  <ScrollArea className="h-72 w-48 rounded-md">
-                    {languages.map((lang) => (
-                      <DropdownMenuItem
-                        key={lang.code}
-                        onClick={() => changeLanguage(lang.code)}
-                        data-testid={`language-switcher-item-${lang.code}`}
-                      >
-                        {lang.name}
-                      </DropdownMenuItem>
-                    ))}
-                  </ScrollArea>
-                </DropdownMenuContent>
-              </DropdownMenu>
-            </TooltipTrigger>
-            <TooltipContent>
-              <p>{t('header.changeLanguageLabel')}</p>
-            </TooltipContent>
-          </Tooltip>
-
-          <Tooltip>
-            <TooltipTrigger asChild>
-              <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                  <Button
-                    variant="ghost"
-                    size="icon"
-                    data-testid="theme-switcher-trigger"
-                    aria-label={t('header.toggleThemeLabel')}
-                  >
-                    <Sun className="h-[1.2rem] w-[1.2rem] rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0" />
-                    <Moon className="absolute h-[1.2rem] w-[1.2rem] rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100" />
-                    <span className="sr-only">{t('header.toggleThemeLabel')}</span>
-                  </Button>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent align="end" data-testid="theme-switcher-content">
-                  <DropdownMenuItem
-                    onClick={() => handleSetTheme('light')}
-                    data-testid="theme-switcher-light"
-                  >
-                    Light
-                  </DropdownMenuItem>
-                  <DropdownMenuItem
-                    onClick={() => handleSetTheme('dark')}
-                    data-testid="theme-switcher-dark"
-                  >
-                    Dark
-                  </DropdownMenuItem>
-                  <DropdownMenuItem
-                    onClick={() => handleSetTheme('system')}
-                    data-testid="theme-switcher-system"
-                  >
-                    System
-                  </DropdownMenuItem>
-                </DropdownMenuContent>
-              </DropdownMenu>
-            </TooltipTrigger>
-            <TooltipContent>
-              <p>{t('header.toggleThemeLabel')}</p>
-            </TooltipContent>
-          </Tooltip>
+          <QuickAccessMenu />
 
           {/* Mobile Menu */}
           <DropdownMenu>
@@ -290,11 +155,6 @@ export function AppHeader() {
           </DropdownMenu>
         </div>
       </div>
-      <QuickAccessMenu
-        onThemeToggle={handleSetTheme}
-        onFullscreenToggle={handleToggleFullscreen}
-        isFullscreen={isFullscreen}
-      />
     </header>
   );
 }

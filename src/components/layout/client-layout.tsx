@@ -1,7 +1,7 @@
 
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import i18n from '@/lib/i18n';
 import { I18nextProvider } from 'react-i18next';
 import { AppHeader } from './app-header';
@@ -9,27 +9,8 @@ import { AppFooter } from './app-footer';
 import { Toaster } from '../ui/toaster';
 import { Providers } from '@/app/providers';
 import { ProgressBar } from './progress-bar';
-import { usePathname } from 'next/navigation';
 import { Preloader } from './preloader';
 import { TooltipProvider } from '../ui/tooltip';
-
-async function fetchTranslations(locale: string) {
-  try {
-    let res = await fetch(`/locales/${locale}.json`);
-    if (!res.ok) {
-      const baseLocale = locale.split('-')[0];
-      res = await fetch(`/locales/${baseLocale}.json`);
-      if (!res.ok) {
-        res = await fetch(`/locales/en.json`);
-      }
-    }
-    return res.json();
-  } catch (error) {
-    console.error('Failed to fetch translations, loading fallback.', error);
-    const res = await fetch(`/locales/en.json`);
-    return res.json();
-  }
-}
 
 interface ClientLayoutProps {
   children: React.ReactNode;
@@ -37,70 +18,39 @@ interface ClientLayoutProps {
   initialResources: any;
 }
 
+// This function initializes the i18n instance. It's called only once.
+const initializeI18n = (lang: string, resources: any) => {
+  if (!i18n.isInitialized) {
+    i18n.init({
+      lng: lang,
+      resources: {
+        [lang]: {
+          translation: resources,
+        },
+      },
+      fallbackLng: 'en',
+      interpolation: {
+        escapeValue: false, // React already safes from xss
+      },
+      react: {
+        useSuspense: false, // This is important to avoid issues with server-side rendering
+      },
+    });
+  }
+  return i18n;
+};
+
 export function ClientLayout({ children, initialLang, initialResources }: ClientLayoutProps) {
-  const [isI18nInitialized, setIsI18nInitialized] = useState(false);
-  const pathname = usePathname();
+  // Initialize i18n synchronously with the resources from the server.
+  // The useState initializer ensures this runs only once on the client.
+  const [i18nInstance] = useState(() => initializeI18n(initialLang, initialResources));
 
-  useEffect(() => {
-    const initI18n = async () => {
-      // Initialize with the resources passed from the server.
-      await i18n.init({
-        lng: initialLang,
-        resources: {
-          [initialLang]: {
-            translation: initialResources,
-          },
-        },
-        fallbackLng: 'en',
-        interpolation: {
-          escapeValue: false, // React already safes from xss
-        },
-      });
-      setIsI18nInitialized(true);
-    };
-
-    if (!i18n.isInitialized) {
-      initI18n();
-    } else {
-      setIsI18nInitialized(true);
-    }
-
-    const onLanguageChanged = async (lng: string) => {
-      if (!i18n.hasResourceBundle(lng, 'translation')) {
-        const resources = await fetchTranslations(lng);
-        i18n.addResourceBundle(lng, 'translation', resources, true, true);
-      }
-      // This will trigger re-renders in components that use useTranslation()
-      i18n.changeLanguage(lng);
-    };
-
-    i18n.on('languageChanged', onLanguageChanged);
-
-    return () => {
-      i18n.off('languageChanged', onLanguageChanged);
-    };
-  }, [initialLang, initialResources]);
-
-  useEffect(() => {
-    if (isI18nInitialized) {
-      const pageKey = pathname.substring(1).replace('/', '-') || 'home';
-      const title = i18n.t(`pageTitles.${pageKey}`, { defaultValue: 'K6 Commander' });
-
-      if (title && title !== `pageTitles.${pageKey}`) {
-        document.title = `${title} | K6 Commander`;
-      } else {
-        document.title = 'K6 Commander';
-      }
-      document.documentElement.lang = i18n.language;
-    }
-  }, [pathname, isI18nInitialized, i18n.language]);
-
-  if (!isI18nInitialized) {
+  if (!i18n.isInitialized) {
     return <Preloader />;
   }
 
   return (
-    <I18nextProvider i18n={i18n}>
+    <I18nextProvider i18n={i18nInstance}>
       <Providers>
         <TooltipProvider>
           <div className="relative flex flex-col min-h-screen bg-background">
@@ -110,10 +60,18 @@ export function ClientLayout({ children, initialLang, initialResources }: Client
               {children}
             </main>
             <AppFooter />
+            <Toaster />
+            <QuickAccessMenu
+              onThemeToggle={() => {}}
+              onFullscreenToggle={() => {}}
+              isFullscreen={false}
+            />
           </div>
-          <Toaster />
         </TooltipProvider>
       </Providers>
     </I18nextProvider>
   );
 }
+
+// Dummy QuickAccessMenu component to satisfy the compiler until the real one is moved
+const QuickAccessMenu = (props: any) => null;
