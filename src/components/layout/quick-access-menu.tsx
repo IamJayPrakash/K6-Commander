@@ -65,15 +65,19 @@ export default function QuickAccessMenu({
   const { t } = useTranslation();
   const nodeRef = useRef(null);
 
+  const handleHandleClick = () => {
+    setOpen(true);
+  };
+
   return (
     <>
-      <Draggable nodeRef={nodeRef} axis="x" bounds="parent" handle=".handle">
+      <Draggable nodeRef={nodeRef} axis="x" bounds="parent" defaultPosition={{ x: 0, y: 0 }}>
         <div
           ref={nodeRef}
-          className="handle absolute top-full left-1/2 -translate-x-1/2 w-[120px] h-[55px] cursor-grab active:cursor-grabbing z-[9999]"
+          className="absolute top-full w-[120px] h-[55px] cursor-grab active:cursor-grabbing z-[9999]"
           role="button"
           aria-label={t('quickAccess.title')}
-          onClick={() => setOpen(true)}
+          onClick={handleHandleClick}
           data-testid="quick-access-menu-button"
         >
           <div
@@ -84,7 +88,7 @@ export default function QuickAccessMenu({
           >
             <svg
               viewBox="0 0 120 55"
-              className="w-full h-full absolute top-0 left-0 transition-all duration-300"
+              className="w-full h-full absolute top-0 left-0 transition-all duration-300 animate-tilt"
               fill="none"
               xmlns="http://www.w3.org/2000/svg"
             >
