@@ -9,7 +9,6 @@ import {
   Bug,
   Menu,
   Languages,
-  PlayCircle,
   Beaker,
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -26,7 +25,6 @@ import Link from 'next/link';
 import { APP_CONFIG } from '@/lib/constants';
 import { useTranslation } from 'react-i18next';
 import { ScrollArea } from '../ui/scroll-area';
-import { usePathname } from 'next/navigation';
 import {
   Tooltip,
   TooltipContent,
@@ -50,15 +48,9 @@ const languages = [
 export function AppHeader() {
   const { setTheme } = useTheme();
   const { t, i18n } = useTranslation();
-  const pathname = usePathname();
 
   const changeLanguage = (lng: string) => {
     i18n.changeLanguage(lng);
-  };
-
-  const handleStartTour = () => {
-    // Custom event to trigger the tour on the main page
-    window.dispatchEvent(new CustomEvent('start-tour'));
   };
 
   return (
@@ -105,25 +97,6 @@ export function AppHeader() {
         </div>
 
         <div className="flex flex-1 items-center justify-end gap-2">
-          {pathname === '/' && (
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <Button
-                  variant="outline"
-                  size="sm"
-                  onClick={handleStartTour}
-                  className="hidden sm:flex"
-                  data-testid="start-tour-button"
-                >
-                  <PlayCircle className="h-4 w-4 mr-2" />
-                  {t('header.startTour')}
-                </Button>
-              </TooltipTrigger>
-              <TooltipContent>
-                <p>{t('header.startTourTooltip')}</p>
-              </TooltipContent>
-            </Tooltip>
-          )}
           <Tooltip>
             <TooltipTrigger asChild>
               <a
@@ -247,12 +220,6 @@ export function AppHeader() {
                   {t('header.aboutLink')}
                 </DropdownMenuItem>
               </Link>
-              {pathname === '/' && (
-                <DropdownMenuItem onClick={handleStartTour} data-testid="mobile-menu-start-tour">
-                  <PlayCircle className="mr-2 h-4 w-4" />
-                  {t('header.startTour')}
-                </DropdownMenuItem>
-              )}
               <DropdownMenuSeparator />
               <a href={APP_CONFIG.bugReportUrl} target="_blank" rel="noopener noreferrer">
                 <DropdownMenuItem data-testid="mobile-menu-bug-report">

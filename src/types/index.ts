@@ -121,11 +121,3 @@ export interface ApiTestCollection {
   name: string;
   requests: ApiTestItem[];
 }
-
-
-declare global {
-  interface Window {
-    // Joyride tour event
-    'start-tour': () => void;
-  }
-}
