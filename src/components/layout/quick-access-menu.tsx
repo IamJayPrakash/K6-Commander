@@ -75,6 +75,7 @@ export default function QuickAccessMenu() {
   const nodeRef = useRef(null);
   const { setTheme } = useTheme();
   const [isFullscreen, setIsFullscreen] = useState(false);
+  const [isDragging, setIsDragging] = useState(false);
 
   useEffect(() => {
     const handleFullscreenChange = () => {
@@ -94,18 +95,25 @@ export default function QuickAccessMenu() {
     }
   };
 
+  const handleClick = () => {
+    if (!isDragging) {
+      setOpen(true);
+    }
+  };
+
   return (
     <>
       <Draggable
         nodeRef={nodeRef}
         axis="x"
         bounds="parent"
-        defaultPosition={{ x: 0, y: 0 }}
+        onStart={() => setIsDragging(false)}
+        onDrag={() => setIsDragging(true)}
       >
         <div
           ref={nodeRef}
-          className="absolute top-full w-24 h-12 cursor-grab active:cursor-grabbing z-[100] group"
-          onClick={() => setOpen(true)}
+          className="fixed top-16 w-24 h-12 cursor-grab active:cursor-grabbing z-[9999] group"
+          onClick={handleClick}
           role="button"
           aria-label={t('quickAccess.title')}
           data-testid="quick-access-menu-button"
@@ -202,8 +210,10 @@ export default function QuickAccessMenu() {
                       <Button
                         variant="outline"
                         className="h-auto py-2 flex flex-col gap-2 hover:bg-accent/10 w-full"
+                        aria-label={t('header.toggleThemeLabel')}
                       >
-                        <Sun className="h-6 w-6" />
+                        <Sun className="h-6 w-6 block dark:hidden" />
+                        <Moon className="h-6 w-6 hidden dark:block" />
                         <span className="text-xs">{t('quickAccess.themeAction')}</span>
                       </Button>
                     </DropdownMenuTrigger>
@@ -217,7 +227,7 @@ export default function QuickAccessMenu() {
                   </DropdownMenu>
                 </TooltipTrigger>
                 <TooltipContent>
-                  <p>{t('quickAccess.themeTooltip')}</p>
+                  <p>{t('header.toggleThemeLabel')}</p>
                 </TooltipContent>
               </Tooltip>
 
@@ -227,6 +237,11 @@ export default function QuickAccessMenu() {
                     variant="outline"
                     className="h-auto py-2 flex flex-col gap-2 hover:bg-accent/10 w-full"
                     onClick={handleToggleFullscreen}
+                    aria-label={
+                      isFullscreen
+                        ? t('header.exitFullscreenLabel')
+                        : t('header.enterFullscreenLabel')
+                    }
                   >
                     {isFullscreen ? (
                       <Minimize className="h-6 w-6" />
@@ -255,6 +270,7 @@ export default function QuickAccessMenu() {
                       <Button
                         variant="outline"
                         className="h-auto py-2 flex flex-col gap-2 hover:bg-accent/10 w-full"
+                        aria-label={t('header.toggleLanguageLabel')}
                       >
                         <Languages className="h-6 w-6" />
                         <span className="text-xs">{t('quickAccess.languageAction')}</span>
@@ -275,7 +291,7 @@ export default function QuickAccessMenu() {
                   </DropdownMenu>
                 </TooltipTrigger>
                 <TooltipContent>
-                  <p>{t('quickAccess.languageTooltip')}</p>
+                  <p>{t('header.toggleLanguageLabel')}</p>
                 </TooltipContent>
               </Tooltip>
             </div>
