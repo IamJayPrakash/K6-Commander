@@ -15,73 +15,9 @@ import { Textarea } from '@/components/ui/textarea';
 import { useToast } from '@/hooks/use-toast';
 import { Download } from 'lucide-react';
 import type { ApiFormValues } from './request-panel';
+import { parse } from 'curlconverter';
 
-interface CurlImportDialogProps {
-  onImport: (values: Partial<ApiFormValues>) => void;
-}
-
-// A simplified cURL parser using regular expressions.
-// This is not exhaustive but covers common cases for API testing.
-function parseCurl(curl: string): Partial<ApiFormValues> {
-  const result: Partial<ApiFormValues> = {};
-
-  // Extract URL
-  const urlMatch = curl.match(/'([^']*)'/);
-  if (urlMatch) {
-    const fullUrl = urlMatch[1];
-    const urlObject = new URL(fullUrl);
-    result.url = `${urlObject.protocol}//${urlObject.host}${urlObject.pathname}`;
-
-    const queryParams: { key: string; value: string }[] = [];
-    urlObject.searchParams.forEach((value, key) => {
-      queryParams.push({ key, value });
-    });
-    if (queryParams.length > 0) {
-      result.queryParams = queryParams;
-    }
-  }
-
-  // Extract Method
-  const methodMatch = curl.match(/-X\s+'([^']*)'|--request\s+'([^']*)'/);
-  if (methodMatch) {
-    const method = (methodMatch[1] || methodMatch[2]).toUpperCase();
-    if (['GET', 'POST', 'PUT', 'PATCH', 'DELETE'].includes(method)) {
-      result.method = method as ApiFormValues['method'];
-    }
-  }
-
-  // Extract Headers
-  const headerMatches = curl.matchAll(/-H\s+'([^']*)'|--header\s+'([^']*)'/g);
-  const headers: { key: string; value: string }[] = [];
-  for (const match of headerMatches) {
-    const headerString = match[1] || match[2];
-    const [key, ...valueParts] = headerString.split(': ');
-    if (key && valueParts.length > 0) {
-      headers.push({ key, value: valueParts.join(': ') });
-    }
-  }
-  if (headers.length > 0) {
-    result.headers = headers;
-  }
-
-  // Extract Body
-  const bodyMatch = curl.match(/--data-raw\s+'([^']*)'|--data\s+'([^']*)'/);
-  if (bodyMatch) {
-    const body = bodyMatch[1] || bodyMatch[2];
-    try {
-      // Try to beautify if it's JSON
-      const parsed = JSON.parse(body);
-      result.body = JSON.stringify(parsed, null, 2);
-    } catch (e) {
-      result.body = body;
-    }
-  }
-
-  return result;
-}
-
-
-export default function CurlImportDialog({ onImport }: CurlImportDialogProps) {
+export default function CurlImportDialog({ onImport }: { onImport: (values: Partial<ApiFormValues>) => void; }) {
   const [open, setOpen] = useState(false);
   const [curl, setCurl] = useState('');
   const { toast } = useToast();
@@ -97,10 +33,20 @@ export default function CurlImportDialog({ onImport }: CurlImportDialogProps) {
     }
 
     try {
-      const importedValues = parseCurl(curl);
-
-      if (!importedValues.url) {
-        throw new Error("Could not parse a valid URL from the cURL command.");
+      const parsedData = parse(curl);
+      
+      const importedValues: Partial<ApiFormValues> = {
+        url: parsedData.url,
+        method: parsedData.method as ApiFormValues['method'],
+        headers: Object.entries(parsedData.headers || {}).map(([key, value]) => ({ key, value: String(value) })),
+        body: typeof parsedData.data === 'string' ? parsedData.data : JSON.stringify(parsedData.data, null, 2),
+        queryParams: Array.from(new URL(parsedData.url).searchParams).map(([key, value]) => ({key, value})),
+      };
+      
+      // Remove query params from URL
+      if (importedValues.url) {
+        const urlObject = new URL(importedValues.url);
+        importedValues.url = `${urlObject.protocol}//${urlObject.host}${urlObject.pathname}`;
       }
 
       onImport(importedValues);
@@ -151,4 +97,3 @@ export default function CurlImportDialog({ onImport }: CurlImportDialogProps) {
     </Dialog>
   );
 }
-

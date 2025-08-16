@@ -23,11 +23,12 @@ import {
 } from '@/components/ui/select';
 import { Textarea } from '@/components/ui/textarea';
 import { Card, CardContent } from '@/components/ui/card';
-import { Download, Loader, Plus, Send, Sparkles, Trash2 } from 'lucide-react';
+import { Download, Loader, Plus, Send, Sparkles, Trash2, Copy } from 'lucide-react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { useTranslation } from 'react-i18next';
 import CurlImportDialog from './curl-import-dialog';
 import { useToast } from '@/hooks/use-toast';
+import { toCurl } from 'curlconverter';
 
 const paramSchema = z.object({
   key: z.string(),
@@ -180,6 +181,46 @@ export default function RequestPanel({ onSend, isLoading, initialValues }: Reque
     }
   };
 
+  const handleCopyToCurl = () => {
+    try {
+      const values = form.getValues();
+      const url = new URL(values.url);
+      values.queryParams.forEach(param => {
+        if (param.key) {
+          url.searchParams.append(param.key, param.value);
+        }
+      });
+      
+      const headers: Record<string, string> = {};
+      values.headers.forEach(h => {
+        if (h.key) {
+          headers[h.key] = h.value;
+        }
+      });
+
+      const curlCommand = toCurl({
+        url: url.toString(),
+        method: values.method,
+        headers,
+        body: values.body,
+      });
+
+      navigator.clipboard.writeText(curlCommand);
+      toast({
+        title: t('apiTester.toast.curlCopiedTitle'),
+        description: t('apiTester.toast.curlCopiedDescription'),
+      });
+
+    } catch (error: any) {
+       toast({
+        variant: 'destructive',
+        title: t('apiTester.toast.curlCopyErrorTitle'),
+        description: error.message || 'Could not generate cURL command.',
+      });
+    }
+  };
+
+
   return (
     <Card className="h-full border-0 shadow-none">
       <CardContent className="p-2 h-full flex flex-col">
@@ -224,6 +265,9 @@ export default function RequestPanel({ onSend, isLoading, initialValues }: Reque
               </div>
               <div className="flex gap-2">
                 <CurlImportDialog onImport={handleImport} />
+                 <Button type="button" variant="outline" onClick={handleCopyToCurl}>
+                  <Copy className="mr-2 h-4 w-4" /> {t('apiTester.copyAsCurlButton')}
+                </Button>
                 <Button type="submit" disabled={isLoading} className="w-28">
                   {isLoading ? (
                     <Loader className="animate-spin h-5 w-5" />
