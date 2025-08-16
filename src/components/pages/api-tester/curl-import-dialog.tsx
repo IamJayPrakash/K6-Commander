@@ -19,27 +19,38 @@ import { useTranslation } from 'react-i18next';
 
 // Simple regex-based parser for cURL commands. Handles common cases.
 const parseCurl = (curl: string) => {
-  const urlMatch = curl.match(/(?:'|")?(https?:\/\/[^'"]+)(?:'|")?/);
-  const url = urlMatch ? urlMatch[1] : '';
+  // Remove line breaks and collapse whitespace for easier parsing
+  const singleLineCurl = curl.replace(/\\\n/g, '').replace(/\s+/g, ' ');
 
-  const methodMatch = curl.match(/-X\s+([A-Z]+)/);
-  const method = (methodMatch ? methodMatch[1] : 'GET').toUpperCase();
+  const urlMatch = singleLineCurl.match(/'([^']*)'|"([^"]*)"/);
+  let url = '';
+  if (urlMatch) {
+    url = urlMatch[1] || urlMatch[2];
+  }
+
+  const methodMatch = singleLineCurl.match(/-X\s+([A-Z]+)/i);
+  let method = 'GET';
+  if (methodMatch) {
+    method = methodMatch[1].toUpperCase();
+  }
 
   const headers: { key: string; value: string }[] = [];
   const headerRegex = /-H\s+'([^:]+):\s*([^']+)'/g;
   let headerMatch;
-  while ((headerMatch = headerRegex.exec(curl)) !== null) {
-    headers.push({ key: headerMatch[1], value: headerMatch[2] });
+  while ((headerMatch = headerRegex.exec(singleLineCurl)) !== null) {
+    headers.push({ key: headerMatch[1].trim(), value: headerMatch[2].trim() });
   }
 
   let body = '';
-  const dataMatch = curl.match(/--data-raw\s+'([^']*)'/);
+  const dataMatch = singleLineCurl.match(/--(?:data|data-raw)\s+'([^']*)'/);
   if (dataMatch) {
     body = dataMatch[1];
+    method = 'POST'; // Common default for data
   }
 
   return { url, method, headers, body };
 };
+
 
 export default function CurlImportDialog({
   onImport,
@@ -63,6 +74,10 @@ export default function CurlImportDialog({
 
     try {
       const parsedData = parseCurl(curl);
+      
+      if (!parsedData.url) {
+        throw new Error("Could not find a URL in the cURL command.");
+      }
 
       const importedValues: Partial<ApiFormValues> = {
         url: parsedData.url,

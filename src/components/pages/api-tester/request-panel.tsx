@@ -190,7 +190,7 @@ export default function RequestPanel({ onSend, isLoading, initialValues }: Reque
         }
       });
 
-      let curlCommand = `curl "${url.toString()}" -X ${values.method}`;
+      let curlCommand = `curl "${url.toString()}" \\\n  -X ${values.method}`;
 
       values.headers.forEach((h) => {
         if (h.key) {
