@@ -1,7 +1,6 @@
 'use client';
 
-import React, { useState, useRef } from 'react';
-import Draggable from 'react-draggable';
+import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import {
   Dialog,
@@ -45,72 +44,26 @@ const externalLinks = [
 
 export default function QuickAccessMenu() {
   const [open, setOpen] = useState(false);
-  const [isDragging, setIsDragging] = useState(false);
   const { t } = useTranslation();
-  const nodeRef = useRef(null);
-
-  // This function is a click handler. It only opens the modal if we are NOT dragging.
-  const handleClick = () => {
-    if (!isDragging) {
-      setOpen(true);
-    }
-  };
 
   return (
     <>
-      <Draggable
-        nodeRef={nodeRef}
-        onStart={() => setIsDragging(true)}
-        // We reset the dragging flag after a short delay on stop.
-        onStop={() => setTimeout(() => setIsDragging(false), 100)}
-        bounds="body"
-        defaultPosition={{ x: 20, y: 200 }}
+      <div
+        className="fixed bottom-6 right-6 z-[999]"
+        data-testid="quick-access-button-container"
       >
-        <div
-          ref={nodeRef}
-          className="fixed z-[9999] cursor-grab active:cursor-grabbing"
-          data-testid="quick-access-button-container"
-          onClick={handleClick} // Use the combined click handler
-          onMouseEnter={(e) => (e.currentTarget.style.transform = 'scale(1.1)')}
-          onMouseLeave={(e) => (e.currentTarget.style.transform = 'scale(1)')}
-        >
-          <div className="relative group">
-            <div
-              className={`relative w-16 h-16 transition-all duration-300 ${
-                isDragging ? 'scale-110' : 'scale-100'
-              }`}
-            >
-              <div className="absolute inset-0 rounded-full bg-gradient-to-br from-blue-500 via-purple-500 to-blue-600 animate-gradient-shift shadow-2xl animate-wavy-border"></div>
-              <div className="absolute -inset-2 rounded-full bg-gradient-to-br from-blue-500/30 to-purple-500/30 blur-xl animate-pulse-glow"></div>
-              <div className="absolute inset-1 rounded-full border-2 border-white/20 backdrop-blur-sm"></div>
-              <Button
-                size="icon"
-                className="absolute inset-0 w-full h-full rounded-full bg-transparent hover:bg-white/10 border-0 shadow-none transition-all duration-300"
-                aria-label={t('quickAccess.title')}
-              >
-                <Compass
-                  className={`w-7 h-7 text-white transition-transform duration-300 ${
-                    isDragging ? 'rotate-45 scale-110' : 'rotate-0 scale-100'
-                  }`}
-                />
-              </Button>
-            </div>
-            {[...Array(3)].map((_, i) => (
-              <div
-                key={i}
-                className={`absolute w-1 h-1 bg-white/60 rounded-full animate-float-particle-${
-                  i + 1
-                }`}
-                style={{
-                  top: `${20 + i * 10}%`,
-                  left: `${30 + i * 15}%`,
-                  animationDelay: `${i * 0.7}s`,
-                }}
-              ></div>
-            ))}
-          </div>
+        <div className="relative group">
+          <div className="absolute -inset-1.5 bg-gradient-to-r from-blue-600 to-purple-600 rounded-full blur opacity-75 group-hover:opacity-100 transition duration-1000 group-hover:duration-200 animate-tilt"></div>
+          <Button
+            size="icon"
+            onClick={() => setOpen(true)}
+            className="relative w-16 h-16 rounded-full bg-slate-900 hover:bg-slate-800 text-white leading-none flex items-center justify-center transition-transform duration-300 group-hover:scale-110"
+            aria-label={t('quickAccess.title')}
+          >
+            <Compass className="w-8 h-8 transition-transform duration-500 group-hover:rotate-12" />
+          </Button>
         </div>
-      </Draggable>
+      </div>
 
       <Dialog open={open} onOpenChange={setOpen}>
         <DialogContent className="max-w-md bg-slate-900/95 backdrop-blur-xl border border-slate-700/50 shadow-2xl">
