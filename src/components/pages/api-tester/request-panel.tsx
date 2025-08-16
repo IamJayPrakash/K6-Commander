@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { useForm, useFieldArray } from 'react-hook-form';
+import { useForm, useFieldArray, type UseFormReturn } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
 import { Button } from '@/components/ui/button';
@@ -14,7 +14,13 @@ import {
   FormMessage,
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
 import { Textarea } from '@/components/ui/textarea';
 import { Card, CardContent } from '@/components/ui/card';
 import { Loader, Plus, Send, Trash2 } from 'lucide-react';
@@ -34,47 +40,35 @@ const formSchema = z.object({
   body: z.string().optional(),
 });
 
-type ApiFormValues = z.infer<typeof formSchema>;
+export type ApiFormValues = z.infer<typeof formSchema>;
 
 interface RequestPanelProps {
   onSend: (config: ApiFormValues) => void;
   isLoading: boolean;
 }
 
-export default function RequestPanel({ onSend, isLoading }: RequestPanelProps) {
+const KeyValueTable = ({
+  fields,
+  onAppend,
+  onRemove,
+  name,
+  form,
+}: {
+  fields: any[];
+  onAppend: (item: { key: string; value: string }) => void;
+  onRemove: (index: number) => void;
+  name: 'queryParams' | 'headers';
+  form: UseFormReturn<ApiFormValues>;
+}) => {
   const { t } = useTranslation();
-
-  const form = useForm<ApiFormValues>({
-    resolver: zodResolver(formSchema),
-    defaultValues: {
-      url: '',
-      method: 'GET',
-      queryParams: [{ key: '', value: '' }],
-      headers: [{ key: '', value: '' }],
-      body: '',
-    },
-  });
-
-  const { fields: queryParamFields, append: appendQueryParam, remove: removeQueryParam } = useFieldArray({
-    control: form.control,
-    name: 'queryParams',
-  });
-
-  const { fields: headerFields, append: appendHeader, remove: removeHeader } = useFieldArray({
-    control: form.control,
-    name: 'headers',
-  });
-
-  const KeyValueTable = ({ fields, onAppend, onRemove, name }: any) => (
+  return (
     <div className="space-y-2">
-      {fields.map((field: any, index: number) => (
+      {fields.map((field, index) => (
         <div key={field.id} className="flex items-center gap-2">
           <FormField
             control={form.control}
             name={`${name}.${index}.key`}
-            render={({ field }) => (
-              <Input placeholder={t('apiTester.keyPlaceholder')} {...field} />
-            )}
+            render={({ field }) => <Input placeholder={t('apiTester.keyPlaceholder')} {...field} />}
           />
           <FormField
             control={form.control}
@@ -83,12 +77,7 @@ export default function RequestPanel({ onSend, isLoading }: RequestPanelProps) {
               <Input placeholder={t('apiTester.valuePlaceholder')} {...field} />
             )}
           />
-          <Button
-            type="button"
-            variant="ghost"
-            size="icon"
-            onClick={() => onRemove(index)}
-          >
+          <Button type="button" variant="ghost" size="icon" onClick={() => onRemove(index)}>
             <Trash2 className="h-4 w-4" />
           </Button>
         </div>
@@ -103,6 +92,39 @@ export default function RequestPanel({ onSend, isLoading }: RequestPanelProps) {
       </Button>
     </div>
   );
+};
+
+export default function RequestPanel({ onSend, isLoading }: RequestPanelProps) {
+  const { t } = useTranslation();
+
+  const form = useForm<ApiFormValues>({
+    resolver: zodResolver(formSchema),
+    defaultValues: {
+      url: 'https://jsonplaceholder.typicode.com/posts/1',
+      method: 'GET',
+      queryParams: [{ key: '', value: '' }],
+      headers: [{ key: '', value: '' }],
+      body: '',
+    },
+  });
+
+  const {
+    fields: queryParamFields,
+    append: appendQueryParam,
+    remove: removeQueryParam,
+  } = useFieldArray({
+    control: form.control,
+    name: 'queryParams',
+  });
+
+  const {
+    fields: headerFields,
+    append: appendHeader,
+    remove: removeHeader,
+  } = useFieldArray({
+    control: form.control,
+    name: 'headers',
+  });
 
   return (
     <Card className="h-full border-0 shadow-none">
@@ -123,7 +145,9 @@ export default function RequestPanel({ onSend, isLoading }: RequestPanelProps) {
                       </FormControl>
                       <SelectContent>
                         {['GET', 'POST', 'PUT', 'PATCH', 'DELETE'].map((method) => (
-                          <SelectItem key={method} value={method}>{method}</SelectItem>
+                          <SelectItem key={method} value={method}>
+                            {method}
+                          </SelectItem>
                         ))}
                       </SelectContent>
                     </Select>
@@ -143,7 +167,13 @@ export default function RequestPanel({ onSend, isLoading }: RequestPanelProps) {
                 )}
               />
               <Button type="submit" disabled={isLoading} className="w-28">
-                {isLoading ? <Loader className="animate-spin h-5 w-5" /> : <><Send className="mr-2 h-4 w-4" /> {t('apiTester.sendButton')}</>}
+                {isLoading ? (
+                  <Loader className="animate-spin h-5 w-5" />
+                ) : (
+                  <>
+                    <Send className="mr-2 h-4 w-4" /> {t('apiTester.sendButton')}
+                  </>
+                )}
               </Button>
             </div>
             <Tabs defaultValue="params" className="w-full">
@@ -153,10 +183,22 @@ export default function RequestPanel({ onSend, isLoading }: RequestPanelProps) {
                 <TabsTrigger value="body">{t('apiTester.bodyTab')}</TabsTrigger>
               </TabsList>
               <TabsContent value="params" className="p-2">
-                <KeyValueTable fields={queryParamFields} onAppend={appendQueryParam} onRemove={removeQueryParam} name="queryParams" />
+                <KeyValueTable
+                  fields={queryParamFields}
+                  onAppend={appendQueryParam}
+                  onRemove={removeQueryParam}
+                  name="queryParams"
+                  form={form}
+                />
               </TabsContent>
               <TabsContent value="headers" className="p-2">
-                <KeyValueTable fields={headerFields} onAppend={appendHeader} onRemove={removeHeader} name="headers" />
+                <KeyValueTable
+                  fields={headerFields}
+                  onAppend={appendHeader}
+                  onRemove={removeHeader}
+                  name="headers"
+                  form={form}
+                />
               </TabsContent>
               <TabsContent value="body" className="p-2">
                 <FormField

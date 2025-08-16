@@ -8,28 +8,92 @@ import {
 } from '@/components/ui/resizable';
 import RequestPanel from '@/components/pages/api-tester/request-panel';
 import ResponsePanel from '@/components/pages/api-tester/response-panel';
+import type { ApiFormValues } from '@/components/pages/api-tester/request-panel';
 
 export default function ApiTesterPage() {
-  const [requestConfig, setRequestConfig] = React.useState({});
   const [response, setResponse] = React.useState(null);
   const [isLoading, setIsLoading] = React.useState(false);
 
-  const handleSendRequest = (config: any) => {
+  const handleSendRequest = async (config: ApiFormValues) => {
     setIsLoading(true);
-    // This is where you would make the API call.
-    // For now, we'll just simulate a delay and set a mock response.
-    console.log('Sending request with config:', config);
-    setTimeout(() => {
-      setResponse({
-        status: 200,
-        statusText: 'OK',
-        headers: { 'content-type': 'application/json' },
-        body: { message: 'This is a mock response!', data: config },
-        size: 123,
-        duration: 456,
+    setResponse(null);
+
+    const startTime = Date.now();
+
+    try {
+      // Build URL with query params
+      const url = new URL(config.url);
+      config.queryParams.forEach((param) => {
+        if (param.key && param.value) {
+          url.searchParams.append(param.key, param.value);
+        }
       });
+
+      // Prepare headers
+      const headers = new Headers();
+      config.headers.forEach((header) => {
+        if (header.key && header.value) {
+          headers.append(header.key, header.value);
+        }
+      });
+
+      // Prepare body
+      let body = null;
+      if (['POST', 'PUT', 'PATCH'].includes(config.method) && config.body) {
+        try {
+          body = JSON.stringify(JSON.parse(config.body));
+          if (!headers.has('Content-Type')) {
+            headers.append('Content-Type', 'application/json');
+          }
+        } catch (e) {
+          throw new Error('Invalid JSON in request body.');
+        }
+      }
+
+      const res = await fetch(url.toString(), {
+        method: config.method,
+        headers,
+        body,
+      });
+
+      const duration = Date.now() - startTime;
+      const responseBodyText = await res.text();
+      let responseBody;
+      try {
+        responseBody = JSON.parse(responseBodyText);
+      } catch (e) {
+        responseBody = responseBodyText;
+      }
+      
+      const responseHeaders: Record<string, string> = {};
+      res.headers.forEach((value, key) => {
+        responseHeaders[key] = value;
+      });
+
+      setResponse({
+        status: res.status,
+        statusText: res.statusText,
+        headers: responseHeaders,
+        body: responseBody,
+        size: new Blob([responseBodyText]).size,
+        duration,
+      });
+    } catch (error: any) {
+      const duration = Date.now() - startTime;
+      setResponse({
+        status: 'Error',
+        statusText: 'Request Failed',
+        headers: {},
+        body: {
+          error: 'Failed to fetch',
+          message: error.message || 'An unknown error occurred.',
+        },
+        size: 0,
+        duration,
+      });
+    } finally {
       setIsLoading(false);
-    }, 1500);
+    }
   };
 
   return (
