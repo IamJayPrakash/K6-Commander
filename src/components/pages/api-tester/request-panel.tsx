@@ -29,6 +29,7 @@ import { useTranslation } from 'react-i18next';
 import CurlImportDialog from './curl-import-dialog';
 import { useToast } from '@/hooks/use-toast';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
+import type { ApiFormValues } from '@/types/index';
 
 const paramSchema = z.object({
   key: z.string(),
@@ -42,8 +43,6 @@ const formSchema = z.object({
   headers: z.array(paramSchema),
   body: z.string().optional(),
 });
-
-export type ApiFormValues = z.infer<typeof formSchema>;
 
 interface RequestPanelProps {
   onSend: (config: ApiFormValues) => void;

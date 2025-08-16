@@ -150,7 +150,7 @@ export default function ApiTestHistory({
     setCollections((prev) =>
       prev.map((c) => {
         if (c.id === collectionId) {
-          return { ...c, requests: c.requests.filter((r) => r.id !== requestId) };
+          return { ...c, requests: (c.requests || []).filter((r) => r.id !== requestId) };
         }
         return c;
       })

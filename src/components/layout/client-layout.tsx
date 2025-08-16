@@ -12,6 +12,7 @@ import { ProgressBar } from './progress-bar';
 import { usePathname } from 'next/navigation';
 import { Preloader } from './preloader';
 import { TooltipProvider } from '../ui/tooltip';
+import QuickAccessMenu from './quick-access-menu';
 
 async function fetchTranslations(locale: string) {
   let res = await fetch(`/locales/${locale}.json`);
@@ -68,10 +69,9 @@ export function ClientLayout({ children }: { children: React.ReactNode }) {
   useEffect(() => {
     if (isI18nInitialized) {
       const pageKey = pathname.substring(1) || 'home';
-      const pageTitleKey = `pageTitles.${pageKey}`;
-      const title = i18n.t(pageTitleKey, { defaultValue: 'K6 Commander' });
+      const title = i18n.t(`pageTitles.${pageKey}`, { defaultValue: 'K6 Commander' });
 
-      if (title && title !== pageTitleKey) {
+      if (title && title !== `pageTitles.${pageKey}`) {
         document.title = `${title} | K6 Commander`;
       } else {
         document.title = 'K6 Commander';
@@ -96,6 +96,7 @@ export function ClientLayout({ children }: { children: React.ReactNode }) {
             <AppFooter />
           </div>
           <Toaster />
+          <QuickAccessMenu />
         </TooltipProvider>
       </Providers>
     </I18nextProvider>

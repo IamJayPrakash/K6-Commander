@@ -103,16 +103,18 @@ export interface HistoryItem {
 }
 
 // Types for API Tester
+export interface ApiFormValues {
+  url: string;
+  method: 'GET' | 'POST' | 'PUT' | 'DELETE' | 'PATCH';
+  headers: { key: string; value: string }[];
+  queryParams: { key: string; value: string }[];
+  body?: string;
+}
+
 export interface ApiTestItem {
   id: string;
   name: string;
-  request: {
-    url: string;
-    method: 'GET' | 'POST' | 'PUT' | 'DELETE' | 'PATCH';
-    headers: { key: string; value: string }[];
-    queryParams: { key: string; value: string }[];
-    body?: string;
-  };
+  request: ApiFormValues;
   createdAt: string;
 }
 
