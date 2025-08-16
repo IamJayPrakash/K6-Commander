@@ -101,3 +101,10 @@ export interface HistoryItem {
   config: TestConfiguration;
   results: TestResults;
 }
+
+declare global {
+  interface Window {
+    // Joyride tour event
+    'start-tour': () => void;
+  }
+}

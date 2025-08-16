@@ -3,163 +3,141 @@
     "title": "K6 Commander",
     "historyLink": "Verlauf",
     "aboutLink": "Über",
-    "startTourButton": "Tour starten",
     "bugReport": "Fehler melden",
-    "featureRequest": "Funktionswunsch"
+    "featureRequest": "Funktion vorschlagen",
+    "toggleThemeLabel": "Theme wechseln",
+    "changeLanguageLabel": "Sprache ändern",
+    "startTour": "Tour starten"
   },
   "footer": {
     "copyright": "© {{year}} K6 Commander. Alle Rechte vorbehalten.",
-    "termsLink": "Nutzungsbedingungen",
+    "termsLink": "AGB",
     "privacyLink": "Datenschutz",
     "securityLink": "Sicherheit"
   },
-  "about": {
-    "title": "Über K6 Commander",
-    "description": "Eine leichte, lokale, autorisierte Lasttestplattform, die die Leistungsfähigkeit von k6, Lighthouse und KI-Analyse in einer einzigen, eleganten Benutzeroberfläche vereint.",
-    "philosophyTitle": "Unsere Philosophie",
-    "localFirstTitle": "Lokal-Zuerst",
-    "localFirstDescription": "Alle Ihre Testkonfigurationen und Ihr Verlauf werden in Ihrem Browser gespeichert. Keine Cloud-Konten erforderlich.",
-    "unifiedToolingTitle": "Einheitliche Werkzeuge",
-    "unifiedToolingDescription": "Führen Sie Lasttests, Lighthouse-Audits und SEO-Analysen von einer einzigen Oberfläche aus.",
-    "k6FeatureTitle": "k6 Lasttests",
-    "k6FeatureDescription": "Simulieren Sie den Verkehr, um Leistungsengpässe zu finden.",
-    "k6HowItWorks": "Leverage the full power of Grafana k6 to understand how your system behaves under load. Configure virtual users (VUs), duration, and custom ramping stages.",
-    "k6HowItWorks2": "Live results are streamed to a pre-configured Grafana dashboard, giving you real-time insights into request rates, response times, and errors.",
-    "lighthouseFeatureTitle": "Lighthouse-Audits",
-    "lighthouseFeatureDescription": "Prüfen Sie auf Leistung, Zugänglichkeit und mehr.",
-    "lighthouseHowItWorks": "Run Google Lighthouse audits directly from the UI. Get scores for Performance, Accessibility, Best Practices, and SEO.",
-    "lighthouseHowItWorks2": "The application provides a high-level summary, and you can access the full, interactive HTML report for a deep-dive analysis and actionable recommendations.",
-    "seoFeatureTitle": "KI-gestützte SEO-Analyse",
-    "seoFeatureDescription": "Tiefenanalyse mit KI-Empfehlungen.",
-    "seoHowItWorks": "Get a deep, AI-powered analysis of the most critical on-page SEO elements to ensure your pages are optimized for search engines.",
-    "seoHowItWorks2": "This includes checks for title tags, meta descriptions, H1s, canonicals, and Open Graph tags, complete with AI-generated suggestions for improvement.",
-    "stackTitle": "Technologie-Stack",
-    "stackDescription": "K6 Commander wurde mit modernen, branchenüblichen Technologien entwickelt.",
-    "involvedTitle": "Beteiligen Sie sich",
-    "involvedDescription": "Dies ist ein Open-Source-Projekt. Beiträge, Probleme und Funktionswünsche sind willkommen!",
-    "githubButton": "Auf GitHub ansehen"
+  "home": {
+    "lastSaved": "Lokaler Verlauf zuletzt gespeichert: {{distance}}"
   },
-  "tour": {
-    "steps": {
-      "welcome": "Willkommen bei K6 Commander! Dies ist Ihr Haupt-Dashboard.",
-      "history": "Hier können Sie Ihre vergangenen Testläufe anzeigen und verwalten.",
-      "about": "Erfahren Sie hier mehr über die Funktionsweise der Anwendung.",
-      "github": "Sehen Sie sich den Quellcode an oder melden Sie Probleme auf GitHub.",
-      "urlInput": "Geben Sie hier die URL ein, die Sie testen möchten. Sie können aus den letzten URLs auswählen.",
-      "testSuites": "Wählen Sie aus, welche Test-Suiten Sie ausführen möchten: Lasttest, Lighthouse-Audit oder KI-SEO-Analyse.",
-      "requestConfig": "Konfigurieren Sie hier die Details Ihrer HTTP-Anfrage wie Methode, Header und Body.",
-      "loadProfile": "Wählen Sie ein vordefiniertes Lastprofil oder erstellen Sie Ihr eigenes benutzerdefiniertes Szenario.",
-      "runTest": "Wenn Sie bereit sind, klicken Sie hier, um Ihre Tests zu starten!"
-    }
+  "pageTitles": {
+    "home": "Neuer Test",
+    "history": "Testverlauf",
+    "about": "Über"
   },
   "form": {
     "title": "Neuer Testlauf",
     "description": "Konfigurieren Sie die Parameter für Ihren nächsten Testlauf.",
     "urlLabel": "Ziel-URL",
-    "urlDescription": "Die vollständige URL der Seite oder des Endpunkts, den Sie testen möchten.",
+    "urlDescription": "Die vollständige URL der Seite, die Sie testen oder prüfen möchten.",
     "urlPlaceholder": "https://example.com",
     "toggleRecentUrlsLabel": "Letzte URLs umschalten",
     "searchUrlPlaceholder": "Letzte URLs durchsuchen...",
     "noRecentUrls": "Keine letzten URLs gefunden.",
     "recentUrlsHeading": "Letzte URLs",
-    "removeRecentUrlLabel": "URL '{{url}}' aus den letzten entfernen",
+    "removeRecentUrlLabel": "{{url}} aus den letzten URLs entfernen",
     "clearRecentUrlsButton": "Letzte URLs löschen",
     "testSuitesTitle": "Test-Suiten",
-    "testSuitesDescription": "Wählen Sie eine oder mehrere Test-Suiten aus, die ausgeführt werden sollen.",
-    "k6SwitchLabel": "k6 Lasttest",
-    "k6SwitchDescription": "Messen Sie die Leistung unter Last.",
+    "testSuitesDescription": "Wählen Sie aus, welche Test-Suiten Sie für die Ziel-URL ausführen möchten.",
+    "k6SwitchLabel": "Lasttest",
+    "k6SwitchDescription": "Simulieren Sie Traffic mit k6, um die Backend-Leistung zu messen.",
     "lighthouseSwitchLabel": "Lighthouse-Audit",
-    "lighthouseSwitchDescription": "Überprüfen Sie Qualität, Leistung und SEO.",
+    "lighthouseSwitchDescription": "Führen Sie Google Lighthouse für Leistung, SEO und Barrierefreiheit aus.",
     "seoSwitchLabel": "KI-SEO-Analyse",
-    "seoSwitchDescription": "Führen Sie eine eingehende On-Page-SEO-Analyse durch.",
+    "seoSwitchDescription": "Führen Sie eine tiefgehende technische SEO-Analyse mit KI durch.",
+    "error": {
+      "atLeastOne": "Sie müssen mindestens eine Test-Suite zum Ausführen auswählen."
+    },
     "requestConfigTitle": "Anforderungskonfiguration",
-    "requestConfigDescription": "Passen Sie die HTTP-Anfrage für den Lasttest an.",
+    "requestConfigDescription": "Definieren Sie die HTTP-Anforderungsdetails für den k6-Lasttest.",
     "methodLabel": "Methode",
-    "methodPlaceholder": "Methode auswählen",
+    "methodPlaceholder": "HTTP-Methode auswählen",
     "headersLabel": "Header",
-    "headerNamePlaceholder": "Header-Name",
-    "headerValuePlaceholder": "Header-Wert",
+    "headerNamePlaceholder": "Header-Name (z.B. Authorization)",
+    "headerValuePlaceholder": "Header-Wert (z.B. Bearer-Token)",
     "removeHeaderLabel": "Header {{index}} entfernen",
     "addHeaderButton": "Header hinzufügen",
-    "requestBodyLabel": "Anforderungs-Body",
+    "requestBodyLabel": "Anforderungskörper (JSON)",
     "loadProfileTitle": "Lastprofil",
-    "loadProfileDescription": "Definieren Sie die Last, die während des Tests generiert werden soll.",
+    "loadProfileDescription": "Definieren Sie die Lastmenge, die während des Tests generiert werden soll.",
     "loadTestPresetsLabel": "Lasttest-Voreinstellungen",
     "customProfileTitle": "Benutzerdefiniertes Lastprofil",
-    "customProfileDescription": "Definieren Sie Ihre eigene Konfiguration für VUs, Dauer oder Stufen.",
+    "customProfileDescription": "Definieren Sie eine feste Anzahl von VUs und eine Dauer oder erstellen Sie ein benutzerdefiniertes Ramping-Profil.",
     "vusLabel": "Virtuelle Benutzer (VUs)",
-    "vusPlaceholder": "z.B. 100",
+    "vusPlaceholder": "z.B. 50",
     "durationLabel": "Dauer",
-    "durationPlaceholder": "z.B. 5m30s",
+    "durationPlaceholder": "z.B. 10m",
     "stagesLabel": "Stufen",
-    "stagesDescription": "Für komplexe Lastszenarien mit ansteigenden/abfallenden VUs im Laufe der Zeit.",
+    "stagesDescription": "Definieren Sie Ramping-Stufen für komplexere Lastmuster.",
     "stageDurationLabel": "Stufendauer",
-    "stageDurationPlaceholder": "z.B. 1m",
+    "stageDurationPlaceholder": "z.B. 2m",
     "stageTargetVusLabel": "Ziel-VUs",
-    "stageTargetVusPlaceholder": "z.B. 50",
+    "stageTargetVusPlaceholder": "z.B. 100",
     "removeStageLabel": "Stufe {{index}} entfernen",
     "addStageButton": "Stufe hinzufügen",
     "runTestButton": "Test(s) ausführen",
     "runningTestButton": "Wird ausgeführt...",
-    "error": {
-      "atLeastOne": "Mindestens eine Test-Suite muss ausgewählt sein."
-    },
     "toast": {
       "historyClearedTitle": "Verlauf gelöscht",
-      "historyClearedDescription": "Ihr lokaler Testverlauf wurde gelöscht.",
-      "testStartedTitle": "Test gestartet!",
-      "testStartedDescription": "Ihre Tests werden jetzt ausgeführt. Überwachen Sie den Fortschritt unten."
+      "historyClearedDescription": "Der bisherige Testverlauf und die letzten URLs wurden gelöscht.",
+      "testStartedTitle": "Test gestartet",
+      "testStartedDescription": "Ihr Testlauf wurde gestartet. Sie werden nach Abschluss benachrichtigt."
     },
     "clearHistoryDialog": {
-      "title": "Vorhandenen Verlauf löschen?",
-      "description": "Sie haben einen vorhandenen Testverlauf. Möchten Sie ihn löschen, bevor Sie diesen neuen Test ausführen?",
+      "title": "Vorherigen Verlauf löschen?",
+      "description": "Um genaue Metriken zu gewährleisten, insbesondere bei Soak-Tests, wird empfohlen, alte Daten aus InfluxDB zu löschen, bevor ein neuer Lauf gestartet wird. Möchten Sie den gesamten bisherigen Verlauf und die letzten URLs löschen?",
       "keepButton": "Nein, Verlauf beibehalten",
-      "clearButton": "Ja, löschen und ausführen"
+      "clearButton": "Ja, löschen & ausführen"
     }
   },
+  "presets": {
+    "baseline": "Basislinie",
+    "spike": "Spitze",
+    "stress": "Stress",
+    "soak": "Dauerlast",
+    "custom": "Benutzerdef."
+  },
   "running": {
-    "title": "Tests werden ausgeführt...",
-    "description": "Bitte warten Sie, während die ausgewählten Suiten abgeschlossen werden. Dies kann einige Minuten dauern.",
-    "finalizingTitle": "Finalisierung der Ergebnisse...",
-    "grafanaLink": "Live-Dashboard in Grafana anzeigen"
+    "title": "Test läuft...",
+    "description": "Bitte navigieren Sie nicht von dieser Seite weg. Sie können den Live-Fortschritt des Lasttests im Grafana-Dashboard überwachen.",
+    "finalizingTitle": "Ergebnisse werden finalisiert...",
+    "grafanaLink": "Live-Grafana-Dashboard anzeigen"
   },
   "summary": {
     "title": "Testzusammenfassung",
-    "description": "Die Ergebnisse für Ihren Testlauf unter",
+    "description": "Die Ergebnisse für Ihren Testlauf auf {{url}}",
     "saveToHistoryButton": "Im Verlauf speichern",
     "rerunButton": "Erneut ausführen",
     "newTestButton": "Neuen Test erstellen",
     "k6Tab": "Lasttest",
     "lighthouseTab": "Lighthouse",
     "seoTab": "SEO",
+    "noK6Data": "k6-Lasttest wurde nicht ausgeführt.",
+    "noLighthouseData": "Keine Lighthouse-Auditdaten.",
+    "noSeoData": "Keine SEO-Analysedaten.",
     "configSummaryTitle": "Testkonfiguration",
-    "viewFullDetails": "Vollständige Konfigurationsdetails anzeigen"
+    "viewFullDetails": "Vollständige Konfigurationsdetails anzeigen",
+    "table": {
+      "url": "URL",
+      "method": "Methode",
+      "preset": "Voreinstellung",
+      "stages": "Stufen",
+      "headers": "Header",
+      "body": "Körper",
+      "na": "N/A"
+    }
   },
   "history": {
     "title": "Testverlauf",
-    "description": "Durchsuchen und verwalten Sie Ihre vergangenen Testläufe.",
+    "description": "Überprüfen, wiederholen oder exportieren Sie Ihre vergangenen Testergebnisse.",
     "lastSaved": "Zuletzt gespeichert",
     "importButton": "Importieren",
     "exportButton": "Exportieren",
-    "searchPlaceholder": "Nach URL oder ID suchen...",
+    "searchPlaceholder": "Nach URL oder Test-ID suchen...",
     "clearSearchLabel": "Suche löschen",
     "clearAllButton": "Gesamten Verlauf löschen",
     "noHistoryMessage": "Kein Verlauf gefunden.",
-    "noHistoryDescription": "Führen Sie einen neuen Test aus, um Ihren Verlauf zu starten.",
-    "noResultsFound": "Keine Ergebnisse für '{{query}}' gefunden.",
-    "clearSearch": "Suche löschen",
-    "clearAllDialog": {
-      "title": "Sind Sie sicher?",
-      "description": "Diese Aktion kann nicht rückgängig gemacht werden. Dadurch werden alle Ihre Testverlaufsdaten und die letzten URLs dauerhaft gelöscht.",
-      "cancel": "Abbrechen",
-      "confirm": "Löschen"
-    },
-    "deleteDialog": {
-      "title": "Diesen Eintrag löschen?",
-      "description": "Diese Aktion kann nicht rückgängig gemacht werden. Dadurch wird dieser Testlauf dauerhaft aus Ihrem Verlauf gelöscht.",
-      "cancel": "Abbrechen",
-      "confirm": "Löschen"
-    },
+    "noHistoryDescription": "Führen Sie einen Test aus, um die Ergebnisse hier anzuzeigen.",
+    "noResultsFound": "Keine Ergebnisse für \"{{query}}\" gefunden",
+    "clearSearch": "Suchanfrage löschen",
     "table": {
       "url": "URL",
       "date": "Datum",
@@ -167,34 +145,68 @@
       "actions": "Aktionen"
     },
     "actions": {
-      "view": "Zusammenfassung für {{url}} anzeigen",
+      "view": "Test für {{url}} anzeigen",
       "rerun": "Test für {{url}} erneut ausführen",
-      "delete": "Verlaufseintrag für {{url}} löschen"
+      "delete": "Test für {{url}} löschen"
     },
     "toast": {
       "exportSuccessTitle": "Verlauf exportiert",
-      "exportSuccessDescription": "Ihre Testhistorie wurde als JSON-Datei heruntergeladen.",
+      "exportSuccessDescription": "Ihr Testverlauf wurde in einer JSON-Datei gespeichert.",
       "exportFailTitle": "Export fehlgeschlagen",
-      "exportFailDescription": "Der Verlauf konnte nicht exportiert werden.",
+      "exportFailDescription": "Verlauf konnte nicht exportiert werden.",
       "importSuccessTitle": "Verlauf importiert",
-      "importSuccessDescription": "Die Testhistorie wurde erfolgreich geladen.",
+      "importSuccessDescription": "Testverlauf wurde erfolgreich geladen.",
       "importFailTitle": "Import fehlgeschlagen",
-      "importFailDescription": "Die ausgewählte Datei konnte nicht gelesen werden.",
+      "importFailDescription": "Beim Importieren der Datei ist ein Fehler aufgetreten.",
       "importInvalidFormat": "Ungültiges Dateiformat.",
-      "deleteSuccessTitle": "Eintrag gelöscht",
-      "deleteSuccessDescription": "Der Testlauf wurde aus Ihrem Verlauf entfernt.",
+      "deleteSuccessTitle": "Verlaufseintrag gelöscht",
+      "deleteSuccessDescription": "Der ausgewählte Testlauf wurde aus Ihrem Verlauf entfernt.",
       "clearSuccessTitle": "Verlauf gelöscht",
-      "clearSuccessDescription": "Ihr gesamter Testverlauf wurde entfernt."
+      "clearSuccessDescription": "Der gesamte Testverlauf und die letzten URLs wurden gelöscht."
+    },
+    "clearAllDialog": {
+      "title": "Sind Sie absolut sicher?",
+      "description": "Diese Aktion kann nicht rückgängig gemacht werden. Dadurch werden Ihr gesamter Testverlauf und die Liste der letzten URLs dauerhaft gelöscht.",
+      "cancel": "Abbrechen",
+      "confirm": "Ja, alles löschen"
+    },
+    "deleteDialog": {
+      "title": "Sind Sie sicher?",
+      "description": "Diese Aktion löscht diesen Testlauf dauerhaft aus Ihrem Verlauf.",
+      "cancel": "Abbrechen",
+      "confirm": "Ja, löschen"
     }
   },
-  "presets": {
-    "baseline": "Grundlinie",
-    "spike": "Spitze",
-    "stress": "Stress",
-    "soak": "Einweichen",
-    "custom": "Benutzerdefiniert"
+  "about": {
+    "title": "Über K6 Commander",
+    "description": "K6 Commander ist eine leichtgewichtige, lokale, autorisierte Lasttestplattform. Sie ermöglicht es Ihnen, Lasttests, Lighthouse-Audits und grundlegende SEO-Prüfungen direkt über eine elegante Weboberfläche zu konfigurieren, auszuführen und zu analysieren.",
+    "philosophyTitle": "Unsere Philosophie",
+    "localFirstTitle": "Lokal-Zuerst",
+    "localFirstDescription": "Ihre Daten gehören Ihnen. Alle Testkonfigurationen und -ergebnisse werden im LocalStorage Ihres Browsers gespeichert, niemals auf unseren Servern.",
+    "unifiedToolingTitle": "Einheitliche Werkzeuge",
+    "unifiedToolingDescription": "Wir bringen die besten Open-Source-Tools (k6, Lighthouse) in einer einzigen, zusammenhängenden Oberfläche zusammen, um Ihren Arbeitsablauf zu optimieren.",
+    "k6FeatureTitle": "k6-Lasttests",
+    "k6FeatureDescription": "Führen Sie anspruchsvolle Lasttests mit k6 durch, die direkt über die Benutzeroberfläche konfigurierbar sind.",
+    "k6HowItWorks": "Wenn Sie einen Lasttest ausführen, startet die Anwendung einen temporären <code>k6</code>-Docker-Container. Die Konfiguration aus der Benutzeroberfläche wird als Umgebungsvariablen an ein generisches k6-Skript übergeben.",
+    "k6HowItWorks2": "Der k6-Container sendet seine Metriken an eine lokale InfluxDB-Instanz, die dann in Echtzeit im eingebetteten Grafana-Dashboard visualisiert werden.",
+    "lighthouseFeatureTitle": "Lighthouse-Audits",
+    "lighthouseFeatureDescription": "Erhalten Sie umfassende Website-Audits, die von Google Lighthouse unterstützt werden.",
+    "lighthouseHowItWorks": "Das Lighthouse-Audit läuft als separater Node.js-Prozess mit dem offiziellen <code>lighthouse</code>-Paket. Es prüft die Ziel-URL und generiert einen vollständigen JSON- und HTML-Bericht.",
+    "lighthouseHowItWorks2": "Die Ergebnisse werden in der Benutzeroberfläche zusammengefasst, und es wird ein Link zur Ansicht des vollständigen, interaktiven HTML-Berichts bereitgestellt.",
+    "seoFeatureTitle": "KI-gestützte SEO-Analyse",
+    "seoFeatureDescription": "Gehen Sie über Standardprüfungen hinaus mit KI-gesteuerter technischer SEO-Analyse.",
+    "seoHowItWorks": "Die App ruft den rohen HTML-Code Ihrer URL ab und sendet ihn an einen sicheren Genkit-KI-Flow. Der KI-Agent wird aufgefordert, wichtige On-Page-SEO-Elemente wie Title-Tags, Meta-Beschreibungen, Canonicals und mehr zu analysieren.",
+    "seoHowItWorks2": "Die KI identifiziert nicht nur Probleme, sondern gibt auch umsetzbare Empfehlungen, wie diese behoben werden können, um Ihnen bei der effektiveren Optimierung Ihrer Website zu helfen.",
+    "stackTitle": "Technologie-Stack",
+    "stackDescription": "K6 Commander wurde mit modernen, leistungsstarken und Open-Source-Technologien entwickelt.",
+    "involvedTitle": "Mitmachen",
+    "involvedDescription": "Dieses Projekt ist Open-Source und wird von der Community vorangetrieben. Wir freuen uns über Beiträge jeder Art, von Fehlerberichten bis hin zu neuen Funktionen.",
+    "githubButton": "Auf GitHub ansehen"
   },
-  "home": {
-    "lastSaved": "Lokaler Verlauf zuletzt gespeichert: {{distance}}"
+  "tour": {
+    "step1": "Geben Sie zuerst die vollständige URL der Website ein, die Sie testen möchten.",
+    "step2": "Wählen Sie als Nächstes aus, welche Tests Sie ausführen möchten. Sie können eine beliebige Kombination aus einem k6-Lasttest, einem Lighthouse-Audit oder einer KI-gestützten SEO-Analyse ausführen.",
+    "step3": "Wenn Sie einen Lasttest ausführen, können Sie eine Voreinstellung auswählen oder ein benutzerdefiniertes Lastprofil mit virtuellen Benutzern, Dauer und Stufen definieren.",
+    "step4": "Wenn Sie bereit sind, klicken Sie hier, um die Tests zu starten. Sie werden zu einem neuen Bildschirm weitergeleitet, um den Fortschritt zu überwachen."
   }
 }

@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import TestForm from '@/components/test/test-form';
 import TestRunning from '@/components/test/test-running';
 import TestSummary from '@/components/test/test-summary';
@@ -14,6 +14,8 @@ import { Clock } from 'lucide-react';
 import { formatDistanceToNow } from 'date-fns';
 import Link from 'next/link';
 import { useTranslation } from 'react-i18next';
+import Joyride, { type Step, type CallBackProps } from 'react-joyride';
+import { useTheme } from 'next-themes';
 
 type View = 'form' | 'running' | 'summary';
 
@@ -29,16 +31,62 @@ export default function Home() {
   const { toast } = useToast();
   const [isMounted, setIsMounted] = useState(false);
   const { t } = useTranslation();
+  const { theme } = useTheme();
+
+  const [runTour, setRunTour] = useState(false);
+  const [tourSteps, setTourSteps] = useState<Step[]>([
+    {
+      target: '[data-testid="url-input"]',
+      content: t('tour.step1'),
+      disableBeacon: true,
+    },
+    {
+      target: '[data-testid="test-suites-card"]',
+      content: t('tour.step2'),
+    },
+    {
+      target: '[data-testid="load-test-profile-card"]',
+      content: t('tour.step3'),
+    },
+    {
+      target: '[data-testid="run-test-button"]',
+      content: t('tour.step4'),
+    },
+  ]);
 
   useEffect(() => {
     setIsMounted(true);
+    // This allows the tour to be started from the header button
+    const handleStartTour = () => setRunTour(true);
+    window.addEventListener('start-tour', handleStartTour);
+    return () => window.removeEventListener('start-tour', handleStartTour);
   }, []);
+
+  const handleJoyrideCallback = (data: CallBackProps) => {
+    const { status } = data;
+    if (['finished', 'skipped'].includes(status)) {
+      setRunTour(false);
+    }
+  };
 
   const updateHistory = (newHistory: HistoryItem[] | ((prev: HistoryItem[]) => HistoryItem[])) => {
     const valueToSet = typeof newHistory === 'function' ? newHistory(history) : newHistory;
     setHistory(valueToSet);
     setLastSaved(new Date().toISOString());
   };
+
+  const handleLoadFromHistory = useCallback((item: HistoryItem) => {
+    setActiveTestConfig(item.config);
+    setActiveTestResults(item.results);
+    setActiveTestId(item.id);
+    setView('summary');
+  }, []);
+
+  const handleRerun = useCallback((config: TestConfiguration) => {
+    setInitialValues(config);
+    setFormKey(Date.now()); // Change key to force re-mount
+    setView('form');
+  }, []);
 
   // Check for history item to load from session storage on mount
   useEffect(() => {
@@ -64,7 +112,7 @@ export default function Home() {
       }
       sessionStorage.removeItem('rerun-config');
     }
-  }, [isMounted]);
+  }, [isMounted, handleLoadFromHistory, handleRerun]);
 
   const handleRunTest = (testId: string, config: TestConfiguration) => {
     setActiveTestId(testId);
@@ -105,19 +153,6 @@ export default function Home() {
       updateHistory([newHistoryItem, ...history.filter((h) => h.id !== activeTestId)]);
       toast({ title: 'Saved to History', description: 'Test run has been saved.' });
     }
-  };
-
-  const handleLoadFromHistory = (item: HistoryItem) => {
-    setActiveTestConfig(item.config);
-    setActiveTestResults(item.results);
-    setActiveTestId(item.id);
-    setView('summary');
-  };
-
-  const handleRerun = (config: TestConfiguration) => {
-    setInitialValues(config);
-    setFormKey(Date.now()); // Change key to force re-mount
-    setView('form');
   };
 
   const handleCreateNewTest = () => {
@@ -163,8 +198,27 @@ export default function Home() {
     }
   };
 
+  if (!isMounted) return null;
+
   return (
     <>
+      <Joyride
+        run={runTour}
+        steps={tourSteps}
+        continuous
+        showProgress
+        showSkipButton
+        callback={handleJoyrideCallback}
+        styles={{
+          options: {
+            arrowColor: theme === 'dark' ? '#2f2f33' : '#ffffff',
+            backgroundColor: theme === 'dark' ? '#2f2f33' : '#ffffff',
+            primaryColor: '#7DF9FF',
+            textColor: theme === 'dark' ? '#ffffff' : '#333333',
+            zIndex: 1000,
+          },
+        }}
+      />
       <ConsentModal />
       {view === 'form' && lastSaved && (
         <Card
