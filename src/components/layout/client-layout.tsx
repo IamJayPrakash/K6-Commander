@@ -59,14 +59,19 @@ export function ClientLayout({ children, initialLang, initialResources }: Client
       setIsI18nInitialized(true);
     };
 
-    initI18n();
+    if (!i18n.isInitialized) {
+      initI18n();
+    } else {
+      setIsI18nInitialized(true);
+    }
 
     const onLanguageChanged = async (lng: string) => {
       if (!i18n.hasResourceBundle(lng, 'translation')) {
         const resources = await fetchTranslations(lng);
         i18n.addResourceBundle(lng, 'translation', resources, true, true);
       }
-      i18n.changeLanguage(lng); // This will trigger re-renders
+      // This will trigger re-renders in components that use useTranslation()
+      i18n.changeLanguage(lng);
     };
 
     i18n.on('languageChanged', onLanguageChanged);
@@ -78,7 +83,7 @@ export function ClientLayout({ children, initialLang, initialResources }: Client
 
   useEffect(() => {
     if (isI18nInitialized) {
-      const pageKey = pathname.substring(1) || 'home';
+      const pageKey = pathname.substring(1).replace('/', '-') || 'home';
       const title = i18n.t(`pageTitles.${pageKey}`, { defaultValue: 'K6 Commander' });
 
       if (title && title !== `pageTitles.${pageKey}`) {
