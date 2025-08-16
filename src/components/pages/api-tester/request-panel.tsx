@@ -1,6 +1,6 @@
 'use client';
 
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useForm, useFieldArray, type UseFormReturn } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
@@ -23,9 +23,10 @@ import {
 } from '@/components/ui/select';
 import { Textarea } from '@/components/ui/textarea';
 import { Card, CardContent } from '@/components/ui/card';
-import { Loader, Plus, Send, Trash2 } from 'lucide-react';
+import { Download, Loader, Plus, Send, Trash2 } from 'lucide-react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { useTranslation } from 'react-i18next';
+import CurlImportDialog from './curl-import-dialog';
 
 const paramSchema = z.object({
   key: z.string(),
@@ -45,6 +46,7 @@ export type ApiFormValues = z.infer<typeof formSchema>;
 interface RequestPanelProps {
   onSend: (config: ApiFormValues) => void;
   isLoading: boolean;
+  initialValues?: Partial<ApiFormValues> | null;
 }
 
 const KeyValueTable = ({
@@ -94,12 +96,12 @@ const KeyValueTable = ({
   );
 };
 
-export default function RequestPanel({ onSend, isLoading }: RequestPanelProps) {
+export default function RequestPanel({ onSend, isLoading, initialValues }: RequestPanelProps) {
   const { t } = useTranslation();
 
   const form = useForm<ApiFormValues>({
     resolver: zodResolver(formSchema),
-    defaultValues: {
+    defaultValues: initialValues || {
       url: 'https://jsonplaceholder.typicode.com/posts/1',
       method: 'GET',
       queryParams: [{ key: '', value: '' }],
@@ -107,6 +109,13 @@ export default function RequestPanel({ onSend, isLoading }: RequestPanelProps) {
       body: '',
     },
   });
+
+  useEffect(() => {
+    if (initialValues) {
+      form.reset(initialValues);
+    }
+  }, [initialValues, form]);
+
 
   const {
     fields: queryParamFields,
@@ -126,55 +135,64 @@ export default function RequestPanel({ onSend, isLoading }: RequestPanelProps) {
     name: 'headers',
   });
 
+  const handleImport = (values: Partial<ApiFormValues>) => {
+    form.reset(values);
+  };
+
   return (
     <Card className="h-full border-0 shadow-none">
       <CardContent className="p-2">
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSend)} className="space-y-4">
-            <div className="flex gap-2">
-              <FormField
-                control={form.control}
-                name="method"
-                render={({ field }) => (
-                  <FormItem>
-                    <Select onValueChange={field.onChange} defaultValue={field.value}>
+            <div className="flex flex-wrap gap-2">
+              <div className="flex flex-1 min-w-[200px] gap-2">
+                <FormField
+                  control={form.control}
+                  name="method"
+                  render={({ field }) => (
+                    <FormItem>
+                      <Select onValueChange={field.onChange} defaultValue={field.value} value={field.value}>
+                        <FormControl>
+                          <SelectTrigger className="w-32">
+                            <SelectValue placeholder="Method" />
+                          </SelectTrigger>
+                        </FormControl>
+                        <SelectContent>
+                          {['GET', 'POST', 'PUT', 'PATCH', 'DELETE'].map((method) => (
+                            <SelectItem key={method} value={method}>
+                              {method}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="url"
+                  render={({ field }) => (
+                    <FormItem className="flex-1">
                       <FormControl>
-                        <SelectTrigger className="w-32">
-                          <SelectValue placeholder="Method" />
-                        </SelectTrigger>
+                        <Input placeholder="https://api.example.com/data" {...field} />
                       </FormControl>
-                      <SelectContent>
-                        {['GET', 'POST', 'PUT', 'PATCH', 'DELETE'].map((method) => (
-                          <SelectItem key={method} value={method}>
-                            {method}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="url"
-                render={({ field }) => (
-                  <FormItem className="flex-1">
-                    <FormControl>
-                      <Input placeholder="https://api.example.com/data" {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <Button type="submit" disabled={isLoading} className="w-28">
-                {isLoading ? (
-                  <Loader className="animate-spin h-5 w-5" />
-                ) : (
-                  <>
-                    <Send className="mr-2 h-4 w-4" /> {t('apiTester.sendButton')}
-                  </>
-                )}
-              </Button>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
+              <div className="flex gap-2">
+                <CurlImportDialog onImport={handleImport} />
+                <Button type="submit" disabled={isLoading} className="w-28">
+                  {isLoading ? (
+                    <Loader className="animate-spin h-5 w-5" />
+                  ) : (
+                    <>
+                      <Send className="mr-2 h-4 w-4" /> {t('apiTester.sendButton')}
+                    </>
+                  )}
+                </Button>
+              </div>
             </div>
             <Tabs defaultValue="params" className="w-full">
               <TabsList>

@@ -102,6 +102,27 @@ export interface HistoryItem {
   results: TestResults;
 }
 
+// Types for API Tester
+export interface ApiTestItem {
+  id: string;
+  name: string;
+  request: {
+    url: string;
+    method: 'GET' | 'POST' | 'PUT' | 'DELETE' | 'PATCH';
+    headers: { key: string; value: string }[];
+    queryParams: { key: string; value: string }[];
+    body?: string;
+  };
+  createdAt: string;
+}
+
+export interface ApiTestCollection {
+  id: string;
+  name: string;
+  requests: ApiTestItem[];
+}
+
+
 declare global {
   interface Window {
     // Joyride tour event
