@@ -39,6 +39,11 @@ import {
   X,
   History,
   BrainCircuit,
+  Activity,
+  Zap,
+  Thermometer,
+  Droplets,
+  SlidersHorizontal,
 } from 'lucide-react';
 import { TEST_PRESETS } from '@/lib/constants';
 import type { TestConfiguration, TestPreset } from '@/types';
@@ -109,6 +114,14 @@ interface TestFormProps {
   onRunTest: (testId: string, config: TestConfiguration) => void;
   setHistory: (value: HistoryItem[] | ((prev: HistoryItem[]) => HistoryItem[])) => void;
 }
+
+const presetIcons = {
+  baseline: Activity,
+  spike: Zap,
+  stress: Thermometer,
+  soak: Droplets,
+  custom: SlidersHorizontal,
+};
 
 const newTestDefaultValues: TestFormValues = {
   url: '',
@@ -658,20 +671,25 @@ export default function TestForm({ initialValues, onRunTest, setHistory }: TestF
                                 handlePresetChange(value);
                               }}
                               value={field.value}
-                              className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-4"
+                              className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4"
                               aria-labelledby="load-profile-title"
                             >
                               <span id="load-profile-title" className="sr-only">
                                 {t('form.loadProfileTitle')}
                               </span>
-                              {Object.entries(TEST_PRESETS).map(([key]) => (
+                              {Object.entries(presetIcons).map(([key, Icon]) => (
                                 <FormItem
                                   key={key}
                                   className="flex items-center space-x-3 space-y-0"
                                 >
                                   <FormControl>
                                     <Card
-                                      className={`p-4 cursor-pointer hover:border-primary w-full ${field.value === key ? 'border-primary ring-2 ring-primary' : ''}`}
+                                      className={cn(
+                                        'p-4 cursor-pointer hover:border-primary w-full h-full flex flex-col items-center justify-center text-center gap-2 transition-all',
+                                        field.value === key
+                                          ? 'border-primary ring-2 ring-primary'
+                                          : ''
+                                      )}
                                       data-testid={`preset-card-${key}`}
                                       onClick={() => {
                                         field.onChange(key);
@@ -683,42 +701,27 @@ export default function TestForm({ initialValues, onRunTest, setHistory }: TestF
                                         id={key}
                                         className="sr-only"
                                         data-testid={`preset-radio-${key}`}
+                                        aria-labelledby={`${key}-label`}
+                                        aria-describedby={`${key}-desc`}
                                       />
+                                      <Icon className="h-8 w-8 text-accent" />
                                       <FormLabel
+                                        id={`${key}-label`}
                                         htmlFor={key}
                                         className="font-semibold capitalize text-base cursor-pointer"
                                       >
                                         {t(`presets.${key}`)}
                                       </FormLabel>
+                                      <p
+                                        id={`${key}-desc`}
+                                        className="text-xs text-muted-foreground"
+                                      >
+                                        {t(`presets.descriptions.${key}`)}
+                                      </p>
                                     </Card>
                                   </FormControl>
                                 </FormItem>
                               ))}
-                              <FormItem className="flex items-center space-x-3 space-y-0">
-                                <FormControl>
-                                  <Card
-                                    className={`p-4 cursor-pointer hover:border-primary w-full ${field.value === 'custom' ? 'border-primary ring-2 ring-primary' : ''}`}
-                                    data-testid="preset-card-custom"
-                                    onClick={() => {
-                                      field.onChange('custom');
-                                      handlePresetChange('custom');
-                                    }}
-                                  >
-                                    <RadioGroupItem
-                                      value="custom"
-                                      id="custom"
-                                      className="sr-only"
-                                      data-testid="preset-radio-custom"
-                                    />
-                                    <FormLabel
-                                      htmlFor="custom"
-                                      className="font-semibold capitalize text-base cursor-pointer"
-                                    >
-                                      {t('presets.custom')}
-                                    </FormLabel>
-                                  </Card>
-                                </FormControl>
-                              </FormItem>
                             </RadioGroup>
                           </FormControl>
                           <FormMessage />
