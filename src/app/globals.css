@@ -134,32 +134,3 @@ body {
     hsl(var(--background)) 60%
   );
 }
-
-/* Run Test Button Animation */
-.run-test-loading-button::before {
-  content: '';
-  display: block;
-  position: absolute;
-  inset: -100% 0 0 0;
-  transform: translateY(-50%);
-  background: linear-gradient(hsl(var(--primary-foreground)), hsl(var(--primary-foreground))) left
-      calc(50% - 1.5em) top 0% / 0.1em 0.3em,
-    linear-gradient(hsl(var(--primary-foreground)), hsl(var(--primary-foreground))) left
-      calc(50% - 0.45em) top 10% / 0.1em 0.3em,
-    linear-gradient(hsl(var(--primary-foreground)), hsl(var(--primary-foreground))) right
-      calc(50% - 2em) top 20% / 0.1em 0.3em,
-    linear-gradient(hsl(var(--primary-foreground)), hsl(var(--primary-foreground))) right
-      calc(50% - 1em) top 30% / 0.1em 0.3em,
-    linear-gradient(hsl(var(--primary-foreground)), hsl(var(--primary-foreground))) left
-      calc(50% - 1em) top 50% / 0.1em 0.3em,
-    linear-gradient(hsl(var(--primary-foreground)), hsl(var(--primary-foreground))) right
-      calc(50% - 1.7em) top 60% / 0.1em 0.3em,
-    linear-gradient(hsl(var(--primary-foreground)), hsl(var(--primary-foreground))) right
-      calc(50% - 0.55em) top 70% / 0.1em 0.3em,
-    linear-gradient(hsl(var(--primary-foreground)), hsl(var(--primary-foreground))) left
-      calc(50% - 0.7em) top 90% / 0.1em 0.3em,
-    linear-gradient(hsl(var(--primary-foreground)), hsl(var(--primary-foreground))) right
-      calc(50% - 1.3em) top 90% / 0.1em 0.3em;
-  background-repeat: no-repeat;
-  animation: move 1s linear infinite;
-}

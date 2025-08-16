@@ -101,17 +101,6 @@ export default {
           '0%': { transform: 'scale(0.5) translateX(20px)', opacity: '0.5' },
           '100%': { transform: 'scale(3) translateX(40px)', opacity: '0' },
         },
-        // For run test button animation
-        fly: {
-          '0%': { transform: 'translate(-50%, -50%) rotate(-45deg)' },
-          '15%': { transform: 'translateY(5px) translate(-50%, -50%) rotate(-45deg)' },
-          '30%, 80%': { transform: 'translateY(-5px) translate(-50%, -50%) rotate(-45deg)' },
-          '100%': { transform: 'translateY(-180%) translate(-50%, -50%) rotate(-45deg)' },
-        },
-        move: {
-          '0%': { transform: 'translateY(-50%)' },
-          '100%': { transform: 'translateY(100%)' },
-        },
       },
       animation: {
         'accordion-down': 'accordion-down 0.2s ease-out',
@@ -122,9 +111,6 @@ export default {
         'rocket-launch': 'rocket-launch 1.5s 1.5s ease-in forwards',
         'smoke-puff-1': 'smoke-puff-1 1s 1.5s ease-out forwards',
         'smoke-puff-2': 'smoke-puff-2 1.2s 1.5s ease-out forwards',
-        // For run test button animation
-        fly: 'fly 3s both',
-        move: 'move 1s linear infinite',
       },
     },
   },

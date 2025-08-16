@@ -878,28 +878,12 @@ export default function TestForm({ initialValues, onRunTest, setHistory }: TestF
                 <Button
                   type="submit"
                   size="lg"
-                  className={cn(
-                    'w-full md:w-auto relative overflow-hidden',
-                    isSubmitting && 'run-test-loading-button'
-                  )}
+                  className="w-full md:w-auto"
                   disabled={isSubmitting}
                   data-testid="run-test-button"
                 >
-                  <Rocket
-                    className={cn(
-                      'absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 transition-opacity',
-                      isSubmitting ? 'opacity-100 animate-fly' : 'opacity-0'
-                    )}
-                  />
-                  <span
-                    className={cn(
-                      'transition-opacity flex items-center',
-                      isSubmitting ? 'opacity-0' : 'opacity-100'
-                    )}
-                  >
-                    <Rocket className="mr-2 h-5 w-5" />
-                    {t('form.runTestButton')}
-                  </span>
+                  <Rocket className="mr-2 h-5 w-5" />
+                  {isSubmitting ? t('form.runningTestButton') : t('form.runTestButton')}
                 </Button>
               </div>
             </form>
