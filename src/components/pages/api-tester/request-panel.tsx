@@ -199,7 +199,9 @@ export default function RequestPanel({ onSend, isLoading, initialValues }: Reque
       });
 
       if (values.body && ['POST', 'PUT', 'PATCH'].includes(values.method)) {
-        curlCommand += ` \\\n  --data-raw '${values.body.replace(/'/g, "'\\''")}'`;
+        // Escape single quotes in the body
+        const escapedBody = values.body.replace(/'/g, "'\\''");
+        curlCommand += ` \\\n  --data-raw '${escapedBody}'`;
       }
 
       navigator.clipboard.writeText(curlCommand);

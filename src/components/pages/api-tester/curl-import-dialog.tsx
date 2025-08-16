@@ -15,8 +15,31 @@ import { Textarea } from '@/components/ui/textarea';
 import { useToast } from '@/hooks/use-toast';
 import { Download } from 'lucide-react';
 import type { ApiFormValues } from './request-panel';
-import { parse } from 'curlconverter';
 import { useTranslation } from 'react-i18next';
+
+// Simple regex-based parser for cURL commands. Handles common cases.
+const parseCurl = (curl: string) => {
+  const urlMatch = curl.match(/(?:'|")?(https?:\/\/[^'"]+)(?:'|")?/);
+  const url = urlMatch ? urlMatch[1] : '';
+
+  const methodMatch = curl.match(/-X\s+([A-Z]+)/);
+  const method = (methodMatch ? methodMatch[1] : 'GET').toUpperCase();
+
+  const headers: { key: string; value: string }[] = [];
+  const headerRegex = /-H\s+'([^:]+):\s*([^']+)'/g;
+  let headerMatch;
+  while ((headerMatch = headerRegex.exec(curl)) !== null) {
+    headers.push({ key: headerMatch[1], value: headerMatch[2] });
+  }
+
+  let body = '';
+  const dataMatch = curl.match(/--data-raw\s+'([^']*)'/);
+  if (dataMatch) {
+    body = dataMatch[1];
+  }
+
+  return { url, method, headers, body };
+};
 
 export default function CurlImportDialog({
   onImport,
@@ -39,19 +62,13 @@ export default function CurlImportDialog({
     }
 
     try {
-      const parsedData = parse(curl);
+      const parsedData = parseCurl(curl);
 
       const importedValues: Partial<ApiFormValues> = {
         url: parsedData.url,
-        method: parsedData.method.toUpperCase() as ApiFormValues['method'],
-        headers: Object.entries(parsedData.headers || {}).map(([key, value]) => ({
-          key,
-          value: String(value),
-        })),
-        body:
-          typeof parsedData.data === 'string'
-            ? parsedData.data
-            : JSON.stringify(parsedData.data, null, 2),
+        method: parsedData.method as ApiFormValues['method'],
+        headers: parsedData.headers,
+        body: parsedData.body,
         queryParams: Array.from(new URL(parsedData.url).searchParams).map(([key, value]) => ({
           key,
           value,
