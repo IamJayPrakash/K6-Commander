@@ -116,7 +116,7 @@ export function ClientLayout({ children }: { children: React.ReactNode }) {
     <I18nextProvider i18n={i18n}>
       <Providers>
         <TooltipProvider>
-          <div className="relative flex min-h-screen flex-col bg-background">
+          <div className="relative min-h-screen bg-background">
             <ProgressBar />
             <AppHeader
               onThemeToggle={handleSetTheme}
@@ -127,12 +127,12 @@ export function ClientLayout({ children }: { children: React.ReactNode }) {
               {children}
             </main>
             <AppFooter />
+            <QuickAccessMenu
+              onThemeToggle={handleSetTheme}
+              onFullscreenToggle={handleToggleFullscreen}
+              isFullscreen={isFullscreen}
+            />
           </div>
-          <QuickAccessMenu
-            onThemeToggle={handleSetTheme}
-            onFullscreenToggle={handleToggleFullscreen}
-            isFullscreen={isFullscreen}
-          />
           <Toaster />
         </TooltipProvider>
       </Providers>
